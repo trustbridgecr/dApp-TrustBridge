@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Moon, Sun, Globe } from "lucide-react";
+import { Moon, Sun, Globe, Bell } from "lucide-react";
 
 type Theme = "light" | "dark";
 type Language = "es" | "en" | "fr" | "de";
@@ -43,6 +43,7 @@ export function DashboardHeader({
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+
           <Button
             variant="ghost"
             size="icon"
@@ -52,6 +53,11 @@ export function DashboardHeader({
             <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
             <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             <span className="sr-only">Toggle theme</span>
+          </Button>
+
+          <Button variant="ghost" size="icon" className="text-black dark:text-white">
+            <Bell className="h-[1.2rem] w-[1.2rem]" />
+            <span className="sr-only">Notifications</span>
           </Button>
         </div>
       </div>

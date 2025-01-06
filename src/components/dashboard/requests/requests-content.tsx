@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { toast, useToast } from "@/components/ui/use-toast";
 import {
   Form,
   FormControl,
@@ -42,7 +41,6 @@ const formSchema = z.object({
 });
 
 export function RequestsContent() {
-  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,17 +57,10 @@ export function RequestsContent() {
     setIsSubmitting(true);
     try {
       console.log(values);
-      await new Promise((resolve) => setTimeout(resolve, 2000)); 
-      toast({
-        title: "Request submitted",
-        description: "Your loan request has been received and is being processed.",
-      });
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulated submission
+      // Removed toast notification
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "There was a problem submitting your request. Please try again.",
-        variant: "destructive",
-      });
+      // Removed toast notification
     } finally {
       setIsSubmitting(false);
     }
@@ -77,9 +68,8 @@ export function RequestsContent() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-white dark:bg-[#18181B] text-black dark:text-white p-6">
-      
       <Card className="w-full max-w-lg bg-white dark:bg-[#18181B] border border-gray-200 dark:border-none">
-      <h2 className="text-4xl font-bold text-left mb-6">Request Loan</h2>
+        <h2 className="text-4xl font-bold text-left mb-6">Request Loan</h2>
         <CardHeader>
           <CardTitle className="text-xl font-bold text-black dark:text-white">Request a Loan</CardTitle>
           <CardDescription className="text-gray-600 dark:text-gray-400">
