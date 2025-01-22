@@ -1,27 +1,43 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { CryptoFormValues } from "@/hooks/use-settings"
-import { UseFormReturn } from "react-hook-form"
-import { Clipboard, Check } from 'lucide-react'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { CryptoFormValues } from "@/hooks/use-settings";
+import { UseFormReturn } from "react-hook-form";
+import { Clipboard, Check } from "lucide-react";
+import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
 
 interface CryptoFormProps {
-  form: UseFormReturn<CryptoFormValues>
-  onSubmit: (data: CryptoFormValues) => void
+  form: UseFormReturn<CryptoFormValues>;
+  onSubmit: (data: CryptoFormValues) => void;
 }
 
 export function CryptoForm({ form, onSubmit }: CryptoFormProps) {
-  const [copiedAddress, setCopiedAddress] = useState(false)
+  const [copiedAddress, setCopiedAddress] = useState(false);
+  const address = useGlobalAuthenticationStore((state) => state.address);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
-      setCopiedAddress(true)
-      setTimeout(() => setCopiedAddress(false), 2000)
-    })
-  }
+      setCopiedAddress(true);
+      setTimeout(() => setCopiedAddress(false), 2000);
+    });
+  };
 
   return (
     <Form {...form}>
@@ -34,20 +50,25 @@ export function CryptoForm({ form, onSubmit }: CryptoFormProps) {
               <FormLabel>Wallet Address</FormLabel>
               <FormControl>
                 <div className="flex">
-                  <Input placeholder="1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2" {...field} />
+                  <Input value={address || field.value} disabled />
                   <Button
                     type="button"
                     variant="outline"
                     size="icon"
                     className="ml-2"
-                    onClick={() => copyToClipboard(field.value)}
+                    onClick={() => copyToClipboard(address || field.value)}
                   >
-                    {copiedAddress ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4" />}
+                    {copiedAddress ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <Clipboard className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
               </FormControl>
               <FormDescription>
-                This is your wallet address for receiving and sending cryptocurrencies.
+                This is your wallet address for receiving and sending
+                cryptocurrencies.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -84,11 +105,10 @@ export function CryptoForm({ form, onSubmit }: CryptoFormProps) {
           render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">
-                <FormLabel className="text-base">
-                  Auto-Convert
-                </FormLabel>
+                <FormLabel className="text-base">Auto-Convert</FormLabel>
                 <FormDescription>
-                  Automatically convert received loans to your preferred cryptocurrency.
+                  Automatically convert received loans to your preferred
+                  cryptocurrency.
                 </FormDescription>
               </div>
               <FormControl>
@@ -103,5 +123,5 @@ export function CryptoForm({ form, onSubmit }: CryptoFormProps) {
         <Button type="submit">Update Crypto Settings</Button>
       </form>
     </Form>
-  )
+  );
 }

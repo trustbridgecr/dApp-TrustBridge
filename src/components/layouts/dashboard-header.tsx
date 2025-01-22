@@ -1,8 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Moon, Sun, Globe, Bell } from "lucide-react";
+import { useWallet } from "../auth/hooks/useWallet.hook";
+import useHeaderWithoutAuth from "./hooks/dashboard-header.hook";
 
 type Theme = "light" | "dark";
 type Language = "es" | "en" | "fr" | "de";
@@ -23,6 +30,9 @@ export function DashboardHeader({
   setTheme: (theme: Theme) => void;
   setLanguage: (lang: Language) => void;
 }) {
+  const { address } = useHeaderWithoutAuth();
+  const { handleConnect, handleDisconnect } = useWallet();
+
   return (
     <header className="w-full bg-white dark:bg-[#18181B] text-black dark:text-white px-6 py-4">
       <div className="flex items-center justify-between">
@@ -30,14 +40,21 @@ export function DashboardHeader({
         <div className="flex items-center space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-black dark:text-white">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-black dark:text-white"
+              >
                 <Globe className="h-[1.2rem] w-[1.2rem]" />
                 <span className="sr-only">Toggle language</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               {languages.map((lang) => (
-                <DropdownMenuItem key={lang.code} onClick={() => setLanguage(lang.code as Language)}>
+                <DropdownMenuItem
+                  key={lang.code}
+                  onClick={() => setLanguage(lang.code as Language)}
+                >
                   {lang.name}
                 </DropdownMenuItem>
               ))}
@@ -55,10 +72,32 @@ export function DashboardHeader({
             <span className="sr-only">Toggle theme</span>
           </Button>
 
-          <Button variant="ghost" size="icon" className="text-black dark:text-white">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-black dark:text-white"
+          >
             <Bell className="h-[1.2rem] w-[1.2rem]" />
             <span className="sr-only">Notifications</span>
           </Button>
+
+          {address ? (
+            <button
+              onClick={handleDisconnect}
+              type="button"
+              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+            >
+              Disconnect
+            </button>
+          ) : (
+            <button
+              onClick={handleConnect}
+              type="button"
+              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+            >
+              Connect
+            </button>
+          )}
         </div>
       </div>
     </header>
