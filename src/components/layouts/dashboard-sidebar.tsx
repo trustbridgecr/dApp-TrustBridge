@@ -37,7 +37,7 @@ export function DashboardSidebar() {
       </nav>
       <div className="mt-auto">
         <Link
-          href="/logout"
+          href="/"
           className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400"
         >
           <LogOut className="h-4 w-4" />
