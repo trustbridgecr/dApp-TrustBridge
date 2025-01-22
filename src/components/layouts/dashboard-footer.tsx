@@ -10,7 +10,7 @@ export function DashboardFooter() {
             <p className="text-center text-sm leading-loose text-gray-600 dark:text-gray-400">
               Built by{" "}
               <a
-                href="#"
+                href="https://trust-bridge-cr.vercel.app/"
                 target="_blank"
                 rel="noreferrer"
                 className="font-medium underline underline-offset-4"
@@ -19,7 +19,7 @@ export function DashboardFooter() {
               </a>
               . The source code is available on{" "}
               <a
-                href="#"
+                href="https://github.com/TrustBridgeCR"
                 target="_blank"
                 rel="noreferrer"
                 className="font-medium underline underline-offset-4"
@@ -30,11 +30,13 @@ export function DashboardFooter() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="text-black dark:text-white">
+            <Button variant="ghost" size="icon" className="text-black dark:text-white" 
+            onClick={() => window.open("https://github.com/TrustBridgeCR", "_blank")}>
               <Github className="h-4 w-4" />
               <span className="sr-only">GitHub</span>
             </Button>
-            <Button variant="ghost" size="icon" className="text-black dark:text-white">
+            <Button variant="ghost" size="icon" className="text-black dark:text-white"
+            onClick={() => window.open("https://x.com/TrustBridgecr", "_blank")}>
               <Twitter className="h-4 w-4" />
               <span className="sr-only">Twitter</span>
             </Button>
