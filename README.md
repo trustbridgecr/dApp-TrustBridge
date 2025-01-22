@@ -43,12 +43,12 @@ Step-by-Step Process
 
 1. **🍴 Forking and Cloning the Repository**
    ```bash
-   git clone https://github.com/TrustBridgeCR/Landing.git
-   cd Landing
+   git clone https://github.com/TrustBridgeCR/dApp-TrustBridge.git
+   cd dApp-TrustBridge
    ```
 2. **🔄 Adding Remote Upstream**
    ```bash
-   git remote add upstream https://github.com/TrustBridgeCR/Landing.git
+   git remote add upstream https://github.com/TrustBridgeCR/dApp-TrustBridge.git
    ```
 3. **⚙️ Setting Up Environment Variables**
    Create a `.env` file and configure required API keys.
@@ -86,13 +86,9 @@ Guidelines
   ```
 -🔄 CI/CD Setup: Automated using GitHub Actions.
 
-🎨 Design Mockups
-
--📎 Figma Design Link: [TrustBridge Figma](https://trust-bridge-cr.vercel.app/)
-
 
 📜 License
 
-© 2024 TrustBridge. Released under the MIT License.
+© 2025 TrustBridge. Released under the MIT License.
 
 🌟 Join TrustBridge today and transform how you manage microloans! 🌟
