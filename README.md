@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+TrustBridge
 
-## Getting Started
+🚀 Project Overview
 
-First, run the development server:
+**TrustBridge** is a decentralized platform aimed at enhancing P2P transactions by providing secure microloan agreements powered by blockchain and trustless technologies. Our goal is to ensure transparency, trust, and automation in financial transactions, making lending seamless and cost-effective.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+🎯 Key Benefits and Objectives
+- Enhance trust in microloan agreements through blockchain transparency.
+- Provide automated and secure smart contract execution.
+- Minimize transaction costs and maximize accessibility.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🔒 Why Choose TrustBridge?
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+⚙️ Core Advantages
+- **Security:** End-to-end encryption and decentralized architecture protect sensitive data.
+- **Transparency:** Blockchain ledger ensures all transactions are publicly verifiable.
+- **Decentralization:** Removes intermediaries, reducing costs and increasing efficiency.
+- **Automation:** Smart contracts handle agreement execution without manual intervention.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+🌟 Key Features
 
-## Learn More
+- **🏦 Secure Microloan Agreements:** Ensure safety and compliance in financial transactions.
+- **🔗 Blockchain-Powered Transparency:** All actions are recorded and verifiable.
+- **⚡ Smart Contract Automation:** Automate loan agreements with predefined conditions.
+- **💰 Low Transaction Fees:** Cost-effective solutions with minimal overhead.
 
-To learn more about Next.js, take a look at the following resources:
+🛠️ How It Works
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Step-by-Step Process
+1. **🏗️ Loan Creation:** Borrower submits a loan request through the TrustBridge platform.
+2. **💵 Funding:** Investors review and fund loan requests via secure wallets.
+3. **📄 Agreement Execution:** Smart contracts automate terms and conditions.
+4. **🔄 Loan Repayment or Default Handling:** Repayments are tracked, and defaults managed transparently.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+⚙️ Getting Started
 
-## Deploy on Vercel
+📋 Prerequisites
+- **🖥️ Node.js** (v14 or later)
+- **🔐 Wallet Integration** (Albedo, Freighter)
+- **🌐 API Access Setup** (Registration required)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+🛠️ Installation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **🍴 Forking and Cloning the Repository**
+   ```bash
+   git clone https://github.com/TrustBridgeCR/dApp-TrustBridge.git
+   cd dApp-TrustBridge
+   ```
+2. **🔄 Adding Remote Upstream**
+   ```bash
+   git remote add upstream https://github.com/TrustBridgeCR/dApp-TrustBridge.git
+   ```
+3. **⚙️ Setting Up Environment Variables**
+   Create a `.env` file and configure required API keys.
+4. **📦 Installing Dependencies**
+   ```bash
+   npm install
+   ```
+5. **▶️ Running the Development Server**
+   ```bash
+   npm run dev
+   ```
+
+📡 API Reference
+
+Key Endpoints
+- **🆕 `/loan/initiate`** - Start a new loan agreement.
+- **💰 `/loan/fund`** - Fund an existing agreement.
+- **✅ `/loan/settle`** - Settle a completed agreement.
+
+🏗️ Tech Stack
+
+- **💻 Frontend:** Next.js, TypeScript, Tailwind CSS.
+- **🔐 Blockchain:** Smart Contracts, Trustless Transactions.
+- **🌐 Backend Integration:** API services for seamless escrow management.
+
+🧪 Testing Infrastructure
+
+Guidelines
+- 🧩 Unit and E2E Testing:** Implemented with Jest and Cypress.
+- 🏃 Running Tests:
+  ```bash
+  npm test
+  npm run test:e2e
+  npm run test:coverage
+  ```
+-🔄 CI/CD Setup: Automated using GitHub Actions.
+
+
+📜 License
+
+© 2025 TrustBridge. Released under the MIT License.
+
+🌟 Join TrustBridge today and transform how you manage microloans! 🌟
