@@ -35,70 +35,67 @@ export function DashboardHeader({
 
   return (
     <header className="w-full bg-white dark:bg-[#18181B] text-black dark:text-white px-6 py-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold"></h1>
-        <div className="flex items-center space-x-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-black dark:text-white"
+      <div className="flex items-center justify-end space-x-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-black dark:text-white"
+            >
+              <Globe className="h-[1.2rem] w-[1.2rem]" />
+              <span className="sr-only">Toggle language</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {languages.map((lang) => (
+              <DropdownMenuItem
+                key={lang.code}
+                onClick={() => setLanguage(lang.code as Language)}
               >
-                <Globe className="h-[1.2rem] w-[1.2rem]" />
-                <span className="sr-only">Toggle language</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {languages.map((lang) => (
-                <DropdownMenuItem
-                  key={lang.code}
-                  onClick={() => setLanguage(lang.code as Language)}
-                >
-                  {lang.name}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                {lang.name}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-black dark:text-white"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-black dark:text-white"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        >
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-black dark:text-white"
+        >
+          <Bell className="h-[1.2rem] w-[1.2rem]" />
+          <span className="sr-only">Notifications</span>
+        </Button>
+
+        {address ? (
+          <button
+            onClick={handleDisconnect}
+            type="button"
+            className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
           >
-            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            <span className="sr-only">Toggle theme</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-black dark:text-white"
+            Disconnect
+          </button>
+        ) : (
+          <button
+            onClick={handleConnect}
+            type="button"
+            className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
           >
-            <Bell className="h-[1.2rem] w-[1.2rem]" />
-            <span className="sr-only">Notifications</span>
-          </Button>
-
-          {address ? (
-            <button
-              onClick={handleDisconnect}
-              type="button"
-              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-            >
-              Disconnect
-            </button>
-          ) : (
-            <button
-              onClick={handleConnect}
-              type="button"
-              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-            >
-              Connect
-            </button>
-          )}
-        </div>
+            Connect
+          </button>
+        )}
       </div>
     </header>
   );
