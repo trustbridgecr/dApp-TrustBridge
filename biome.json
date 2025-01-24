@@ -1,0 +1,17 @@
+{
+    "$schema": "https://biome.dev/schema.json",
+    "files": {
+      "ignore": ["node_modules", "dist"]
+    },
+    "formatter": {
+      "enabled": true
+    },
+    "linter": {
+      "rules": {
+        "recommended": true,
+        "style": {},
+        "correctness": {}
+      }
+    }
+  }
+  
