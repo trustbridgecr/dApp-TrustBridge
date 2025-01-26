@@ -1,0 +1,16 @@
+{
+    "common": {
+      "welcome": "Welcome to TrustBridge",
+      "login": "Login",
+      "signup": "Sign Up",
+      "dashboard": "Dashboard",
+      "settings": "Settings",
+      "profile": "Profile"
+    },
+    "actions": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  }

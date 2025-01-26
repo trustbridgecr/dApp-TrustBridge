@@ -1,0 +1,16 @@
+{
+    "common": {
+      "welcome": "Bienvenido a TrustBridge",
+      "login": "Iniciar Sesión",
+      "signup": "Registrarse",
+      "dashboard": "Panel de Control",
+      "settings": "Configuración",
+      "profile": "Perfil"
+    },
+    "actions": {
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    }
+  }

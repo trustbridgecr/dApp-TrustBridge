@@ -3,6 +3,7 @@
 import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
 import { redirect } from "next/navigation";
 import React from "react";
+import '../i18n';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { address } = useGlobalAuthenticationStore();
