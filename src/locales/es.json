@@ -1,16 +1,30 @@
 {
-    "common": {
-      "welcome": "Bienvenido a TrustBridge",
-      "login": "Iniciar Sesión",
-      "signup": "Registrarse",
-      "dashboard": "Panel de Control",
-      "settings": "Configuración",
-      "profile": "Perfil"
-    },
-    "actions": {
-      "save": "Guardar",
-      "cancel": "Cancelar",
-      "edit": "Editar",
-      "delete": "Eliminar"
+  "common": {
+    "welcome": "Bienvenido a TrustBridge",
+    "login": "Iniciar Sesión",
+    "signup": "Registrarse",
+    "dashboard": "Panel de Control",
+    "settings": "Configuración",
+    "profile": "Perfil"
+  },
+  "actions": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Eliminar"
+  },
+  "settings": {
+    "title": "Configuración",
+    "description": "Gestiona tu cuenta y configura tus preferencias.",
+    "tabs": {
+      "profile": "Perfil",
+      "account": "Cuenta",
+      "notifications": "Notificaciones",
+      "crypto": "Cripto"
     }
+  },
+  "layout": {
+    "unauthorized": "Por favor conecta tu billetera para acceder a esta página",
+    "error": "Ocurrió un error"
   }
+}

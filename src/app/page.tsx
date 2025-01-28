@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { Login } from "@/components/auth/login";
 import { Register } from "@/components/auth/register";
 import { ForgotPassword } from "@/components/auth/forgot-password";
@@ -10,6 +11,7 @@ import { DashboardFooter } from "@/components/layouts/dashboard-footer";
 import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
 
 export default function HomePage() {
+  const { t, i18n } = useTranslation();
   const [authView, setAuthView] = useState<
     "login" | "register" | "forgotPassword"
   >("login");
@@ -30,6 +32,10 @@ export default function HomePage() {
       router.push("/dashboard");
     }
   }, [address, router]);
+
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language, i18n]);
 
   const handleLogin = () => {
     console.log("User authenticated");

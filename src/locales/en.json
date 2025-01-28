@@ -1,16 +1,30 @@
 {
-    "common": {
-      "welcome": "Welcome to TrustBridge",
-      "login": "Login",
-      "signup": "Sign Up",
-      "dashboard": "Dashboard",
-      "settings": "Settings",
-      "profile": "Profile"
-    },
-    "actions": {
-      "save": "Save",
-      "cancel": "Cancel",
-      "edit": "Edit",
-      "delete": "Delete"
+  "common": {
+    "welcome": "Welcome to TrustBridge",
+    "login": "Login",
+    "signup": "Sign Up",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "profile": "Profile"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account and configure your preferences.",
+    "tabs": {
+      "profile": "Profile",
+      "account": "Account",
+      "notifications": "Notifications",
+      "crypto": "Crypto"
     }
+  },
+  "layout": {
+    "unauthorized": "Please connect your wallet to access this page",
+    "error": "An error occurred"
   }
+}
