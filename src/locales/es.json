@@ -1,0 +1,213 @@
+{
+  "header": {
+    "connect": "Conectar Billetera",
+    "disconnect": "Desconectar Billetera",
+    "theme": {
+      "toggleTheme": "Cambiar tema",
+      "toggleLanguage": "Cambiar idioma",
+      "notifications": "Notificaciones"
+    },
+    "languages": {
+      "en": "Inglés",
+      "es": "Español"
+    }
+  },
+  "footer": {
+    "builtBy": "Desarrollado por",
+    "sourceCode": "El código fuente está disponible en",
+    "githubLink": "Visita nuestro perfil de GitHub",
+    "twitterLink": "Síguenos en Twitter"
+  },
+  "dashboard": {
+    "title": "Panel de Control",
+    "currentLoan": {
+      "title": "Estado del Préstamo Actual",
+      "summary": "Resumen de tu préstamo activo",
+      "totalAmount": "Monto total",
+      "amountPaid": "Monto pagado",
+      "nextPayment": "Próximo pago",
+      "interestRate": "Tasa de interés",
+      "percentagePaid": "pagado",
+      "progressLabel": "Progreso del préstamo"
+    },
+    "paymentHistory": {
+      "title": "Historial de Pagos",
+      "date": "Fecha",
+      "amount": "Monto",
+      "noPayments": "No hay historial de pagos disponible"
+    },
+    "paymentSchedule": {
+      "title": "Calendario de Pagos Futuros",
+      "date": "Fecha",
+      "amount": "Monto",
+      "noSchedule": "No hay pagos programados"
+    }
+  },
+  "sidebar": {
+    "dashboard": "Panel de Control",
+    "requests": "Solicitudes",
+    "loans": "Préstamos",
+    "settings": "Configuración",
+    "logout": "Cerrar Sesión"
+  },
+  "common": {
+    "currency": {
+      "format": "USD {{amount}}"
+    },
+    "loading": "Cargando...",
+    "error": "Ocurrió un error"
+  },
+  "form": {
+    "pageTitle": "Solicitar Préstamo",
+    "title": "Solicitar un Préstamo",
+    "description": "Complete el formulario para solicitar su préstamo",
+    "fields": {
+      "amount": {
+        "label": "Monto del Préstamo",
+        "placeholder": "Ej.: 5000",
+        "description": "Ingrese el monto que desea solicitar en USD"
+      },
+      "term": {
+        "label": "Plazo del Préstamo",
+        "placeholder": "Seleccionar plazo",
+        "description": "Elija el período de pago"
+      },
+      "purpose": {
+        "label": "Propósito del Préstamo",
+        "placeholder": "Describa brevemente por qué necesita el préstamo",
+        "description": "Explique el motivo de su solicitud"
+      },
+      "monthlyIncome": {
+        "label": "Ingreso Mensual",
+        "placeholder": "Ej.: 3000",
+        "description": "Ingrese su ingreso mensual promedio en USD"
+      }
+    },
+    "terms": {
+      "3months": "3 meses",
+      "6months": "6 meses",
+      "12months": "12 meses",
+      "18months": "18 meses",
+      "24months": "24 meses"
+    },
+    "buttons": {
+      "submit": "Enviar Solicitud",
+      "submitting": "Enviando..."
+    },
+    "validation": {
+      "amount": {
+        "required": "El monto del préstamo es requerido",
+        "positive": "El monto del préstamo debe ser un número positivo"
+      },
+      "term": {
+        "required": "El plazo del préstamo es requerido"
+      },
+      "purpose": {
+        "minLength": "El propósito debe tener al menos 10 caracteres",
+        "maxLength": "El propósito no puede exceder los 500 caracteres"
+      },
+      "income": {
+        "required": "El ingreso mensual es requerido",
+        "positive": "El ingreso mensual debe ser un número positivo"
+      }
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "account": {
+      "title": "Configuración de la Cuenta",
+      "fullName": {
+        "label": "Nombre Completo",
+        "placeholder": "Juan Pérez",
+        "description": "Este es tu nombre completo."
+      },
+      "dob": {
+        "label": "Fecha de Nacimiento"
+      },
+      "language": {
+        "label": "Idioma",
+        "placeholder": "Selecciona un idioma",
+        "description": "Este es el idioma en el que se mostrará la interfaz.",
+        "options": {
+          "en": "Inglés",
+          "es": "Español"
+        }
+      },
+      "submit": "Actualizar Cuenta"
+    },
+    "crypto": {
+      "title": "Configuración de Criptomonedas",
+      "walletAddress": {
+        "label": "Dirección de Billetera",
+        "description": "Esta es tu dirección de billetera para recibir y enviar criptomonedas."
+      },
+      "preferredCurrency": {
+        "label": "Criptomoneda Preferida",
+        "placeholder": "Selecciona una criptomoneda",
+        "description": "Esta será la criptomoneda predeterminada para tus transacciones."
+      },
+      "autoConvert": {
+        "label": "Conversión Automática",
+        "description": "Convierte automáticamente los préstamos recibidos a tu criptomoneda preferida."
+      },
+      "submit": "Actualizar Configuración de Cripto"
+    },
+    "notifications": {
+      "title": "Configuración de Notificaciones",
+      "email": {
+        "label": "Notificaciones por Email",
+        "description": "Recibe notificaciones por email sobre la actividad de tu cuenta."
+      },
+      "marketing": {
+        "label": "Emails de Marketing",
+        "description": "Recibe emails sobre nuevas funciones y ofertas especiales."
+      },
+      "submit": "Actualizar Configuración de Notificaciones"
+    },
+    "profile": {
+      "title": "Configuración del Perfil",
+      "email": {
+        "label": "Email",
+        "description": "Tu dirección de email para las comunicaciones de la cuenta."
+      },
+      "bio": {
+        "label": "Biografía",
+        "placeholder": "Escribe una breve biografía sobre ti...",
+        "description": "Cuéntanos un poco sobre ti."
+      },
+      "submit": "Actualizar Perfil"
+    }
+  },
+  "auth": {
+    "common": {
+      "emailLabel": "Correo Electrónico",
+      "emailPlaceholder": "correo@ejemplo.com",
+      "passwordLabel": "Contraseña"
+    },
+    "login": {
+      "title": "Iniciar Sesión",
+      "description": "Accede a tu cuenta de micropréstamos blockchain",
+      "submitButton": "Iniciar Sesión",
+      "forgotPasswordLink": "¿Olvidaste tu contraseña?",
+      "registerLink": "¿No tienes una cuenta? Regístrate aquí"
+    },
+    "register": {
+      "title": "Registro",
+      "description": "Crea una nueva cuenta de micropréstamos blockchain",
+      "nameLabel": "Nombre Completo",
+      "namePlaceholder": "Juan Pérez",
+      "confirmPasswordLabel": "Confirmar Contraseña",
+      "submitButton": "Registrarse",
+      "loginLink": "¿Ya tienes una cuenta? Inicia sesión aquí",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "errorMessage": "Error al registrarse. Por favor, inténtelo de nuevo."
+    },
+    "forgotPassword": {
+      "title": "Restablecer Contraseña",
+      "description": "Ingresa tu correo electrónico para recibir instrucciones",
+      "submitButton": "Enviar Instrucciones",
+      "backToLogin": "Volver a Iniciar Sesión",
+      "successMessage": "Se han enviado las instrucciones a tu correo electrónico."
+    }
+  }
+}

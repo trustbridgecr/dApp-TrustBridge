@@ -3,16 +3,19 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { LayoutDashboard, FileText, PiggyBank, Settings, LogOut } from "lucide-react";
+import { useTranslation } from 'react-i18next';
+import '@/lib/i18n';
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-  { icon: FileText, label: "Requests", href: "/dashboard/requests" },
-  { icon: PiggyBank, label: "Loans", href: "/dashboard/loans" },
-  { icon: Settings, label: "Settings", href: "/dashboard/settings" },
+  { icon: LayoutDashboard, labelKey: "sidebar.dashboard", href: "/dashboard" },
+  { icon: FileText, labelKey: "sidebar.requests", href: "/dashboard/requests" },
+  { icon: PiggyBank, labelKey: "sidebar.loans", href: "/dashboard/loans" },
+  { icon: Settings, labelKey: "sidebar.settings", href: "/dashboard/settings" },
 ];
 
 export function DashboardSidebar() {
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   return (
     <aside className="flex flex-col w-64 min-h-screen bg-white dark:bg-[#18181B] border-r border-gray-200 dark:border-none p-4">
@@ -31,7 +34,7 @@ export function DashboardSidebar() {
             }`}
           >
             <item.icon className="h-4 w-4" />
-            <span>{item.label}</span>
+            <span>{t(item.labelKey)}</span>
           </Link>
         ))}
       </nav>
@@ -41,7 +44,7 @@ export function DashboardSidebar() {
           className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400"
         >
           <LogOut className="h-4 w-4" />
-          <span>Log Out</span>
+          <span>{t('sidebar.logout')}</span>
         </Link>
       </div>
     </aside>
