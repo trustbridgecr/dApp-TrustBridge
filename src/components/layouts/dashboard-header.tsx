@@ -1,5 +1,7 @@
 "use client";
 
+import '@/lib/i18n';
+import { useTranslation } from 'react-i18next';
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,26 +14,26 @@ import { useWallet } from "../auth/hooks/useWallet.hook";
 import useHeaderWithoutAuth from "./hooks/dashboard-header.hook";
 
 type Theme = "light" | "dark";
-type Language = "es" | "en" | "fr" | "de";
 
 const languages = [
   { code: "es", name: "Spanish" },
   { code: "en", name: "English" },
-  { code: "fr", name: "French" },
-  { code: "de", name: "German" },
 ];
 
 export function DashboardHeader({
   theme,
   setTheme,
-  setLanguage,
 }: {
   theme: Theme;
   setTheme: (theme: Theme) => void;
-  setLanguage: (lang: Language) => void;
 }) {
+  const { t, i18n } = useTranslation();
   const { address } = useHeaderWithoutAuth();
   const { handleConnect, handleDisconnect } = useWallet();
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <header className="w-full bg-white dark:bg-[#18181B] text-black dark:text-white px-6 py-4">
@@ -51,7 +53,7 @@ export function DashboardHeader({
             {languages.map((lang) => (
               <DropdownMenuItem
                 key={lang.code}
-                onClick={() => setLanguage(lang.code as Language)}
+                onClick={() => changeLanguage(lang.code)}
               >
                 {lang.name}
               </DropdownMenuItem>
@@ -85,7 +87,7 @@ export function DashboardHeader({
             type="button"
             className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
           >
-            Disconnect
+            {t('header.disconnect')}
           </button>
         ) : (
           <button
@@ -93,7 +95,7 @@ export function DashboardHeader({
             type="button"
             className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
           >
-            Connect
+            {t('header.connect')}
           </button>
         )}
       </div>

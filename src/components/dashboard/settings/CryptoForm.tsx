@@ -1,23 +1,10 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { CryptoFormValues } from "@/hooks/use-settings";
 import { UseFormReturn } from "react-hook-form";
 import { Clipboard, Check } from "lucide-react";
@@ -29,6 +16,7 @@ interface CryptoFormProps {
 }
 
 export function CryptoForm({ form, onSubmit }: CryptoFormProps) {
+  const { t } = useTranslation();
   const [copiedAddress, setCopiedAddress] = useState(false);
   const address = useGlobalAuthenticationStore((state) => state.address);
 
@@ -47,7 +35,7 @@ export function CryptoForm({ form, onSubmit }: CryptoFormProps) {
           name="wallet_address"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Wallet Address</FormLabel>
+              <FormLabel>{t('settings.crypto.walletAddress.label')}</FormLabel>
               <FormControl>
                 <div className="flex">
                   <Input value={address || field.value} disabled />
@@ -67,8 +55,7 @@ export function CryptoForm({ form, onSubmit }: CryptoFormProps) {
                 </div>
               </FormControl>
               <FormDescription>
-                This is your wallet address for receiving and sending
-                cryptocurrencies.
+                {t('settings.crypto.walletAddress.description')}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -79,11 +66,11 @@ export function CryptoForm({ form, onSubmit }: CryptoFormProps) {
           name="preferred_currency"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Preferred Cryptocurrency</FormLabel>
+              <FormLabel>{t('settings.crypto.preferredCurrency.label')}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a cryptocurrency" />
+                    <SelectValue placeholder={t('settings.crypto.preferredCurrency.placeholder')} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -93,7 +80,7 @@ export function CryptoForm({ form, onSubmit }: CryptoFormProps) {
                 </SelectContent>
               </Select>
               <FormDescription>
-                This will be the default cryptocurrency for your transactions.
+                {t('settings.crypto.preferredCurrency.description')}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -105,10 +92,9 @@ export function CryptoForm({ form, onSubmit }: CryptoFormProps) {
           render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">
-                <FormLabel className="text-base">Auto-Convert</FormLabel>
+                <FormLabel className="text-base">{t('settings.crypto.autoConvert.label')}</FormLabel>
                 <FormDescription>
-                  Automatically convert received loans to your preferred
-                  cryptocurrency.
+                  {t('settings.crypto.autoConvert.description')}
                 </FormDescription>
               </div>
               <FormControl>
@@ -120,7 +106,7 @@ export function CryptoForm({ form, onSubmit }: CryptoFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit">Update Crypto Settings</Button>
+        <Button type="submit">{t('settings.crypto.submit')}</Button>
       </form>
     </Form>
   );

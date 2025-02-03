@@ -4,10 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -23,24 +23,25 @@ import {
 const formSchema = z.object({
   amount: z
     .string()
-    .min(1, "Loan amount is required")
+    .min(1, "form.validation.amount.required")
     .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
-      message: "Loan amount must be a positive number",
+      message: "form.validation.amount.positive",
     }),
-  term: z.string().min(1, "Loan term is required"),
+  term: z.string().min(1, "form.validation.term.required"),
   purpose: z
     .string()
-    .min(10, "Purpose must have at least 10 characters")
-    .max(500, "Purpose cannot exceed 500 characters"),
+    .min(10, "form.validation.purpose.minLength")
+    .max(500, "form.validation.purpose.maxLength"),
   monthlyIncome: z
     .string()
-    .min(1, "Monthly income is required")
+    .min(1, "form.validation.income.required")
     .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
-      message: "Monthly income must be a positive number",
+      message: "form.validation.income.positive",
     }),
 });
 
 export function RequestsContent() {
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -57,23 +58,32 @@ export function RequestsContent() {
     setIsSubmitting(true);
     try {
       console.log(values);
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulated submission
-      // Removed toast notification
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     } catch (error) {
-      // Removed toast notification
+      console.error(error);
     } finally {
       setIsSubmitting(false);
     }
   }
 
+  const loanTerms = [
+    { value: "3", label: t('form.terms.3months') },
+    { value: "6", label: t('form.terms.6months') },
+    { value: "12", label: t('form.terms.12months') },
+    { value: "18", label: t('form.terms.18months') },
+    { value: "24", label: t('form.terms.24months') },
+  ];
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-white dark:bg-[#18181B] text-black dark:text-white p-6">
       <Card className="w-full max-w-lg bg-white dark:bg-[#18181B] border border-gray-200 dark:border-none">
-        <h2 className="text-4xl font-bold text-left mb-6">Request Loan</h2>
+        <h2 className="text-4xl font-bold text-left mb-6">{t('form.pageTitle')}</h2>
         <CardHeader>
-          <CardTitle className="text-xl font-bold text-black dark:text-white">Request a Loan</CardTitle>
+          <CardTitle className="text-xl font-bold text-black dark:text-white">
+            {t('form.title')}
+          </CardTitle>
           <CardDescription className="text-gray-600 dark:text-gray-400">
-            Complete the form to request your loan
+            {t('form.description')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -84,11 +94,11 @@ export function RequestsContent() {
                 name="amount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Loan Amount</FormLabel>
+                    <FormLabel>{t('form.fields.amount.label')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="E.g.: 5000" {...field} />
+                      <Input placeholder={t('form.fields.amount.placeholder')} {...field} />
                     </FormControl>
-                    <FormDescription>Enter the amount you wish to request in USD</FormDescription>
+                    <FormDescription>{t('form.fields.amount.description')}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -98,22 +108,22 @@ export function RequestsContent() {
                 name="term"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Loan Term</FormLabel>
+                    <FormLabel>{t('form.fields.term.label')}</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select term" />
+                          <SelectValue placeholder={t('form.fields.term.placeholder')} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="3">3 months</SelectItem>
-                        <SelectItem value="6">6 months</SelectItem>
-                        <SelectItem value="12">12 months</SelectItem>
-                        <SelectItem value="18">18 months</SelectItem>
-                        <SelectItem value="24">24 months</SelectItem>
+                        {loanTerms.map((term) => (
+                          <SelectItem key={term.value} value={term.value}>
+                            {term.label}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
-                    <FormDescription>Choose the repayment period</FormDescription>
+                    <FormDescription>{t('form.fields.term.description')}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -123,15 +133,15 @@ export function RequestsContent() {
                 name="purpose"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Purpose of Loan</FormLabel>
+                    <FormLabel>{t('form.fields.purpose.label')}</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Briefly describe why you need the loan"
+                        placeholder={t('form.fields.purpose.placeholder')}
                         className="resize-none"
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>Explain the reason for your request</FormDescription>
+                    <FormDescription>{t('form.fields.purpose.description')}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -141,17 +151,21 @@ export function RequestsContent() {
                 name="monthlyIncome"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Monthly Income</FormLabel>
+                    <FormLabel>{t('form.fields.monthlyIncome.label')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="E.g.: 3000" {...field} />
+                      <Input placeholder={t('form.fields.monthlyIncome.placeholder')} {...field} />
                     </FormControl>
-                    <FormDescription>Enter your average monthly income in USD</FormDescription>
+                    <FormDescription>{t('form.fields.monthlyIncome.description')}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full bg-primary text-white dark:bg-blue-700 hover:dark:bg-blue-800" disabled={isSubmitting}>
-                {isSubmitting ? "Submitting..." : "Submit Request"}
+              <Button 
+                type="submit" 
+                className="w-full bg-primary text-white dark:bg-blue-700 hover:dark:bg-blue-800" 
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? t('form.buttons.submitting') : t('form.buttons.submit')}
               </Button>
             </form>
           </Form>

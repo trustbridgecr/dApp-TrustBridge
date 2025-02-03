@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
 export function Register({ onSwitchToLogin }: { onSwitchToLogin: () => void }) {
+  const { t } = useTranslation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,28 +21,28 @@ export function Register({ onSwitchToLogin }: { onSwitchToLogin: () => void }) {
     e.preventDefault();
     setError("");
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError(t('auth.register.passwordMismatch'));
       return;
     }
     console.log("Register attempt with:", { name, email, password });
-    setError("Error registering. Please try again.");
+    setError(t('auth.register.errorMessage'));
   };
 
   return (
     <Card className="w-full max-w-md mx-auto bg-white dark:bg-[#18181B] border border-gray-200 dark:border-none">
       <CardHeader>
-        <CardTitle className="text-gray-900 dark:text-gray-100">Register</CardTitle>
+        <CardTitle className="text-gray-900 dark:text-gray-100">{t('auth.register.title')}</CardTitle>
         <CardDescription className="text-gray-600 dark:text-gray-400">
-          Create a new blockchain microloans account
+          {t('auth.register.description')}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-gray-700 dark:text-gray-300">Full Name</Label>
+            <Label htmlFor="name" className="text-gray-700 dark:text-gray-300">{t('auth.register.nameLabel')}</Label>
             <Input
               id="name"
-              placeholder="John Doe"
+              placeholder={t('auth.register.namePlaceholder')}
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -48,11 +50,11 @@ export function Register({ onSwitchToLogin }: { onSwitchToLogin: () => void }) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">Email Address</Label>
+            <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">{t('auth.common.emailLabel')}</Label>
             <Input
               id="email"
               type="email"
-              placeholder="email@example.com"
+              placeholder={t('auth.common.emailPlaceholder')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -60,7 +62,7 @@ export function Register({ onSwitchToLogin }: { onSwitchToLogin: () => void }) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-gray-700 dark:text-gray-300">Password</Label>
+            <Label htmlFor="password" className="text-gray-700 dark:text-gray-300">{t('auth.common.passwordLabel')}</Label>
             <Input
               id="password"
               type="password"
@@ -71,7 +73,7 @@ export function Register({ onSwitchToLogin }: { onSwitchToLogin: () => void }) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword" className="text-gray-700 dark:text-gray-300">Confirm Password</Label>
+            <Label htmlFor="confirmPassword" className="text-gray-700 dark:text-gray-300">{t('auth.register.confirmPasswordLabel')}</Label>
             <Input
               id="confirmPassword"
               type="password"
@@ -88,13 +90,13 @@ export function Register({ onSwitchToLogin }: { onSwitchToLogin: () => void }) {
             </Alert>
           )}
           <Button type="submit" className="w-full bg-blue-600 text-white dark:bg-blue-700 hover:dark:bg-blue-800">
-            Register
+            {t('auth.register.submitButton')}
           </Button>
         </form>
       </CardContent>
       <CardFooter className="flex justify-center">
         <Button variant="link" className="text-gray-700 dark:text-gray-300" onClick={onSwitchToLogin}>
-          Already have an account? Log in here
+          {t('auth.register.loginLink')}
         </Button>
       </CardFooter>
     </Card>

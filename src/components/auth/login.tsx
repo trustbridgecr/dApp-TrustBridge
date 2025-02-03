@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +16,7 @@ interface LoginProps {
 }
 
 export function Login({ onSwitchToRegister, onForgotPassword, onLogin }: LoginProps) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -29,19 +31,19 @@ export function Login({ onSwitchToRegister, onForgotPassword, onLogin }: LoginPr
   return (
     <Card className="w-full max-w-md mx-auto bg-white dark:bg-[#18181B] border border-gray-200 dark:border-none">
       <CardHeader>
-        <CardTitle className="text-black dark:text-gray-100">Log In</CardTitle>
+        <CardTitle className="text-black dark:text-gray-100">{t('auth.login.title')}</CardTitle>
         <CardDescription className="text-gray-600 dark:text-gray-400">
-          Access your blockchain microloans account
+          {t('auth.login.description')}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">Email Address</Label>
+            <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">{t('auth.common.emailLabel')}</Label>
             <Input
               id="email"
               type="email"
-              placeholder="email@example.com"
+              placeholder={t('auth.common.emailPlaceholder')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -49,7 +51,7 @@ export function Login({ onSwitchToRegister, onForgotPassword, onLogin }: LoginPr
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-gray-700 dark:text-gray-300">Password</Label>
+            <Label htmlFor="password" className="text-gray-700 dark:text-gray-300">{t('auth.common.passwordLabel')}</Label>
             <Input
               id="password"
               type="password"
@@ -69,7 +71,7 @@ export function Login({ onSwitchToRegister, onForgotPassword, onLogin }: LoginPr
             type="submit"
             className="w-full bg-blue-600 dark:bg-blue-700 text-white hover:dark:bg-blue-800"
           >
-            Log In
+            {t('auth.login.submitButton')}
           </Button>
         </form>
       </CardContent>
@@ -79,14 +81,14 @@ export function Login({ onSwitchToRegister, onForgotPassword, onLogin }: LoginPr
           className="text-gray-700 dark:text-gray-400"
           onClick={onForgotPassword}
         >
-          Forgot your password?
+          {t('auth.login.forgotPasswordLink')}
         </Button>
         <Button
           variant="link"
           className="text-gray-700 dark:text-gray-400"
           onClick={onSwitchToRegister}
         >
-          Don’t have an account? Register here
+          {t('auth.login.registerLink')}
         </Button>
       </CardFooter>
     </Card>

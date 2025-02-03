@@ -1,0 +1,213 @@
+{
+  "header": {
+    "connect": "Connect Wallet",
+    "disconnect": "Disconnect Wallet",
+    "theme": {
+      "toggleTheme": "Toggle theme",
+      "toggleLanguage": "Toggle language",
+      "notifications": "Notifications"
+    },
+    "languages": {
+      "en": "English",
+      "es": "Spanish"
+    }
+  },
+  "footer": {
+    "builtBy": "Built by",
+    "sourceCode": "The source code is available on",
+    "githubLink": "Visit our GitHub profile",
+    "twitterLink": "Follow us on Twitter"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "currentLoan": {
+      "title": "Current Loan Status",
+      "summary": "Summary of your active loan",
+      "totalAmount": "Total amount",
+      "amountPaid": "Amount paid",
+      "nextPayment": "Next payment",
+      "interestRate": "Interest rate",
+      "percentagePaid": "paid",
+      "progressLabel": "Loan progress"
+    },
+    "paymentHistory": {
+      "title": "Payment History",
+      "date": "Date",
+      "amount": "Amount",
+      "noPayments": "No payment history available"
+    },
+    "paymentSchedule": {
+      "title": "Future Payment Schedule",
+      "date": "Date",
+      "amount": "Amount",
+      "noSchedule": "No scheduled payments"
+    }
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "requests": "Requests",
+    "loans": "Loans",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "common": {
+    "currency": {
+      "format": "USD {{amount}}"
+    },
+    "loading": "Loading...",
+    "error": "An error occurred"
+  },
+  "form": {
+    "pageTitle": "Request Loan",
+    "title": "Request a Loan",
+    "description": "Complete the form to request your loan",
+    "fields": {
+      "amount": {
+        "label": "Loan Amount",
+        "placeholder": "E.g.: 5000",
+        "description": "Enter the amount you wish to request in USD"
+      },
+      "term": {
+        "label": "Loan Term",
+        "placeholder": "Select term",
+        "description": "Choose the repayment period"
+      },
+      "purpose": {
+        "label": "Purpose of Loan",
+        "placeholder": "Briefly describe why you need the loan",
+        "description": "Explain the reason for your request"
+      },
+      "monthlyIncome": {
+        "label": "Monthly Income",
+        "placeholder": "E.g.: 3000",
+        "description": "Enter your average monthly income in USD"
+      }
+    },
+    "terms": {
+      "3months": "3 months",
+      "6months": "6 months",
+      "12months": "12 months",
+      "18months": "18 months",
+      "24months": "24 months"
+    },
+    "buttons": {
+      "submit": "Submit Request",
+      "submitting": "Submitting..."
+    },
+    "validation": {
+      "amount": {
+        "required": "Loan amount is required",
+        "positive": "Loan amount must be a positive number"
+      },
+      "term": {
+        "required": "Loan term is required"
+      },
+      "purpose": {
+        "minLength": "Purpose must have at least 10 characters",
+        "maxLength": "Purpose cannot exceed 500 characters"
+      },
+      "income": {
+        "required": "Monthly income is required",
+        "positive": "Monthly income must be a positive number"
+      }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "account": {
+      "title": "Account Settings",
+      "fullName": {
+        "label": "Full Name",
+        "placeholder": "John Doe",
+        "description": "This is your full name."
+      },
+      "dob": {
+        "label": "Date of Birth"
+      },
+      "language": {
+        "label": "Language",
+        "placeholder": "Select a language",
+        "description": "This is the language in which the interface will be displayed.",
+        "options": {
+          "en": "English",
+          "es": "Spanish"
+        }
+      },
+      "submit": "Update Account"
+    },
+    "crypto": {
+      "title": "Cryptocurrency Settings",
+      "walletAddress": {
+        "label": "Wallet Address",
+        "description": "This is your wallet address for receiving and sending cryptocurrencies."
+      },
+      "preferredCurrency": {
+        "label": "Preferred Cryptocurrency",
+        "placeholder": "Select a cryptocurrency",
+        "description": "This will be the default cryptocurrency for your transactions."
+      },
+      "autoConvert": {
+        "label": "Auto-Convert",
+        "description": "Automatically convert received loans to your preferred cryptocurrency."
+      },
+      "submit": "Update Crypto Settings"
+    },
+    "notifications": {
+      "title": "Notification Settings",
+      "email": {
+        "label": "Email Notifications",
+        "description": "Receive email notifications about your account activity."
+      },
+      "marketing": {
+        "label": "Marketing Emails",
+        "description": "Receive emails about new features and special offers."
+      },
+      "submit": "Update Notification Settings"
+    },
+    "profile": {
+      "title": "Profile Settings",
+      "email": {
+        "label": "Email",
+        "description": "Your email address for account communications."
+      },
+      "bio": {
+        "label": "Bio",
+        "placeholder": "Write a short bio about yourself...",
+        "description": "Tell us a little bit about yourself."
+      },
+      "submit": "Update Profile"
+    }
+  },
+  "auth": {
+    "common": {
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "email@example.com",
+      "passwordLabel": "Password"
+    },
+    "login": {
+      "title": "Log In",
+      "description": "Access your blockchain microloans account",
+      "submitButton": "Log In",
+      "forgotPasswordLink": "Forgot your password?",
+      "registerLink": "Don't have an account? Register here"
+    },
+    "register": {
+      "title": "Register",
+      "description": "Create a new blockchain microloans account",
+      "nameLabel": "Full Name",
+      "namePlaceholder": "John Doe",
+      "confirmPasswordLabel": "Confirm Password",
+      "submitButton": "Register",
+      "loginLink": "Already have an account? Log in here",
+      "passwordMismatch": "Passwords do not match",
+      "errorMessage": "Error registering. Please try again."
+    },
+    "forgotPassword": {
+      "title": "Reset Password",
+      "description": "Enter your email address to receive reset instructions",
+      "submitButton": "Send Instructions",
+      "backToLogin": "Back to login",
+      "successMessage": "Reset instructions have been sent to your email address."
+    }
+  }
+}
