@@ -1,0 +1,136 @@
+import React from 'react';
+import { Card } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { ArrowUpDown } from 'lucide-react';
+
+interface LoanRequest {
+  id: string;
+  borrower: string;
+  amount: number;
+  term: number;
+  purpose: string;
+  status: 'pending' | 'approved' | 'rejected';
+  creditScore: number;
+  dateSubmitted: string;
+}
+
+export const RequestsContent = () => {
+  const [requests, setRequests] = useState<LoanRequest[]>([]);
+  const [sortConfig, setSortConfig] = useState<{
+    key: keyof LoanRequest;
+    direction: 'asc' | 'desc';
+  } | null>(null);
+
+  // Mock data - replace with your actual API call
+  useEffect(() => {
+    // Simulated API call
+    const fetchRequests = async () => {
+      // Replace this with your actual API call
+      const mockData: LoanRequest[] = [
+        {
+          id: '1',
+          borrower: 'John Doe',
+          amount: 5000,
+          term: 12,
+          purpose: 'Business Expansion',
+          status: 'pending',
+          creditScore: 720,
+          dateSubmitted: '2025-02-07'
+        },
+        // Add more mock data as needed
+      ];
+      setRequests(mockData);
+    };
+
+    fetchRequests();
+  }, []);
+
+  const handleSort = (key: keyof LoanRequest) => {
+    setSortConfig({
+      key,
+      direction: sortConfig?.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc'
+    });
+  };
+
+  const sortedRequests = React.useMemo(() => {
+    if (!sortConfig) return requests;
+
+    return [...requests].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [requests, sortConfig]);
+
+  const getStatusColor = (status: LoanRequest['status']) => {
+    switch (status) {
+      case 'approved':
+        return 'bg-green-500';
+      case 'rejected':
+        return 'bg-red-500';
+      default:
+        return 'bg-yellow-500';
+    }
+  };
+
+  return (
+    <main className="flex-1 p-6">
+      <Card className="w-full">
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold">Loan Requests</h2>
+          </div>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead onClick={() => handleSort('dateSubmitted')} className="cursor-pointer">
+                    Date <ArrowUpDown className="inline h-4 w-4" />
+                  </TableHead>
+                  <TableHead onClick={() => handleSort('borrower')} className="cursor-pointer">
+                    Borrower <ArrowUpDown className="inline h-4 w-4" />
+                  </TableHead>
+                  <TableHead onClick={() => handleSort('amount')} className="cursor-pointer">
+                    Amount <ArrowUpDown className="inline h-4 w-4" />
+                  </TableHead>
+                  <TableHead onClick={() => handleSort('term')} className="cursor-pointer">
+                    Term (Months) <ArrowUpDown className="inline h-4 w-4" />
+                  </TableHead>
+                  <TableHead>Purpose</TableHead>
+                  <TableHead onClick={() => handleSort('creditScore')} className="cursor-pointer">
+                    Credit Score <ArrowUpDown className="inline h-4 w-4" />
+                  </TableHead>
+                  <TableHead onClick={() => handleSort('status')} className="cursor-pointer">
+                    Status <ArrowUpDown className="inline h-4 w-4" />
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {sortedRequests.map((request) => (
+                  <TableRow key={request.id}>
+                    <TableCell>{new Date(request.dateSubmitted).toLocaleDateString()}</TableCell>
+                    <TableCell>{request.borrower}</TableCell>
+                    <TableCell>${request.amount.toLocaleString()}</TableCell>
+                    <TableCell>{request.term}</TableCell>
+                    <TableCell>{request.purpose}</TableCell>
+                    <TableCell>{request.creditScore}</TableCell>
+                    <TableCell>
+                      <Badge className={`${getStatusColor(request.status)} text-white`}>
+                        {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      </Card>
+    </main>
+  );
+};
