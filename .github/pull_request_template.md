@@ -1,4 +1,4 @@
-# Pull Request for SafeTrust - Close Issue
+# Pull Request for TrustBridge - Close Issue
 
 ❗ **Pull Request Information**
 
