@@ -20,13 +20,17 @@ const languages = [
   { code: "en", name: "English" },
 ];
 
+interface DashboardHeaderProps {
+  theme: "light" | "dark";
+  setTheme: (theme: "light" | "dark") => void;
+  setLanguage: (language: "es" | "en" | "fr" | "de") => void;
+}
+
 export function DashboardHeader({
   theme,
   setTheme,
-}: {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-}) {
+  setLanguage,
+}: DashboardHeaderProps) {
   const { t, i18n } = useTranslation();
   const { address } = useHeaderWithoutAuth();
   const { handleConnect, handleDisconnect } = useWallet();
