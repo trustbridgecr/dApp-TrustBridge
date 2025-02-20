@@ -1,7 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import { NotificationFormValues } from "@/hooks/use-settings";
 import { UseFormReturn } from "react-hook-form";
 
@@ -23,10 +30,10 @@ export function NotificationsForm({ form, onSubmit }: NotificationsFormProps) {
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel className="text-base">
-                  {t('settings.notifications.email.label')}
+                  {t("settings.notifications.email.label")}
                 </FormLabel>
                 <FormDescription>
-                  {t('settings.notifications.email.description')}
+                  {t("settings.notifications.email.description")}
                 </FormDescription>
               </div>
               <FormControl>
@@ -45,10 +52,10 @@ export function NotificationsForm({ form, onSubmit }: NotificationsFormProps) {
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel className="text-base">
-                  {t('settings.notifications.marketing.label')}
+                  {t("settings.notifications.marketing.label")}
                 </FormLabel>
                 <FormDescription>
-                  {t('settings.notifications.marketing.description')}
+                  {t("settings.notifications.marketing.description")}
                 </FormDescription>
               </div>
               <FormControl>
@@ -60,7 +67,7 @@ export function NotificationsForm({ form, onSubmit }: NotificationsFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit">{t('settings.notifications.submit')}</Button>
+        <Button type="submit">{t("settings.notifications.submit")}</Button>
       </form>
     </Form>
   );

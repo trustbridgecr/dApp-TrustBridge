@@ -8,7 +8,13 @@ import { CryptoForm } from "@/components/dashboard/settings/CryptoForm";
 import { DashboardSidebar } from "@/components/layouts/dashboard-sidebar";
 import { DashboardHeader } from "@/components/layouts/dashboard-header";
 import { DashboardFooter } from "@/components/layouts/dashboard-footer";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, useEffect } from "react";
 
@@ -39,7 +45,11 @@ export default function SettingsPage() {
     <div className={`flex min-h-screen ${theme === "dark" ? "dark" : ""}`}>
       <DashboardSidebar />
       <div className="flex-1 flex flex-col">
-        <DashboardHeader theme={theme} setTheme={setTheme} setLanguage={setLanguage} />
+        <DashboardHeader
+          theme={theme}
+          setTheme={setTheme}
+          setLanguage={setLanguage}
+        />
         <div className="container mx-auto py-10">
           <Card className="bg-white dark:bg-[#18181B] dark:border-none shadow-none">
             <CardHeader>
@@ -63,7 +73,10 @@ export default function SettingsPage() {
                   <AccountForm form={accountForm} onSubmit={onAccountSubmit} />
                 </TabsContent>
                 <TabsContent value="notifications">
-                  <NotificationsForm form={notificationsForm} onSubmit={onNotificationsSubmit} />
+                  <NotificationsForm
+                    form={notificationsForm}
+                    onSubmit={onNotificationsSubmit}
+                  />
                 </TabsContent>
                 <TabsContent value="crypto">
                   <CryptoForm form={cryptoForm} onSubmit={onCryptoSubmit} />

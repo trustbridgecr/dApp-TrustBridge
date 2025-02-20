@@ -1,7 +1,7 @@
 "use client";
 
-import '@/lib/i18n';
-import { useTranslation } from 'react-i18next';
+import "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -37,16 +37,16 @@ export function DashboardContent() {
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat(i18n.language, {
-      style: 'currency',
-      currency: 'USD'
+      style: "currency",
+      currency: "USD",
     }).format(amount);
   };
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString(i18n.language, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -54,16 +54,18 @@ export function DashboardContent() {
     <main className="flex-1 p-6 bg-white dark:bg-[#18181B] text-black dark:text-white">
       <div className="w-full max-w-5xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-4xl font-bold text-left">{t('dashboard.title')}</h2>
+          <h2 className="text-4xl font-bold text-left">
+            {t("dashboard.title")}
+          </h2>
         </div>
         <div className="grid gap-6 lg:grid-cols-2">
           <Card className="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-none">
             <CardHeader className="pb-2">
               <CardTitle className="text-base font-medium text-black dark:text-white">
-                {t('dashboard.currentLoan.title')}
+                {t("dashboard.currentLoan.title")}
               </CardTitle>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {t('dashboard.currentLoan.summary')}
+                {t("dashboard.currentLoan.summary")}
               </p>
             </CardHeader>
             <CardContent>
@@ -71,7 +73,7 @@ export function DashboardContent() {
                 <div className="grid gap-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600 dark:text-gray-400">
-                      {t('dashboard.currentLoan.totalAmount')}:
+                      {t("dashboard.currentLoan.totalAmount")}:
                     </span>
                     <span className="font-medium text-black dark:text-white">
                       {formatCurrency(currentLoan.amount)}
@@ -79,7 +81,7 @@ export function DashboardContent() {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600 dark:text-gray-400">
-                      {t('dashboard.currentLoan.amountPaid')}:
+                      {t("dashboard.currentLoan.amountPaid")}:
                     </span>
                     <span className="font-medium text-black dark:text-white">
                       {formatCurrency(currentLoan.paid)}
@@ -87,7 +89,7 @@ export function DashboardContent() {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600 dark:text-gray-400">
-                      {t('dashboard.currentLoan.nextPayment')}:
+                      {t("dashboard.currentLoan.nextPayment")}:
                     </span>
                     <span className="font-medium text-black dark:text-white">
                       {formatDate(currentLoan.nextPaymentDate)}
@@ -95,7 +97,7 @@ export function DashboardContent() {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600 dark:text-gray-400">
-                      {t('dashboard.currentLoan.interestRate')}:
+                      {t("dashboard.currentLoan.interestRate")}:
                     </span>
                     <span className="font-medium text-black dark:text-white">
                       {currentLoan.interestRate}%
@@ -103,9 +105,13 @@ export function DashboardContent() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Progress value={percentagePaid} className="h-2 bg-gray-200 dark:bg-gray-700" />
+                  <Progress
+                    value={percentagePaid}
+                    className="h-2 bg-gray-200 dark:bg-gray-700"
+                  />
                   <p className="text-xs text-center text-gray-600 dark:text-gray-400">
-                    {percentagePaid.toFixed(1)}% {t('dashboard.currentLoan.percentagePaid')}
+                    {percentagePaid.toFixed(1)}%{" "}
+                    {t("dashboard.currentLoan.percentagePaid")}
                   </p>
                 </div>
               </div>
@@ -115,7 +121,7 @@ export function DashboardContent() {
           <Card className="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-none">
             <CardHeader className="pb-2">
               <CardTitle className="text-base font-medium text-black dark:text-white">
-                {t('dashboard.paymentHistory.title')}
+                {t("dashboard.paymentHistory.title")}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
@@ -123,10 +129,10 @@ export function DashboardContent() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-gray-600 dark:text-gray-400">
-                      {t('dashboard.paymentHistory.date')}
+                      {t("dashboard.paymentHistory.date")}
                     </TableHead>
                     <TableHead className="text-right text-gray-600 dark:text-gray-400">
-                      {t('dashboard.paymentHistory.amount')}
+                      {t("dashboard.paymentHistory.amount")}
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -149,7 +155,7 @@ export function DashboardContent() {
           <Card className="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-none lg:col-span-2">
             <CardHeader className="pb-2">
               <CardTitle className="text-base font-medium text-black dark:text-white">
-                {t('dashboard.paymentSchedule.title')}
+                {t("dashboard.paymentSchedule.title")}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
@@ -157,10 +163,10 @@ export function DashboardContent() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-gray-600 dark:text-gray-400">
-                      {t('dashboard.paymentSchedule.date')}
+                      {t("dashboard.paymentSchedule.date")}
                     </TableHead>
                     <TableHead className="text-right text-gray-600 dark:text-gray-400">
-                      {t('dashboard.paymentSchedule.amount')}
+                      {t("dashboard.paymentSchedule.amount")}
                     </TableHead>
                   </TableRow>
                 </TableHeader>

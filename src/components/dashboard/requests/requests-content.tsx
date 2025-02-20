@@ -4,11 +4,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useState } from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
@@ -67,23 +79,25 @@ export function RequestsContent() {
   }
 
   const loanTerms = [
-    { value: "3", label: t('form.terms.3months') },
-    { value: "6", label: t('form.terms.6months') },
-    { value: "12", label: t('form.terms.12months') },
-    { value: "18", label: t('form.terms.18months') },
-    { value: "24", label: t('form.terms.24months') },
+    { value: "3", label: t("form.terms.3months") },
+    { value: "6", label: t("form.terms.6months") },
+    { value: "12", label: t("form.terms.12months") },
+    { value: "18", label: t("form.terms.18months") },
+    { value: "24", label: t("form.terms.24months") },
   ];
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-white dark:bg-[#18181B] text-black dark:text-white p-6">
       <Card className="w-full max-w-lg bg-white dark:bg-[#18181B] border border-gray-200 dark:border-none">
-        <h2 className="text-4xl font-bold text-left mb-6">{t('form.pageTitle')}</h2>
+        <h2 className="text-4xl font-bold text-left mb-6">
+          {t("form.pageTitle")}
+        </h2>
         <CardHeader>
           <CardTitle className="text-xl font-bold text-black dark:text-white">
-            {t('form.title')}
+            {t("form.title")}
           </CardTitle>
           <CardDescription className="text-gray-600 dark:text-gray-400">
-            {t('form.description')}
+            {t("form.description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -94,11 +108,16 @@ export function RequestsContent() {
                 name="amount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('form.fields.amount.label')}</FormLabel>
+                    <FormLabel>{t("form.fields.amount.label")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t('form.fields.amount.placeholder')} {...field} />
+                      <Input
+                        placeholder={t("form.fields.amount.placeholder")}
+                        {...field}
+                      />
                     </FormControl>
-                    <FormDescription>{t('form.fields.amount.description')}</FormDescription>
+                    <FormDescription>
+                      {t("form.fields.amount.description")}
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -108,11 +127,16 @@ export function RequestsContent() {
                 name="term"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('form.fields.term.label')}</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormLabel>{t("form.fields.term.label")}</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={t('form.fields.term.placeholder')} />
+                          <SelectValue
+                            placeholder={t("form.fields.term.placeholder")}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -123,7 +147,9 @@ export function RequestsContent() {
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormDescription>{t('form.fields.term.description')}</FormDescription>
+                    <FormDescription>
+                      {t("form.fields.term.description")}
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -133,15 +159,17 @@ export function RequestsContent() {
                 name="purpose"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('form.fields.purpose.label')}</FormLabel>
+                    <FormLabel>{t("form.fields.purpose.label")}</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder={t('form.fields.purpose.placeholder')}
+                        placeholder={t("form.fields.purpose.placeholder")}
                         className="resize-none"
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>{t('form.fields.purpose.description')}</FormDescription>
+                    <FormDescription>
+                      {t("form.fields.purpose.description")}
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -151,21 +179,30 @@ export function RequestsContent() {
                 name="monthlyIncome"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('form.fields.monthlyIncome.label')}</FormLabel>
+                    <FormLabel>
+                      {t("form.fields.monthlyIncome.label")}
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder={t('form.fields.monthlyIncome.placeholder')} {...field} />
+                      <Input
+                        placeholder={t("form.fields.monthlyIncome.placeholder")}
+                        {...field}
+                      />
                     </FormControl>
-                    <FormDescription>{t('form.fields.monthlyIncome.description')}</FormDescription>
+                    <FormDescription>
+                      {t("form.fields.monthlyIncome.description")}
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button 
-                type="submit" 
-                className="w-full bg-primary text-white dark:bg-blue-700 hover:dark:bg-blue-800" 
+              <Button
+                type="submit"
+                className="w-full bg-primary text-white dark:bg-blue-700 hover:dark:bg-blue-800"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? t('form.buttons.submitting') : t('form.buttons.submit')}
+                {isSubmitting
+                  ? t("form.buttons.submitting")
+                  : t("form.buttons.submit")}
               </Button>
             </form>
           </Form>

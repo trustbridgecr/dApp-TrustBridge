@@ -20,7 +20,11 @@ export default function RequestsPage() {
     <div className={`flex min-h-screen ${theme === "dark" ? "dark" : ""}`}>
       <DashboardSidebar />
       <div className="flex-1 flex flex-col">
-        <DashboardHeader theme={theme} setTheme={setTheme} setLanguage={setLanguage} />
+        <DashboardHeader
+          theme={theme}
+          setTheme={setTheme}
+          setLanguage={setLanguage}
+        />
         <RequestsContent />
         <DashboardFooter />
       </div>

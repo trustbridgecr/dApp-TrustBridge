@@ -14,17 +14,15 @@ const profileFormSchema = z.object({
     .max(30, {
       message: "Username cannot be more than 30 characters long.",
     }),
-  email: z
-    .string()
-    .email({
-      message: "Please enter a valid email address.",
-    }),
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
   bio: z.string().max(160).min(4),
   urls: z
     .array(
       z.object({
         value: z.string().url({ message: "Please enter a valid URL." }),
-      })
+      }),
     )
     .optional(),
 });
@@ -53,7 +51,9 @@ const cryptoFormSchema = z.object({
   wallet_address: z
     .string()
     .min(26, { message: "Wallet address must be at least 26 characters long." })
-    .max(35, { message: "Wallet address cannot be more than 35 characters long." }),
+    .max(35, {
+      message: "Wallet address cannot be more than 35 characters long.",
+    }),
   preferred_currency: z.string({
     required_error: "Please select a preferred cryptocurrency.",
   }),

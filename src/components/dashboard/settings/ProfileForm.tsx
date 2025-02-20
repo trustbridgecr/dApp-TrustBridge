@@ -2,7 +2,15 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { ProfileFormValues } from "@/hooks/use-settings";
 import { UseFormReturn } from "react-hook-form";
 
@@ -22,12 +30,12 @@ export function ProfileForm({ form, onSubmit }: ProfileFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('settings.profile.email.label')}</FormLabel>
+              <FormLabel>{t("settings.profile.email.label")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
               <FormDescription>
-                {t('settings.profile.email.description')}
+                {t("settings.profile.email.description")}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -38,22 +46,22 @@ export function ProfileForm({ form, onSubmit }: ProfileFormProps) {
           name="bio"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('settings.profile.bio.label')}</FormLabel>
+              <FormLabel>{t("settings.profile.bio.label")}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={t('settings.profile.bio.placeholder')}
+                  placeholder={t("settings.profile.bio.placeholder")}
                   className="resize-none"
                   {...field}
                 />
               </FormControl>
               <FormDescription>
-                {t('settings.profile.bio.description')}
+                {t("settings.profile.bio.description")}
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">{t('settings.profile.submit')}</Button>
+        <Button type="submit">{t("settings.profile.submit")}</Button>
       </form>
     </Form>
   );
