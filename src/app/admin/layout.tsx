@@ -12,7 +12,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className={`flex min-h-screen ${theme === "dark" ? "dark" : ""}`}>
       <DashboardSidebar />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col dark:bg-[#18181B]">
         <DashboardHeader
           theme={theme}
           setTheme={setTheme}
