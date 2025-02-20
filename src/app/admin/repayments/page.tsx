@@ -1,5 +1,7 @@
+import RepaymentsContent from "@/components/modules/admin/repayments/ui/repayments-content";
+
 const RepaymentsPage = () => {
-  return <div>RepaymentsPage</div>;
+  return <RepaymentsContent />;
 };
 
 export default RepaymentsPage;
