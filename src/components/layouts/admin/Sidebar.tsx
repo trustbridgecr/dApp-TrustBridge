@@ -37,11 +37,6 @@ export function Sidebar({ className }: SidebarProps) {
       icon: DollarSign,
       href: "/admin/repayments",
     },
-    {
-      label: "Wallet",
-      icon: Wallet,
-      href: "/admin/wallet",
-    },
   ]
 
   return (
