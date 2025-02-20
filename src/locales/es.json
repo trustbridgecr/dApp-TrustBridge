@@ -43,6 +43,11 @@
       "noSchedule": "No hay pagos programados"
     }
   },
+  "admin": {
+    "repayments": {
+      "title": "Reembolsos"
+    }
+  },
   "sidebar": {
     "dashboard": "Panel de Control",
     "requests": "Solicitudes",
