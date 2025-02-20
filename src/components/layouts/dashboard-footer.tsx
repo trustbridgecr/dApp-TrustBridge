@@ -33,21 +33,25 @@ export function DashboardFooter() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="text-black dark:text-white"
-              onClick={() => window.open("https://github.com/TrustBridgeCR", "_blank")}
+              onClick={() =>
+                window.open("https://github.com/TrustBridgeCR", "_blank")
+              }
               aria-label={t("footer.githubLink")}
             >
               <Github className="h-4 w-4" />
               <span className="sr-only">GitHub</span>
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="text-black dark:text-white"
-              onClick={() => window.open("https://x.com/TrustBridgecr", "_blank")}
+              onClick={() =>
+                window.open("https://x.com/TrustBridgecr", "_blank")
+              }
               aria-label={t("footer.twitterLink")}
             >
               <Twitter className="h-4 w-4" />

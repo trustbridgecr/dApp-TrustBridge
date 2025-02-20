@@ -8,7 +8,7 @@ import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
 
 export default function HomePage() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [language, setLanguage] = useState<"es" | "en" | "fr" | "de">("en");
+  const [, setLanguage] = useState<"es" | "en" | "fr" | "de">("en");
   const router = useRouter();
 
   const address = useGlobalAuthenticationStore((state) => state.address);

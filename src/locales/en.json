@@ -43,6 +43,11 @@
       "noSchedule": "No scheduled payments"
     }
   },
+  "admin": {
+    "repayments": {
+      "title": "Repayments"
+    }
+  },
   "sidebar": {
     "dashboard": "Dashboard",
     "requests": "Requests",

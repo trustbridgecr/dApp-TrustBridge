@@ -3,6 +3,7 @@
 **TrustBridge** is a decentralized platform aimed at enhancing P2P transactions by providing secure microloan agreements powered by blockchain and trustless technologies. Our goal is to ensure transparency, trust, and automation in financial transactions, making lending seamless and cost-effective.
 
 ## 🎯 Key Benefits and Objectives
+
 - Enhance trust in microloan agreements through blockchain transparency.
 - Provide automated and secure smart contract execution.
 - Minimize transaction costs and maximize accessibility.
@@ -10,6 +11,7 @@
 ## 🔒 Why Choose TrustBridge?
 
 ### ⚙️ Core Advantages
+
 - **Security:** End-to-end encryption and decentralized architecture protect sensitive data.
 - **Transparency:** Blockchain ledger ensures all transactions are publicly verifiable.
 - **Decentralization:** Removes intermediaries, reducing costs and increasing efficiency.
@@ -25,6 +27,7 @@
 ## 🛠️ How It Works
 
 ### Step-by-Step Process
+
 1. **🏗️ Loan Creation:** Borrower submits a loan request through the TrustBridge platform.
 2. **💵 Funding:** Investors review and fund loan requests via secure wallets.
 3. **📄 Agreement Execution:** Smart contracts automate terms and conditions.
@@ -33,6 +36,7 @@
 ## ⚙️ Getting Started
 
 ### 📋 Prerequisites
+
 - **🖥️ Node.js** (v14 or later)
 - **🔐 Wallet Integration** (Albedo, Freighter)
 - **🌐 API Access Setup** (Registration required)
@@ -62,6 +66,7 @@
 ## 📡 API Reference
 
 ### Key Endpoints
+
 - **🆕 `/loan/initiate`** - Start a new loan agreement.
 - **💰 `/loan/fund`** - Fund an existing agreement.
 - **✅ `/loan/settle`** - Settle a completed agreement.
@@ -75,6 +80,7 @@
 ## 🧪 Testing Infrastructure
 
 ### Guidelines
+
 - **🧩 Unit and E2E Testing:** Implemented with Jest and Cypress.
 - **🏃 Running Tests:**
   ```bash
