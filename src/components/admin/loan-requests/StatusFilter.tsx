@@ -18,4 +18,3 @@ export default function StatusFilter({ statusFilter, setStatusFilter }: StatusFi
         </Select>
     );
 }
-2
