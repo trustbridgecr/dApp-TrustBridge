@@ -12,6 +12,9 @@ export default function HomePage() {
   const router = useRouter();
 
   const address = useGlobalAuthenticationStore((state) => state.address);
+  const [storedRole, setStoredRole] = useState<string | null>(
+    localStorage.getItem("userRole")
+  );
 
   useEffect(() => {
     const root = document.documentElement;
@@ -21,9 +24,55 @@ export default function HomePage() {
 
   useEffect(() => {
     if (address) {
-      router.push("/dashboard");
+      const role = localStorage.getItem("userRole");
+      if (role) {
+        setStoredRole(role);
+        registerUserBeforeRedirect(address, role);
+      } else {
+        router.push("/dashboard");
+      }
     }
   }, [address, router]);
+
+  const retryFetch = async (url: string, options: RequestInit, retries = 3, delay = 1000) => {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        const response = await fetch(url, options);
+        if (!response.ok) throw new Error(`Attempt ${attempt}: ${response.statusText}`);
+        return await response.json();
+      } catch (error) {
+        if (attempt < retries) {
+          await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+      }
+    }
+    return null; 
+  };
+
+  const registerUserBeforeRedirect = async (walletAddress: string, role: string) => {
+    console.log("User selected role:", role);
+    
+    const data = {
+      wallet_address: walletAddress,
+      role: role.toLowerCase(),
+    };
+
+    const result = await retryFetch("/users/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!result) {
+      console.error("Failed to register user after 3 attempts.");
+    } else {
+      console.log("Registration successful:", result);
+    }
+
+    router.push("/dashboard");
+  };
 
   return (
     <div className={`h-screen flex flex-col ${theme === "dark" ? "dark" : ""}`}>
