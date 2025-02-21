@@ -32,7 +32,6 @@ export const useWallet = () => {
       console.error("Error connecting wallet:", error);
     }
   };
-
   const handleDisconnect = async () => {
     try {
       if (disconnectWallet) {
