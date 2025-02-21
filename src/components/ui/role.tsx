@@ -1,7 +1,9 @@
 "use client";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button"; // ✅ Usando ShadCN para botones
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { FaWallet, FaUsers } from "react-icons/fa";
 
 interface RoleSelectionModalProps {
   isOpen: boolean;
@@ -12,26 +14,42 @@ interface RoleSelectionModalProps {
 export default function RoleSelectionModal({ isOpen, onClose, onSelectRole }: RoleSelectionModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="bg-black text-white p-12 max-w-2xl rounded-3xl">
         <DialogHeader>
-          <DialogTitle className="text-center text-gray-800 dark:text-gray-100">
-            Please select your role
-          </DialogTitle>
+          <DialogTitle className="text-center text-2xl font-bold">Select Your Role</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-4 mt-4">
-          <Button
+        
+        <div className="flex flex-row items-center justify-between gap-8 mt-8">
+          {/* Lender Card */}
+          <div
             onClick={() => onSelectRole("Lender")}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg transition"
+            className="flex flex-col items-center justify-center w-1/2 p-8 bg-black rounded-2xl cursor-pointer hover:bg-gray-800 transition shadow-lg"
           >
-            Lender
-          </Button>
-          <Button
+            <FaWallet className="text-blue-400 text-5xl mb-4" />
+            <h3 className="text-blue-400 font-semibold text-xl">Lender</h3>
+            <p className="text-sm text-gray-400 text-center mt-2">
+              Invest your funds and earn returns by supporting borrowers on our platform.
+            </p>
+          </div>
+          
+          <Separator orientation="vertical" className="h-32 w-px bg-gray-700" />
+          
+          {/* Borrower Card */}
+          <div
             onClick={() => onSelectRole("Borrower")}
-            className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-lg transition"
+            className="flex flex-col items-center justify-center w-1/2 p-8 bg-black rounded-2xl cursor-pointer hover:bg-gray-800 transition shadow-lg"
           >
-            Borrower
-          </Button>
+            <FaUsers className="text-green-400 text-5xl mb-4" />
+            <h3 className="text-green-400 font-semibold text-xl">Borrower</h3>
+            <p className="text-sm text-gray-400 text-center mt-2">
+              Access funds quickly through our community of lenders with competitive rates.
+            </p>
+          </div>
         </div>
+        
+        <p className="text-center text-gray-500 text-sm mt-8">
+          Secure P2P lending powered by smart contracts.
+        </p>
       </DialogContent>
     </Dialog>
   );
