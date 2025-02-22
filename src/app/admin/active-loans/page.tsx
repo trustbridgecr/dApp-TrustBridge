@@ -1,14 +1,16 @@
 "use client";
 
-import React from 'react';
-import ActiveLoansTable from '@/components/admin/active-loans/ActiveLoansTable';
+import React from "react";
+import ActiveLoansTable from "@/components/admin/active-loans/ActiveLoansTable";
 
-const ActiveLoansPage = () => {
-  return (
-    <div>
-      <ActiveLoansTable />
-    </div>
-  );
+const ActiveLoansPage = ({
+  language,
+  setLanguage,
+}: {
+  language: "en" | "es";
+  setLanguage: (lang: "en" | "es") => void;
+}) => {
+  return <ActiveLoansTable language={language} setLanguage={setLanguage} />;
 };
 
 export default ActiveLoansPage;

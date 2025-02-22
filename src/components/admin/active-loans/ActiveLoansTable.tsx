@@ -1,6 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchBar from './SearchBar';
 import StatusFilter from './StatusFilter';
+import en from "@/locales/en.json";
+import es from "@/locales/es.json";
+import { useTranslation } from "react-i18next";
+
+const translations = {
+  en,
+  es
+};
 
 const loansData = [
     {
@@ -136,65 +144,94 @@ const loansData = [
   ];
   
 
-const ActiveLoansTable: React.FC = () => {
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
-
-  const filteredLoans = loansData.filter(loan =>
-    (loan.borrower.toLowerCase().includes(search.toLowerCase()) || loan.id.toLowerCase().includes(search.toLowerCase())) &&
-    (statusFilter !== 'all' ? loan.status === statusFilter : true)
-  );
-
-  return (
-    <div className="p-6 bg-white dark:bg-[#1A1A1A]">
-      <h1 className="text-3xl font-bold text-black dark:text-white mb-4">Active Loans</h1>
-      <p className="text-gray-600 dark:text-gray-300 mb-6">Overview of all active loans with detailed payment statuses.</p>
-
-      <div className="flex justify-between items-center mb-4 space-x-4">
-        <SearchBar search={search} setSearch={setSearch} />
-        <StatusFilter statusFilter={statusFilter} setStatusFilter={setStatusFilter} />
-      </div>
-
-      <div className="overflow-x-auto rounded-lg shadow-lg">
-        <table className="min-w-full bg-white dark:bg-[#1A1A1A] rounded-lg text-black dark:text-white">
-          <thead>
-            <tr className="text-left text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-[#1A1A1A]">
-              <th className="py-3 px-6">Loan ID</th>
-              <th className="py-3 px-6">Borrower</th>
-              <th className="py-3 px-6">Loan Type</th>
-              <th className="py-3 px-6">Amount</th>
-              <th className="py-3 px-6">Remaining Balance</th>
-              <th className="py-3 px-6">Interest Rate</th>
-              <th className="py-3 px-6">Start Date</th>
-              <th className="py-3 px-6">Last Payment Date</th>
-              <th className="py-3 px-6">Next Payment Date</th>
-              <th className="py-3 px-6">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredLoans.map((loan) => (
-              <tr key={loan.id} className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                <td className="py-4 px-6">{loan.id}</td>
-                <td className="py-4 px-6">{loan.borrower}</td>
-                <td className="py-4 px-6">{loan.loanType}</td>
-                <td className="py-4 px-6">{loan.amount}</td>
-                <td className="py-4 px-6">{loan.remainingBalance}</td>
-                <td className="py-4 px-6">{loan.interestRate}</td>
-                <td className="py-4 px-6">{loan.startDate}</td>
-                <td className="py-4 px-6">{loan.lastPayment}</td>
-                <td className="py-4 px-6">{loan.nextPayment}</td>
-                <td className="py-4 px-6">
-                  <span className={`px-3 py-1 rounded-full text-white ${loan.status === 'On Time' ? 'bg-green-600' : 'bg-red-600'}`}>
-                    {loan.status}
-                  </span>
-                </td>
+  const ActiveLoansTable: React.FC = () => {
+    const [search, setSearch] = useState("");
+    const [statusFilter, setStatusFilter] = useState("all");
+  
+    const { t } = useTranslation();
+  
+    const filteredLoans = loansData.filter(
+      (loan) =>
+        (loan.borrower.toLowerCase().includes(search.toLowerCase()) ||
+          loan.id.toLowerCase().includes(search.toLowerCase())) &&
+        (statusFilter === "all" || loan.status === statusFilter)
+    );
+  
+    return (
+      <div className="p-6 bg-white dark:bg-[#1A1A1A]">
+        <h1 className="text-3xl font-bold text-black dark:text-white mb-4">
+          {t("activeLoans.title")}
+        </h1>
+        <p className="text-gray-600 dark:text-gray-300 mb-6">
+          {t("activeLoans.overview")}
+        </p>
+  
+        <div className="flex justify-between items-center mb-4 space-x-4">
+          <SearchBar
+            search={search}
+            setSearch={setSearch}
+            placeholder={t("searchBar.placeholder")}
+          />
+          <StatusFilter
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            placeholder={t("statusFilter.placeholder")}
+          />
+        </div>
+  
+        <div className="overflow-x-auto rounded-lg shadow-lg">
+          <table className="min-w-full bg-white dark:bg-[#1A1A1A] rounded-lg text-black dark:text-white">
+            <thead>
+              <tr className="text-left text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-[#1A1A1A]">
+                <th className="py-3 px-6">{t("activeLoans.loanId")}</th>
+                <th className="py-3 px-6">{t("activeLoans.borrower")}</th>
+                <th className="py-3 px-6">{t("activeLoans.loanType")}</th>
+                <th className="py-3 px-6">{t("activeLoans.amount")}</th>
+                <th className="py-3 px-6">
+                  {t("activeLoans.remainingBalance")}
+                </th>
+                <th className="py-3 px-6">{t("activeLoans.interestRate")}</th>
+                <th className="py-3 px-6">{t("activeLoans.startDate")}</th>
+                <th className="py-3 px-6">{t("activeLoans.lastPaymentDate")}</th>
+                <th className="py-3 px-6">{t("activeLoans.nextPaymentDate")}</th>
+                <th className="py-3 px-6">{t("activeLoans.status")}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredLoans.map((loan) => (
+                <tr
+                  key={loan.id}
+                  className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <td className="py-4 px-6">{loan.id}</td>
+                  <td className="py-4 px-6">{loan.borrower}</td>
+                  <td className="py-4 px-6">{loan.loanType}</td>
+                  <td className="py-4 px-6">{loan.amount}</td>
+                  <td className="py-4 px-6">{loan.remainingBalance}</td>
+                  <td className="py-4 px-6">{loan.interestRate}</td>
+                  <td className="py-4 px-6">{loan.startDate}</td>
+                  <td className="py-4 px-6">{loan.lastPayment}</td>
+                  <td className="py-4 px-6">{loan.nextPayment}</td>
+                  <td className="py-4 px-6">
+                    <span
+                      className={`px-3 py-1 rounded-full text-white ${
+                        loan.status === "On Time"
+                          ? "bg-green-600"
+                          : "bg-red-600"
+                      }`}
+                    >
+                      {loan.status === "On Time"
+                        ? t("activeLoans.onTime")
+                        : t("activeLoans.late")}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  );
-};
-
-export default ActiveLoansTable;
+    );
+  };
+  
+  export default ActiveLoansTable;

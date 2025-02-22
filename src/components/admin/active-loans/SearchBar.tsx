@@ -1,7 +1,8 @@
 "use client";
 
-import React from 'react';
-import { Input } from '@/components/ui/input';
+import React from "react";
+import { Input } from "@/components/ui/input";
+import { useTranslation } from "react-i18next";
 
 interface SearchBarProps {
   search: string;
@@ -9,9 +10,11 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ search, setSearch }) => {
+  const { t } = useTranslation();
+
   return (
-    <Input 
-      placeholder="Search by Borrower or Loan ID"
+    <Input
+      placeholder={t("searchBar.placeholder")}
       value={search}
       onChange={(e) => setSearch(e.target.value)}
       className="w-1/3 text-black dark:text-white bg-white dark:bg-[#1A1A1A] border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400"

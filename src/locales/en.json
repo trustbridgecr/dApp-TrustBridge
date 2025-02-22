@@ -139,80 +139,32 @@
         }
       },
       "submit": "Update Account"
-    },
-    "crypto": {
-      "title": "Cryptocurrency Settings",
-      "walletAddress": {
-        "label": "Wallet Address",
-        "description": "This is your wallet address for receiving and sending cryptocurrencies."
-      },
-      "preferredCurrency": {
-        "label": "Preferred Cryptocurrency",
-        "placeholder": "Select a cryptocurrency",
-        "description": "This will be the default cryptocurrency for your transactions."
-      },
-      "autoConvert": {
-        "label": "Auto-Convert",
-        "description": "Automatically convert received loans to your preferred cryptocurrency."
-      },
-      "submit": "Update Crypto Settings"
-    },
-    "notifications": {
-      "title": "Notification Settings",
-      "email": {
-        "label": "Email Notifications",
-        "description": "Receive email notifications about your account activity."
-      },
-      "marketing": {
-        "label": "Marketing Emails",
-        "description": "Receive emails about new features and special offers."
-      },
-      "submit": "Update Notification Settings"
-    },
-    "profile": {
-      "title": "Profile Settings",
-      "email": {
-        "label": "Email",
-        "description": "Your email address for account communications."
-      },
-      "bio": {
-        "label": "Bio",
-        "placeholder": "Write a short bio about yourself...",
-        "description": "Tell us a little bit about yourself."
-      },
-      "submit": "Update Profile"
     }
   },
-  "auth": {
-    "common": {
-      "emailLabel": "Email Address",
-      "emailPlaceholder": "email@example.com",
-      "passwordLabel": "Password"
-    },
-    "login": {
-      "title": "Log In",
-      "description": "Access your blockchain microloans account",
-      "submitButton": "Log In",
-      "forgotPasswordLink": "Forgot your password?",
-      "registerLink": "Don't have an account? Register here"
-    },
-    "register": {
-      "title": "Register",
-      "description": "Create a new blockchain microloans account",
-      "nameLabel": "Full Name",
-      "namePlaceholder": "John Doe",
-      "confirmPasswordLabel": "Confirm Password",
-      "submitButton": "Register",
-      "loginLink": "Already have an account? Log in here",
-      "passwordMismatch": "Passwords do not match",
-      "errorMessage": "Error registering. Please try again."
-    },
-    "forgotPassword": {
-      "title": "Reset Password",
-      "description": "Enter your email address to receive reset instructions",
-      "submitButton": "Send Instructions",
-      "backToLogin": "Back to login",
-      "successMessage": "Reset instructions have been sent to your email address."
-    }
+  "activeLoans": {
+    "title": "Active Loans",
+    "overview": "Overview of all active loans with detailed payment statuses.",
+    "searchPlaceholder": "Search by Borrower or Loan ID",
+    "loanId": "Loan ID",
+    "borrower": "Borrower",
+    "loanType": "Loan Type",
+    "amount": "Amount",
+    "remainingBalance": "Remaining Balance",
+    "interestRate": "Interest Rate",
+    "startDate": "Start Date",
+    "lastPaymentDate": "Last Payment Date",
+    "nextPaymentDate": "Next Payment Date",
+    "status": "Status",
+    "onTime": "On Time",
+    "late": "Late"
+  },
+  "statusFilter": {
+    "placeholder": "Filter by Status",
+    "all": "All",
+    "onTime": "On Time",
+    "late": "Late"
+  },
+  "searchBar": {
+    "placeholder": "Search by Borrower or Loan ID"
   }
 }

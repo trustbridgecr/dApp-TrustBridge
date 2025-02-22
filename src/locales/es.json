@@ -1,4 +1,30 @@
 {
+  "activeLoans": {
+    "title": "Préstamos Activos",
+    "overview": "Resumen de todos los préstamos activos con estados de pago detallados.",
+    "searchPlaceholder": "Buscar por Prestatario o ID de Préstamo",
+    "loanId": "ID de Préstamo",
+    "borrower": "Prestatario",
+    "loanType": "Tipo de Préstamo",
+    "amount": "Monto",
+    "remainingBalance": "Saldo Restante",
+    "interestRate": "Tasa de Interés",
+    "startDate": "Fecha de Inicio",
+    "lastPaymentDate": "Última Fecha de Pago",
+    "nextPaymentDate": "Próxima Fecha de Pago",
+    "status": "Estado",
+    "onTime": "A tiempo",
+    "late": "Atrasado"
+  },
+  "statusFilter": {
+    "placeholder": "Filtrar por Estado",
+    "all": "Todos",
+    "onTime": "A tiempo",
+    "late": "Atrasado"
+  },
+  "searchBar": {
+    "placeholder": "Buscar por Prestatario o ID de Préstamo"
+  },
   "header": {
     "connect": "Conectar Billetera",
     "disconnect": "Desconectar Billetera",
@@ -98,23 +124,6 @@
     "buttons": {
       "submit": "Enviar Solicitud",
       "submitting": "Enviando..."
-    },
-    "validation": {
-      "amount": {
-        "required": "El monto del préstamo es requerido",
-        "positive": "El monto del préstamo debe ser un número positivo"
-      },
-      "term": {
-        "required": "El plazo del préstamo es requerido"
-      },
-      "purpose": {
-        "minLength": "El propósito debe tener al menos 10 caracteres",
-        "maxLength": "El propósito no puede exceder los 500 caracteres"
-      },
-      "income": {
-        "required": "El ingreso mensual es requerido",
-        "positive": "El ingreso mensual debe ser un número positivo"
-      }
     }
   },
   "settings": {
@@ -139,48 +148,6 @@
         }
       },
       "submit": "Actualizar Cuenta"
-    },
-    "crypto": {
-      "title": "Configuración de Criptomonedas",
-      "walletAddress": {
-        "label": "Dirección de Billetera",
-        "description": "Esta es tu dirección de billetera para recibir y enviar criptomonedas."
-      },
-      "preferredCurrency": {
-        "label": "Criptomoneda Preferida",
-        "placeholder": "Selecciona una criptomoneda",
-        "description": "Esta será la criptomoneda predeterminada para tus transacciones."
-      },
-      "autoConvert": {
-        "label": "Conversión Automática",
-        "description": "Convierte automáticamente los préstamos recibidos a tu criptomoneda preferida."
-      },
-      "submit": "Actualizar Configuración de Cripto"
-    },
-    "notifications": {
-      "title": "Configuración de Notificaciones",
-      "email": {
-        "label": "Notificaciones por Email",
-        "description": "Recibe notificaciones por email sobre la actividad de tu cuenta."
-      },
-      "marketing": {
-        "label": "Emails de Marketing",
-        "description": "Recibe emails sobre nuevas funciones y ofertas especiales."
-      },
-      "submit": "Actualizar Configuración de Notificaciones"
-    },
-    "profile": {
-      "title": "Configuración del Perfil",
-      "email": {
-        "label": "Email",
-        "description": "Tu dirección de email para las comunicaciones de la cuenta."
-      },
-      "bio": {
-        "label": "Biografía",
-        "placeholder": "Escribe una breve biografía sobre ti...",
-        "description": "Cuéntanos un poco sobre ti."
-      },
-      "submit": "Actualizar Perfil"
     }
   },
   "auth": {
@@ -195,24 +162,6 @@
       "submitButton": "Iniciar Sesión",
       "forgotPasswordLink": "¿Olvidaste tu contraseña?",
       "registerLink": "¿No tienes una cuenta? Regístrate aquí"
-    },
-    "register": {
-      "title": "Registro",
-      "description": "Crea una nueva cuenta de micropréstamos blockchain",
-      "nameLabel": "Nombre Completo",
-      "namePlaceholder": "Juan Pérez",
-      "confirmPasswordLabel": "Confirmar Contraseña",
-      "submitButton": "Registrarse",
-      "loginLink": "¿Ya tienes una cuenta? Inicia sesión aquí",
-      "passwordMismatch": "Las contraseñas no coinciden",
-      "errorMessage": "Error al registrarse. Por favor, inténtelo de nuevo."
-    },
-    "forgotPassword": {
-      "title": "Restablecer Contraseña",
-      "description": "Ingresa tu correo electrónico para recibir instrucciones",
-      "submitButton": "Enviar Instrucciones",
-      "backToLogin": "Volver a Iniciar Sesión",
-      "successMessage": "Se han enviado las instrucciones a tu correo electrónico."
     }
   }
 }
