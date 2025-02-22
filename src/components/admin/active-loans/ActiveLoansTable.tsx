@@ -138,7 +138,7 @@ const loansData = [
 
 const ActiveLoansTable: React.FC = () => {
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('All');
 
   const filteredLoans = loansData.filter(loan =>
     (loan.borrower.toLowerCase().includes(search.toLowerCase()) || loan.id.toLowerCase().includes(search.toLowerCase())) &&
