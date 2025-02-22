@@ -18,6 +18,19 @@
     "githubLink": "Visita nuestro perfil de GitHub",
     "twitterLink": "Síguenos en Twitter"
   },
+  "homepage": {
+    "body": "diseñada para facilitar micropréstamos P2P de forma segura, transparente y eficiente. Conectamos prestamistas y prestatarios a través de la tecnología blockchain, aprovechando contratos inteligentes para automatizar y asegurar las transacciones. Nuestro enfoque promueve la inclusión financiera, empoderando a las comunidades globales al proporcionar herramientas accesibles y confiables para gestionar préstamos sin intermediarios tradicionales",
+    "subtitle": "Trustbridge es una plataforma descentralizada",
+    "title": "Bienvenido a "
+  },
+  "roleSelection": {
+    "title": "Seleccione su rol",
+    "lenderTitle": "Prestamista",
+    "lenderDescription": "Invierte tus fondos y obtén rendimientos al apoyar a los prestatarios en nuestra plataforma",
+    "borrowerTitle": "Prestatario",
+    "borrowerDescription": "Accede a fondos rápidamente a través de nuestra comunidad de prestamistas con tasas competitivas.",
+    "footer": "Préstamos P2P seguros impulsados por contratos inteligentes."
+  },
   "dashboard": {
     "title": "Panel de Control",
     "currentLoan": {
