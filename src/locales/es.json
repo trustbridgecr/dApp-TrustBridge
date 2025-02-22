@@ -214,5 +214,31 @@
       "backToLogin": "Volver a Iniciar Sesión",
       "successMessage": "Se han enviado las instrucciones a tu correo electrónico."
     }
-  }
+  },
+    "loanRequests": {
+      "title": "Solicitudes de Préstamos",
+      "subtitle": "Todas las Solicitudes de Préstamos",
+      "description": "Una lista de todas las solicitudes de préstamos de los prestatarios. Revise y tome acción.",
+      "table": {
+        "requestId": "ID de Solicitud",
+        "borrower": "Prestatario",
+        "amount": "Monto ($)",
+        "purpose": "Propósito",
+        "creditScore": "Puntaje Crediticio",
+        "status": "Estado",
+        "actions": "Acciones"
+      }
+    },
+    "status": {
+      "allStatuses": "Todos los Estados",
+      "pending": "Pendiente",
+      "under_review": "En Revisión",
+      "approved": "Aprobado"
+    },
+      "actions": {
+        "viewDetails": "Ver detalles",
+        "approveRequest": "Aprobar solicitud",
+        "rejectRequest": "Rechazar solicitud",
+        "contactBorrower": "Contactar al prestatario"
+      } 
 }

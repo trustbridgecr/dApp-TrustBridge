@@ -1,8 +1,10 @@
 import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export function Actions() {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <div className="relative inline-block text-left">
@@ -22,25 +24,25 @@ export function Actions() {
             className="block w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
             onClick={() => setOpen(false)}
           >
-            View details
+            {t("actions.viewDetails")}
           </button>
           <button
             className="block w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
             onClick={() => setOpen(false)}
           >
-            Approve request
+            {t("actions.approveRequest")}
           </button>
           <button
             className="block w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
             onClick={() => setOpen(false)}
           >
-            Reject request
+            {t("actions.rejectRequest")}
           </button>
           <button
             className="block w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
             onClick={() => setOpen(false)}
           >
-            Contact borrower
+            {t("actions.contactBorrower")}
           </button>
         </div>
       )}

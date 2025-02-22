@@ -214,5 +214,31 @@
       "backToLogin": "Back to login",
       "successMessage": "Reset instructions have been sent to your email address."
     }
-  }
+  },
+    "loanRequests": {
+      "title": "Loan Requests",
+      "subtitle": "All Loan Requests",
+      "description": "A list of all loan requests from borrowers. Review and take action.",
+      "table": {
+        "requestId": "Request ID",
+        "borrower": "Borrower",
+        "amount": "Amount ($)",
+        "purpose": "Purpose",
+        "creditScore": "Credit Score",
+        "status": "Status",
+        "actions": "Actions"
+      }
+    },
+    "status": {
+      "allStatuses": "All Statuses",
+      "pending": "Pending",
+      "under_review": "Under Review",
+      "approved": "Approved"
+    },
+    "actions": {
+      "viewDetails": "View details",
+      "approveRequest": "Approve request",
+      "rejectRequest": "Reject request",
+      "contactBorrower": "Contact borrower"
+    }
 }
