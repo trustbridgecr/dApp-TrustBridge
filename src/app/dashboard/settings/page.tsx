@@ -5,9 +5,7 @@ import { ProfileForm } from "@/components/dashboard/settings/ProfileForm";
 import { AccountForm } from "@/components/dashboard/settings/AccountForm";
 import { NotificationsForm } from "@/components/dashboard/settings/NotificationsForm";
 import { CryptoForm } from "@/components/dashboard/settings/CryptoForm";
-import { DashboardSidebar } from "@/components/layouts/dashboard-sidebar";
-import { DashboardHeader } from "@/components/layouts/dashboard-header";
-import { DashboardFooter } from "@/components/layouts/dashboard-footer";
+
 import {
   Card,
   CardContent,
@@ -43,13 +41,7 @@ export default function SettingsPage() {
 
   return (
     <div className={`flex min-h-screen ${theme === "dark" ? "dark" : ""}`}>
-      <DashboardSidebar />
       <div className="flex-1 flex flex-col">
-        <DashboardHeader
-          theme={theme}
-          setTheme={setTheme}
-          setLanguage={setLanguage}
-        />
         <div className="container mx-auto py-10">
           <Card className="bg-white dark:bg-[#18181B] dark:border-none shadow-none">
             <CardHeader>
@@ -85,7 +77,6 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
         </div>
-        <DashboardFooter />
       </div>
     </div>
   );
