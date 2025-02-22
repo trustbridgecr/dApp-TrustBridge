@@ -17,13 +17,13 @@ interface StatusFilterProps {
 const StatusFilter: React.FC<StatusFilterProps> = ({ statusFilter, setStatusFilter }) => {
   return (
     <Select onValueChange={(value) => setStatusFilter(value)} value={statusFilter}>
-      <SelectTrigger className="w-1/4">
-        <SelectValue placeholder="Filter by Status" />
+      <SelectTrigger className="w-1/4 text-black dark:text-white bg-white dark:bg-[#1A1A1A] border border-gray-300 dark:border-gray-600">
+        <SelectValue placeholder="Filter by Status" className="text-black dark:text-white" />
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="all">All</SelectItem>
-        <SelectItem value="On Time">On Time</SelectItem>
-        <SelectItem value="Late">Late</SelectItem>
+      <SelectContent className="bg-white dark:bg-[#1A1A1A] border border-gray-300 dark:border-gray-600">
+        <SelectItem value="all" className="text-black dark:text-white bg-white dark:bg-[#1A1A1A] hover:bg-gray-200 dark:hover:bg-gray-800">All</SelectItem>
+        <SelectItem value="On Time" className="text-black dark:text-white bg-white dark:bg-[#1A1A1A] hover:bg-gray-200 dark:hover:bg-gray-800">On Time</SelectItem>
+        <SelectItem value="Late" className="text-black dark:text-white bg-white dark:bg-[#1A1A1A] hover:bg-gray-200 dark:hover:bg-gray-800">Late</SelectItem>
       </SelectContent>
     </Select>
   );
