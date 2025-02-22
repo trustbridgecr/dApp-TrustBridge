@@ -5,18 +5,21 @@ import { useRouter } from "next/navigation";
 import { DashboardHeader } from "@/components/layouts/dashboard-header";
 import { DashboardFooter } from "@/components/layouts/dashboard-footer";
 import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
-
 import { create } from "zustand";
 
 type AuthState = {
   role: string | null;
-  setRole: (role: string) => void;
+  setRole: (role: string | null) => void;
 };
 
 export const useAuthStore = create<AuthState>((set) => ({
   role: typeof window !== "undefined" ? localStorage.getItem("userRole") || null : null, 
   setRole: (role) => {
-    localStorage.setItem("userRole", role);
+    if (role === null) {
+      localStorage.removeItem("userRole");
+    } else {
+      localStorage.setItem("userRole", role);
+    }
     set({ role });
   },
 }));
@@ -36,8 +39,8 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!role) {
-      fetchUserRole(address); // Make API request if don´t have any role
-     // setRole("lender"); Descomment for test
+     fetchUserRole(address); // Petición API si no hay role asignado globalmente.
+    //  setRole("borrower"); // for test
       console.log("No role found, setting default role: lender");
     }
   }, [role, setRole]);
@@ -46,9 +49,14 @@ export default function HomePage() {
 
   useEffect(() => {
     if (address && role) {
-      router.push("/dashboard");
+      if (role === "lender") {
+        router.push("/admin");
+      } else if (role === "borrower") {
+        router.push("/dashboard");
+      }
     }
   }, [address, role, router]);
+
   const fetchUserRole = async (walletAddress: string) => {
     try {
       const response = await fetch(`/users/role?wallet_address=${walletAddress}`);
@@ -65,7 +73,6 @@ export default function HomePage() {
       console.error("Failed to fetch user role:", error);
     }
   };
-
 
   return (
     <div className={`h-screen flex flex-col ${theme === "dark" ? "dark" : ""}`}>
@@ -85,7 +92,7 @@ export default function HomePage() {
           <strong>smart contracts</strong> to automate and secure transactions.
           Our approach promotes <strong>financial inclusion</strong>, empowering
           global communities by providing accessible and reliable tools to
-          manage loans without traditional intermediaries.
+          manage loans without traditional intermediarios.
         </p>
       </main>
       <DashboardFooter />

@@ -1,6 +1,4 @@
 "use client";
-
-import { useState, useEffect } from "react";
 import "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,14 +34,6 @@ export function DashboardContent() {
   const { t, i18n } = useTranslation();
   const percentagePaid = (currentLoan.paid / currentLoan.amount) * 100;
   
-  const [role, setRole] = useState<string | null>(null);
-
-  useEffect(() => {
-    const storedRole = localStorage.getItem("userRole");
-    if (storedRole) {
-      setRole(storedRole);
-    }
-  }, []);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat(i18n.language, {
@@ -67,13 +57,6 @@ export function DashboardContent() {
           <h2 className="text-4xl font-bold text-left">
             {t("dashboard.title")}
           </h2>
-          
-          {/* This button is gonna be shown only if the role is lender */}
-          {role === "lender" && (
-            <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-              Fund Escrow
-            </button>
-          )}
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
