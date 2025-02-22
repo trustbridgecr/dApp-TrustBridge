@@ -16,7 +16,7 @@ export default function RoleSelectionModal({ isOpen, onClose, onSelectRole }: Ro
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white dark:bg-black text-black dark:text-white p-12 max-w-2xl rounded-3xl">
+      <DialogContent className="bg-white dark:bg-[#18181B] text-black dark:text-white p-12 max-w-2xl rounded-3xl">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-bold">
             {t("roleSelection.title", "Select Your Role")}
@@ -26,7 +26,7 @@ export default function RoleSelectionModal({ isOpen, onClose, onSelectRole }: Ro
         <div className="flex flex-row items-center justify-between gap-8 mt-8">
           <div
             onClick={() => onSelectRole("Lender")}
-            className="flex flex-col items-center justify-center w-1/2 p-8 bg-white dark:bg-black rounded-2xl cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition shadow-lg"
+            className="flex flex-col items-center justify-center w-1/2 p-8 bg-white dark:bg-[#18181B] rounded-2xl cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition shadow-lg"
           >
             <Wallet className="text-blue-400 text-5xl mb-4" />
             <h3 className="text-blue-400 font-semibold text-xl">
@@ -41,7 +41,7 @@ export default function RoleSelectionModal({ isOpen, onClose, onSelectRole }: Ro
           
           <div
             onClick={() => onSelectRole("Borrower")}
-            className="flex flex-col items-center justify-center w-1/2 p-8 bg-white dark:bg-black rounded-2xl cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition shadow-lg"
+            className="flex flex-col items-center justify-center w-1/2 p-8 bg-white dark:bg-[#18181B] rounded-2xl cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition shadow-lg"
           >
             <Users className="text-green-400 text-5xl mb-4" />
             <h3 className="text-green-400 font-semibold text-xl">
