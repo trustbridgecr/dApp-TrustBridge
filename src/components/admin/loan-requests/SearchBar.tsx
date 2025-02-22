@@ -1,8 +1,8 @@
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input"
 
 interface SearchBarProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
+  searchQuery: string
+  setSearchQuery: (query: string) => void
 }
 
 export function SearchBar({ searchQuery, setSearchQuery }: SearchBarProps) {
@@ -12,7 +12,8 @@ export function SearchBar({ searchQuery, setSearchQuery }: SearchBarProps) {
       placeholder="Search by borrower or ID..."
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
-      className="w-64"
+      className="w-64  dark:text-gray-300 "
     />
-  );
+  )
 }
+
