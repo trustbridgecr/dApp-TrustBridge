@@ -13,7 +13,8 @@ type AuthState = {
 };
 
 export const useAuthStore = create<AuthState>((set) => ({
-  role: typeof window !== "undefined" ? localStorage.getItem("userRole") || null : null, 
+  role:
+    typeof window !== "undefined" ? localStorage.getItem("userRole") || null : null,
   setRole: (role) => {
     if (role === null) {
       localStorage.removeItem("userRole");
@@ -29,7 +30,7 @@ export default function HomePage() {
   const router = useRouter();
   const [, setLanguage] = useState<"es" | "en" | "fr" | "de">("en");
   const address = useGlobalAuthenticationStore((state) => state.address);
-  const { role, setRole } = useAuthStore(); 
+  const { role, setRole } = useAuthStore();
 
   useEffect(() => {
     const root = document.documentElement;
@@ -39,8 +40,8 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!role) {
-     fetchUserRole(address); // Petición API si no hay role asignado globalmente.
-    //  setRole("borrower"); // for test
+      //fetchUserRole(address); // API Request
+       setRole("lender"); // for test
       console.log("No role found, setting default role: lender");
     }
   }, [role, setRole]);
@@ -61,7 +62,7 @@ export default function HomePage() {
     try {
       const response = await fetch(`/users/role?wallet_address=${walletAddress}`);
       if (!response.ok) throw new Error(`Error fetching role: ${response.statusText}`);
-      
+
       const data = await response.json();
       if (data.role) {
         setRole(data.role);
@@ -72,6 +73,11 @@ export default function HomePage() {
     } catch (error) {
       console.error("Failed to fetch user role:", error);
     }
+  };
+// Function to clear rol
+  const clearRole = () => {
+    setRole(null);
+    console.log("Role cleared from localStorage");
   };
 
   return (
@@ -95,6 +101,15 @@ export default function HomePage() {
           manage loans without traditional intermediarios.
         </p>
       </main>
+      {/* Test button*/}
+      <div className="flex justify-center my-4">
+        <button
+          onClick={clearRole}
+          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+        >
+          Limpiar rol
+        </button>
+      </div>
       <DashboardFooter />
     </div>
   );
