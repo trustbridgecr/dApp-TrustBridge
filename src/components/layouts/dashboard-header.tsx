@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Moon, Sun, Globe, Bell } from "lucide-react";
 import { useWallet } from "../auth/hooks/useWallet.hook";
+import RoleSelectionModal from "@/components/ui/role"; 
 import useHeaderWithoutAuth from "./hooks/dashboard-header.hook";
 
 type Theme = "light" | "dark";
@@ -33,7 +34,14 @@ export function DashboardHeader({
 }: DashboardHeaderProps) {
   const { t, i18n } = useTranslation();
   const { address } = useHeaderWithoutAuth();
-  const { handleConnect, handleDisconnect } = useWallet();
+  
+  const { 
+    showRoleModal, 
+    handleConnect, 
+    handleDisconnect, 
+    handleSelectRole, 
+    setShowRoleModal 
+  } = useWallet(); 
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -95,7 +103,7 @@ export function DashboardHeader({
           </button>
         ) : (
           <button
-            onClick={handleConnect}
+            onClick={handleConnect} 
             type="button"
             className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
           >
@@ -103,6 +111,12 @@ export function DashboardHeader({
           </button>
         )}
       </div>
+
+      <RoleSelectionModal
+        isOpen={showRoleModal}
+        onClose={() => setShowRoleModal(false)}
+        onSelectRole={handleSelectRole}
+      />
     </header>
   );
 }

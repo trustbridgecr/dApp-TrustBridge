@@ -167,4 +167,62 @@
   "searchBar": {
     "placeholder": "Search by Borrower or Loan ID"
   }
+  "auth": {
+    "common": {
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "email@example.com",
+      "passwordLabel": "Password"
+    },
+    "login": {
+      "title": "Log In",
+      "description": "Access your blockchain microloans account",
+      "submitButton": "Log In",
+      "forgotPasswordLink": "Forgot your password?",
+      "registerLink": "Don't have an account? Register here"
+    },
+    "register": {
+      "title": "Register",
+      "description": "Create a new blockchain microloans account",
+      "nameLabel": "Full Name",
+      "namePlaceholder": "John Doe",
+      "confirmPasswordLabel": "Confirm Password",
+      "submitButton": "Register",
+      "loginLink": "Already have an account? Log in here",
+      "passwordMismatch": "Passwords do not match",
+      "errorMessage": "Error registering. Please try again."
+    },
+    "forgotPassword": {
+      "title": "Reset Password",
+      "description": "Enter your email address to receive reset instructions",
+      "submitButton": "Send Instructions",
+      "backToLogin": "Back to login",
+      "successMessage": "Reset instructions have been sent to your email address."
+    }
+  },
+    "loanRequests": {
+      "title": "Loan Requests",
+      "subtitle": "All Loan Requests",
+      "description": "A list of all loan requests from borrowers. Review and take action.",
+      "table": {
+        "requestId": "Request ID",
+        "borrower": "Borrower",
+        "amount": "Amount ($)",
+        "purpose": "Purpose",
+        "creditScore": "Credit Score",
+        "status": "Status",
+        "actions": "Actions"
+      }
+    },
+    "status": {
+      "allStatuses": "All Statuses",
+      "pending": "Pending",
+      "under_review": "Under Review",
+      "approved": "Approved"
+    },
+    "actions": {
+      "viewDetails": "View details",
+      "approveRequest": "Approve request",
+      "rejectRequest": "Reject request",
+      "contactBorrower": "Contact borrower"
+    }
 }
