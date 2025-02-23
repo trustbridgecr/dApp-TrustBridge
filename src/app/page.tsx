@@ -5,16 +5,35 @@ import { useRouter } from "next/navigation";
 import { DashboardHeader } from "@/components/layouts/dashboard-header";
 import { DashboardFooter } from "@/components/layouts/dashboard-footer";
 import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
+import { create } from "zustand";
 import { useTranslation } from "react-i18next";
 import "@/lib/i18n"; 
+type AuthState = {
+  role: string | null;
+  setRole: (role: string | null) => void;
+};
+
+export const useAuthStore = create<AuthState>((set) => ({
+  role:
+    typeof window !== "undefined" ? localStorage.getItem("userRole") || null : null,
+  setRole: (role) => {
+    if (role === null) {
+      localStorage.removeItem("userRole");
+    } else {
+      localStorage.setItem("userRole", role);
+    }
+    set({ role });
+  },
+}));
 
 export default function HomePage() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [, setLanguage] = useState<"es" | "en" | "fr" | "de">("en");
   const router = useRouter();
+  const [, setLanguage] = useState<"es" | "en" | "fr" | "de">("en");
+  const address = useGlobalAuthenticationStore((state) => state.address);
+  const { role, setRole } = useAuthStore();
   const { t } = useTranslation(); 
 
-  const address = useGlobalAuthenticationStore((state) => state.address);
   const [storedRole, setStoredRole] = useState<string | null>(
     typeof window !== "undefined" ? localStorage.getItem("userRole") : null
   );
@@ -25,17 +44,54 @@ export default function HomePage() {
     root.classList.add(theme);
   }, [theme]);
 
-  useEffect(() => {
-    if (address) {
+
+          useEffect(() => {
+           if (address) {
       const role = localStorage.getItem("userRole");
       if (role) {
         setStoredRole(role);
         registerUserBeforeRedirect(address, role);
-      } else {
+      } else if (!role) {
+      //fetchUserRole(address); // API Request
+       setRole("lender"); // for test
+      console.log("No role found, setting default role: lender");
+    }
+  }, [role, setRole]);
+
+  console.log("ROL EN HOMEPAGE:", role);
+
+  useEffect(() => {
+        
+    if (address && role) {
+      if (role === "lender") {
+        router.push("/admin");
+      } else if (role === "borrower") {
         router.push("/dashboard");
       }
     }
-  }, [address, router]);
+  }, [address, role, router]);
+
+  const fetchUserRole = async (walletAddress: string) => {
+    try {
+      const response = await fetch(`/users/role?wallet_address=${walletAddress}`);
+      if (!response.ok) throw new Error(`Error fetching role: ${response.statusText}`);
+
+      const data = await response.json();
+      if (data.role) {
+        setRole(data.role);
+        console.log("User role fetched:", data.role);
+      } else {
+        console.log("No role found, user needs to select one.");
+      }
+    } catch (error) {
+      console.error("Failed to fetch user role:", error);
+    }
+  };
+// Function to clear rol
+  const clearRole = () => {
+    setRole(null);
+    console.log("Role cleared from localStorage");
+  };
 
   const retryFetch = async (
     url: string,
@@ -105,6 +161,15 @@ export default function HomePage() {
           )}
         </p>
       </main>
+      {/* Test button*/}
+      <div className="flex justify-center my-4">
+        <button
+          onClick={clearRole}
+          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+        >
+          Limpiar rol
+        </button>
+      </div>
       <DashboardFooter />
     </div>
   );
