@@ -136,5 +136,6 @@ export function DashboardContent() {
         </div>
       </div>
     </main>
+    
   );
 }
