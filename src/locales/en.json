@@ -139,50 +139,34 @@
         }
       },
       "submit": "Update Account"
-    },
-    "crypto": {
-      "title": "Cryptocurrency Settings",
-      "walletAddress": {
-        "label": "Wallet Address",
-        "description": "This is your wallet address for receiving and sending cryptocurrencies."
-      },
-      "preferredCurrency": {
-        "label": "Preferred Cryptocurrency",
-        "placeholder": "Select a cryptocurrency",
-        "description": "This will be the default cryptocurrency for your transactions."
-      },
-      "autoConvert": {
-        "label": "Auto-Convert",
-        "description": "Automatically convert received loans to your preferred cryptocurrency."
-      },
-      "submit": "Update Crypto Settings"
-    },
-    "notifications": {
-      "title": "Notification Settings",
-      "email": {
-        "label": "Email Notifications",
-        "description": "Receive email notifications about your account activity."
-      },
-      "marketing": {
-        "label": "Marketing Emails",
-        "description": "Receive emails about new features and special offers."
-      },
-      "submit": "Update Notification Settings"
-    },
-    "profile": {
-      "title": "Profile Settings",
-      "email": {
-        "label": "Email",
-        "description": "Your email address for account communications."
-      },
-      "bio": {
-        "label": "Bio",
-        "placeholder": "Write a short bio about yourself...",
-        "description": "Tell us a little bit about yourself."
-      },
-      "submit": "Update Profile"
     }
   },
+  "activeLoans": {
+    "title": "Active Loans",
+    "overview": "Overview of all active loans with detailed payment statuses.",
+    "searchPlaceholder": "Search by Borrower or Loan ID",
+    "loanId": "Loan ID",
+    "borrower": "Borrower",
+    "loanType": "Loan Type",
+    "amount": "Amount",
+    "remainingBalance": "Remaining Balance",
+    "interestRate": "Interest Rate",
+    "startDate": "Start Date",
+    "lastPaymentDate": "Last Payment Date",
+    "nextPaymentDate": "Next Payment Date",
+    "status": "Status",
+    "onTime": "On Time",
+    "late": "Late"
+  },
+  "statusFilter": {
+    "placeholder": "Filter by Status",
+    "all": "All",
+    "onTime": "On Time",
+    "late": "Late"
+  },
+  "searchBar": {
+    "placeholder": "Search by Borrower or Loan ID"
+  }
   "auth": {
     "common": {
       "emailLabel": "Email Address",
