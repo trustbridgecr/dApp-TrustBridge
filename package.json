@@ -28,6 +28,7 @@
     "@shadcn/ui": "^0.0.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.4.7",
     "i18next": "^24.2.2",
     "lucide-react": "^0.469.0",
     "next": "15.1.1",
