@@ -113,6 +113,7 @@ export function AccountForm({ form, onSubmit }: AccountFormProps) {
                       field.onChange(value);
                     }}
                     value={field.value || ""}
+                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </FormControl>
                 <FormDescription>
