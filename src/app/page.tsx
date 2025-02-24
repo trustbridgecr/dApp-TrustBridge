@@ -44,19 +44,19 @@ export default function HomePage() {
     root.classList.add(theme);
   }, [theme]);
 
-
-          useEffect(() => {
-           if (address) {
+  useEffect(() => {
+    if (address) {
       const role = localStorage.getItem("userRole");
       if (role) {
         setStoredRole(role);
         registerUserBeforeRedirect(address, role);
       } else if (!role) {
-      //fetchUserRole(address); // API Request
-       setRole("lender"); // for test
-      console.log("No role found, setting default role: lender");
+        // Temporarily using default role. Will use fetchUserRole when API is ready
+        setRole("lender"); // for test
+        console.log("No role found, setting default role: lender");
+      }
     }
-  }, [role, setRole]);
+  }, [address, setRole]);
 
   console.log("ROL EN HOMEPAGE:", role);
 
@@ -71,6 +71,7 @@ export default function HomePage() {
     }
   }, [address, role, router]);
 
+  // fetchUserRole is temporarily disabled but will be used for API integration
   const fetchUserRole = async (walletAddress: string) => {
     try {
       const response = await fetch(`/users/role?wallet_address=${walletAddress}`);
@@ -164,6 +165,7 @@ export default function HomePage() {
       {/* Test button*/}
       <div className="flex justify-center my-4">
         <button
+          type="button"
           onClick={clearRole}
           className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
         >
