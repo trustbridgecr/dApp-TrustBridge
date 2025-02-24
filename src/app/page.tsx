@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import { DashboardHeader } from "@/components/layouts/dashboard-header";
 import { DashboardFooter } from "@/components/layouts/dashboard-footer";
 import { useAuth } from "@/contexts/AuthContext";
@@ -33,11 +33,9 @@ export default function HomePage() {
   // Redirect authenticated users
   if (isAuthenticated && user) {
     if (user.role === "Lender") {
-      router.replace("/lender/dashboard");
-      return null; // Return null to prevent flash of content
+      redirect("/lender/dashboard");
     } else if (user.role === "Borrower") {
-      router.replace("/dashboard");
-      return null; // Return null to prevent flash of content
+      redirect("/dashboard");
     }
   }
 
