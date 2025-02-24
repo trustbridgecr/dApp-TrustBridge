@@ -7,7 +7,7 @@ import React, { useState } from "react";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
-  const [, setLanguage] = useState<"es" | "en" | "fr" | "de">("en");
+  const [language, setLanguage] = useState<"es" | "en">("en");
 
   return (
     <div className={`flex min-h-screen ${theme === "dark" ? "dark" : ""}`}>
@@ -18,9 +18,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           setTheme={setTheme}
           setLanguage={setLanguage}
         />
-        <div className="flex-1">
-          {children}
-        </div>
+        {React.cloneElement(children as React.ReactElement<any>, {
+          language,
+          setLanguage,
+        })}
         <DashboardFooter />
       </div>
     </div>

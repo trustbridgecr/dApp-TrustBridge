@@ -1,5 +1,4 @@
 "use client";
-
 import "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -34,6 +33,7 @@ const paymentSchedule = [
 export function DashboardContent() {
   const { t, i18n } = useTranslation();
   const percentagePaid = (currentLoan.paid / currentLoan.amount) * 100;
+  
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat(i18n.language, {
@@ -58,6 +58,7 @@ export function DashboardContent() {
             {t("dashboard.title")}
           </h2>
         </div>
+
         <div className="grid gap-6 lg:grid-cols-2">
           <Card className="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-none">
             <CardHeader className="pb-2">
@@ -87,28 +88,9 @@ export function DashboardContent() {
                       {formatCurrency(currentLoan.paid)}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">
-                      {t("dashboard.currentLoan.nextPayment")}:
-                    </span>
-                    <span className="font-medium text-black dark:text-white">
-                      {formatDate(currentLoan.nextPaymentDate)}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">
-                      {t("dashboard.currentLoan.interestRate")}:
-                    </span>
-                    <span className="font-medium text-black dark:text-white">
-                      {currentLoan.interestRate}%
-                    </span>
-                  </div>
                 </div>
                 <div className="space-y-2">
-                  <Progress
-                    value={percentagePaid}
-                    className="h-2 bg-gray-200 dark:bg-gray-700"
-                  />
+                  <Progress value={percentagePaid} className="h-2 bg-gray-200 dark:bg-gray-700" />
                   <p className="text-xs text-center text-gray-600 dark:text-gray-400">
                     {percentagePaid.toFixed(1)}%{" "}
                     {t("dashboard.currentLoan.percentagePaid")}
@@ -138,40 +120,6 @@ export function DashboardContent() {
                 </TableHeader>
                 <TableBody>
                   {paymentHistory.map((payment, index) => (
-                    <TableRow key={index}>
-                      <TableCell className="text-black dark:text-white">
-                        {formatDate(payment.date)}
-                      </TableCell>
-                      <TableCell className="text-right text-black dark:text-white">
-                        {formatCurrency(payment.amount)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-none lg:col-span-2">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base font-medium text-black dark:text-white">
-                {t("dashboard.paymentSchedule.title")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-gray-600 dark:text-gray-400">
-                      {t("dashboard.paymentSchedule.date")}
-                    </TableHead>
-                    <TableHead className="text-right text-gray-600 dark:text-gray-400">
-                      {t("dashboard.paymentSchedule.amount")}
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paymentSchedule.map((payment, index) => (
                     <TableRow key={index}>
                       <TableCell className="text-black dark:text-white">
                         {formatDate(payment.date)}

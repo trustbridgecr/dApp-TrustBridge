@@ -57,8 +57,6 @@ const connectWallet = async () => {
       console.error("Error opening role selection modal:", error);
     }
   };
-
-
   const handleDisconnect = async () => {
     try {
       await disconnectWallet();
