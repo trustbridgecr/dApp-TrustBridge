@@ -12,6 +12,36 @@
       "es": "Spanish"
     }
   },
+  "auditLogs": {
+    "title": "Audit Logs",
+    "subtitle": "Track and monitor all system activities and changes",
+    "table": {
+      "event": "Event",
+      "description": "Description",
+      "user": "User",
+      "timestamp": "Timestamp"
+    },
+    "filters": {
+      "allEvents": "All Events",
+      "loanCreation": "Loan Creation",
+      "loanUpdate": "Loan Update",
+      "paymentProcess": "Payment Process",
+      "userUpdate": "User Update",
+      "riskAlert": "Risk Alert",
+      "unknownAction": "Unknown Action",
+      "filter": "Filter",
+      "search": "Search logs..."
+    },
+    "empty": {
+      "title": "No logs found",
+      "description": "No logs found for the selected filters. Try changing the filters or search for a different event."
+    },
+    "pagination": {
+      "showing": "Showing page {{page}} of {{totalPages}}",
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
   "footer": {
     "builtBy": "Built by",
     "sourceCode": "The source code is available on",
@@ -53,7 +83,8 @@
     "requests": "Requests",
     "loans": "Loans",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "auditLogs": "Audit Logs"
   },
   "common": {
     "currency": {

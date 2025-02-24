@@ -18,7 +18,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           setTheme={setTheme}
           setLanguage={setLanguage}
         />
-        {children}
+        <div className="flex-1">
+          {children}
+        </div>
         <DashboardFooter />
       </div>
     </div>

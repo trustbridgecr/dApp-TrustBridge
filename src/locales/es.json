@@ -12,6 +12,36 @@
       "es": "Español"
     }
   },
+  "auditLogs": {
+    "title": "Registros de Auditoría",
+    "subtitle": "Rastrea y supervisa todas las actividades y cambios del sistema",
+    "table": {
+      "event": "Evento",
+      "description": "Descripción",
+      "user": "Usuario",
+      "timestamp": "Hora"
+    },
+    "filters": {
+      "allEvents": "Todos los Eventos",
+      "loanCreation": "Creación de Préstamo",
+      "loanUpdate": "Actualización de Préstamo",  
+      "paymentProcess": "Procesamiento de Pago",
+      "userUpdate": "Actualización de Usuario",
+      "riskAlert": "Alerta de Riesgo",
+      "unknownAction": "Acción Desconocida",
+      "filter": "Filtrar",
+      "search": "Buscar logs..."
+    },
+    "empty": {
+      "title": "No se encontraron logs",
+      "description": "No se encontraron logs para los filtros seleccionados. Intenta cambiar los filtros o buscar un evento diferente."
+    },
+    "pagination": {
+      "showing": "Mostrando página {{page}} de {{totalPages}}",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    }
+  },
   "footer": {
     "builtBy": "Desarrollado por",
     "sourceCode": "El código fuente está disponible en",
@@ -66,7 +96,8 @@
     "requests": "Solicitudes",
     "loans": "Préstamos",
     "settings": "Configuración",
-    "logout": "Cerrar Sesión"
+    "logout": "Cerrar Sesión",
+    "auditLogs": "Registros de Auditoría"
   },
   "common": {
     "currency": {

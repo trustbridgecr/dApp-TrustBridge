@@ -17,6 +17,7 @@ const menuItems = [
   { icon: FileText, labelKey: "sidebar.requests", href: "/dashboard/requests" },
   { icon: PiggyBank, labelKey: "sidebar.loans", href: "/dashboard/loans" },
   { icon: Settings, labelKey: "sidebar.settings", href: "/dashboard/settings" },
+  { icon: FileText, labelKey: "sidebar.auditLogs", href: "/admin/lender/audit-logs" },
 ];
 
 export function DashboardSidebar() {
