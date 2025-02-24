@@ -12,7 +12,7 @@ export default function HomePage() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const router = useRouter();
   const [, setLanguage] = useState<"es" | "en" | "fr" | "de">("en");
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -21,16 +21,27 @@ export default function HomePage() {
     root.classList.add(theme);
   }, [theme]);
 
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      if (user.role === "Lender") {
-        router.push("/lender/dashboard");
-      } else if (user.role === "Borrower") {
-        router.push("/dashboard");
-      }
-    }
-  }, [isAuthenticated, user, router]);
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
+  // Redirect authenticated users
+  if (isAuthenticated && user) {
+    if (user.role === "Lender") {
+      router.replace("/lender/dashboard");
+      return null; // Return null to prevent flash of content
+    } else if (user.role === "Borrower") {
+      router.replace("/dashboard");
+      return null; // Return null to prevent flash of content
+    }
+  }
+
+  // Only render the homepage content for non-authenticated users
   return (
     <div className={`h-screen flex flex-col ${theme === "dark" ? "dark" : ""}`}>
       <DashboardHeader theme={theme} setTheme={setTheme} setLanguage={setLanguage} />
