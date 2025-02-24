@@ -17,8 +17,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { AccountFormValues } from "@/hooks/use-settings";
-import { UseFormReturn } from "react-hook-form";
+import type { AccountFormValues } from "@/hooks/use-settings";
+import type { UseFormReturn } from "react-hook-form";
+import { useAuthStore } from "@/app/page";
 
 interface AccountFormProps {
   form: UseFormReturn<AccountFormValues>;
@@ -27,6 +28,8 @@ interface AccountFormProps {
 
 export function AccountForm({ form, onSubmit }: AccountFormProps) {
   const { t } = useTranslation();
+  const { role } = useAuthStore();
+  const isBorrower = role?.toLowerCase() === "borrower";
 
   return (
     <Form {...form}>
@@ -93,6 +96,33 @@ export function AccountForm({ form, onSubmit }: AccountFormProps) {
             </FormItem>
           )}
         />
+        {isBorrower && (
+          <FormField
+            control={form.control}
+            name="monthlyIncome"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("settings.account.monthlyIncome.label")}</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder={t("settings.account.monthlyIncome.placeholder")}
+                    {...field}
+                    onChange={(e) => {
+                      const value = e.target.value ? Number.parseFloat(e.target.value) : undefined;
+                      field.onChange(value);
+                    }}
+                    value={field.value || ""}
+                  />
+                </FormControl>
+                <FormDescription>
+                  {t("settings.account.monthlyIncome.description")}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <Button type="submit">{t("settings.account.submit")}</Button>
       </form>
     </Form>
