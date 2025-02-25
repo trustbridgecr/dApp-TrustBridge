@@ -40,6 +40,9 @@ const accountFormSchema = z.object({
   language: z.string({
     required_error: "Please select a language.",
   }),
+  monthlyIncome: z.number().optional().refine((val) => !val || val >= 0, {
+    message: "Monthly income must be a positive number",
+  }),
 });
 
 const notificationsFormSchema = z.object({
@@ -86,6 +89,7 @@ export function useSettingsForm() {
       name: "",
       dob: "",
       language: "",
+      monthlyIncome: undefined,
     },
     mode: "onChange",
   });

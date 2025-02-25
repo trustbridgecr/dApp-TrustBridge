@@ -5,15 +5,41 @@ import { useRouter, redirect } from "next/navigation";
 import { DashboardHeader } from "@/components/layouts/dashboard-header";
 import { DashboardFooter } from "@/components/layouts/dashboard-footer";
 import { useAuth } from "@/contexts/AuthContext";
+import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
+import { create } from "zustand";
 import { useTranslation } from "react-i18next";
 import "@/lib/i18n";
+
+type AuthState = {
+  role: string | null;
+  setRole: (role: string | null) => void;
+};
+
+export const useAuthStore = create<AuthState>((set) => ({
+  role:
+    typeof window !== "undefined" ? localStorage.getItem("userRole") || null : null,
+  setRole: (role) => {
+    if (role === null) {
+      localStorage.removeItem("userRole");
+    } else {
+      localStorage.setItem("userRole", role);
+    }
+    set({ role });
+  },
+}));
 
 export default function HomePage() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const router = useRouter();
   const [, setLanguage] = useState<"es" | "en" | "fr" | "de">("en");
   const { user, isAuthenticated, isLoading } = useAuth();
+  const address = useGlobalAuthenticationStore((state) => state.address);
+  const { role, setRole } = useAuthStore();
   const { t } = useTranslation();
+
+  const [storedRole, setStoredRole] = useState<string | null>(
+    typeof window !== "undefined" ? localStorage.getItem("userRole") : null
+  );
 
   useEffect(() => {
     const root = document.documentElement;
@@ -21,25 +47,61 @@ export default function HomePage() {
     root.classList.add(theme);
   }, [theme]);
 
-  // Show loading state while checking authentication
+  // Handle wallet-based authentication
+  useEffect(() => {
+    if (address) {
+      const role = localStorage.getItem("userRole");
+      if (role) {
+        setStoredRole(role);
+        registerUserBeforeRedirect(address, role);
+      } else if (!role) {
+        setRole("lender"); // default role
+      }
+    }
+  }, [address, setRole]);
+
+  // Handle traditional authentication redirects
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      if (user.role === "Lender") {
+        router.push("/lender/dashboard");
+      } else if (user.role === "Borrower") {
+        router.push("/dashboard");
+      }
+    }
+  }, [isAuthenticated, user, router]);
+
+  // Show loading state
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"> </div>
       </div>
     );
   }
 
-  // Redirect authenticated users
-  if (isAuthenticated && user) {
-    if (user.role === "Lender") {
-      redirect("/lender/dashboard");
-    } else if (user.role === "Borrower") {
-      redirect("/dashboard");
-    }
-  }
+  // Add utility functions
+  const retryFetch = async (
+    url: string,
+    options: RequestInit,
+    retries = 3,
+    delay = 1000
+  ) => {
+    // ... existing retryFetch implementation ...
+  };
 
-  // Only render the homepage content for non-authenticated users
+  const registerUserBeforeRedirect = async (
+    walletAddress: string,
+    role: string
+  ) => {
+    // ... existing registerUserBeforeRedirect implementation ...
+  };
+
+  const clearRole = () => {
+    setRole(null);
+    console.log("Role cleared from localStorage");
+  };
+
   return (
     <div className={`h-screen flex flex-col ${theme === "dark" ? "dark" : ""}`}>
       <DashboardHeader theme={theme} setTheme={setTheme} setLanguage={setLanguage} />
@@ -59,6 +121,15 @@ export default function HomePage() {
           )}
         </p>
       </main>
+      <div className="flex justify-center my-4">
+        <button
+          type="button"
+          onClick={clearRole}
+          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+        >
+          Clear Role
+        </button>
+      </div>
       <DashboardFooter />
     </div>
   );
