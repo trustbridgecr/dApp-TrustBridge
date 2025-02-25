@@ -6,11 +6,19 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useState, useEffect } from 'react';
 
 export default function ForbiddenPage() {
   const { t } = useTranslation();
   const router = useRouter();
   const { user } = useAuth();
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.remove("light", "dark");
+    root.classList.add(theme);
+  }, [theme]);
 
   const handleRedirect = () => {
     if (user?.role === 'Lender') {
@@ -23,7 +31,7 @@ export default function ForbiddenPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <div className={`min-h-screen flex items-center justify-center bg-background p-4 ${theme === "dark" ? "dark" : ""}`}>
       <Card className="max-w-md w-full bg-white dark:bg-[#18181B] border-none shadow-lg">
         <CardHeader className="space-y-1 flex flex-col items-center text-center pb-2">
           <div className="h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center mb-4">
@@ -40,7 +48,7 @@ export default function ForbiddenPage() {
           </p>
           <Button
             onClick={handleRedirect}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-colors dark:bg-blue-700 dark:hover:bg-blue-800"
           >
             {t('error.forbidden.backButton', 'Back')}
           </Button>
