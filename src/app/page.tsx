@@ -54,7 +54,7 @@ export default function HomePage() {
         setStoredRole(role);
         registerUserBeforeRedirect(address, role);
       } else if (!role) {
-        //fetchUserRole(address); // API Request
+        // Temporarily using default role. Will use fetchUserRole when API is ready
         setRole("lender"); // for test
         console.log("No role found, setting default role: lender");
       }
@@ -74,6 +74,7 @@ export default function HomePage() {
     }
   }, [address, role, router]);
 
+  // fetchUserRole is temporarily disabled but will be used for API integration
   const fetchUserRole = async (walletAddress: string) => {
     try {
       const response = await fetch(
