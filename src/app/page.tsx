@@ -141,7 +141,7 @@ export default function HomePage() {
       console.log("Registration successful:", result);
     }
 
-    router.push("/dashboard");
+    // router.push("/dashboard");
   };
 
   return (
