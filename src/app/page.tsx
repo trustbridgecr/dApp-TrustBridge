@@ -100,10 +100,6 @@ export default function HomePage() {
     // ... existing registerUserBeforeRedirect implementation ...
   };
   
-  const clearRole = () => {
-    setRole(null);
-    console.log("Role cleared from localStorage");
-  };
 
   return (
     <div className={`h-screen flex flex-col ${theme === "dark" ? "dark" : ""}`}>
@@ -128,16 +124,6 @@ export default function HomePage() {
           )}
         </p>
       </main>
-
-      <div className="flex justify-center my-4">
-        <button
-          type="button"
-          onClick={clearRole}
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
-        >
-          Clear Role
-        </button>
-      </div>
       <DashboardFooter />
     </div>
   );
