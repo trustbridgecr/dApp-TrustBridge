@@ -3,12 +3,13 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Wallet, Users } from "lucide-react";
-import { useTranslation } from "next-i18next"; 
+import { useTranslation } from "next-i18next";
+import { UserRole } from "@/@types/auth";
 
 interface RoleSelectionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectRole: (role: string) => void;
+  onSelectRole: (role: UserRole) => void;
 }
 
 export default function RoleSelectionModal({ isOpen, onClose, onSelectRole }: RoleSelectionModalProps) {

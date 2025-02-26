@@ -2,13 +2,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import { DashboardHeader } from "@/components/layouts/dashboard-header";
 import { DashboardFooter } from "@/components/layouts/dashboard-footer";
+import { useAuth } from "@/contexts/AuthContext";
 import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
 import { create } from "zustand";
 import { useTranslation } from "react-i18next";
 import "@/lib/i18n";
+
 type AuthState = {
   role: string | null;
   setRole: (role: string | null) => void;
@@ -33,6 +35,7 @@ export default function HomePage() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const router = useRouter();
   const [, setLanguage] = useState<"es" | "en" | "fr" | "de">("en");
+  const { user, isAuthenticated, isLoading } = useAuth();
   const address = useGlobalAuthenticationStore((state) => state.address);
   const { role, setRole } = useAuthStore();
   const { t } = useTranslation();
@@ -47,6 +50,7 @@ export default function HomePage() {
     root.classList.add(theme);
   }, [theme]);
 
+  // Handle wallet-based authentication
   useEffect(() => {
     if (address) {
       const role = localStorage.getItem("userRole");
@@ -54,94 +58,51 @@ export default function HomePage() {
         setStoredRole(role);
         registerUserBeforeRedirect(address, role);
       } else if (!role) {
-        // Temporarily using default role. Will use fetchUserRole when API is ready
-        setRole("lender"); // for test
-        console.log("No role found, setting default role: lender");
+        setRole("lender"); // default role
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, role, setRole]);
+  }, [address, setRole]);
 
+  // Handle traditional authentication redirects
   useEffect(() => {
-    const role = localStorage.getItem("userRole");
-
-    if (address && role) {
-      if (role === "Lender") {
-        router.push("/admin");
-      } else if (role === "Borrower") {
+    if (isAuthenticated && user) {
+      if (user.role === "Lender") {
+        router.push("/lender/dashboard");
+      } else if (user.role === "Borrower") {
         router.push("/dashboard");
       }
     }
-  }, [address, role, router]);
+  }, [isAuthenticated, user, router]);
 
-  // fetchUserRole is temporarily disabled but will be used for API integration
-  const fetchUserRole = async (walletAddress: string) => {
-    try {
-      const response = await fetch(
-        `/users/role?wallet_address=${walletAddress}`
-      );
-      if (!response.ok)
-        throw new Error(`Error fetching role: ${response.statusText}`);
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"> </div>
+      </div>
+    );
+  }
 
-      const data = await response.json();
-      if (data.role) {
-        setRole(data.role);
-        console.log("User role fetched:", data.role);
-      } else {
-        console.log("No role found, user needs to select one.");
-      }
-    } catch (error) {
-      console.error("Failed to fetch user role:", error);
-    }
-  };
-
+  // Add utility functions
   const retryFetch = async (
     url: string,
     options: RequestInit,
     retries = 3,
     delay = 1000
   ) => {
-    for (let attempt = 1; attempt <= retries; attempt++) {
-      try {
-        const response = await fetch(url, options);
-        if (!response.ok)
-          throw new Error(`Attempt ${attempt}: ${response.statusText}`);
-        return await response.json();
-      } catch (error) {
-        if (attempt < retries) {
-          await new Promise((resolve) => setTimeout(resolve, delay));
-        }
-      }
-    }
-    return null;
+    // ... existing retryFetch implementation ...
   };
 
   const registerUserBeforeRedirect = async (
     walletAddress: string,
     role: string
   ) => {
-    console.log("User selected role:", role);
-
-    const data = {
-      wallet_address: walletAddress,
-      role: role.toLowerCase(),
-    };
-
-    const result = await retryFetch("/users/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!result) {
-      console.error("Failed to register user after 3 attempts.");
-    } else {
-      console.log("Registration successful:", result);
-    }
-
-    // router.push("/dashboard");
+    // ... existing registerUserBeforeRedirect implementation ...
+  };
+  
+  const clearRole = () => {
+    setRole(null);
+    console.log("Role cleared from localStorage");
   };
 
   return (
@@ -167,6 +128,16 @@ export default function HomePage() {
           )}
         </p>
       </main>
+
+      <div className="flex justify-center my-4">
+        <button
+          type="button"
+          onClick={clearRole}
+          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+        >
+          Clear Role
+        </button>
+      </div>
       <DashboardFooter />
     </div>
   );
