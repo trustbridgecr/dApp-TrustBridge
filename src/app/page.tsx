@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -17,7 +18,9 @@ type AuthState = {
 
 export const useAuthStore = create<AuthState>((set) => ({
   role:
-    typeof window !== "undefined" ? localStorage.getItem("userRole") || null : null,
+    typeof window !== "undefined"
+      ? localStorage.getItem("userRole") || null
+      : null,
   setRole: (role) => {
     if (role === null) {
       localStorage.removeItem("userRole");
@@ -96,15 +99,15 @@ export default function HomePage() {
   ) => {
     // ... existing registerUserBeforeRedirect implementation ...
   };
-
-  const clearRole = () => {
-    setRole(null);
-    console.log("Role cleared from localStorage");
-  };
+  
 
   return (
     <div className={`h-screen flex flex-col ${theme === "dark" ? "dark" : ""}`}>
-      <DashboardHeader theme={theme} setTheme={setTheme} setLanguage={setLanguage} />
+      <DashboardHeader
+        theme={theme}
+        setTheme={setTheme}
+        setLanguage={setLanguage}
+      />
       <main className="flex-1 flex flex-col sm:flex-row justify-center items-center bg-white dark:bg-[#18181B] text-black dark:text-gray-100 mt-20 gap-10">
         <h1 className="text-5xl md:text-6xl font-bold text-center md:text-left">
           {t("homepage.title", "Welcome to")} <br />{" "}
@@ -121,15 +124,6 @@ export default function HomePage() {
           )}
         </p>
       </main>
-      <div className="flex justify-center my-4">
-        <button
-          type="button"
-          onClick={clearRole}
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
-        >
-          Clear Role
-        </button>
-      </div>
       <DashboardFooter />
     </div>
   );
