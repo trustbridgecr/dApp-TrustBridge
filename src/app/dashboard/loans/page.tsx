@@ -20,7 +20,7 @@ const loanData = {
 
 export default function LoansPage() {
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="container mx-auto py-10 px-8 space-y-6">
       <LoanSummary
         totalAmount={loanData.totalAmount}
         amountPaid={loanData.amountPaid}
