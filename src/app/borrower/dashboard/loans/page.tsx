@@ -1,6 +1,6 @@
-import { LoanSummary } from "@/components/admin/loan-status/LoanSummary"
-import { PaymentHistory } from "@/components/admin/loan-status/PaymentHistory"
-import { FuturePayments } from "@/components/admin/loan-status/FuturePayments"
+import { FuturePayments } from "@/components/borrewer/loan-status/FuturePayments";
+import { LoanSummary } from "@/components/borrewer/loan-status/LoanSummary";
+import { PaymentHistory } from "@/components/borrewer/loan-status/PaymentHistory";
 
 const loanData = {
   totalAmount: 1000.0,
@@ -16,7 +16,7 @@ const loanData = {
     { id: "4", date: "August 14, 2023", amount: 200.0 },
     { id: "5", date: "September 14, 2023", amount: 200.0 },
   ],
-}
+};
 
 export default function LoansPage() {
   return (
@@ -32,6 +32,5 @@ export default function LoansPage() {
         <FuturePayments payments={loanData.futurePayments} />
       </div>
     </div>
-  )
+  );
 }
-

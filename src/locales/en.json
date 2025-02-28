@@ -196,7 +196,6 @@
     "status": "Status",
     "onTime": "On Time",
     "late": "Late"
-    
   },
   "statusFilter": {
     "placeholder": "Filter by Status",
@@ -266,11 +265,11 @@
     "contactBorrower": "Contact borrower"
   },
   "loanTypes": {
-        "home": "Home",
-        "personal": "Personal",
-        "education": "Education",
-        "car": "Car"
-    }
+    "home": "Home",
+    "personal": "Personal",
+    "education": "Education",
+    "car": "Car"
+  },
   "futurePayments": {
     "title": "Future Payment Schedule",
     "date": "Date",
