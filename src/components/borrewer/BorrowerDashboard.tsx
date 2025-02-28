@@ -33,7 +33,6 @@ const paymentSchedule = [
 export function DashboardContent() {
   const { t, i18n } = useTranslation();
   const percentagePaid = (currentLoan.paid / currentLoan.amount) * 100;
-  
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat(i18n.language, {
@@ -90,7 +89,10 @@ export function DashboardContent() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Progress value={percentagePaid} className="h-2 bg-gray-200 dark:bg-gray-700" />
+                  <Progress
+                    value={percentagePaid}
+                    className="h-2 bg-gray-200 dark:bg-gray-700"
+                  />
                   <p className="text-xs text-center text-gray-600 dark:text-gray-400">
                     {percentagePaid.toFixed(1)}%{" "}
                     {t("dashboard.currentLoan.percentagePaid")}
@@ -136,6 +138,5 @@ export function DashboardContent() {
         </div>
       </div>
     </main>
-    
   );
 }

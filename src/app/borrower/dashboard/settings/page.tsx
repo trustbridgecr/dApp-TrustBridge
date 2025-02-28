@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useSettingsForm } from "@/hooks/use-settings";
 import { ProfileForm } from "@/components/borrewer/settings/ProfileForm";
 import { AccountForm } from "@/components/borrewer/settings/AccountForm";
