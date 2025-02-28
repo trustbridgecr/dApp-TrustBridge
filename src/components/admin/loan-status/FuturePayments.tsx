@@ -1,6 +1,8 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useTranslation } from "react-i18next";
+
 
 interface Payment {
   id: string
@@ -13,17 +15,19 @@ interface FuturePaymentsProps {
 }
 
 export function FuturePayments({ payments = [] }: FuturePaymentsProps) {
+  const { t } = useTranslation()
+
   return (
     <Card className="dark:border-gray-700 dark:bg-darkbg">
       <CardHeader>
-        <CardTitle>Future Payment Schedule</CardTitle>
+        <CardTitle>{t("futurePayments.title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead>{t("futurePayments.date")}</TableHead>
+              <TableHead className="text-right">{t("futurePayments.amount")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -31,13 +35,18 @@ export function FuturePayments({ payments = [] }: FuturePaymentsProps) {
               payments.map((payment) => (
                 <TableRow key={payment.id}>
                   <TableCell>{payment.date}</TableCell>
-                  <TableCell className="text-right">${payment.amount.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">
+                    {new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    }).format(payment.amount)}
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
                 <TableCell colSpan={2} className="text-center py-4">
-                  No future payments scheduled
+                  {t("futurePayments.noPayments")}
                 </TableCell>
               </TableRow>
             )}

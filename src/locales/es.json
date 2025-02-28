@@ -233,5 +233,13 @@
         "approveRequest": "Aprobar solicitud",
         "rejectRequest": "Rechazar solicitud",
         "contactBorrower": "Contactar al prestatario"
-      } 
+      },
+        "futurePayments": {
+          "title": "Calendario de Pagos Futuros",
+          "date": "Fecha",
+          "amount": "Monto",
+          "noPayments": "No hay pagos futuros programados"
+        }
+
+      
 }
