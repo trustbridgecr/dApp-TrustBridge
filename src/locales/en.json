@@ -84,7 +84,10 @@
     "loans": "Loans",
     "settings": "Settings",
     "logout": "Logout",
-    "auditLogs": "Audit Logs"
+    "activeLoans": "Active Loans",
+    "auditLogs": "Audit Logs",
+    "loanRequests": "Loan Requests",
+    "repayments": "Repayments"
   },
   "common": {
     "currency": {
@@ -261,6 +264,12 @@
     "rejectRequest": "Reject request",
     "contactBorrower": "Contact borrower"
   },
+  "loanTypes": {
+    "home": "Home",
+    "personal": "Personal",
+    "education": "Education",
+    "car": "Car"
+  },
   "futurePayments": {
     "title": "Future Payment Schedule",
     "date": "Date",
@@ -282,5 +291,4 @@
     "amount": "Amount",
     "noPayments": "No payment history available"
   }
-
 }

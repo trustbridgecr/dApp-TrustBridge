@@ -3,13 +3,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, redirect } from "next/navigation";
-import { DashboardHeader } from "@/components/layouts/dashboard-header";
-import { DashboardFooter } from "@/components/layouts/dashboard-footer";
+import { DashboardFooter } from "@/components/layouts/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
 import { create } from "zustand";
 import { useTranslation } from "react-i18next";
 import "@/lib/i18n";
+import { DashboardHeader } from "@/components/layouts/Header";
 
 type AuthState = {
   role: string | null;
@@ -69,7 +69,7 @@ export default function HomePage() {
       if (user.role === "Lender") {
         router.push("/lender/dashboard");
       } else if (user.role === "Borrower") {
-        router.push("/dashboard");
+        router.push("/borrower/dashboard");
       }
     }
   }, [isAuthenticated, user, router]);
@@ -108,7 +108,7 @@ export default function HomePage() {
         setTheme={setTheme}
         setLanguage={setLanguage}
       />
-      <main className="flex-1 flex flex-col sm:flex-row justify-center items-center bg-white dark:bg-[#18181B] text-black dark:text-gray-100 mt-20 gap-10">
+      <main className="flex-1 flex flex-col sm:flex-row justify-center items-center bg-white dark:bg-darkbg text-black dark:text-gray-100 mt-20 gap-10">
         <h1 className="text-5xl md:text-6xl font-bold text-center md:text-left">
           {t("homepage.title", "Welcome to")} <br />{" "}
           {t("homepage.title.part2", "TrustBridge")}

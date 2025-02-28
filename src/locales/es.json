@@ -50,7 +50,7 @@
     "filters": {
       "allEvents": "Todos los Eventos",
       "loanCreation": "Creación de Préstamo",
-      "loanUpdate": "Actualización de Préstamo",  
+      "loanUpdate": "Actualización de Préstamo",
       "paymentProcess": "Procesamiento de Pago",
       "userUpdate": "Actualización de Usuario",
       "riskAlert": "Alerta de Riesgo",
@@ -123,7 +123,10 @@
     "loans": "Préstamos",
     "settings": "Configuración",
     "logout": "Cerrar Sesión",
-    "auditLogs": "Registros de Auditoría"
+    "auditLogs": "Registros de Auditoría",
+    "activeLoans": "Préstamos Activos",
+    "loanRequests": "Solicitudes de Préstamo",
+    "repayments": "Reembolsos"
   },
   "common": {
     "currency": {
@@ -208,51 +211,58 @@
       "registerLink": "¿No tienes una cuenta? Regístrate aquí"
     }
   },
-    "loanRequests": {
-      "title": "Solicitudes de Préstamos",
-      "subtitle": "Todas las Solicitudes de Préstamos",
-      "description": "Una lista de todas las solicitudes de préstamos de los prestatarios. Revise y tome acción.",
-      "table": {
-        "requestId": "ID de Solicitud",
-        "borrower": "Prestatario",
-        "amount": "Monto ($)",
-        "purpose": "Propósito",
-        "creditScore": "Puntaje Crediticio",
-        "status": "Estado",
-        "actions": "Acciones"
-      }
-    },
-    "status": {
-      "allStatuses": "Todos los Estados",
-      "pending": "Pendiente",
-      "under_review": "En Revisión",
-      "approved": "Aprobado"
-    },
-    "actions": {
-      "viewDetails": "Ver detalles",
-      "approveRequest": "Aprobar solicitud",
-      "rejectRequest": "Rechazar solicitud",
-      "contactBorrower": "Contactar al prestatario"
+  "loanRequests": {
+    "title": "Solicitudes de Préstamos",
+    "subtitle": "Todas las Solicitudes de Préstamos",
+    "description": "Una lista de todas las solicitudes de préstamos de los prestatarios. Revise y tome acción.",
+    "table": {
+      "requestId": "ID de Solicitud",
+      "borrower": "Prestatario",
+      "amount": "Monto ($)",
+      "purpose": "Propósito",
+      "creditScore": "Puntaje Crediticio",
+      "status": "Estado",
+      "actions": "Acciones"
+    }
   },
-    "futurePayments": {
-      "title": "Calendario de Pagos Futuros",
-      "date": "Fecha",
-      "amount": "Monto",
-      "noPayments": "No hay pagos futuros programados"
-    },
-    "loanSummary": {
-      "title": "Estado del Préstamo Actual",
-      "description": "Resumen de tu préstamo activo",
-      "totalAmount": "Monto total",
-      "amountPaid": "Monto pagado",
-      "nextPayment": "Próximo pago",
-      "interestRate": "Tasa de interés",
-      "percentagePaid": "pagado"
-    },
-    "paymentHistory": {
-      "title": "Historial de Pagos",
-      "date": "Fecha",
-      "amount": "Monto",
-      "noPayments": "No hay historial de pagos disponible"
-    }     
+  "status": {
+    "allStatuses": "Todos los Estados",
+    "pending": "Pendiente",
+    "under_review": "En Revisión",
+    "approved": "Aprobado"
+  },
+  "actions": {
+    "viewDetails": "Ver detalles",
+    "approveRequest": "Aprobar solicitud",
+    "rejectRequest": "Rechazar solicitud",
+    "contactBorrower": "Contactar al prestatario"
+  },
+
+  "loanTypes": {
+    "home": "Hipotecario",
+    "personal": "Personal",
+    "education": "Educación",
+    "car": "Vehicular"
+  },
+  "futurePayments": {
+    "title": "Calendario de Pagos Futuros",
+    "date": "Fecha",
+    "amount": "Monto",
+    "noPayments": "No hay pagos futuros programados"
+  },
+  "loanSummary": {
+    "title": "Estado del Préstamo Actual",
+    "description": "Resumen de tu préstamo activo",
+    "totalAmount": "Monto total",
+    "amountPaid": "Monto pagado",
+    "nextPayment": "Próximo pago",
+    "interestRate": "Tasa de interés",
+    "percentagePaid": "pagado"
+  },
+  "paymentHistory": {
+    "title": "Historial de Pagos",
+    "date": "Fecha",
+    "amount": "Monto",
+    "noPayments": "No hay historial de pagos disponible"
+  }
 }
