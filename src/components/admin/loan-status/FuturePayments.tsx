@@ -14,7 +14,7 @@ interface FuturePaymentsProps {
 
 export function FuturePayments({ payments = [] }: FuturePaymentsProps) {
   return (
-    <Card>
+    <Card className="dark:border-gray-700 dark:bg-darkbg">
       <CardHeader>
         <CardTitle>Future Payment Schedule</CardTitle>
       </CardHeader>

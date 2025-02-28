@@ -13,7 +13,7 @@ export function LoanSummary({ totalAmount, amountPaid, interestRate, nextPayment
   const percentage = (amountPaid / totalAmount) * 100
 
   return (
-    <Card className="w-full">
+    <Card className="w-full dark:border-gray-700 dark:bg-darkbg">
       <CardHeader>
         <CardTitle>Current Loan Status</CardTitle>
         <CardDescription>Summary of your active loan</CardDescription>

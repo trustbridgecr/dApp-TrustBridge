@@ -15,7 +15,7 @@ interface PaymentHistoryProps {
 
 export function PaymentHistory({ payments = [] }: PaymentHistoryProps) {
   return (
-    <Card>
+    <Card className="dark:border-gray-700 dark:bg-darkbg">
       <CardHeader>
         <CardTitle>Payment History</CardTitle>
       </CardHeader>
