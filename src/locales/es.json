@@ -248,5 +248,11 @@
       "nextPayment": "Próximo pago",
       "interestRate": "Tasa de interés",
       "percentagePaid": "pagado"
-}     
+    },
+    "paymentHistory": {
+      "title": "Historial de Pagos",
+      "date": "Fecha",
+      "amount": "Monto",
+      "noPayments": "No hay historial de pagos disponible"
+    }     
 }

@@ -1,30 +1,33 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useTranslation } from "react-i18next";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface Payment {
-  id: string
-  date: string
-  amount: number
+  id: string;
+  date: string;
+  amount: number;
 }
 
 interface PaymentHistoryProps {
-  payments?: Payment[]
+  payments?: Payment[];
 }
 
 export function PaymentHistory({ payments = [] }: PaymentHistoryProps) {
+  const { t } = useTranslation();
+
   return (
     <Card className="dark:border-gray-700 dark:bg-darkbg">
       <CardHeader>
-        <CardTitle>Payment History</CardTitle>
+        <CardTitle>{t("paymentHistory.title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead>{t("paymentHistory.date")}</TableHead>
+              <TableHead className="text-right">{t("paymentHistory.amount")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -32,13 +35,15 @@ export function PaymentHistory({ payments = [] }: PaymentHistoryProps) {
               payments.map((payment) => (
                 <TableRow key={payment.id}>
                   <TableCell>{payment.date}</TableCell>
-                  <TableCell className="text-right">${payment.amount.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">
+                    {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(payment.amount)}
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
                 <TableCell colSpan={2} className="text-center py-4">
-                  No payment history available
+                  {t("paymentHistory.noPayments")}
                 </TableCell>
               </TableRow>
             )}
@@ -46,6 +51,5 @@ export function PaymentHistory({ payments = [] }: PaymentHistoryProps) {
         </Table>
       </CardContent>
     </Card>
-  )
+  );
 }
-

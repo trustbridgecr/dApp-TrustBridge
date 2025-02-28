@@ -275,6 +275,12 @@
     "nextPayment": "Next payment",
     "interestRate": "Interest rate",
     "percentagePaid": "paid"
+  },
+  "paymentHistory": {
+    "title": "Payment History",
+    "date": "Date",
+    "amount": "Amount",
+    "noPayments": "No payment history available"
   }
 
 }
