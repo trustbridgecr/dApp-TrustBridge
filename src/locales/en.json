@@ -266,5 +266,15 @@
     "date": "Date",
     "amount": "Amount",
     "noPayments": "No future payments scheduled"
+  },
+  "loanSummary": {
+    "title": "Current Loan Status",
+    "description": "Summary of your active loan",
+    "totalAmount": "Total amount",
+    "amountPaid": "Amount paid",
+    "nextPayment": "Next payment",
+    "interestRate": "Interest rate",
+    "percentagePaid": "paid"
   }
+
 }
