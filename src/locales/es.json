@@ -15,6 +15,7 @@
     "status": "Estado",
     "onTime": "A tiempo",
     "late": "Atrasado"
+    
   },
   "statusFilter": {
     "placeholder": "Filtrar por Estado",
@@ -123,7 +124,10 @@
     "loans": "Préstamos",
     "settings": "Configuración",
     "logout": "Cerrar Sesión",
-    "auditLogs": "Registros de Auditoría"
+    "auditLogs": "Registros de Auditoría",
+    "activeLoans": "Préstamos Activos",
+    "loanRequests": "Solicitudes de Préstamo",
+    "repayments": "Reembolsos"
   },
   "common": {
     "currency": {
@@ -228,10 +232,17 @@
       "under_review": "En Revisión",
       "approved": "Aprobado"
     },
-      "actions": {
-        "viewDetails": "Ver detalles",
-        "approveRequest": "Aprobar solicitud",
-        "rejectRequest": "Rechazar solicitud",
-        "contactBorrower": "Contactar al prestatario"
-      } 
+    "actions": {
+      "viewDetails": "Ver detalles",
+      "approveRequest": "Aprobar solicitud",
+      "rejectRequest": "Rechazar solicitud",
+      "contactBorrower": "Contactar al prestatario"
+    },
+  
+    "loanTypes": {
+      "home": "Hipotecario",
+      "personal": "Personal",
+      "education": "Educación",
+      "car": "Vehicular"
+    }
 }

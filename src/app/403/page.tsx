@@ -24,7 +24,7 @@ export default function ForbiddenPage() {
     if (user?.role === 'Lender') {
       router.push('/lender/dashboard');
     } else if (user?.role === 'Borrower') {
-      router.push('/dashboard');
+      router.push('/borrower/dashboard');
     } else {
       router.push('/');
     }

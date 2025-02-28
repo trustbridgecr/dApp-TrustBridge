@@ -84,7 +84,10 @@
     "loans": "Loans",
     "settings": "Settings",
     "logout": "Logout",
-    "auditLogs": "Audit Logs"
+    "activeLoans": "Active Loans",
+    "auditLogs": "Audit Logs",
+    "loanRequests": "Loan Requests",
+    "repayments": "Repayments"
   },
   "common": {
     "currency": {
@@ -193,6 +196,7 @@
     "status": "Status",
     "onTime": "On Time",
     "late": "Late"
+    
   },
   "statusFilter": {
     "placeholder": "Filter by Status",
@@ -260,5 +264,11 @@
     "approveRequest": "Approve request",
     "rejectRequest": "Reject request",
     "contactBorrower": "Contact borrower"
-  }
+  },
+  "loanTypes": {
+        "home": "Home",
+        "personal": "Personal",
+        "education": "Education",
+        "car": "Car"
+    }
 }
