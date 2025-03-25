@@ -277,7 +277,7 @@ export function LoanRequestsTable() {
                   {filteredRequests.map((request, index) => (
                     <TableRow
                       key={request.id}
-                      className="hover:bg-gray-50 dark:hover:bg-[#0A1420] transition-colors duration-200 animate-fade-in"
+                      className="hover:bg-gray-50  dark:hover:bg-[#0A1420] transition-colors"
                       style={{ animationDelay: `${index * 50}ms` }}
                     >
                       <TableCell className="dark:text-gray-300 group-hover:text-white transition-colors duration-200">
