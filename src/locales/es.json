@@ -302,6 +302,12 @@
       "borrower": "Prestatario",
       "loanId": "ID de Préstamo",
       "dueDate": "Fecha de Vencimiento"
+    },
+    "filters": {
+      "all": "Todos los Estados",
+      "upcoming": "Próximos",
+      "overdue": "Vencidos",
+      "paid": "Pagados"
     }
   }
 }

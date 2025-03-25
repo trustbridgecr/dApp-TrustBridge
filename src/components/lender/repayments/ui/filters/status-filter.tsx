@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Status } from '@/@types/repayment.entity';
 import { statuses } from '../../constants/status-filter.constant';
+import { useTranslation } from 'react-i18next';
 
 interface StatusFilterProps {
   selectedStatus: Status;
@@ -20,6 +21,8 @@ export function StatusFilter({
   selectedStatus,
   onStatusChange,
 }: StatusFilterProps) {
+  const { t } = useTranslation();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,7 +30,7 @@ export function StatusFilter({
           variant='outline'
           className='w-[150px] justify-between bg-[#1C2530] hover:bg-[#1C2A3E]/30 hover:text-white border-[#63CDE6]/20 text-gray-300'
         >
-          {statuses.find((s) => s.value === selectedStatus)?.label}
+          {t(`repayments.filters.${selectedStatus}`)}
           <Check className='ml-2 h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
@@ -42,7 +45,7 @@ export function StatusFilter({
             onCheckedChange={() => onStatusChange(status.value)}
             className='hover:bg-[#1C2A3E]/50'
           >
-            {status.label}
+            {t(`repayments.filters.${status.value}`)}
           </DropdownMenuCheckboxItem>
         ))}
       </DropdownMenuContent>

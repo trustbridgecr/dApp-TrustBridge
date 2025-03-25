@@ -30,7 +30,7 @@ export default function RepaymentsContent() {
           className='text-white border border-[#63CDE6]/20 bg-[#0F1927] max-sm:self-end flex space-x-2 items-center shadow-[0px_0px_12px_1px_rgba(99,205,230,0.25)] font-medium rounded-full text-sm px-3 sm:px-5 py-2.5 text-center me-2 mb-2'
         >
           <div className='h-3 w-3 sm:h-4 sm:w-4 bg-[#63CDE6] rounded-full'></div>
-          <span>Payment Tracking</span>
+          <span>{t('repayments.paymentTracking')}</span>
         </button>
       </div>
 

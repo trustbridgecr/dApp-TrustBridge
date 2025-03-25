@@ -328,6 +328,12 @@
       "borrower": "Borrower",
       "loanId": "Loan ID",
       "dueDate": "Due Date"
+    },
+    "filters": {
+      "all": "All Statuses",
+      "upcoming": "Upcoming",
+      "overdue": "Overdue",
+      "paid": "Paid"
     }
   }
 }
