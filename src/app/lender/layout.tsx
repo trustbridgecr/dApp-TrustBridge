@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { DashboardFooter } from "@/components/layouts/Footer";
 import { DashboardHeader } from "@/components/layouts/Header";
@@ -22,7 +22,7 @@ export default function LenderLayout({
   }, [theme]);
 
   return (
-    <RouteGuard allowedRoles={['Lender']}>
+    <RouteGuard allowedRoles={["Lender"]}>
       <div className={`flex min-h-screen ${theme === "dark" ? "dark" : ""}`}>
         <LenderSidebar />
         <div className="flex-1 flex flex-col dark:bg-darkbg">
@@ -37,4 +37,4 @@ export default function LenderLayout({
       </div>
     </RouteGuard>
   );
-} 
+}
