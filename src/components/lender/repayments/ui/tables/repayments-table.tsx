@@ -28,6 +28,7 @@ import { Status } from '@/@types/repayment.entity';
 import { useRepaymentsTable } from './hooks/repayments-table.hooks';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export interface RepaymentsTableProps {
   searchQuery: string;
@@ -44,6 +45,7 @@ export function RepaymentsTable({
   });
 
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
+  const { t } = useTranslation();
 
   const toggleRow = (id: string) => {
     setExpandedRows((prev) =>
@@ -59,33 +61,33 @@ export function RepaymentsTable({
           <TableHeader>
             <TableRow>
               <TableHead className='px-0'>
-                {renderSortButton('Repayment ID', 'id')}
+                {renderSortButton(t('repayments.table.repaymentId'), 'id')}
               </TableHead>
               <TableHead className='px-0'>
-                {renderSortButton('Borrower', 'borrower')}
+                {renderSortButton(t('repayments.table.borrower'), 'borrower')}
               </TableHead>
               <TableHead className='px-0'>
-                {renderSortButton('Loan ID', 'loanId')}
+                {renderSortButton(t('repayments.table.loanId'), 'loanId')}
               </TableHead>
               <TableHead className='px-0'>
-                {renderSortButton('Amount ($)', 'amount')}
+                {renderSortButton(t('repayments.table.amount'), 'amount')}
               </TableHead>
               <TableHead className='px-0'>
-                {renderSortButton('Due Date', 'dueDate')}
+                {renderSortButton(t('repayments.table.dueDate'), 'dueDate')}
               </TableHead>
               <TableHead className='px-0'>
-                {renderSortButton('Status', 'status')}
+                {renderSortButton(t('repayments.table.status'), 'status')}
               </TableHead>
               <TableHead className='text-[#63CDE6] font-semibold'>
-                Actions
+                {t('repayments.table.actions')}
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredAndSortedData.length === 0 ? (
-              <TableRow className='text-gray-300 '>
+              <TableRow className='text-gray-300'>
                 <TableCell colSpan={7} className='h-24 text-center'>
-                  No results found.
+                  {t('repayments.noResults')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -129,8 +131,7 @@ export function RepaymentsTable({
                       {repayment.status === 'paid' && (
                         <CircleCheckBig className='w-4 h-4' />
                       )}
-                      {repayment.status.charAt(0).toUpperCase() +
-                        repayment.status.slice(1)}
+                      {t(`repayments.status.${repayment.status}`)}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -148,13 +149,13 @@ export function RepaymentsTable({
                         className='bg-[#1C2530] border-none text-white'
                       >
                         <DropdownMenuItem className='hover:!bg-[#1C2A3E]/50 hover:!text-white'>
-                          View details
+                          {t('repayments.actions.viewDetails')}
                         </DropdownMenuItem>
                         <DropdownMenuItem className='hover:!bg-[#1C2A3E]/50 hover:!text-white'>
-                          Mark as paid
+                          {t('repayments.actions.markAsPaid')}
                         </DropdownMenuItem>
                         <DropdownMenuItem className='hover:!bg-[#1C2A3E]/50 hover:!text-white'>
-                          Send reminder
+                          {t('repayments.actions.sendReminder')}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -217,8 +218,7 @@ export function RepaymentsTable({
                       {repayment.status === 'paid' && (
                         <CircleCheckBig className='w-4 h-4' />
                       )}
-                      {repayment.status.charAt(0).toUpperCase() +
-                        repayment.status.slice(1)}
+                      {t(`repayments.status.${repayment.status}`)}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -238,32 +238,38 @@ export function RepaymentsTable({
                   <TableCell colSpan={4} className='p-4'>
                     <div className='space-y-3'>
                       <div className='flex justify-between'>
-                        <span className='text-sm text-gray-400'>Borrower</span>
+                        <span className='text-sm text-gray-400'>
+                          {t('repayments.mobileView.borrower')}
+                        </span>
                         <span className='text-sm text-gray-300'>
                           {repayment.borrower}
                         </span>
                       </div>
                       <div className='flex justify-between'>
-                        <span className='text-sm text-gray-400'>Loan ID</span>
+                        <span className='text-sm text-gray-400'>
+                          {t('repayments.mobileView.loanId')}
+                        </span>
                         <span className='text-sm text-gray-300'>
                           {repayment.loanId}
                         </span>
                       </div>
                       <div className='flex justify-between'>
-                        <span className='text-sm text-gray-400'>Due Date</span>
+                        <span className='text-sm text-gray-400'>
+                          {t('repayments.mobileView.dueDate')}
+                        </span>
                         <span className='text-sm text-gray-300'>
                           {repayment.dueDate}
                         </span>
                       </div>
                       <div className='flex justify-end gap-2 mt-4'>
                         <Button variant='outline' size='sm'>
-                          View details
+                          {t('repayments.actions.viewDetails')}
                         </Button>
                         <Button variant='outline' size='sm'>
-                          Mark as paid
+                          {t('repayments.actions.markAsPaid')}
                         </Button>
                         <Button variant='outline' size='sm'>
-                          Send reminder
+                          {t('repayments.actions.sendReminder')}
                         </Button>
                       </div>
                     </div>

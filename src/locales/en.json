@@ -94,7 +94,16 @@
       "format": "USD {{amount}}"
     },
     "loading": "Loading...",
-    "error": "An error occurred"
+    "error": "An error occurred",
+    "search": {
+      "placeholder": {
+        "default": "Search..."
+      },
+      "aria": {
+        "label": "Search input",
+        "clear": "Clear search"
+      }
+    }
   },
   "form": {
     "pageTitle": "Request Loan",
@@ -290,5 +299,35 @@
     "date": "Date",
     "amount": "Amount",
     "noPayments": "No payment history available"
+  },
+  "repayments": {
+    "title": "Loan Repayments",
+    "subtitle": "Track and manage all loan repayments",
+    "table": {
+      "repaymentId": "Repayment ID",
+      "borrower": "Borrower",
+      "loanId": "Loan ID",
+      "amount": "Amount ($)",
+      "dueDate": "Due Date",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "upcoming": "Upcoming",
+      "overdue": "Overdue",
+      "paid": "Paid"
+    },
+    "actions": {
+      "viewDetails": "View details",
+      "markAsPaid": "Mark as paid",
+      "sendReminder": "Send reminder"
+    },
+    "paymentTracking": "Payment Tracking",
+    "noResults": "No results found.",
+    "mobileView": {
+      "borrower": "Borrower",
+      "loanId": "Loan ID",
+      "dueDate": "Due Date"
+    }
   }
 }
