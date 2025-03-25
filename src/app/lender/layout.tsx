@@ -25,7 +25,7 @@ export default function LenderLayout({
     <RouteGuard allowedRoles={['Lender']}>
       <div className={`flex min-h-screen ${theme === 'dark' ? 'dark' : ''}`}>
         <LenderSidebar />
-        <div className='w-full flex flex-col dark:bg-darkbg'>
+        <div className='w-full flex flex-col bg-gradient-to-b from-[#0B1120] via-[#0B1120] to-[#121E31]'>
           {/* <div className='w-full'> */}
           <DashboardHeader
             theme={theme}

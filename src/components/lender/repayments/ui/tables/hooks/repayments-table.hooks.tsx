@@ -62,7 +62,7 @@ export const useRepaymentsTable = ({
     <Button
       variant='ghost'
       onClick={() => handleSort(key)}
-      className='hover:bg-transparent dark:text-[#63CDE6] font-semibold px-2'
+      className='hover:bg-transparent hover:text-[#63CDE6] text-[#63CDE6] font-semibold px-2'
     >
       {label}
       <ArrowUpDown className='ml-2 h-4 w-4' />

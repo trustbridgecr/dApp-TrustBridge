@@ -52,7 +52,7 @@ export function RepaymentsTable({
   };
 
   return (
-    <div className='dark:bg-[#0F1927] border dark:border-[#63CDE6]/20 shadow-[0px_0px_8px_2px_rgba(99,205,230,0.15)] rounded-2xl p-5 w-full'>
+    <div className='bg-[#0F1927] border border-[#63CDE6]/20 shadow-[0px_0px_8px_2px_rgba(99,205,230,0.15)] rounded-2xl p-5 w-full'>
       {/* Desktop Table */}
       <div className='hidden md:block'>
         <Table>
@@ -76,14 +76,14 @@ export function RepaymentsTable({
               <TableHead className='px-0'>
                 {renderSortButton('Status', 'status')}
               </TableHead>
-              <TableHead className='dark:text-[#63CDE6] font-semibold'>
+              <TableHead className='text-[#63CDE6] font-semibold'>
                 Actions
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredAndSortedData.length === 0 ? (
-              <TableRow className='dark:text-gray-300 '>
+              <TableRow className='text-gray-300 '>
                 <TableCell colSpan={7} className='h-24 text-center'>
                   No results found.
                 </TableCell>
@@ -91,29 +91,29 @@ export function RepaymentsTable({
             ) : (
               filteredAndSortedData.map((repayment) => (
                 <TableRow key={repayment.id}>
-                  <TableCell className='font-medium dark:text-gray-300'>
+                  <TableCell className='font-medium text-gray-300'>
                     {repayment.id}
                   </TableCell>
-                  <TableCell className='dark:text-gray-300'>
+                  <TableCell className='text-gray-300'>
                     {repayment.borrower}
                   </TableCell>
-                  <TableCell className='dark:text-gray-300'>
+                  <TableCell className='text-gray-300'>
                     {repayment.loanId}
                   </TableCell>
-                  <TableCell className='dark:text-[#6AD09E]'>
+                  <TableCell className='text-[#6AD09E]'>
                     {repayment.amount}
                   </TableCell>
-                  <TableCell className='dark:text-gray-300'>
+                  <TableCell className='text-gray-300'>
                     {repayment.dueDate}
                   </TableCell>
-                  <TableCell className='dark:text-gray-300'>
+                  <TableCell className='text-gray-300'>
                     <Badge
                       className={
                         repayment.status === 'upcoming'
-                          ? 'bg-blue-500/10 text-blue-400 flex items-center gap-2 w-fit rounded-full'
+                          ? 'bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 flex items-center gap-2 w-fit rounded-full'
                           : repayment.status === 'overdue'
-                            ? 'bg-red-500/10 text-red-400 flex items-center gap-2 w-fit rounded-full'
-                            : 'bg-green-500/10 text-green-400 flex items-center gap-2 w-fit rounded-full'
+                            ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 flex items-center gap-2 w-fit rounded-full'
+                            : 'bg-green-500/10 text-green-400 hover:bg-green-500/20 flex items-center gap-2 w-fit rounded-full'
                       }
                       variant='secondary'
                       style={{
@@ -136,14 +136,26 @@ export function RepaymentsTable({
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant='ghost' className='h-8 w-8 p-0'>
-                          <MoreHorizontal className='h-4 w-4 dark:text-gray-300' />
+                        <Button
+                          variant='ghost'
+                          className='h-8 w-8 p-0 hover:bg-[#1C2A3E]/30'
+                        >
+                          <MoreHorizontal className='h-4 w-4 text-gray-300' />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align='end'>
-                        <DropdownMenuItem>View details</DropdownMenuItem>
-                        <DropdownMenuItem>Mark as paid</DropdownMenuItem>
-                        <DropdownMenuItem>Send reminder</DropdownMenuItem>
+                      <DropdownMenuContent
+                        align='end'
+                        className='bg-[#1C2530] border-none text-white'
+                      >
+                        <DropdownMenuItem className='hover:!bg-[#1C2A3E]/50 hover:!text-white'>
+                          View details
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className='hover:!bg-[#1C2A3E]/50 hover:!text-white'>
+                          Mark as paid
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className='hover:!bg-[#1C2A3E]/50 hover:!text-white'>
+                          Send reminder
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -179,10 +191,10 @@ export function RepaymentsTable({
                   className='cursor-pointer'
                   onClick={() => toggleRow(repayment.id)}
                 >
-                  <TableCell className='font-medium dark:text-gray-300'>
+                  <TableCell className='font-medium text-gray-300'>
                     {repayment.id}
                   </TableCell>
-                  <TableCell className='dark:text-[#6AD09E]'>
+                  <TableCell className='text-[#6AD09E]'>
                     ${repayment.amount}
                   </TableCell>
                   <TableCell>
@@ -211,41 +223,35 @@ export function RepaymentsTable({
                   </TableCell>
                   <TableCell>
                     {expandedRows.includes(repayment.id) ? (
-                      <ChevronUp className='w-4 h-4 dark:text-gray-400' />
+                      <ChevronUp className='w-4 h-4 text-gray-400' />
                     ) : (
-                      <ChevronDown className='w-4 h-4 dark:text-gray-400' />
+                      <ChevronDown className='w-4 h-4 text-gray-400' />
                     )}
                   </TableCell>
                 </TableRow>
                 <TableRow
                   className={cn(
-                    'dark:bg-slate-950/10',
+                    'bg-slate-950/10',
                     !expandedRows.includes(repayment.id) && 'hidden'
                   )}
                 >
                   <TableCell colSpan={4} className='p-4'>
                     <div className='space-y-3'>
                       <div className='flex justify-between'>
-                        <span className='text-sm dark:text-gray-400'>
-                          Borrower
-                        </span>
-                        <span className='text-sm dark:text-gray-300'>
+                        <span className='text-sm text-gray-400'>Borrower</span>
+                        <span className='text-sm text-gray-300'>
                           {repayment.borrower}
                         </span>
                       </div>
                       <div className='flex justify-between'>
-                        <span className='text-sm dark:text-gray-400'>
-                          Loan ID
-                        </span>
-                        <span className='text-sm dark:text-gray-300'>
+                        <span className='text-sm text-gray-400'>Loan ID</span>
+                        <span className='text-sm text-gray-300'>
                           {repayment.loanId}
                         </span>
                       </div>
                       <div className='flex justify-between'>
-                        <span className='text-sm dark:text-gray-400'>
-                          Due Date
-                        </span>
-                        <span className='text-sm dark:text-gray-300'>
+                        <span className='text-sm text-gray-400'>Due Date</span>
+                        <span className='text-sm text-gray-300'>
                           {repayment.dueDate}
                         </span>
                       </div>
