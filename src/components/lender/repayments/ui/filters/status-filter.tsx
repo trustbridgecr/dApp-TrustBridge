@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Status } from "@/@types/repayment.entity";
-import { statuses } from "../../constants/status-filter.constant";
+} from '@/components/ui/dropdown-menu';
+import { Status } from '@/@types/repayment.entity';
+import { statuses } from '../../constants/status-filter.constant';
 
 interface StatusFilterProps {
   selectedStatus: Status;
@@ -24,14 +24,14 @@ export function StatusFilter({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="outline"
-          className="w-[150px] justify-between dark:bg-darkbg dark:text-gray-300"
+          variant='outline'
+          className='w-[150px] justify-between dark:bg-[#1C2530] dark:text-gray-300'
         >
           {statuses.find((s) => s.value === selectedStatus)?.label}
-          <Check className="ml-2 h-4 w-4" />
+          <Check className='ml-2 h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[150px]">
+      <DropdownMenuContent align='end' className='w-[150px]'>
         {statuses.map((status) => (
           <DropdownMenuCheckboxItem
             key={status.value}
