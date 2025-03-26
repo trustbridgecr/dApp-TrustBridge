@@ -79,7 +79,7 @@ export default function CryptoTab({ theme }: CryptoTabProps) {
         </p>
       </div>
 
-          <div className="flex items-center justify-between p-4 rounded-lg bg-[#1F283B] border border-[#2A3549]">
+      <div className="flex items-center justify-between p-4 rounded-lg bg-[#1F283B] border border-[#2A3549]">
         <div className="space-y-0.5">
           <div className="flex items-center gap-2">
             <DollarSign className={`h-5 w-5 ${theme === "dark" ? "text-[#1DAFC9]" : "text-gray-500"}`} />
