@@ -51,7 +51,7 @@ export function DashboardHeader({
   };
 
   return (
-    <header className="w-full bg-white dark:bg-darkbg text-black dark:text-white px-6 py-4">
+    <header className="w-full backdrop-blur-md bg-[#0A1A2A]/60 border-b border-cyan-900/30 shadow-[0_4px_15px_rgba(0,200,255,0.1)] px-6 py-3">
       <div className="flex items-center justify-end space-x-2">
         <div className="flex items-center space-x-2">
           <DropdownMenu>
@@ -82,37 +82,30 @@ export function DashboardHeader({
           </Button>
 
           {address ? (
-            <div className="flex items-center gap-2">
-              <div className="flex flex-col items-start">
-                <span className="text-xs text-white/60">
-                  Connected as
-                </span>
-                <span className="text-sm font-medium text-cyan-300">
-                  {address.slice(0, 6)}...{address.slice(-4)}
-                </span>
+            <div className="flex items-center ml-2">
+              <div className="mr-3 hidden md:block">
+                <p className="text-xs text-white/60">Connected as</p>
+                <p className="text-sm text-cyan-300 font-mono">
+                  {address.substring(0, 6)}...{address.substring(address.length - 4)}
+                </p>
               </div>
-              <Button
+              <button
                 onClick={handleDisconnect}
-                variant="ghost"
-                className="border border-gray-100/20 
-                hover:bg-gradient-to-br hover:from-green-900/90 hover:to-blue-950/90 hover:text-white 
-                hover:shadow-lg hover:shadow-blue-950/50
-                rounded-full 
-                focus:border-0 focus:bg-gradient-to-br focus:from-green-900/90 focus:to-blue-950/90 focus:text-white 
-                focus:shadow-lg focus:shadow-blue-950/50
-                active:bg-gradient-to-br active:from-green-900/90 active:to-blue-950/90 active:text-white"
+                type="button"
+                className="relative overflow-hidden px-4 py-2 rounded-full bg-[#0A1A2A]/80 border border-cyan-900/30 text-white text-sm font-medium transition-all hover:shadow-[0_0_15px_rgba(0,200,255,0.3)] group"
               >
-                Disconnect
-              </Button>
+                <span className="relative z-10">{t("header.disconnect")}</span>
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-emerald-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+              </button>
             </div>
           ) : (
-            <Button
+            <button
               onClick={handleConnect}
-              variant="default"
-              className="bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl"
+              type="button"
+              className="relative overflow-hidden px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-emerald-500 text-white text-sm font-medium transition-all hover:shadow-[0_0_15px_rgba(0,200,255,0.3)]"
             >
-              {t("header.connect")}
-            </Button>
+              <span className="relative z-10">{t("header.connect")}</span>
+            </button>
           )}
         </div>
       </div>
