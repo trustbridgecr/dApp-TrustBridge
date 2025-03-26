@@ -17,7 +17,7 @@ export default function DashboardLayout({
   return (
     <RouteGuard allowedRoles={['Borrower']}>
       <div className={`flex min-h-screen ${theme === "dark" ? "dark" : ""}`}>
-        <BorrowerSidebar />
+        <BorrowerSidebar theme={theme} />
         <div className="flex-1 flex flex-col">
           <DashboardHeader
             theme={theme}
