@@ -1,32 +1,31 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { ChevronRight, Search, Filter, ArrowUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
-import ParticlesBackground from "./ParticlesBackground"
-import { Geist, Geist_Mono } from "next/font/google";
-
-
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
-})
+import { useState, useEffect } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { ChevronRight, Search, Filter, ArrowUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import ParticlesBackground from "@/components/lender/active-loans/ParticlesBackground";
 
 interface Loan {
-  id: string
-  borrower: string
-  type: "Home" | "Personal" | "Education" | "Business" | "Auto"
-  amount: number
-  remaining: number
-  interestRate: number
-  startDate: string
-  lastPayment: string
-  nextPayment: string
-  status: "On Time" | "Late"
+  id: string;
+  borrower: string;
+  type: "Home" | "Personal" | "Education" | "Business" | "Auto";
+  amount: number;
+  remaining: number;
+  interestRate: number;
+  startDate: string;
+  lastPayment: string;
+  nextPayment: string;
+  status: "On Time" | "Late";
 }
 
 const sampleLoans: Loan[] = [
@@ -174,115 +173,116 @@ const sampleLoans: Loan[] = [
     nextPayment: "2025-03-05",
     status: "On Time",
   },
-]
+];
 
-
-
-
-const statusOptions = ["All Status", "On Time", "Late"]
+const statusOptions = ["All Status", "On Time", "Late"];
 
 export default function ActiveLoansTable() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [statusFilter, setStatusFilter] = useState("All Status")
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All Status");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState<{
-    key: keyof Loan | null
-    direction: "ascending" | "descending" | null
+    key: keyof Loan | null;
+    direction: "ascending" | "descending" | null;
   }>({
     key: null,
     direction: null,
-  })
-  const [isLoading, setIsLoading] = useState(true)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage] = useState(8)
-  const [animateRows, setAnimateRows] = useState(false)
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(8);
+  const [animateRows, setAnimateRows] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isDropdownOpen && event.target instanceof Element) {
-        const dropdownElement = document.querySelector(".dropdown-container")
+        const dropdownElement = document.querySelector(".dropdown-container");
         if (dropdownElement && !dropdownElement.contains(event.target)) {
-          setIsDropdownOpen(false)
+          setIsDropdownOpen(false);
         }
       }
-    }
+    };
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [isDropdownOpen])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false)
-      setAnimateRows(true)
-    }, 1000)
-    return () => clearTimeout(timer)
-  }, [])
+      setIsLoading(false);
+      setAnimateRows(true);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filteredLoans = sampleLoans.filter((loan) => {
     const matchesSearch =
       loan.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      loan.borrower.toLowerCase().includes(searchQuery.toLowerCase())
+      loan.borrower.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesStatus = statusFilter === "All Status" || loan.status === statusFilter
+    const matchesStatus =
+      statusFilter === "All Status" || loan.status === statusFilter;
 
-    return matchesSearch && matchesStatus
-  })
+    return matchesSearch && matchesStatus;
+  });
 
   const sortedLoans = [...filteredLoans].sort((a, b) => {
-    if (!sortConfig.key || !sortConfig.direction) return 0
+    if (!sortConfig.key || !sortConfig.direction) return 0;
 
-    const aValue = a[sortConfig.key]
-    const bValue = b[sortConfig.key]
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
 
     if (aValue < bValue) {
-      return sortConfig.direction === "ascending" ? -1 : 1
+      return sortConfig.direction === "ascending" ? -1 : 1;
     }
     if (aValue > bValue) {
-      return sortConfig.direction === "ascending" ? 1 : -1
+      return sortConfig.direction === "ascending" ? 1 : -1;
     }
-    return 0
-  })
+    return 0;
+  });
 
   const handleSort = (key: keyof Loan) => {
-    let direction: "ascending" | "descending" | null = "ascending"
+    let direction: "ascending" | "descending" | null = "ascending";
 
     if (sortConfig.key === key) {
       if (sortConfig.direction === "ascending") {
-        direction = "descending"
+        direction = "descending";
       } else if (sortConfig.direction === "descending") {
-        direction = null
+        direction = null;
       }
     }
 
-    setSortConfig({ key, direction })
-  }
+    setSortConfig({ key, direction });
+  };
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
       minimumFractionDigits: 0,
-    }).format(value)
-  }
+    }).format(value);
+  };
 
   const formatDate = (dateString: string) => {
-    return dateString.replace(/(\d{4})-(\d{2})-(\d{2})/, "$1-$2-$3")
-  }
+    return dateString.replace(/(\d{4})-(\d{2})-(\d{2})/, "$1-$2-$3");
+  };
 
-  const indexOfLastItem = currentPage * itemsPerPage
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentItems = sortedLoans.slice(indexOfFirstItem, indexOfLastItem)
-  const totalPages = Math.ceil(sortedLoans.length / itemsPerPage)
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = sortedLoans.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(sortedLoans.length / itemsPerPage);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const LoadingSkeleton = () => (
     <>
       {[...Array(6)].map((_, index) => (
-        <TableRow key={index} className="animate-pulse border-b border-[#1e2d3d]">
+        <TableRow
+          key={index}
+          className="animate-pulse border-b border-[#1e2d3d]"
+        >
           {[...Array(10)].map((_, cellIndex) => (
             <TableCell key={cellIndex} className="px-4 py-4">
               <div className="h-4 bg-[#1e2d3d] rounded w-3/4"></div>
@@ -292,10 +292,13 @@ export default function ActiveLoansTable() {
         </TableRow>
       ))}
     </>
-  )
+  );
 
   return (
-    <div className={`w-full min-h-screen bg-[#0a101f] text-white relative ${geistMono.className}`}>
+    <div
+      className="w-full min-h-screen bg-[#0a101f] text-white relative"
+      style={{ fontFamily: "var(--font-geist-sans)" }}
+    >
       <ParticlesBackground />
 
       <div className="relative z-10">
@@ -306,7 +309,9 @@ export default function ActiveLoansTable() {
           </div>
           <div className="flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-[#0ff]"></div>
-            <span className="text-[#0ff]">{filteredLoans.length} Active Loans</span>
+            <span className="text-[#0ff]">
+              {filteredLoans.length} Active Loans
+            </span>
           </div>
         </div>
 
@@ -358,8 +363,8 @@ export default function ActiveLoansTable() {
                   <div className="py-1 border-b border-[#1e2d3d]">
                     <button
                       onClick={() => {
-                        setStatusFilter("All Status")
-                        setIsDropdownOpen(false)
+                        setStatusFilter("All Status");
+                        setIsDropdownOpen(false);
                       }}
                       className="w-full px-4 py-2 text-left text-[#0ff] font-medium hover:bg-[#1e2d3d] transition-colors"
                     >
@@ -369,8 +374,8 @@ export default function ActiveLoansTable() {
                   <div className="py-1">
                     <button
                       onClick={() => {
-                        setStatusFilter("On Time")
-                        setIsDropdownOpen(false)
+                        setStatusFilter("On Time");
+                        setIsDropdownOpen(false);
                       }}
                       className="w-full px-4 py-2 text-left hover:bg-[#1e2d3d] transition-colors"
                     >
@@ -380,8 +385,8 @@ export default function ActiveLoansTable() {
                     </button>
                     <button
                       onClick={() => {
-                        setStatusFilter("Late")
-                        setIsDropdownOpen(false)
+                        setStatusFilter("Late");
+                        setIsDropdownOpen(false);
                       }}
                       className="w-full px-4 py-2 text-left hover:bg-[#1e2d3d] transition-colors"
                     >
@@ -409,7 +414,8 @@ export default function ActiveLoansTable() {
                         <ArrowUpDown
                           className={cn(
                             "ml-1 h-3 w-3 transition-transform duration-300",
-                            sortConfig.direction === "descending" && "rotate-180",
+                            sortConfig.direction === "descending" &&
+                              "rotate-180"
                           )}
                         />
                       )}
@@ -425,13 +431,16 @@ export default function ActiveLoansTable() {
                         <ArrowUpDown
                           className={cn(
                             "ml-1 h-3 w-3 transition-transform duration-300",
-                            sortConfig.direction === "descending" && "rotate-180",
+                            sortConfig.direction === "descending" &&
+                              "rotate-180"
                           )}
                         />
                       )}
                     </div>
                   </TableHead>
-                  <TableHead className="text-[#0ff] font-medium px-4">Loan Type</TableHead>
+                  <TableHead className="text-[#0ff] font-medium px-4">
+                    Loan Type
+                  </TableHead>
                   <TableHead
                     className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 cursor-pointer transition-all duration-200"
                     onClick={() => handleSort("amount")}
@@ -442,7 +451,8 @@ export default function ActiveLoansTable() {
                         <ArrowUpDown
                           className={cn(
                             "ml-1 h-3 w-3 transition-transform duration-300",
-                            sortConfig.direction === "descending" && "rotate-180",
+                            sortConfig.direction === "descending" &&
+                              "rotate-180"
                           )}
                         />
                       )}
@@ -458,7 +468,8 @@ export default function ActiveLoansTable() {
                         <ArrowUpDown
                           className={cn(
                             "ml-1 h-3 w-3 transition-transform duration-300",
-                            sortConfig.direction === "descending" && "rotate-180",
+                            sortConfig.direction === "descending" &&
+                              "rotate-180"
                           )}
                         />
                       )}
@@ -474,7 +485,8 @@ export default function ActiveLoansTable() {
                         <ArrowUpDown
                           className={cn(
                             "ml-1 h-3 w-3 transition-transform duration-300",
-                            sortConfig.direction === "descending" && "rotate-180",
+                            sortConfig.direction === "descending" &&
+                              "rotate-180"
                           )}
                         />
                       )}
@@ -490,13 +502,16 @@ export default function ActiveLoansTable() {
                         <ArrowUpDown
                           className={cn(
                             "ml-1 h-3 w-3 transition-transform duration-300",
-                            sortConfig.direction === "descending" && "rotate-180",
+                            sortConfig.direction === "descending" &&
+                              "rotate-180"
                           )}
                         />
                       )}
                     </div>
                   </TableHead>
-                  <TableHead className="text-[#0ff] font-medium px-4">Last Payment</TableHead>
+                  <TableHead className="text-[#0ff] font-medium px-4">
+                    Last Payment
+                  </TableHead>
                   <TableHead
                     className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 cursor-pointer transition-all duration-200"
                     onClick={() => handleSort("nextPayment")}
@@ -507,7 +522,8 @@ export default function ActiveLoansTable() {
                         <ArrowUpDown
                           className={cn(
                             "ml-1 h-3 w-3 transition-transform duration-300",
-                            sortConfig.direction === "descending" && "rotate-180",
+                            sortConfig.direction === "descending" &&
+                              "rotate-180"
                           )}
                         />
                       )}
@@ -523,7 +539,8 @@ export default function ActiveLoansTable() {
                         <ArrowUpDown
                           className={cn(
                             "ml-1 h-3 w-3 transition-transform duration-300",
-                            sortConfig.direction === "descending" && "rotate-180",
+                            sortConfig.direction === "descending" &&
+                              "rotate-180"
                           )}
                         />
                       )}
@@ -537,7 +554,10 @@ export default function ActiveLoansTable() {
                   <LoadingSkeleton />
                 ) : currentItems.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={11} className="h-24 text-center text-gray-400">
+                    <TableCell
+                      colSpan={11}
+                      className="h-24 text-center text-gray-400"
+                    >
                       No loans found.
                     </TableCell>
                   </TableRow>
@@ -548,12 +568,16 @@ export default function ActiveLoansTable() {
                       className={cn(
                         "group border-b border-[#1e2d3d] transition-all duration-300 hover:bg-[#1e2d3d]/50",
                         animateRows && "animate-rowFadeIn",
-                        `animate-delay-${index * 100}`,
+                        `animate-delay-${index * 100}`
                       )}
                       style={{ animationDelay: `${index * 50}ms` }}
                     >
-                      <TableCell className="font-medium text-white px-4">{loan.id}</TableCell>
-                      <TableCell className="text-white px-4">{loan.borrower}</TableCell>
+                      <TableCell className="font-medium text-white px-4">
+                        {loan.id}
+                      </TableCell>
+                      <TableCell className="text-white px-4">
+                        {loan.borrower}
+                      </TableCell>
                       <TableCell className="px-4">
                         <div
                           className={cn(
@@ -562,21 +586,29 @@ export default function ActiveLoansTable() {
                             loan.type === "Personal" && "bg-[#2d1e57]",
                             loan.type === "Education" && "bg-[#1e5741]",
                             loan.type === "Business" && "bg-[#573e1e]",
-                            loan.type === "Auto" && "bg-[#3a1e57]",
+                            loan.type === "Auto" && "bg-[#3a1e57]"
                           )}
                         >
                           {loan.type}
                         </div>
                       </TableCell>
-                      <TableCell className="text-[#00ff99] px-4">{formatCurrency(loan.amount)}</TableCell>
-                      <TableCell className="text-[#00ff99] px-4">{formatCurrency(loan.remaining)}</TableCell>
+                      <TableCell className="text-[#00ff99] px-4">
+                        {formatCurrency(loan.amount)}
+                      </TableCell>
+                      <TableCell className="text-[#00ff99] px-4">
+                        {formatCurrency(loan.remaining)}
+                      </TableCell>
                       <TableCell className="px-4">
                         <div className="flex items-center">
                           <span className="text-white">%</span>
-                          <span className="ml-1 text-white">{loan.interestRate}</span>
+                          <span className="ml-1 text-white">
+                            {loan.interestRate}
+                          </span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-white px-4">{formatDate(loan.startDate)}</TableCell>
+                      <TableCell className="text-white px-4">
+                        {formatDate(loan.startDate)}
+                      </TableCell>
                       <TableCell className="px-4">
                         <div className="flex items-center">
                           <svg
@@ -591,12 +623,21 @@ export default function ActiveLoansTable() {
                             strokeLinejoin="round"
                             className="lucide lucide-calendar text-gray-400 mr-1"
                           >
-                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                            <rect
+                              width="18"
+                              height="18"
+                              x="3"
+                              y="4"
+                              rx="2"
+                              ry="2"
+                            />
                             <line x1="16" x2="16" y1="2" y2="6" />
                             <line x1="8" x2="8" y1="2" y2="6" />
                             <line x1="3" x2="21" y1="10" y2="10" />
                           </svg>
-                          <span className="text-white">{formatDate(loan.lastPayment)}</span>
+                          <span className="text-white">
+                            {formatDate(loan.lastPayment)}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell className="px-4">
@@ -615,15 +656,19 @@ export default function ActiveLoansTable() {
                           >
                             <circle cx="12" cy="12" r="10" />
                           </svg>
-                          <span className="text-white">{formatDate(loan.nextPayment)}</span>
+                          <span className="text-white">
+                            {formatDate(loan.nextPayment)}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell className="px-4">
                         <div
                           className={cn(
                             "rounded-full px-3 py-1 text-center text-sm w-fit transition-all duration-300 hover:scale-105",
-                            loan.status === "On Time" && "bg-[#003b29] text-[#00ff99]",
-                            loan.status === "Late" && "bg-[#3b0000] text-[#ff0000]",
+                            loan.status === "On Time" &&
+                              "bg-[#003b29] text-[#00ff99]",
+                            loan.status === "Late" &&
+                              "bg-[#3b0000] text-[#ff0000]"
                           )}
                         >
                           {loan.status}
@@ -647,9 +692,12 @@ export default function ActiveLoansTable() {
 
           <div className="flex items-center justify-center gap-8 py-4 text-gray-400 text-sm animate-fadeIn backdrop-blur-sm bg-[#0a101f]/70">
             <div>
-              Showing <span className="text-white">{indexOfFirstItem + 1}</span> to{" "}
-              <span className="text-white">{Math.min(indexOfLastItem, sortedLoans.length)}</span> of{" "}
-              <span className="text-white">{sortedLoans.length}</span> loans
+              Showing <span className="text-white">{indexOfFirstItem + 1}</span>{" "}
+              to{" "}
+              <span className="text-white">
+                {Math.min(indexOfLastItem, sortedLoans.length)}
+              </span>{" "}
+              of <span className="text-white">{sortedLoans.length}</span> loans
             </div>
             <div className="flex items-center space-x-2">
               <Button
@@ -675,5 +723,5 @@ export default function ActiveLoansTable() {
         </div>
       </div>
     </div>
-  )
+  );
 }
