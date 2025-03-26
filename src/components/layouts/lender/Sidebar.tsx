@@ -29,34 +29,68 @@ export function LenderSidebar() {
   const { t } = useTranslation();
 
   return (
-    <aside className="flex flex-col w-64 min-h-screen bg-white border-r dark:bg-darkbg dark:border-gray-700 border-gray-700 p-4">
-      <div className="flex items-center  mb-4">
-        <Image src="/img/TrustBridge.png" alt="TrustBridge" width={50} height={50} />
-        <h1 className="text-2xl font-bold text-dark dark:text-white">TrustBridge</h1>
+    <aside
+      role="navigation"
+      aria-label="Sidebar"
+      className="flex flex-col w-60 min-h-screen bg-[#081B2C] text-white">
+
+      {/* Header con el logo/ícono */}
+      <div className="flex items-center px-0 py-5 sm:px-3 md:px-5">
+        <Image src="/img/TrustBridge.png" alt="TrustBridge" width={50} height={50} className="w-10 h-10 sm:w-12 sm:h-12" />
+        <h1 className="text-xl sm:text-2xl font-bold text-dark dark:text-white">TrustBridge</h1>
       </div>
-      <nav className="flex-1 space-y-4">
-        {menuItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`flex items-center space-x-2 text-sm font-medium ${
-              pathname === item.href
-                ? "text-gray-700 dark:text-gray-300"
-                : "text-gray-700 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-500"
-            }`}
-          >
-            <item.icon className="h-4 w-4" />
-            <span>{t(item.labelKey)}</span>
-          </Link>
-        ))}
+
+
+      {/* Menú principal */}
+      <nav className="flex-1 px-4 space-y-1" role="menu">
+        {menuItems.map((item) => {
+          const isActive = pathname === item.href;
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              role="menuitem"
+              aria-current={isActive ? "page" : undefined}
+              className={`group flex items-center p-2 rounded-md transition-colors 
+                focus:outline-none focus:shadow-[0_0_0_2px_#06b6d4]
+                ${
+                  isActive
+                    ? "bg-[#0E2A3A] shadow-[0_0_0_2px_#06b6d4]" 
+                    : "hover:bg-[#0F2C3D]"
+                }
+              `}
+              
+            >
+              {/* Ícono */}
+              <item.icon className="h-5 w-5 mr-2 text-white" />
+              {/* Texto traducido */}
+              <span className="text-sm font-medium">{t(item.labelKey)}</span>
+
+              {/* Pequeño indicador (dot) cuando está activo */}
+              {isActive && (
+                <span
+                  className="ml-auto w-2 h-2 rounded-full bg-cyan-400"
+                  aria-hidden="true"
+                />
+              )}
+            </Link>
+          );
+        })}
       </nav>
-      <div className="mt-auto">
+
+      {/* Sección Logout al final. */}
+      <div className="mt-auto px-4 py-2">
         <Link
           href="/"
-          className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400"
+          role="menuitem"
+          className={`group flex items-center p-2 rounded-md transition-colors 
+            focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-[#081B2C]
+            hover:bg-[#0F2C3D]
+          `}
         >
-          <LogOut className="h-4 w-4" />
-          <span>{t("sidebar.logout")}</span>
+          <LogOut className="h-5 w-5 mr-3 text-white" />
+          <span className="text-sm font-medium">{t("sidebar.logout")}</span>
         </Link>
       </div>
     </aside>
