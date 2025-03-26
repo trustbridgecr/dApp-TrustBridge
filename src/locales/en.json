@@ -1,7 +1,7 @@
 {
   "header": {
     "connect": "Connect Wallet",
-    "disconnect": "Disconnect Wallet",
+    "disconnect": "Disconnect",
     "theme": {
       "toggleTheme": "Toggle theme",
       "toggleLanguage": "Toggle language",
