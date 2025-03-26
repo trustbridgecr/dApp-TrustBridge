@@ -50,7 +50,7 @@ export function BorrowerSidebar({ theme }: { theme: "light" | "dark" }) {
 
   return (
     <Sidebar
-      className={`${theme === "dark" ? "dark bg-[#0D1A2A] border-[#112430]" : "bg-white border-gray-200"} w-64 min-h-screen border-r p-0`}
+      className={`${theme === "dark" ? "dark bg-dark border-gray-700" : "bg-white border-gray-200"} w-64 min-h-screen bg-white border-r p-0`}
     >
       <SidebarHeader className="flex items-center flex-row p-4">
         <Image
@@ -72,10 +72,10 @@ export function BorrowerSidebar({ theme }: { theme: "light" | "dark" }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center px-4 py-2 gap-2 w-full text-sm font-medium hover:bg-[#263141] rounded-md hover:text-[#56C3CE] dark:hover:text-[#56C3CE] hover:shadow-[1px_1px_15px_0px_rgba(12,35,50,0.74)] transition-all ${
+              className={`flex items-center px-4 py-2 gap-2 w-full text-sm rounded-md font-medium ${
                 pathname === item.href
-                  ? "text-[#56C3CE] bg-[#263141] shadow-[1px_1px_15px_0px_rgba(12,35,50,0.74)]"
-                  : "text-gray-700 dark:text-gray-300"
+                  ? "text-gray-700 dark:text-gray-300"
+                  : "text-gray-700 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-500"
               }`}
             >
               <item.icon className="h-4 w-4" />
