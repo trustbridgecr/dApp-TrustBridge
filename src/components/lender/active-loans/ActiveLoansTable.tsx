@@ -175,8 +175,6 @@ const sampleLoans: Loan[] = [
   },
 ];
 
-const statusOptions = ["All Status", "On Time", "Late"];
-
 export default function ActiveLoansTable() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Status");
@@ -284,7 +282,7 @@ export default function ActiveLoansTable() {
           className="animate-pulse border-b border-[#1e2d3d]"
         >
           {[...Array(10)].map((_, cellIndex) => (
-            <TableCell key={cellIndex} className="px-4 py-4">
+            <TableCell key={cellIndex} className="px-4 py-2">
               <div className="h-4 bg-[#1e2d3d] rounded w-3/4"></div>
             </TableCell>
           ))}
@@ -301,13 +299,16 @@ export default function ActiveLoansTable() {
     >
       <ParticlesBackground />
 
-      <div className="relative z-10">
-        <div className="px-6 py-4 flex items-center justify-between animate-fadeIn">
-          <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-medium text-[#0ff]">Active Loans</h2>
-            <div className="h-1 w-28 bg-gradient-to-r from-[#0066ff] to-[#00ff99] rounded-full mt-1"></div>
+      <div className="relative z-10 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col">
+            <h2 className="text-3xl font-medium text-[#0ff]">Active Loans</h2>
+            <div className="flex flex-col gap-1 mt-1">
+              <div className="h-1 w-28 bg-gradient-to-r from-[#0066ff] to-[#00ff99] rounded-full"></div>
+              <div className="h-1 w-20 bg-gradient-to-r from-[#0066ff] to-[#00ff99] rounded-full"></div>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 bg-[#131e2d] px-3 py-1.5 rounded-full">
             <div className="h-2 w-2 rounded-full bg-[#0ff]"></div>
             <span className="text-[#0ff]">
               {filteredLoans.length} Active Loans
@@ -315,8 +316,8 @@ export default function ActiveLoansTable() {
           </div>
         </div>
 
-        <div className="px-6 py-4 animate-fadeIn">
-          <div className="flex items-center gap-3 mb-6">
+        <div className="bg-[#111827] rounded-lg overflow-hidden border border-[#1e2d3d]">
+          <div className="flex items-center gap-3 p-4 border-b border-[#1e2d3d]">
             <div className="flex items-center gap-2 text-[#0ff]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -345,13 +346,13 @@ export default function ActiveLoansTable() {
                 placeholder="Search by borrower or ID..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-10 w-full rounded-md border border-[#1e2d3d] bg-[#0a101f] pl-9 text-gray-300 focus:border-[#0ff] focus:ring-0 transition-all duration-300"
+                className="h-10 w-full rounded-md border border-[#1e2d3d] bg-[#0f172a] pl-9 text-gray-300 focus:border-[#0ff] focus:ring-0 transition-all duration-300"
               />
             </div>
             <div className="relative">
               <Button
                 variant="outline"
-                className="h-10 border border-[#1e2d3d] bg-[#0a101f] text-gray-300 hover:bg-[#1e2d3d] hover:text-white transition-all duration-300 flex items-center"
+                className="h-10 border border-[#1e2d3d] bg-[#0f172a] text-gray-300 hover:bg-[#1e2d3d] hover:text-white transition-all duration-300 flex items-center"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
                 <Filter className="mr-2 h-4 w-4" />
@@ -359,7 +360,7 @@ export default function ActiveLoansTable() {
               </Button>
 
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-1 w-[160px] bg-[#0a101f] border border-[#1e2d3d] rounded-md overflow-hidden z-50 animate-fadeIn shadow-lg dropdown-container">
+                <div className="absolute right-0 mt-1 w-[160px] bg-[#0f172a] border border-[#1e2d3d] rounded-md overflow-hidden z-50 animate-fadeIn shadow-lg dropdown-container">
                   <div className="py-1 border-b border-[#1e2d3d]">
                     <button
                       onClick={() => {
@@ -400,12 +401,12 @@ export default function ActiveLoansTable() {
             </div>
           </div>
 
-          <div className="overflow-hidden border-t border-l border-r border-[#1e2d3d] animate-fadeIn backdrop-blur-sm bg-[#0a101f]/70">
+          <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="border-b border-[#1e2d3d] hover:bg-transparent">
+                <TableRow className="border-b border-[#1e2d3d] hover:bg-transparent bg-[#0f172a]">
                   <TableHead
-                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 cursor-pointer transition-all duration-200"
+                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 py-3 cursor-pointer transition-all duration-200"
                     onClick={() => handleSort("id")}
                   >
                     <div className="flex items-center">
@@ -422,7 +423,7 @@ export default function ActiveLoansTable() {
                     </div>
                   </TableHead>
                   <TableHead
-                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 cursor-pointer transition-all duration-200"
+                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 py-3 cursor-pointer transition-all duration-200"
                     onClick={() => handleSort("borrower")}
                   >
                     <div className="flex items-center">
@@ -438,11 +439,11 @@ export default function ActiveLoansTable() {
                       )}
                     </div>
                   </TableHead>
-                  <TableHead className="text-[#0ff] font-medium px-4">
+                  <TableHead className="text-[#0ff] font-medium px-4 py-3">
                     Loan Type
                   </TableHead>
                   <TableHead
-                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 cursor-pointer transition-all duration-200"
+                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 py-3 cursor-pointer transition-all duration-200"
                     onClick={() => handleSort("amount")}
                   >
                     <div className="flex items-center">
@@ -459,7 +460,7 @@ export default function ActiveLoansTable() {
                     </div>
                   </TableHead>
                   <TableHead
-                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 cursor-pointer transition-all duration-200"
+                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 py-3 cursor-pointer transition-all duration-200"
                     onClick={() => handleSort("remaining")}
                   >
                     <div className="flex items-center">
@@ -476,7 +477,7 @@ export default function ActiveLoansTable() {
                     </div>
                   </TableHead>
                   <TableHead
-                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 cursor-pointer transition-all duration-200"
+                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 py-3 cursor-pointer transition-all duration-200"
                     onClick={() => handleSort("interestRate")}
                   >
                     <div className="flex items-center">
@@ -493,7 +494,7 @@ export default function ActiveLoansTable() {
                     </div>
                   </TableHead>
                   <TableHead
-                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 cursor-pointer transition-all duration-200"
+                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 py-3 cursor-pointer transition-all duration-200"
                     onClick={() => handleSort("startDate")}
                   >
                     <div className="flex items-center">
@@ -509,11 +510,11 @@ export default function ActiveLoansTable() {
                       )}
                     </div>
                   </TableHead>
-                  <TableHead className="text-[#0ff] font-medium px-4">
+                  <TableHead className="text-[#0ff] font-medium px-4 py-3">
                     Last Payment
                   </TableHead>
                   <TableHead
-                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 cursor-pointer transition-all duration-200"
+                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 py-3 cursor-pointer transition-all duration-200"
                     onClick={() => handleSort("nextPayment")}
                   >
                     <div className="flex items-center">
@@ -530,7 +531,7 @@ export default function ActiveLoansTable() {
                     </div>
                   </TableHead>
                   <TableHead
-                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 cursor-pointer transition-all duration-200"
+                    className="text-[#0ff] font-medium hover:text-[#0ff]/80 px-4 py-3 cursor-pointer transition-all duration-200"
                     onClick={() => handleSort("status")}
                   >
                     <div className="flex items-center">
@@ -546,7 +547,7 @@ export default function ActiveLoansTable() {
                       )}
                     </div>
                   </TableHead>
-                  <TableHead className="w-[50px]"></TableHead>
+                  <TableHead className="w-[50px] py-3"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -572,13 +573,13 @@ export default function ActiveLoansTable() {
                       )}
                       style={{ animationDelay: `${index * 50}ms` }}
                     >
-                      <TableCell className="font-medium text-white px-4">
+                      <TableCell className="font-medium text-white px-4 py-4">
                         {loan.id}
                       </TableCell>
-                      <TableCell className="text-white px-4">
+                      <TableCell className="text-white px-4 py-4">
                         {loan.borrower}
                       </TableCell>
-                      <TableCell className="px-4">
+                      <TableCell className="px-4 py-4">
                         <div
                           className={cn(
                             "rounded-full px-3 py-1 text-center text-sm text-[#0ff] w-fit transition-all duration-300 hover:scale-105",
@@ -592,13 +593,13 @@ export default function ActiveLoansTable() {
                           {loan.type}
                         </div>
                       </TableCell>
-                      <TableCell className="text-[#00ff99] px-4">
+                      <TableCell className="text-[#00ff99] px-4 py-4">
                         {formatCurrency(loan.amount)}
                       </TableCell>
-                      <TableCell className="text-[#00ff99] px-4">
+                      <TableCell className="text-[#00ff99] px-4 py-4">
                         {formatCurrency(loan.remaining)}
                       </TableCell>
-                      <TableCell className="px-4">
+                      <TableCell className="px-4 py-4">
                         <div className="flex items-center">
                           <span className="text-white">%</span>
                           <span className="ml-1 text-white">
@@ -606,10 +607,10 @@ export default function ActiveLoansTable() {
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-white px-4">
+                      <TableCell className="text-white px-4 py-4">
                         {formatDate(loan.startDate)}
                       </TableCell>
-                      <TableCell className="px-4">
+                      <TableCell className="px-4 py-4">
                         <div className="flex items-center">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -640,7 +641,7 @@ export default function ActiveLoansTable() {
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="px-4">
+                      <TableCell className="px-4 py-4">
                         <div className="flex items-center">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -661,7 +662,7 @@ export default function ActiveLoansTable() {
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="px-4">
+                      <TableCell className="px-4 py-4">
                         <div
                           className={cn(
                             "rounded-full px-3 py-1 text-center text-sm w-fit transition-all duration-300 hover:scale-105",
@@ -674,7 +675,7 @@ export default function ActiveLoansTable() {
                           {loan.status}
                         </div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="py-4">
                         <Button
                           variant="ghost"
                           size="icon"
@@ -690,8 +691,8 @@ export default function ActiveLoansTable() {
             </Table>
           </div>
 
-          <div className="flex items-center justify-center gap-8 py-4 text-gray-400 text-sm animate-fadeIn backdrop-blur-sm bg-[#0a101f]/70">
-            <div>
+          <div className="flex items-center justify-between px-4 py-3 border-t border-[#1e2d3d]">
+            <div className="text-gray-400 text-sm">
               Showing <span className="text-white">{indexOfFirstItem + 1}</span>{" "}
               to{" "}
               <span className="text-white">
@@ -703,7 +704,7 @@ export default function ActiveLoansTable() {
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8 border border-[#1e2d3d] bg-[#0a101f] text-gray-300 hover:bg-[#1e2d3d] hover:text-white transition-all duration-300"
+                className="h-8 border border-[#1e2d3d] bg-[#0f172a] text-gray-300 hover:bg-[#1e2d3d] hover:text-white transition-all duration-300"
                 onClick={() => paginate(currentPage - 1)}
                 disabled={currentPage === 1}
               >
@@ -712,7 +713,7 @@ export default function ActiveLoansTable() {
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8 border border-[#1e2d3d] bg-[#0a101f] text-gray-300 hover:bg-[#1e2d3d] hover:text-white transition-all duration-300"
+                className="h-8 border border-[#1e2d3d] bg-[#0f172a] text-gray-300 hover:bg-[#1e2d3d] hover:text-white transition-all duration-300"
                 onClick={() => paginate(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
