@@ -294,7 +294,7 @@ export default function ActiveLoansTable() {
   )
 
   return (
-    <div className="w-full min-h-screen bg-[#0a101f] text-white relative">
+    <div className="w-full min-h-screen bg-[#0a101f] text-white relative font-sans">
 
       <ParticlesBackground />
 
@@ -679,4 +679,3 @@ export default function ActiveLoansTable() {
     </div>
   )
 }
-
