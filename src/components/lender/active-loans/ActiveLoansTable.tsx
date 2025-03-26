@@ -7,7 +7,14 @@ import { Button } from "@/components/ui/button"
 import { ChevronRight, Search, Filter, ArrowUpDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import ParticlesBackground from "./ParticlesBackground"
+import { Geist, Geist_Mono } from "next/font/google";
 
+
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+})
 
 interface Loan {
   id: string
@@ -21,7 +28,6 @@ interface Loan {
   nextPayment: string
   status: "On Time" | "Late"
 }
-
 
 const sampleLoans: Loan[] = [
   {
@@ -171,6 +177,8 @@ const sampleLoans: Loan[] = [
 ]
 
 
+
+
 const statusOptions = ["All Status", "On Time", "Late"]
 
 export default function ActiveLoansTable() {
@@ -205,7 +213,6 @@ export default function ActiveLoansTable() {
     }
   }, [isDropdownOpen])
 
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
@@ -213,7 +220,6 @@ export default function ActiveLoansTable() {
     }, 1000)
     return () => clearTimeout(timer)
   }, [])
-
 
   const filteredLoans = sampleLoans.filter((loan) => {
     const matchesSearch =
@@ -240,7 +246,6 @@ export default function ActiveLoansTable() {
     return 0
   })
 
-
   const handleSort = (key: keyof Loan) => {
     let direction: "ascending" | "descending" | null = "ascending"
 
@@ -255,7 +260,6 @@ export default function ActiveLoansTable() {
     setSortConfig({ key, direction })
   }
 
-
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -264,11 +268,9 @@ export default function ActiveLoansTable() {
     }).format(value)
   }
 
-
   const formatDate = (dateString: string) => {
     return dateString.replace(/(\d{4})-(\d{2})-(\d{2})/, "$1-$2-$3")
   }
-
 
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
@@ -276,7 +278,6 @@ export default function ActiveLoansTable() {
   const totalPages = Math.ceil(sortedLoans.length / itemsPerPage)
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
-
 
   const LoadingSkeleton = () => (
     <>
@@ -294,10 +295,8 @@ export default function ActiveLoansTable() {
   )
 
   return (
-    <div className="w-full min-h-screen bg-[#0a101f] text-white relative font-sans">
-
+    <div className={`w-full min-h-screen bg-[#0a101f] text-white relative ${geistMono.className}`}>
       <ParticlesBackground />
-
 
       <div className="relative z-10">
         <div className="px-6 py-4 flex items-center justify-between animate-fadeIn">
@@ -645,7 +644,6 @@ export default function ActiveLoansTable() {
               </TableBody>
             </Table>
           </div>
-
 
           <div className="flex items-center justify-center gap-8 py-4 text-gray-400 text-sm animate-fadeIn backdrop-blur-sm bg-[#0a101f]/70">
             <div>
