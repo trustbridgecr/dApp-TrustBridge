@@ -294,7 +294,6 @@ export default function ActiveLoansTable() {
 
   return (
     <div
-      className="w-full min-h-screen bg-[#0a101f] text-white relative"
       style={{ fontFamily: "var(--font-geist-sans)" }}
     >
       <ParticlesBackground />
