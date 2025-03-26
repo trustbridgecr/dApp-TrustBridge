@@ -57,7 +57,7 @@ export function DashboardHeader({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
-                <Globe className="h-[1.2rem] w-[1.2rem] stroke-[#b5eeff] stroke-2" />
+                <Globe className="h-[1.2rem] w-[1.2rem] text-cyan-300 stroke-2" />
                 <span className="sr-only">Toggle language</span>
               </Button>
             </DropdownMenuTrigger>
@@ -74,9 +74,9 @@ export function DashboardHeader({
           </DropdownMenu>
 
           <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-[1.2rem] w-[1.2rem] stroke-[#b5eeff] stroke-2" />
+            <Bell className="h-[1.2rem] w-[1.2rem] text-cyan-300 stroke-2" />
             {hasUnreadNotifications && (
-              <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-green-500" />
+              <span className="absolute top-1 right-1 h-2 w-2 bg-emerald-400 rounded-full" />
             )}
             <span className="sr-only">Notifications</span>
           </Button>
@@ -84,10 +84,10 @@ export function DashboardHeader({
           {address ? (
             <div className="flex items-center gap-2">
               <div className="flex flex-col items-start">
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-white/60">
                   Connected as
                 </span>
-                <span className="text-sm font-medium text-[#b5eeff]">
+                <span className="text-sm font-medium text-cyan-300">
                   {address.slice(0, 6)}...{address.slice(-4)}
                 </span>
               </div>
