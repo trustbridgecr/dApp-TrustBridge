@@ -37,7 +37,7 @@ export function LenderSidebar() {
       {/* Header con el logo/ícono */}
       <div className="flex items-center px-0 py-5 sm:px-3 md:px-5">
         <Image src="/img/TrustBridge.png" alt="TrustBridge" width={50} height={50} className="w-10 h-10 sm:w-12 sm:h-12" />
-        <h1 className="text-xl sm:text-2xl font-bold text-dark dark:text-white">TrustBridge</h1>
+        <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-cyan-400 to-green-400 text-transparent bg-clip-text">TrustBridge</h1>
       </div>
 
 
@@ -52,11 +52,11 @@ export function LenderSidebar() {
               href={item.href}
               role="menuitem"
               aria-current={isActive ? "page" : undefined}
-              className={`group flex items-center p-2 rounded-md transition-colors 
-                focus:outline-none focus:shadow-[0_0_0_2px_#06b6d4]
+              className={`flex items-center px-4 py-2 gap-2 w-full text-sm font-medium
+                hover:text-[#56C3CE] dark:hover:text-[#56C3CE] transition-all
                 ${
                   isActive
-                    ? "bg-[#0E2A3A] shadow-[0_0_0_2px_#06b6d4]" 
+                    ? "bg-[#0E2A3A] shadow-[1px_1px_8px_0px_#06b6d4]" 
                     : "hover:bg-[#0F2C3D]"
                 }
               `}
