@@ -53,7 +53,7 @@ export function LenderSidebar() {
               role="menuitem"
               aria-current={isActive ? "page" : undefined}
               className={`flex items-center px-4 py-2 gap-2 w-full text-sm font-medium
-                hover:text-[#56C3CE] dark:hover:text-[#56C3CE] transition-all
+                hover:text-[#56C3CE] dark:hover:text-[#56C3CE] transition-all rounded-lg
                 ${
                   isActive
                     ? "bg-[#0E2A3A] shadow-[1px_1px_8px_0px_#06b6d4]" 
