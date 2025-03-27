@@ -1,82 +1,46 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import StatusFilter from "./StatusFilter"
 import { SearchBar } from "./SearchBar"
 import { Actions } from "./Actions"
+import { useLoanRequests } from "./hooks/useLoanRequests"
 
+// Define an interface for the loan request object
 interface LoanRequest {
-  id: string
-  borrower: string
-  amount: number
-  purpose: string
-  creditScore: number
-  status: string
+  id: string;
+  borrower: string;
+  amount: number;
+  purpose: string;
+  creditScore: number;
+  status: string;
 }
-
-const loanRequests: LoanRequest[] = [
-  {
-    id: "LR001",
-    borrower: "Alice Johnson",
-    amount: 5000,
-    purpose: "Business Expansion",
-    creditScore: 720,
-    status: "pending",
-  },
-  {
-    id: "LR002",
-    borrower: "Bob Smith",
-    amount: 3500,
-    purpose: "Debt Consolidation",
-    creditScore: 680,
-    status: "under_review",
-  },
-  {
-    id: "LR003",
-    borrower: "Carol Williams",
-    amount: 7000,
-    purpose: "Home Improvement",
-    creditScore: 750,
-    status: "pending",
-  },
-  { 
-    id: "LR004", 
-    borrower: "David Brown", 
-    amount: 2000, 
-    purpose: "Education", 
-    creditScore: 700, 
-    status: "approved" 
-  },
-  {
-    id: "LR005",
-    borrower: "Eva Davis",
-    amount: 10000,
-    purpose: "Start-up Funding",
-    creditScore: 780,
-    status: "under_review",
-  },
-]
 
 export function LoanRequestsTable() {
   const { t } = useTranslation()
+  const { loading, error, loanRequests } = useLoanRequests();
   const [filteredRequests, setFilteredRequests] = useState<LoanRequest[]>(loanRequests)
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
 
+  // Update filtered requests when the data changes
+  useEffect(() => {
+    filterRequests(searchQuery, statusFilter);
+  }, [loanRequests, searchQuery, statusFilter]);
+
   const filterRequests = (query: string, status: string) => {
     let filtered = loanRequests.filter(
-      (req) =>
+      (req: LoanRequest) =>
         req.borrower.toLowerCase().includes(query.toLowerCase()) || req.id.toLowerCase().includes(query.toLowerCase()),
     );
   
     if (status !== "all") {
-      filtered = filtered.filter((req) => req.status === status); 
+      filtered = filtered.filter((req: LoanRequest) => req.status === status); 
     }
     setFilteredRequests(filtered);
   };
-  
 
   const handleSearch = (query: string) => {
     setSearchQuery(query)
@@ -87,6 +51,18 @@ export function LoanRequestsTable() {
     setStatusFilter(status)
     filterRequests(searchQuery, status)
   }
+
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="p-6 text-red-500">
+      <p>Error loading loan requests: {error.message}</p>
+    </div>
+  );
 
   return (
     <div className="min-h-screen">
