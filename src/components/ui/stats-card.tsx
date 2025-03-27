@@ -77,8 +77,8 @@ export function StatsCard({
       <Card
         className={cn(
           'group relative overflow-visible transition-all duration-300',
-          'bg-[#0A1628] border border-[#1E3A5F]',
-          'shadow-[0_0_15px_0px_rgba(30,58,95,0.3)]',
+          'dark:bg-[#0A1628] dark:border-[#1E3A5F] bg-white border-gray-200',
+          'dark:shadow-[0_0_15px_0px_rgba(30,58,95,0.3)] shadow-[0_0_15px_0px_rgba(0,0,0,0.1)]',
           className
         )}
       >
@@ -103,18 +103,18 @@ export function StatsCard({
         />
         <div className="p-6 relative">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-gray-400">{title}</h3>
+            <h3 className="text-sm font-medium dark:text-gray-400 text-gray-600">{title}</h3>
             <div className="relative">
               <span 
                 className={cn(
-                  'relative flex items-center justify-center w-8 h-8 rounded-full z-10',
+                  'relative flex items-center justify-center w-8 h-8 rounded-lg z-10',
                   color.text
                 )}
                 style={{
-                  backgroundColor: color.text === 'text-blue-400' ? 'rgba(59, 130, 246, 0.07)' :  
-                    color.text === 'text-yellow-400' ? 'rgba(234, 179, 8, 0.07)' :
-                    color.text === 'text-pink-300' ? 'rgba(228, 161, 221, 0.07)' :
-                    'rgba(6, 182, 212, 0.07)'
+                  backgroundColor: color.text === 'text-blue-500' ? 'rgba(59, 130, 246, 0.15)' :
+                    color.text === 'text-yellow-500' ? 'rgba(234, 179, 8, 0.15)' :
+                    color.text === 'text-purple-500' ? 'rgba(168, 85, 247, 0.15)' :
+                    'rgba(6, 182, 212, 0.15)'
                 }}
               >
                 {icon}
@@ -123,16 +123,16 @@ export function StatsCard({
           </div>
           <div className="mt-4">
             <p className={cn('text-2xl font-bold', color.text)}>{value}</p>
-            <p className="mt-1 text-[13px] text-gray-400">{description}</p>
+            <p className="mt-1 text-[13px] dark:text-gray-400 text-gray-600">{description}</p>
           </div>
           <div className="mt-4">
-            <div className="flex items-center text-sm text-gray-400 mb-2">
+            <div className="flex items-center text-sm dark:text-gray-400 text-gray-600 mb-2">
               <span className="flex items-center gap-1 group-hover:text-[#00FFFF] transition-colors duration-300">
                 {t('lenderDashboard.stats.viewDetails')}
                 <ArrowRight className="w-4 h-4" />
               </span>
             </div>
-            <div className="relative h-[2px] w-full bg-[#1E3A5F] overflow-hidden">
+            <div className="relative h-[2px] w-full dark:bg-[#1E3A5F] bg-gray-200 overflow-hidden">
               <div
                 className="absolute left-0 h-full w-0 group-hover:w-1/4 transition-all duration-300"
                 style={{

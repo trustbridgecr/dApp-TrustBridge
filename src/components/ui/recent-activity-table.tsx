@@ -45,17 +45,17 @@ export function RecentActivityTable({ activities, className }: RecentActivityTab
 
   return (
     <Card className={cn(
-      'bg-[#0A1628] border border-[#1E3A5F]',
-      'shadow-[0_0_15px_0px_rgba(30,58,95,0.3)]',
+      'dark:bg-[#0A1628] dark:border-[#1E3A5F] bg-white border-gray-200',
+      'dark:shadow-[0_0_15px_0px_rgba(30,58,95,0.3)] shadow-[0_0_15px_0px_rgba(0,0,0,0.1)]',
       className
     )}>
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-[#40E0D0]" />
-            <h2 className="text-lg font-medium text-white">{t('lenderDashboard.recentActivity.title')}</h2>
+            <Activity className="w-4 h-4 dark:text-[#40E0D0] text-cyan-500" />
+            <h2 className="text-lg font-medium dark:text-white text-gray-900">{t('lenderDashboard.recentActivity.title')}</h2>
           </div>
-          <Button variant="outline" className="text-sm">
+          <Button variant="outline" className="text-sm dark:text-gray-400 text-gray-600">
             {t('lenderDashboard.recentActivity.viewAll')}
           </Button>
         </div>
@@ -63,41 +63,45 @@ export function RecentActivityTable({ activities, className }: RecentActivityTab
         <div className="relative overflow-x-auto">
           <table className="w-full text-sm text-left">
             <thead>
-              <tr className="border-b border-[#1E3A5F]">
-                <th className="pb-3 text-[#40E0D0] font-medium">{t('lenderDashboard.recentActivity.table.date')}</th>
-                <th className="pb-3 text-[#40E0D0] font-medium">{t('lenderDashboard.recentActivity.table.type')}</th>
-                <th className="pb-3 text-[#40E0D0] font-medium w-[200px]">{t('lenderDashboard.recentActivity.table.amount')}</th>
-                <th className="pb-3 text-[#40E0D0] font-medium">{t('lenderDashboard.recentActivity.table.status')}</th>
-                <th className="pb-3 text-[#40E0D0] font-medium w-[180px]"></th>
+              <tr className="border-b dark:border-[#1E3A5F] border-gray-200">
+                <th className="pb-3 dark:text-[#40E0D0] text-cyan-600 font-medium">{t('lenderDashboard.recentActivity.table.date')}</th>
+                <th className="pb-3 dark:text-[#40E0D0] text-cyan-600 font-medium">{t('lenderDashboard.recentActivity.table.type')}</th>
+                <th className="pb-3 dark:text-[#40E0D0] text-cyan-600 font-medium w-[200px]">{t('lenderDashboard.recentActivity.table.amount')}</th>
+                <th className="pb-3 dark:text-[#40E0D0] text-cyan-600 font-medium">{t('lenderDashboard.recentActivity.table.status')}</th>
+                <th className="pb-3 dark:text-[#40E0D0] text-cyan-600 font-medium w-[180px]"></th>
               </tr>
             </thead>
             <tbody>
               {activities.map((activity, index) => (
-                <tr key={index} className="border-b border-[#1E3A5F] last:border-0">
-                  <td className="py-4">{activity.date}</td>
+                <tr key={index} className="border-b dark:border-[#1E3A5F] border-gray-200 last:border-0">
+                  <td className="py-4 dark:text-gray-400 text-gray-600">{activity.date}</td>
                   <td className="py-4">
                     <span className={cn(
                       'px-3 py-1 rounded-full text-xs',
                       activity.type === 'investment' 
-                        ? 'bg-blue-500/10 text-blue-500'
-                        : 'bg-green-500/10 text-green-500'
+                        ? 'dark:bg-blue-500/10 bg-blue-50 dark:text-blue-400 text-blue-600'
+                        : 'dark:bg-green-500/10 bg-green-50 dark:text-green-400 text-green-600'
                     )}>
                       {t(`lenderDashboard.recentActivity.types.${activity.type}`)}
                     </span>
                   </td>
-                  <td className="py-4 text-green-500 w-[200px]">${activity.amount}</td>
+                  <td className="py-4 dark:text-green-400 text-green-600 w-[200px]">{activity.amount}</td>
                   <td className="py-4">
                     <span className={cn(
                       'px-3 py-1 rounded-full text-xs',
                       activity.status === 'completed'
-                        ? 'bg-green-500/10 text-green-500'
-                        : 'bg-blue-500/10 text-blue-500'
+                        ? 'dark:bg-green-500/10 bg-green-50 dark:text-green-400 text-green-600'
+                        : 'dark:bg-blue-500/10 bg-blue-50 dark:text-blue-400 text-blue-600'
                     )}>
                       {t(`lenderDashboard.recentActivity.status.${activity.status}`)}
                     </span>
                   </td>
                   <td className="py-4 text-center w-[180px]">
-                    <Button variant="ghost" size="sm" className="group-hover:text-[#00FFFF]">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="group-hover:text-[#00FFFF] dark:hover:bg-[#1E3A5F] hover:bg-gray-100"
+                    >
                       <ChevronRight className="w-4 h-4" />
                     </Button>
                   </td>
