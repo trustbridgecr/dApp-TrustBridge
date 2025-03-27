@@ -264,5 +264,51 @@
     "date": "Fecha",
     "amount": "Monto",
     "noPayments": "No hay historial de pagos disponible"
+  },
+  "lenderDashboard": {
+    "welcome": "¡Bienvenido, {{name}}!",
+    "activeStatus": "Estado Activo",
+    "stats": {
+      "activeLoans": {
+        "title": "Préstamos Activos",
+        "value": "{{count}}",
+        "description": ""
+      },
+      "loanRequests": {
+        "title": "Solicitudes de Préstamo",
+        "value": "{{count}} Pendientes",
+        "description": "Revisar solicitudes de prestatarios"
+      },
+      "repayments": {
+        "title": "Reembolsos",
+        "value": "{{count}} Programados",
+        "description": "Seguimiento de próximos pagos"
+      },
+      "systemAuditLogs": {
+        "title": "Registros de Auditoría",
+        "value": "{{count}} Eventos",
+        "description": "Seguimiento de actividades del sistema"
+      },
+      "viewDetails": "Ver Detalles"
+    },
+    "recentActivity": {
+      "title": "Actividad Reciente",
+      "viewAll": "Ver Todo",
+      "table": {
+        "date": "Fecha",
+        "type": "Tipo",
+        "amount": "Monto",
+        "status": "Estado"
+      },
+      "types": {
+        "investment": "Inversión",
+        "return": "Retorno"
+      },
+      "status": {
+        "completed": "Completado",
+        "received": "Recibido"
+      },
+      "viewDetails": "Ver detalles"
+    }
   }
 }

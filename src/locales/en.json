@@ -290,5 +290,51 @@
     "date": "Date",
     "amount": "Amount",
     "noPayments": "No payment history available"
+  },
+  "lenderDashboard": {
+    "welcome": "Welcome, {{name}}!",
+    "activeStatus": "Active Status",
+    "stats": {
+      "activeLoans": {
+        "title": "Active Loans",
+        "value": "{{count}}",
+        "description": ""
+      },
+      "loanRequests": {
+        "title": "Loan Requests",
+        "value": "{{count}} Pending",
+        "description": "Review borrower applications"
+      },
+      "repayments": {
+        "title": "Repayments",
+        "value": "{{count}} Scheduled",
+        "description": "Track upcoming payments"
+      },
+      "systemAuditLogs": {
+        "title": "System Audit Logs",
+        "value": "{{count}} Events",
+        "description": "Track all system activities"
+      },
+      "viewDetails": "View Details"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "viewAll": "View All",
+      "table": {
+        "date": "Date",
+        "type": "Type",
+        "amount": "Amount",
+        "status": "Status"
+      },
+      "types": {
+        "investment": "Investment",
+        "return": "Return"
+      },
+      "status": {
+        "completed": "Completed",
+        "received": "Received"
+      },
+      "viewDetails": "View details"
+    }
   }
 }
