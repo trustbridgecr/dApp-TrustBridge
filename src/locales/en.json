@@ -290,5 +290,26 @@
     "date": "Date",
     "amount": "Amount",
     "noPayments": "No payment history available"
+  },
+  "loanDetails": {
+    "title": "Loan Details",
+    "activeLoan": "Active Loan",
+    "loanSummary": {
+      "title": "Loan Summary",
+      "subtitle": "Overview of your current loan status",
+      "totalAmount": "Total Amount",
+      "nextPayment": "Next Payment",
+      "amountPaid": "Amount Paid",
+      "interestRate": "Interest Rate",
+      "completed": "Completed"
+    },
+    "paymentHistory": {
+      "title": "Payment History"
+    },
+    "upcomingPayments": {
+      "title": "Upcoming Payments",
+      "dueDate": "Due Date",
+      "amount": "Amount"
+    }
   }
 }

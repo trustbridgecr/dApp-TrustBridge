@@ -264,5 +264,26 @@
     "date": "Fecha",
     "amount": "Monto",
     "noPayments": "No hay historial de pagos disponible"
+  },
+  "loanDetails": {
+    "title": "Detalles del Préstamo",
+    "activeLoan": "Préstamo Activo",
+    "loanSummary": {
+      "title": "Resumen del Préstamo",
+      "subtitle": "Descripción general de su estado de préstamo actual",
+      "totalAmount": "Monto Total",
+      "nextPayment": "Próximo Pago",
+      "amountPaid": "Monto Pagado",
+      "interestRate": "Tasa de Interés",
+      "completed": "Completado"
+    },
+    "paymentHistory": {
+      "title": "Historial de Pagos"
+    },
+    "upcomingPayments": {
+      "title": "Próximos Pagos",
+      "dueDate": "Fecha de Vencimiento",
+      "amount": "Monto"
+    }
   }
 }
