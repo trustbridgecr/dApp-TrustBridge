@@ -107,14 +107,14 @@ export function StatsCard({
             <div className="relative">
               <span 
                 className={cn(
-                  'relative flex items-center justify-center w-8 h-8 rounded-lg z-10',
+                  'relative flex items-center justify-center w-8 h-8 rounded-full z-10',
                   color.text
                 )}
                 style={{
-                  backgroundColor: color.text === 'text-blue-500' ? 'rgba(59, 130, 246, 0.15)' :
-                    color.text === 'text-yellow-500' ? 'rgba(234, 179, 8, 0.15)' :
-                    color.text === 'text-purple-500' ? 'rgba(168, 85, 247, 0.15)' :
-                    'rgba(6, 182, 212, 0.15)'
+                  backgroundColor: color.text === 'text-blue-400' ? 'rgba(59, 130, 246, 0.07)' :
+                    color.text === 'text-yellow-400' ? 'rgba(234, 179, 8, 0.07)' :
+                    color.text === 'text-pink-300' ? 'rgba(228, 161, 221, 0.07)' :
+                    'rgba(6, 182, 212, 0.07)'
                 }}
               >
                 {icon}
