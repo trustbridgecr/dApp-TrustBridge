@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth.hook";
 
 interface LoginProps {
   onSwitchToRegister: () => void;
@@ -30,64 +31,18 @@ export function Login({
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [is2FARequired, setIs2FARequired] = useState(false);
   const [otp, setOtp] = useState("");
+  const { login, verifyOTP, error, is2FARequired } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-  
-    console.log("Login attempt with:", { email, password });
-  
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
-      }
-  
-      if (data.is2FARequired) {
-        setIs2FARequired(true);
-      } else {
-        onLogin();
-      }
-    } catch (err: any) {
-      setError(err.message);
-    }
+    await login(email, password, onLogin);
   };
-  
+
   const handleOTPSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-  
-    console.log("Verifying OTP:", otp);
-  
-    try {
-      const response = await fetch("/api/auth/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp }),
-      });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        throw new Error(data.message || "Invalid OTP. Please try again.");
-      }
-  
-      onLogin();
-    } catch (err: any) {
-      setError(err.message);
-    }
+    await verifyOTP(email, otp, onLogin);
   };
-  
 
   return (
     <Card className="w-full max-w-md mx-auto bg-white dark:bg-[#18181B] border border-gray-200 dark:border-none">
@@ -105,7 +60,7 @@ export function Login({
         {!is2FARequired ? (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">
+              <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">
                 {t("auth.common.emailLabel")}
               </Label>
               <Input
