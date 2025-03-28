@@ -89,208 +89,6 @@
     "loanRequests": "Loan Requests",
     "repayments": "Repayments"
   },
-  "common": {
-    "currency": {
-      "format": "USD {{amount}}"
-    },
-    "loading": "Loading...",
-    "error": "An error occurred"
-  },
-  "form": {
-    "pageTitle": "Request Loan",
-    "title": "Request a Loan",
-    "description": "Complete the form to request your loan",
-    "fields": {
-      "amount": {
-        "label": "Loan Amount",
-        "placeholder": "E.g.: 5000",
-        "description": "Enter the amount you wish to request in USD"
-      },
-      "term": {
-        "label": "Loan Term",
-        "placeholder": "Select term",
-        "description": "Choose the repayment period"
-      },
-      "purpose": {
-        "label": "Purpose of Loan",
-        "placeholder": "Briefly describe why you need the loan",
-        "description": "Explain the reason for your request"
-      },
-      "monthlyIncome": {
-        "label": "Monthly Income",
-        "placeholder": "E.g.: 3000",
-        "description": "Enter your average monthly income in USD"
-      }
-    },
-    "terms": {
-      "3months": "3 months",
-      "6months": "6 months",
-      "12months": "12 months",
-      "18months": "18 months",
-      "24months": "24 months"
-    },
-    "buttons": {
-      "submit": "Submit Request",
-      "submitting": "Submitting..."
-    },
-    "validation": {
-      "amount": {
-        "required": "Loan amount is required",
-        "positive": "Loan amount must be a positive number"
-      },
-      "term": {
-        "required": "Loan term is required"
-      },
-      "purpose": {
-        "minLength": "Purpose must have at least 10 characters",
-        "maxLength": "Purpose cannot exceed 500 characters"
-      },
-      "income": {
-        "required": "Monthly income is required",
-        "positive": "Monthly income must be a positive number"
-      }
-    }
-  },
-  "settings": {
-    "title": "Settings",
-    "account": {
-      "title": "Account Settings",
-      "fullName": {
-        "label": "Full Name",
-        "placeholder": "John Doe",
-        "description": "This is your full name."
-      },
-      "dob": {
-        "label": "Date of Birth"
-      },
-      "language": {
-        "label": "Language",
-        "placeholder": "Select a language",
-        "description": "This is the language in which the interface will be displayed.",
-        "options": {
-          "en": "English",
-          "es": "Spanish"
-        }
-      },
-      "monthlyIncome": {
-        "label": "Monthly Income",
-        "placeholder": "Enter your monthly income",
-        "description": "Your average monthly income in USD"
-      },
-      "submit": "Update Account"
-    }
-  },
-  "activeLoans": {
-    "title": "Active Loans",
-    "overview": "Overview of all active loans with detailed payment statuses.",
-    "searchPlaceholder": "Search by Borrower or Loan ID",
-    "loanId": "Loan ID",
-    "borrower": "Borrower",
-    "loanType": "Loan Type",
-    "amount": "Amount",
-    "remainingBalance": "Remaining Balance",
-    "interestRate": "Interest Rate",
-    "startDate": "Start Date",
-    "lastPaymentDate": "Last Payment Date",
-    "nextPaymentDate": "Next Payment Date",
-    "status": "Status",
-    "onTime": "On Time",
-    "late": "Late"
-  },
-  "statusFilter": {
-    "placeholder": "Filter by Status",
-    "all": "All",
-    "onTime": "On Time",
-    "late": "Late"
-  },
-  "searchBar": {
-    "placeholder": "Search by Borrower or Loan ID"
-  },
-  "auth": {
-    "common": {
-      "emailLabel": "Email Address",
-      "emailPlaceholder": "email@example.com",
-      "passwordLabel": "Password"
-    },
-    "login": {
-      "title": "Log In",
-      "description": "Access your blockchain microloans account",
-      "submitButton": "Log In",
-      "forgotPasswordLink": "Forgot your password?",
-      "registerLink": "Don't have an account? Register here"
-    },
-    "register": {
-      "title": "Register",
-      "description": "Create a new blockchain microloans account",
-      "nameLabel": "Full Name",
-      "namePlaceholder": "John Doe",
-      "confirmPasswordLabel": "Confirm Password",
-      "submitButton": "Register",
-      "loginLink": "Already have an account? Log in here",
-      "passwordMismatch": "Passwords do not match",
-      "errorMessage": "Error registering. Please try again."
-    },
-    "forgotPassword": {
-      "title": "Reset Password",
-      "description": "Enter your email address to receive reset instructions",
-      "submitButton": "Send Instructions",
-      "backToLogin": "Back to login",
-      "successMessage": "Reset instructions have been sent to your email address."
-    }
-  },
-  "loanRequests": {
-    "title": "Loan Requests",
-    "subtitle": "All Loan Requests",
-    "description": "A list of all loan requests from borrowers. Review and take action.",
-    "table": {
-      "requestId": "Request ID",
-      "borrower": "Borrower",
-      "amount": "Amount ($)",
-      "purpose": "Purpose",
-      "creditScore": "Credit Score",
-      "status": "Status",
-      "actions": "Actions"
-    }
-  },
-  "status": {
-    "allStatuses": "All Statuses",
-    "pending": "Pending",
-    "under_review": "Under Review",
-    "approved": "Approved"
-  },
-  "actions": {
-    "viewDetails": "View details",
-    "approveRequest": "Approve request",
-    "rejectRequest": "Reject request",
-    "contactBorrower": "Contact borrower"
-  },
-  "loanTypes": {
-    "home": "Home",
-    "personal": "Personal",
-    "education": "Education",
-    "car": "Car"
-  },
-  "futurePayments": {
-    "title": "Future Payment Schedule",
-    "date": "Date",
-    "amount": "Amount",
-    "noPayments": "No future payments scheduled"
-  },
-  "loanSummary": {
-    "title": "Current Loan Status",
-    "description": "Summary of your active loan",
-    "totalAmount": "Total amount",
-    "amountPaid": "Amount paid",
-    "nextPayment": "Next payment",
-    "interestRate": "Interest rate",
-    "percentagePaid": "paid"
-  },
-  "paymentHistory": {
-    "title": "Payment History",
-    "date": "Date",
-    "amount": "Amount",
-    "noPayments": "No payment history available"
-  },
   "loanDetails": {
     "title": "Loan Details",
     "activeLoan": "Active Loan",
@@ -310,6 +108,52 @@
       "title": "Upcoming Payments",
       "dueDate": "Due Date",
       "amount": "Amount"
+    }
+  },
+  "lenderDashboard": {
+    "welcome": "Welcome, {{name}}!",
+    "activeStatus": "Active Status",
+    "stats": {
+      "activeLoans": {
+        "title": "Active Loans",
+        "value": "{{count}}",
+        "description": ""
+      },
+      "loanRequests": {
+        "title": "Loan Requests",
+        "value": "{{count}} Pending",
+        "description": "Review borrower applications"
+      },
+      "repayments": {
+        "title": "Repayments",
+        "value": "{{count}} Scheduled",
+        "description": "Track upcoming payments"
+      },
+      "systemAuditLogs": {
+        "title": "System Audit Logs",
+        "value": "{{count}} Events",
+        "description": "Track all system activities"
+      },
+      "viewDetails": "View Details"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "viewAll": "View All",
+      "table": {
+        "date": "Date",
+        "type": "Type",
+        "amount": "Amount",
+        "status": "Status"
+      },
+      "types": {
+        "investment": "Investment",
+        "return": "Return"
+      },
+      "status": {
+        "completed": "Completed",
+        "received": "Received"
+      },
+      "viewDetails": "View details"
     }
   }
 }

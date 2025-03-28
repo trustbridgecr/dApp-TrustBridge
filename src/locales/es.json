@@ -175,26 +175,45 @@
   },
   "settings": {
     "title": "Configuración",
+    "description": "Administra la configuración y preferencias de tu cuenta",
+    "accountSettings": "Configuración de Cuenta",
+    "saveButton": "Guardar Configuración",
+    "tabs": {
+      "account": "Cuenta",
+      "profile": "Perfil",
+      "crypto": "Cripto",
+      "notifications": "Notificaciones"
+    },
     "account": {
-      "title": "Configuración de la Cuenta",
-      "fullName": {
-        "label": "Nombre Completo",
-        "placeholder": "Juan Pérez",
-        "description": "Este es tu nombre completo."
-      },
-      "dob": {
-        "label": "Fecha de Nacimiento"
-      },
-      "language": {
-        "label": "Idioma",
-        "placeholder": "Selecciona un idioma",
-        "description": "Este es el idioma en el que se mostrará la interfaz.",
-        "options": {
-          "en": "Inglés",
-          "es": "Español"
-        }
-      },
-      "submit": "Actualizar Cuenta"
+      "fullName": "Nombre Completo",
+      "fullNameDescription": "Este es tu nombre público",
+      "dateOfBirth": "Fecha de Nacimiento",
+      "language": "Idioma",
+      "languageDescription": "Esto cambiará el idioma de la interfaz",
+      "selectLanguage": "Selecciona un idioma",
+      "monthlyIncome": "Ingresos Mensuales",
+      "incomeDescription": "Esto nos ayuda a adaptar las ofertas de préstamos a tu situación financiera"
+    },
+    "profile": {
+      "emailAddress": "Dirección de Correo",
+      "emailDescription": "Nunca compartiremos tu correo con nadie más",
+      "bio": "Biografía",
+      "bioDescription": "Esto se mostrará en tu perfil"
+    },
+    "notifications": {
+      "emailNotifications": "Notificaciones por Correo",
+      "emailNotificationsDescription": "Recibe notificaciones por correo para actualizaciones importantes",
+      "marketingEmails": "Correos de Marketing",
+      "marketingEmailsDescription": "Recibe correos sobre nuevas funciones y ofertas"
+    },
+    "crypto": {
+      "walletAddress": "Dirección de Billetera",
+      "walletAddressDescription": "Tu dirección de billetera blockchain conectada",
+      "preferredCurrency": "Moneda Preferida",
+      "currencyDescription": "Esto se utilizará para transacciones",
+      "selectCurrency": "Selecciona una moneda",
+      "autoConvert": "Auto-Convertir a Fiat",
+      "autoConvertDescription": "Convierte automáticamente cripto a tu moneda local"
     }
   },
   "auth": {
@@ -285,5 +304,54 @@
       "dueDate": "Fecha de Vencimiento",
       "amount": "Monto"
     }
+  },
+  "lenderDashboard": {
+    "welcome": "¡Bienvenido, {{name}}!",
+    "activeStatus": "Estado Activo",
+    "stats": {
+      "activeLoans": {
+        "title": "Préstamos Activos",
+        "value": "{{count}}",
+        "description": ""
+      },
+      "loanRequests": {
+        "title": "Solicitudes de Préstamo",
+        "value": "{{count}} Pendientes",
+        "description": "Revisar solicitudes de prestatarios"
+      },
+      "repayments": {
+        "title": "Reembolsos",
+        "value": "{{count}} Programados",
+        "description": "Seguimiento de próximos pagos"
+      },
+      "systemAuditLogs": {
+        "title": "Registros de Auditoría",
+        "value": "{{count}} Eventos",
+        "description": "Seguimiento de actividades del sistema"
+      },
+      "viewDetails": "Ver Detalles"
+    },
+    "recentActivity": {
+      "title": "Actividad Reciente",
+      "viewAll": "Ver Todo",
+      "table": {
+        "date": "Fecha",
+        "type": "Tipo",
+        "amount": "Monto",
+        "status": "Estado"
+      },
+      "types": {
+        "investment": "Inversión",
+        "return": "Retorno"
+      },
+      "status": {
+        "completed": "Completado",
+        "received": "Recibido"
+      },
+      "viewDetails": "Ver detalles"
+    }
   }
+
+    
+  
 }
