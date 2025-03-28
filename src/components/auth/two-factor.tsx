@@ -1,4 +1,4 @@
-import { useTwoFactor } from "./useTwoFactor.hook";
+import { useTwoFactor } from "./hooks/useTwoFactor.hook";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
