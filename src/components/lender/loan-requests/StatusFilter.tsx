@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Filter } from "lucide-react";
 
 interface StatusFilterProps {
   statusFilter: string;
   setStatusFilter: (status: string) => void;
 }
 
-export default function StatusFilter({ statusFilter, setStatusFilter }: StatusFilterProps) {
+export default function StatusFilter({
+  statusFilter,
+  setStatusFilter,
+}: StatusFilterProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -21,10 +25,12 @@ export default function StatusFilter({ statusFilter, setStatusFilter }: StatusFi
     <div className="relative w-38">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-white text-gray-900 dark:bg-darkbg dark:text-gray-200 border border-gray-300 dark:border-darkborder px-4 py-2 rounded-md text-left shadow-sm text-sm"
+        className="w-full bg-white flex gap-3 justify-center items-center text-gray-900 dark:bg-gray-800 dark:text-gray-200 border border-gray-300 dark:border-darkborder px-4 py-2 rounded-md text-left shadow-sm text-sm"
         aria-expanded={isOpen}
       >
-        {statuses.find((s) => s.key === statusFilter)?.label || t("status.allStatuses")}
+        <Filter className="w-4 h-4" />
+        {statuses.find((s) => s.key === statusFilter)?.label ||
+          t("status.allStatuses")}
       </button>
 
       {isOpen && (
