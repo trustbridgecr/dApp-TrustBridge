@@ -1,0 +1,4 @@
+
+npx lint-staged
+npm run eslint
+npm run format
