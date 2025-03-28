@@ -133,7 +133,16 @@
       "format": "USD {{amount}}"
     },
     "loading": "Cargando...",
-    "error": "Ocurrió un error"
+    "error": "Ocurrió un error",
+    "search": {
+      "placeholder": {
+        "default": "Buscar..."
+      },
+      "aria": {
+        "label": "Campo de búsqueda",
+        "clear": "Limpiar búsqueda"
+      }
+    }
   },
   "form": {
     "pageTitle": "Solicitar Préstamo",
@@ -256,7 +265,6 @@
     "rejectRequest": "Rechazar solicitud",
     "contactBorrower": "Contactar al prestatario"
   },
-
   "loanTypes": {
     "home": "Hipotecario",
     "personal": "Personal",
@@ -305,6 +313,42 @@
       "amount": "Monto"
     }
   },
+  "repayments": {
+    "title": "Reembolsos de Préstamos",
+    "subtitle": "Rastrea y gestiona todos los reembolsos de préstamos",
+    "table": {
+      "repaymentId": "ID de Reembolso",
+      "borrower": "Prestatario",
+      "loanId": "ID de Préstamo",
+      "amount": "Monto ($)",
+      "dueDate": "Fecha de Vencimiento",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "status": {
+      "upcoming": "Próximo",
+      "overdue": "Vencido",
+      "paid": "Pagado"
+    },
+    "actions": {
+      "viewDetails": "Ver detalles",
+      "markAsPaid": "Marcar como pagado",
+      "sendReminder": "Enviar recordatorio"
+    },
+    "paymentTracking": "Seguimiento de Pagos",
+    "noResults": "No se encontraron resultados.",
+    "mobileView": {
+      "borrower": "Prestatario",
+      "loanId": "ID de Préstamo",
+      "dueDate": "Fecha de Vencimiento"
+    },
+    "filters": {
+      "all": "Todos los Estados",
+      "upcoming": "Próximos",
+      "overdue": "Vencidos",
+      "paid": "Pagados"
+    }
+  },
   "lenderDashboard": {
     "welcome": "¡Bienvenido, {{name}}!",
     "activeStatus": "Estado Activo",
@@ -351,7 +395,4 @@
       "viewDetails": "Ver detalles"
     }
   }
-
-    
-  
 }
