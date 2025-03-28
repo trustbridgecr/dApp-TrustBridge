@@ -44,6 +44,9 @@ export function DashboardHeader({
     setShowRoleModal,
   } = useWallet();
 
+  // This should come from your notifications system
+  const hasUnreadNotifications = true; // Example state
+
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };
