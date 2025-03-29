@@ -1,7 +1,7 @@
 "use client";
 
+import LoanRequestPage from "@/components/borrewer/requests/requests-content";
 import { useState, useEffect } from "react";
-import { RequestsContent } from "@/components/borrewer/requests/requests-content";
 
 export default function RequestsPage() {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
@@ -16,7 +16,7 @@ export default function RequestsPage() {
   return (
     <div className={`flex min-h-screen ${theme === "dark" ? "dark" : ""}`}>
       <div className="flex-1 flex flex-col dark:bg-darkbg">
-        <RequestsContent />
+        <LoanRequestPage />
       </div>
     </div>
   );
