@@ -1,16 +1,14 @@
-"use client";
+'use client';
 
-import React from "react";
+import { useState } from "react";
 import ActiveLoansTable from "@/components/lender/active-loans/ActiveLoansTable";
 
-const ActiveLoansPage = ({
-  language,
-  setLanguage,
-}: {
-  language: "en" | "es";
-  setLanguage: (lang: "en" | "es") => void;
-}) => {
-  return <ActiveLoansTable language={language} setLanguage={setLanguage} />;
-};
+export default function ActiveLoansPage() {
+  const [language, setLanguage] = useState<"en" | "es">("en");
 
-export default ActiveLoansPage;
+  return (
+    <div className="p-4">
+      <ActiveLoansTable language={language} setLanguage={setLanguage} />
+    </div>
+  );
+}
