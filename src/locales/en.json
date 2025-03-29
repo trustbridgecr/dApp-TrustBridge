@@ -290,5 +290,38 @@
     "date": "Date",
     "amount": "Amount",
     "noPayments": "No payment history available"
+  },
+  "borrowerDashboard": {
+  "title": "Borrower Dashboard",
+  "welcomeMessage": "Welcome to your dashboard, {{name}}!",
+  "loanOverview": {
+    "activeLoans": "Active Loans"
+  },
+  "currentLoan": {
+    "title": "Current Loan Status",
+    "summary": "Overview of your active loan",
+    "totalAmount": "Total amount",
+    "amountPaid": "Amount paid",
+    "nextPayment": "Next payment",
+    "interestRate": "Interest rate",
+    "percentagePaid": "paid",
+    "progressLabel": "Loan progress",
+    "remaining": "Remaining",
+    "completed": "Completed"
+  },
+  "paymentHistory": {
+    "title": "Payment History",
+    "date": "Date",
+    "amount": "Amount",
+    "status": "Status",
+    "noPayments": "No payment history available"
+  },
+  "upcomingPayments": {
+    "title": "Upcoming Payments",
+    "date": "Date",
+    "amount": "Amount",
+    "dueDate": "Due Date",
+    "noUpcomingPayments": "No upcoming payments scheduled"
   }
+}
 }

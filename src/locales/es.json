@@ -264,5 +264,38 @@
     "date": "Fecha",
     "amount": "Monto",
     "noPayments": "No hay historial de pagos disponible"
+  },
+  "borrowerDashboard": {
+  "title": "Panel del Prestatario",
+  "welcomeMessage": "¡Bienvenido a tu panel, {{name}}!",
+  "loanOverview": {
+    "activeLoans": "Préstamos Activos"
+  },
+  "currentLoan": {
+    "title": "Estado del Préstamo Actual",
+    "summary": "Resumen de tu préstamo activo",
+    "totalAmount": "Monto total",
+    "amountPaid": "Monto pagado",
+    "nextPayment": "Próximo pago",
+    "interestRate": "Tasa de interés",
+    "percentagePaid": "pagado",
+    "progressLabel": "Progreso del préstamo",
+    "remaining": "Saldo",
+    "completed": "Completado"
+  },
+  "paymentHistory": {
+    "title": "Historial de Pagos",
+    "date": "Fecha",
+    "amount": "Monto",
+    "status": "Estado",
+    "noPayments": "No hay historial de pagos disponible"
+  },
+  "upcomingPayments": {
+    "title": "Próximos Pagos",
+    "date": "Fecha",
+    "amount": "Monto",
+    "dueDate": "Fecha de Vencimiento",
+    "noUpcomingPayments": "No hay pagos próximos programados"
   }
+}
 }
