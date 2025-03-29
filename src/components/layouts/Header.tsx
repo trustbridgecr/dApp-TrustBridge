@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import "@/lib/i18n";
-import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
+import '@/lib/i18n';
+import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,17 +15,17 @@ import RoleSelectionModal from "@/components/ui/role";
 import useHeaderWithoutAuth from "../../hooks/use-header";
 import { SidebarTrigger } from "../ui/sidebar";
 
-type Theme = "light" | "dark";
+type Theme = 'light' | 'dark';
 
 const languages = [
-  { code: "es", name: "Spanish" },
-  { code: "en", name: "English" },
+  { code: 'es', name: 'Spanish' },
+  { code: 'en', name: 'English' },
 ];
 
 interface DashboardHeaderProps {
-  theme: "light" | "dark";
-  setTheme: (theme: "light" | "dark") => void;
-  setLanguage: (language: "es" | "en" | "fr" | "de") => void;
+  theme: 'light' | 'dark';
+  setTheme: (theme: 'light' | 'dark') => void;
+  setLanguage: (language: 'es' | 'en' | 'fr' | 'de') => void;
 }
 
 export function DashboardHeader({
