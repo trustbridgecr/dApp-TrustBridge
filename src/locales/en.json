@@ -1,7 +1,7 @@
 {
   "header": {
     "connect": "Connect Wallet",
-    "disconnect": "Disconnect",
+    "disconnect": "Disconnect Wallet",
     "theme": {
       "toggleTheme": "Toggle theme",
       "toggleLanguage": "Toggle language",
@@ -89,9 +89,25 @@
     "loanRequests": "Loan Requests",
     "repayments": "Repayments"
   },
-  "common": {
-    "currency": {
-      "format": "USD {{amount}}"
+  "loanDetails": {
+    "title": "Loan Details",
+    "activeLoan": "Active Loan",
+    "loanSummary": {
+      "title": "Loan Summary",
+      "subtitle": "Overview of your current loan status",
+      "totalAmount": "Total Amount",
+      "nextPayment": "Next Payment",
+      "amountPaid": "Amount Paid",
+      "interestRate": "Interest Rate",
+      "completed": "Completed"
+    },
+    "paymentHistory": {
+      "title": "Payment History"
+    },
+    "upcomingPayments": {
+      "title": "Upcoming Payments",
+      "dueDate": "Due Date",
+      "amount": "Amount"
     },
     "loading": "Loading...",
     "error": "An error occurred",
@@ -160,7 +176,6 @@
       }
     }
   },
-  
   "settings": {
     "title": "Settings",
     "description": "Manage your account settings and preferences",
@@ -253,13 +268,6 @@
       "loginLink": "Already have an account? Log in here",
       "passwordMismatch": "Passwords do not match",
       "errorMessage": "Error registering. Please try again."
-    },
-    "forgotPassword": {
-      "title": "Reset Password",
-      "description": "Enter your email address to receive reset instructions",
-      "submitButton": "Send Instructions",
-      "backToLogin": "Back to login",
-      "successMessage": "Reset instructions have been sent to your email address."
     }
   },
   "loanRequests": {
