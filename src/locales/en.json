@@ -1,7 +1,7 @@
 {
   "header": {
     "connect": "Connect Wallet",
-    "disconnect": "Disconnect Wallet",
+    "disconnect": "Disconnect",
     "theme": {
       "toggleTheme": "Toggle theme",
       "toggleLanguage": "Toggle language",
@@ -94,7 +94,16 @@
       "format": "USD {{amount}}"
     },
     "loading": "Loading...",
-    "error": "An error occurred"
+    "error": "An error occurred",
+    "search": {
+      "placeholder": {
+        "default": "Search..."
+      },
+      "aria": {
+        "label": "Search input",
+        "clear": "Clear search"
+      }
+    }
   },
   "form": {
     "pageTitle": "Request Loan",
@@ -151,33 +160,48 @@
       }
     }
   },
+  
   "settings": {
     "title": "Settings",
+    "description": "Manage your account settings and preferences",
+    "accountSettings": "Account Settings",
+    "saveButton": "Save Settings",
+    "tabs": {
+      "account": "Account",
+      "profile": "Profile",
+      "crypto": "Crypto",
+      "notifications": "Notifications"
+    },
     "account": {
-      "title": "Account Settings",
-      "fullName": {
-        "label": "Full Name",
-        "placeholder": "John Doe",
-        "description": "This is your full name."
-      },
-      "dob": {
-        "label": "Date of Birth"
-      },
-      "language": {
-        "label": "Language",
-        "placeholder": "Select a language",
-        "description": "This is the language in which the interface will be displayed.",
-        "options": {
-          "en": "English",
-          "es": "Spanish"
-        }
-      },
-      "monthlyIncome": {
-        "label": "Monthly Income",
-        "placeholder": "Enter your monthly income",
-        "description": "Your average monthly income in USD"
-      },
-      "submit": "Update Account"
+      "fullName": "Full Name",
+      "fullNameDescription": "This is your public display name",
+      "dateOfBirth": "Date of Birth",
+      "language": "Language",
+      "languageDescription": "This will change the language of the interface",
+      "selectLanguage": "Select a language",
+      "monthlyIncome": "Monthly Income",
+      "incomeDescription": "This helps us tailor loan offers to your financial situation"
+    },
+    "profile": {
+      "emailAddress": "Email Address",
+      "emailDescription": "We'll never share your email with anyone else",
+      "bio": "Bio",
+      "bioDescription": "This will be displayed on your profile"
+    },
+    "notifications": {
+      "emailNotifications": "Email Notifications",
+      "emailNotificationsDescription": "Receive email notifications for important updates",
+      "marketingEmails": "Marketing Emails",
+      "marketingEmailsDescription": "Receive emails about new features and offers"
+    },
+    "crypto": {
+      "walletAddress": "Wallet Address",
+      "walletAddressDescription": "Your connected blockchain wallet address",
+      "preferredCurrency": "Preferred Currency",
+      "currencyDescription": "This will be used for transactions",
+      "selectCurrency": "Select a currency",
+      "autoConvert": "Auto-Convert to Fiat",
+      "autoConvertDescription": "Automatically convert crypto to your local currency"
     }
   },
   "activeLoans": {
@@ -292,36 +316,120 @@
     "noPayments": "No payment history available"
   },
   "borrowerDashboard": {
-  "title": "Borrower Dashboard",
-  "welcomeMessage": "Welcome to your dashboard, {{name}}!",
-  "loanOverview": {
-    "activeLoans": "Active Loans"
+    "title": "Borrower Dashboard",
+    "welcomeMessage": "Welcome to your dashboard, {{name}}!",
+    "loanOverview": {
+      "activeLoans": "Active Loans"
+    },
+    "currentLoan": {
+      "title": "Current Loan Status",
+      "summary": "Overview of your active loan",
+      "totalAmount": "Total amount",
+      "amountPaid": "Amount paid",
+      "nextPayment": "Next payment",
+      "interestRate": "Interest rate",
+      "percentagePaid": "paid",
+      "progressLabel": "Loan progress",
+      "remaining": "Remaining",
+      "completed": "Completed"
+    },
+    "paymentHistory": {
+      "title": "Payment History",
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status",
+      "noPayments": "No payment history available"
+    },
+    "upcomingPayments": {
+      "title": "Upcoming Payments",
+      "date": "Date",
+      "amount": "Amount",
+      "dueDate": "Due Date",
+      "noUpcomingPayments": "No upcoming payments scheduled"
+    }
   },
-  "currentLoan": {
-    "title": "Current Loan Status",
-    "summary": "Overview of your active loan",
-    "totalAmount": "Total amount",
-    "amountPaid": "Amount paid",
-    "nextPayment": "Next payment",
-    "interestRate": "Interest rate",
-    "percentagePaid": "paid",
-    "progressLabel": "Loan progress",
-    "remaining": "Remaining",
-    "completed": "Completed"
+  "repayments": {
+    "title": "Loan Repayments",
+    "subtitle": "Track and manage all loan repayments",
+    "table": {
+      "repaymentId": "Repayment ID",
+      "borrower": "Borrower",
+      "loanId": "Loan ID",
+      "amount": "Amount ($)",
+      "dueDate": "Due Date",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "upcoming": "Upcoming",
+      "overdue": "Overdue",
+      "paid": "Paid"
+    },
+    "actions": {
+      "viewDetails": "View details",
+      "markAsPaid": "Mark as paid",
+      "sendReminder": "Send reminder"
+    },
+    "paymentTracking": "Payment Tracking",
+    "noResults": "No results found.",
+    "mobileView": {
+      "borrower": "Borrower",
+      "loanId": "Loan ID",
+      "dueDate": "Due Date"
+    },
+    "filters": {
+      "all": "All Statuses",
+      "upcoming": "Upcoming",
+      "overdue": "Overdue",
+      "paid": "Paid"
+    }
   },
-  "paymentHistory": {
-    "title": "Payment History",
-    "date": "Date",
-    "amount": "Amount",
-    "status": "Status",
-    "noPayments": "No payment history available"
-  },
-  "upcomingPayments": {
-    "title": "Upcoming Payments",
-    "date": "Date",
-    "amount": "Amount",
-    "dueDate": "Due Date",
-    "noUpcomingPayments": "No upcoming payments scheduled"
+  "lenderDashboard": {
+    "welcome": "Welcome, {{name}}!",
+    "activeStatus": "Active Status",
+    "stats": {
+      "activeLoans": {
+        "title": "Active Loans",
+        "value": "{{count}}",
+        "description": ""
+      },
+      "loanRequests": {
+        "title": "Loan Requests",
+        "value": "{{count}} Pending",
+        "description": "Review borrower applications"
+      },
+      "repayments": {
+        "title": "Repayments",
+        "value": "{{count}} Scheduled",
+        "description": "Track upcoming payments"
+      },
+      "systemAuditLogs": {
+        "title": "System Audit Logs",
+        "value": "{{count}} Events",
+        "description": "Track all system activities"
+      },
+      "viewDetails": "View Details"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "viewAll": "View All",
+      "table": {
+        "date": "Date",
+        "type": "Type",
+        "amount": "Amount",
+        "status": "Status"
+      },
+      "types": {
+        "investment": "Investment",
+        "return": "Return"
+      },
+      "status": {
+        "completed": "Completed",
+        "received": "Received"
+      },
+      "viewDetails": "View details"
+    }
   }
-}
-}
+  }
+
+

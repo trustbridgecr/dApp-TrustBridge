@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth.hook";
 
 interface LoginProps {
   onSwitchToRegister: () => void;
@@ -30,90 +31,135 @@ export function Login({
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [otp, setOtp] = useState("");
+  const { login, verifyOTP, error, is2FARequired } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    console.log("Login attempt with:", { email, password });
-    onLogin();
+    await login(email, password, onLogin);
+  };
+
+  const handleOTPSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await verifyOTP(email, otp, onLogin);
   };
 
   return (
     <Card className="w-full max-w-md mx-auto bg-white dark:bg-[#18181B] border border-gray-200 dark:border-none">
       <CardHeader>
         <CardTitle className="text-black dark:text-gray-100">
-          {t("auth.login.title")}
+          {is2FARequired ? t("auth.otp.title") : t("auth.login.title")}
         </CardTitle>
         <CardDescription className="text-gray-600 dark:text-gray-400">
-          {t("auth.login.description")}
+          {is2FARequired
+            ? t("auth.otp.description")
+            : t("auth.login.description")}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">
-              {t("auth.common.emailLabel")}
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder={t("auth.common.emailPlaceholder")}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="bg-white dark:bg-[#18181B] text-black dark:text-gray-100 border border-gray-300 dark:border-gray-700"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label
-              htmlFor="password"
-              className="text-gray-700 dark:text-gray-300"
+        {!is2FARequired ? (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">
+                {t("auth.common.emailLabel")}
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder={t("auth.common.emailPlaceholder")}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="bg-white dark:bg-[#18181B] text-black dark:text-gray-100 border border-gray-300 dark:border-gray-700"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label
+                htmlFor="password"
+                className="text-gray-700 dark:text-gray-300"
+              >
+                {t("auth.common.passwordLabel")}
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="bg-white dark:bg-[#18181B] text-black dark:text-gray-100 border border-gray-300 dark:border-gray-700"
+              />
+            </div>
+            {error && (
+              <Alert
+                variant="destructive"
+                className="bg-red-100 dark:bg-red-800 text-red-600 dark:text-red-200 border dark:border-red-700"
+              >
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            <Button
+              type="submit"
+              className="w-full bg-blue-600 dark:bg-blue-700 text-white hover:dark:bg-blue-800"
             >
-              {t("auth.common.passwordLabel")}
-            </Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="bg-white dark:bg-[#18181B] text-black dark:text-gray-100 border border-gray-300 dark:border-gray-700"
-            />
-          </div>
-          {error && (
-            <Alert
-              variant="destructive"
-              className="bg-red-100 dark:bg-red-800 text-red-600 dark:text-red-200 border dark:border-red-700"
+              {t("auth.login.submitButton")}
+            </Button>
+          </form>
+        ) : (
+          <form onSubmit={handleOTPSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label
+                htmlFor="otp"
+                className="text-gray-700 dark:text-gray-300"
+              >
+                {t("auth.otp.enterCode")}
+              </Label>
+              <Input
+                id="otp"
+                type="text"
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+                className="bg-white dark:bg-[#18181B] text-black dark:text-gray-100 border border-gray-300 dark:border-gray-700"
+              />
+            </div>
+            {error && (
+              <Alert
+                variant="destructive"
+                className="bg-red-100 dark:bg-red-800 text-red-600 dark:text-red-200 border dark:border-red-700"
+              >
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            <Button
+              type="submit"
+              className="w-full bg-green-600 dark:bg-green-700 text-white hover:dark:bg-green-800"
             >
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          <Button
-            type="submit"
-            className="w-full bg-blue-600 dark:bg-blue-700 text-white hover:dark:bg-blue-800"
-          >
-            {t("auth.login.submitButton")}
-          </Button>
-        </form>
+              {t("auth.otp.verifyButton")}
+            </Button>
+          </form>
+        )}
       </CardContent>
-      <CardFooter className="flex flex-col items-center space-y-2">
-        <Button
-          variant="link"
-          className="text-gray-700 dark:text-gray-400"
-          onClick={onForgotPassword}
-        >
-          {t("auth.login.forgotPasswordLink")}
-        </Button>
-        <Button
-          variant="link"
-          className="text-gray-700 dark:text-gray-400"
-          onClick={onSwitchToRegister}
-        >
-          {t("auth.login.registerLink")}
-        </Button>
-      </CardFooter>
+      {!is2FARequired && (
+        <CardFooter className="flex flex-col items-center space-y-2">
+          <Button
+            variant="link"
+            className="text-gray-700 dark:text-gray-400"
+            onClick={onForgotPassword}
+          >
+            {t("auth.login.forgotPasswordLink")}
+          </Button>
+          <Button
+            variant="link"
+            className="text-gray-700 dark:text-gray-400"
+            onClick={onSwitchToRegister}
+          >
+            {t("auth.login.registerLink")}
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 }
