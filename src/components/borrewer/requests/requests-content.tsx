@@ -1,213 +1,53 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { DashboardHeader } from "@/components/layouts/Header";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { LoanRequestForm } from "./loan-request-form";
 
-const formSchema = z.object({
-  amount: z
-    .string()
-    .min(1, "form.validation.amount.required")
-    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
-      message: "form.validation.amount.positive",
-    }),
-  term: z.string().min(1, "form.validation.term.required"),
-  purpose: z
-    .string()
-    .min(10, "form.validation.purpose.minLength")
-    .max(500, "form.validation.purpose.maxLength"),
-  monthlyIncome: z
-    .string()
-    .min(1, "form.validation.income.required")
-    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
-      message: "form.validation.income.positive",
-    }),
-});
+export default function LoanRequestPage() {
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [, setLanguage] = useState<"es" | "en" | "fr" | "de">("en");
 
-export function RequestsContent() {
-  const { t } = useTranslation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      amount: "",
-      term: "",
-      purpose: "",
-      monthlyIncome: "",
-    },
-  });
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
-    try {
-      console.log(values);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
-  const loanTerms = [
-    { value: "3", label: t("form.terms.3months") },
-    { value: "6", label: t("form.terms.6months") },
-    { value: "12", label: t("form.terms.12months") },
-    { value: "18", label: t("form.terms.18months") },
-    { value: "24", label: t("form.terms.24months") },
-  ];
+  // Mock wallet address for demonstration
+  const [address] = useState<string | null>(
+    "0xf3B1E8F0A1D9B2c988F428171bB935378265a9d8"
+  );
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-white dark:bg-darkbg text-black dark:text-white p-6">
-      <Card className="w-full max-w-lg bg-white dark:bg-darkbg border border-gray-200 dark:border-none">
-        <h2 className="text-4xl font-bold text-left mb-6">
-          {t("form.pageTitle")}
-        </h2>
-        <CardHeader>
-          <CardTitle className="text-xl font-bold text-black dark:text-white">
-            {t("form.title")}
-          </CardTitle>
-          <CardDescription className="text-gray-600 dark:text-gray-400">
-            {t("form.description")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="amount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("form.fields.amount.label")}</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t("form.fields.amount.placeholder")}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      {t("form.fields.amount.description")}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="term"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("form.fields.term.label")}</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            placeholder={t("form.fields.term.placeholder")}
-                          />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {loanTerms.map((term) => (
-                          <SelectItem key={term.value} value={term.value}>
-                            {term.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      {t("form.fields.term.description")}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="purpose"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("form.fields.purpose.label")}</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder={t("form.fields.purpose.placeholder")}
-                        className="resize-none"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      {t("form.fields.purpose.description")}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="monthlyIncome"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {t("form.fields.monthlyIncome.label")}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t("form.fields.monthlyIncome.placeholder")}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      {t("form.fields.monthlyIncome.description")}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button
-                type="submit"
-                className="w-full text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-                disabled={isSubmitting}
-              >
-                {isSubmitting
-                  ? t("form.buttons.submitting")
-                  : t("form.buttons.submit")}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </main>
+    <div className="flex min-h-screen bg-[#050A14] bg-opacity-95 text-white relative overflow-hidden">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,30,60,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,30,60,0.05)_1px,transparent_1px)] bg-[size:40px_40px] opacity-30"></div>
+
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-900/10 rounded-full blur-[100px]"></div>
+        <div className="absolute top-1/3 right-0 w-80 h-80 bg-emerald-900/10 rounded-full blur-[100px]"></div>
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-cyan-900/10 rounded-full blur-[100px]"></div>
+
+        {/* Contenido principal con z-index para que esté por encima de los efectos */}
+        <div className="flex-1 w-full max-w-6xl mx-auto relative z-10 p-6">
+          {/* Header with futuristic elements */}
+          <div className="relative mb-10">
+            <div className="flex justify-between items-center relative z-10">
+              <div className="relative">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
+                  Loan Request
+                </h1>
+                <div className="h-1 w-3/4 mt-2 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full"></div>
+                <div className="h-1 w-1/2 mt-1 bg-gradient-to-r from-blue-500/50 to-emerald-500/50 rounded-full"></div>
+              </div>
+              <div className="flex items-center gap-2 bg-[#0A1A2A]/80 backdrop-blur-md px-4 py-2 rounded-full border border-cyan-900/30 shadow-[0_0_15px_rgba(0,200,255,0.15)]">
+                <div className="w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-cyan-100">
+                  New Application
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Loan Request Form */}
+          <LoanRequestForm />
+        </div>
+      </div>
+    </div>
   );
 }

@@ -133,7 +133,16 @@
       "format": "USD {{amount}}"
     },
     "loading": "Cargando...",
-    "error": "Ocurrió un error"
+    "error": "Ocurrió un error",
+    "search": {
+      "placeholder": {
+        "default": "Buscar..."
+      },
+      "aria": {
+        "label": "Campo de búsqueda",
+        "clear": "Limpiar búsqueda"
+      }
+    }
   },
   "form": {
     "pageTitle": "Solicitar Préstamo",
@@ -175,26 +184,45 @@
   },
   "settings": {
     "title": "Configuración",
+    "description": "Administra la configuración y preferencias de tu cuenta",
+    "accountSettings": "Configuración de Cuenta",
+    "saveButton": "Guardar Configuración",
+    "tabs": {
+      "account": "Cuenta",
+      "profile": "Perfil",
+      "crypto": "Cripto",
+      "notifications": "Notificaciones"
+    },
     "account": {
-      "title": "Configuración de la Cuenta",
-      "fullName": {
-        "label": "Nombre Completo",
-        "placeholder": "Juan Pérez",
-        "description": "Este es tu nombre completo."
-      },
-      "dob": {
-        "label": "Fecha de Nacimiento"
-      },
-      "language": {
-        "label": "Idioma",
-        "placeholder": "Selecciona un idioma",
-        "description": "Este es el idioma en el que se mostrará la interfaz.",
-        "options": {
-          "en": "Inglés",
-          "es": "Español"
-        }
-      },
-      "submit": "Actualizar Cuenta"
+      "fullName": "Nombre Completo",
+      "fullNameDescription": "Este es tu nombre público",
+      "dateOfBirth": "Fecha de Nacimiento",
+      "language": "Idioma",
+      "languageDescription": "Esto cambiará el idioma de la interfaz",
+      "selectLanguage": "Selecciona un idioma",
+      "monthlyIncome": "Ingresos Mensuales",
+      "incomeDescription": "Esto nos ayuda a adaptar las ofertas de préstamos a tu situación financiera"
+    },
+    "profile": {
+      "emailAddress": "Dirección de Correo",
+      "emailDescription": "Nunca compartiremos tu correo con nadie más",
+      "bio": "Biografía",
+      "bioDescription": "Esto se mostrará en tu perfil"
+    },
+    "notifications": {
+      "emailNotifications": "Notificaciones por Correo",
+      "emailNotificationsDescription": "Recibe notificaciones por correo para actualizaciones importantes",
+      "marketingEmails": "Correos de Marketing",
+      "marketingEmailsDescription": "Recibe correos sobre nuevas funciones y ofertas"
+    },
+    "crypto": {
+      "walletAddress": "Dirección de Billetera",
+      "walletAddressDescription": "Tu dirección de billetera blockchain conectada",
+      "preferredCurrency": "Moneda Preferida",
+      "currencyDescription": "Esto se utilizará para transacciones",
+      "selectCurrency": "Selecciona una moneda",
+      "autoConvert": "Auto-Convertir a Fiat",
+      "autoConvertDescription": "Convierte automáticamente cripto a tu moneda local"
     }
   },
   "auth": {
@@ -209,7 +237,34 @@
       "submitButton": "Iniciar Sesión",
       "forgotPasswordLink": "¿Olvidaste tu contraseña?",
       "registerLink": "¿No tienes una cuenta? Regístrate aquí"
-    }
+    },
+    "welcome": "Bienvenido a TrustBridge",
+    "loginTitle": "Inicia sesión en tu cuenta",
+    "registerTitle": "Crea una cuenta",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "Ingresa tu correo electrónico",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Ingresa tu contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "confirmPasswordPlaceholder": "Confirma tu contraseña",
+    "fullName": "Nombre Completo",
+    "fullNamePlaceholder": "Ingresa tu nombre completo",
+    "walletAddress": "Dirección de Wallet (Opcional)",
+    "walletAddressPlaceholder": "Ingresa tu dirección de wallet",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "loginButton": "Iniciar sesión",
+    "registerButton": "Registrarse",
+    "loginWithWallet": "Iniciar sesión con Wallet",
+    "registerWithWallet": "Registrarse con Wallet",
+    "noAccount": "¿No tienes una cuenta?",
+    "createAccount": "Crear cuenta",
+    "alreadyAccount": "¿Ya tienes una cuenta?",
+    "loginInstead": "Iniciar sesión",
+    "termsAgree": "Al registrarte, aceptas nuestros",
+    "termsLink": "Términos de Servicio",
+    "privacyLink": "Política de Privacidad",
+    "and": "y",
+    "languageSelector": "Idioma"
   },
   "loanRequests": {
     "title": "Solicitudes de Préstamos",
@@ -237,7 +292,6 @@
     "rejectRequest": "Rechazar solicitud",
     "contactBorrower": "Contactar al prestatario"
   },
-
   "loanTypes": {
     "home": "Hipotecario",
     "personal": "Personal",
@@ -264,5 +318,141 @@
     "date": "Fecha",
     "amount": "Monto",
     "noPayments": "No hay historial de pagos disponible"
+  },
+  "borrowerDashboard": {
+    "title": "Panel del Prestatario",
+    "welcomeMessage": "¡Bienvenido a tu panel, {{name}}!",
+    "loanOverview": {
+      "activeLoans": "Préstamos Activos"
+    },
+    "currentLoan": {
+      "title": "Estado del Préstamo Actual",
+      "summary": "Resumen de tu préstamo activo",
+      "totalAmount": "Monto total",
+      "amountPaid": "Monto pagado",
+      "nextPayment": "Próximo pago",
+      "interestRate": "Tasa de interés",
+      "percentagePaid": "pagado",
+      "progressLabel": "Progreso del préstamo",
+      "remaining": "Saldo",
+      "completed": "Completado"
+    },
+    "paymentHistory": {
+      "title": "Historial de Pagos",
+      "date": "Fecha",
+      "amount": "Monto",
+      "status": "Estado",
+      "noPayments": "No hay historial de pagos disponible"
+    },
+    "upcomingPayments": {
+      "title": "Próximos Pagos",
+      "date": "Fecha",
+      "amount": "Monto",
+      "dueDate": "Fecha de Vencimiento",
+      "noUpcomingPayments": "No hay pagos próximos programados"
+    }
+  },
+  "loanDetails": {
+    "title": "Detalles del Préstamo",
+    "activeLoan": "Préstamo Activo",
+    "loanSummary": {
+      "title": "Resumen del Préstamo",
+      "subtitle": "Descripción general de su estado de préstamo actual",
+      "totalAmount": "Monto Total",
+      "nextPayment": "Próximo Pago",
+      "amountPaid": "Monto Pagado",
+      "interestRate": "Tasa de Interés",
+      "completed": "Completado"
+    },
+    "paymentHistory": {
+      "title": "Historial de Pagos"
+    },
+    "upcomingPayments": {
+      "title": "Próximos Pagos",
+      "dueDate": "Fecha de Vencimiento",
+      "amount": "Monto"
+    }
+  },
+  "repayments": {
+    "title": "Reembolsos de Préstamos",
+    "subtitle": "Rastrea y gestiona todos los reembolsos de préstamos",
+    "table": {
+      "repaymentId": "ID de Reembolso",
+      "borrower": "Prestatario",
+      "loanId": "ID de Préstamo",
+      "amount": "Monto ($)",
+      "dueDate": "Fecha de Vencimiento",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "status": {
+      "upcoming": "Próximo",
+      "overdue": "Vencido",
+      "paid": "Pagado"
+    },
+    "actions": {
+      "viewDetails": "Ver detalles",
+      "markAsPaid": "Marcar como pagado",
+      "sendReminder": "Enviar recordatorio"
+    },
+    "paymentTracking": "Seguimiento de Pagos",
+    "noResults": "No se encontraron resultados.",
+    "mobileView": {
+      "borrower": "Prestatario",
+      "loanId": "ID de Préstamo",
+      "dueDate": "Fecha de Vencimiento"
+    },
+    "filters": {
+      "all": "Todos los Estados",
+      "upcoming": "Próximos",
+      "overdue": "Vencidos",
+      "paid": "Pagados"
+    }
+  },
+  "lenderDashboard": {
+    "welcome": "¡Bienvenido, {{name}}!",
+    "activeStatus": "Estado Activo",
+    "stats": {
+      "activeLoans": {
+        "title": "Préstamos Activos",
+        "value": "{{count}}",
+        "description": ""
+      },
+      "loanRequests": {
+        "title": "Solicitudes de Préstamo",
+        "value": "{{count}} Pendientes",
+        "description": "Revisar solicitudes de prestatarios"
+      },
+      "repayments": {
+        "title": "Reembolsos",
+        "value": "{{count}} Programados",
+        "description": "Seguimiento de próximos pagos"
+      },
+      "systemAuditLogs": {
+        "title": "Registros de Auditoría",
+        "value": "{{count}} Eventos",
+        "description": "Seguimiento de actividades del sistema"
+      },
+      "viewDetails": "Ver Detalles"
+    },
+    "recentActivity": {
+      "title": "Actividad Reciente",
+      "viewAll": "Ver Todo",
+      "table": {
+        "date": "Fecha",
+        "type": "Tipo",
+        "amount": "Monto",
+        "status": "Estado"
+      },
+      "types": {
+        "investment": "Inversión",
+        "return": "Retorno"
+      },
+      "status": {
+        "completed": "Completado",
+        "received": "Recibido"
+      },
+      "viewDetails": "Ver detalles"
+    }
   }
 }

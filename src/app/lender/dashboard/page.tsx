@@ -1,4 +1,4 @@
-import LenderDashboard from "@/components/lender/LenderDashboard";
+import { LenderDashboard } from "@/components/lender/LenderDashboard";
 
 const DashboardPage = () => {
   return (
