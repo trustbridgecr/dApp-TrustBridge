@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { DashboardFooter } from "@/components/layouts/Footer";
 import { DashboardHeader } from "@/components/layouts/Header";
@@ -23,24 +23,24 @@ export default function LenderLayout({
   }, [theme]);
 
   return (
-    <div
-      className={`relative flex min-h-screen ${theme === "dark" ? "dark" : ""}`}
-    >
-      <div className="absolute inset-0 -z-10">
-        <ParticlesBackground />
-      </div>
-
-      <div className={`flex min-h-screen ${theme === "dark" ? "dark" : ""}`}>
-        <LenderSidebar />
-        <div className="w-full flex flex-col bg-gradient-to-b from-[#0B1120] via-[#0B1120] to-[#121E31]">
-          <DashboardHeader
-            theme={theme}
-            setTheme={setTheme}
-            setLanguage={setLanguage}
-          />
-          {children}
-          <DashboardFooter />
+    <RouteGuard allowedRoles={["Lender"]}>
+      <div className={`relative flex min-h-screen ${theme === "dark" ? "dark" : ""}`}>
+        
+        {/* Background Particles */}
+        <div className="absolute inset-0 -z-10">
+          <ParticlesBackground />
         </div>
+
+        {/* Sidebar and Main Content */}
+        <div className="flex min-h-screen">
+          <LenderSidebar />
+          <div className="w-full flex flex-col bg-gradient-to-b from-[#0B1120] via-[#0B1120] to-[#121E31]">
+            <DashboardHeader theme={theme} setTheme={setTheme} setLanguage={setLanguage} />
+            {children}
+            <DashboardFooter />
+          </div>
+        </div>
+
       </div>
     </div>
   );

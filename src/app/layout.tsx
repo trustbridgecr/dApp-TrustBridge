@@ -1,11 +1,6 @@
-
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-// Removing the unused import
-import { AppProvider } from "@/contexts/AppContext";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { ApolloContextProvider } from "@/contexts/ApolloContext";
+import ClientLayout from "./layouts/client-layout";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,7 +13,6 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
   display: "swap",
-
 });
 
 export const metadata: Metadata = {
@@ -32,15 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body>
-        <AppProvider>
-          <AuthProvider>
-            <ApolloContextProvider>
-              {children}
-            </ApolloContextProvider>
-          </AuthProvider>
-        </AppProvider>
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-darkbg`}
+      >
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
