@@ -4,11 +4,8 @@ import { useEffect, useState, useCallback } from 'react'
 import { AuditLogsTable } from '@/components/lender/audit-logs/audit-logs-table'
 import { AuditLog, AuditAction } from '@/@types/audits.entity'
 import { useDebounce } from '@/hooks/use-debounce'
-import { useTranslation } from 'react-i18next'
-
 
 export default function AuditLogsPage() {
-  const { t } = useTranslation()
   const [logs, setLogs] = useState<AuditLog[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
@@ -39,7 +36,7 @@ export default function AuditLogsPage() {
       const data = await response.json()
       setLogs(data.logs)
       setTotalPages(data.totalPages)
-    } catch (err) {
+    } catch {
       setError('Failed to load audit logs')
     } finally {
       setIsLoading(false)
@@ -62,10 +59,6 @@ export default function AuditLogsPage() {
 
   return (
     <div className="container mx-auto p-6">
-      <div className="mb-2">
-        <h1 className="text-4xl font-bold tracking-tight dark:text-gray-200">{t('auditLogs.title')}</h1>
-      </div>
-      
       <AuditLogsTable
         logs={logs}
         isLoading={isLoading}
