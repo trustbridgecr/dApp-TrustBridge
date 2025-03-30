@@ -268,7 +268,34 @@
       "loginLink": "Already have an account? Log in here",
       "passwordMismatch": "Passwords do not match",
       "errorMessage": "Error registering. Please try again."
-    }
+    },
+    "welcome": "Welcome to TrustBridge",
+    "loginTitle": "Login to your account",
+    "registerTitle": "Create an account",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "walletAddress": "Wallet Address (Optional)",
+    "walletAddressPlaceholder": "Enter your wallet address",
+    "forgotPassword": "Forgot password?",
+    "loginButton": "Login",
+    "registerButton": "Register",
+    "loginWithWallet": "Login with Wallet",
+    "registerWithWallet": "Register with Wallet",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create account",
+    "alreadyAccount": "Already have an account?",
+    "loginInstead": "Login instead",
+    "termsAgree": "By registering, you agree to our",
+    "termsLink": "Terms of Service",
+    "privacyLink": "Privacy Policy",
+    "and": "and",
+    "languageSelector": "Language"
   },
   "loanRequests": {
     "title": "Loan Requests",
@@ -438,5 +465,4 @@
       "viewDetails": "View details"
     }
   }
-  }
-
+}

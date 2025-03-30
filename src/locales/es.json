@@ -237,7 +237,34 @@
       "submitButton": "Iniciar Sesión",
       "forgotPasswordLink": "¿Olvidaste tu contraseña?",
       "registerLink": "¿No tienes una cuenta? Regístrate aquí"
-    }
+    },
+    "welcome": "Bienvenido a TrustBridge",
+    "loginTitle": "Inicia sesión en tu cuenta",
+    "registerTitle": "Crea una cuenta",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "Ingresa tu correo electrónico",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Ingresa tu contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "confirmPasswordPlaceholder": "Confirma tu contraseña",
+    "fullName": "Nombre Completo",
+    "fullNamePlaceholder": "Ingresa tu nombre completo",
+    "walletAddress": "Dirección de Wallet (Opcional)",
+    "walletAddressPlaceholder": "Ingresa tu dirección de wallet",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "loginButton": "Iniciar sesión",
+    "registerButton": "Registrarse",
+    "loginWithWallet": "Iniciar sesión con Wallet",
+    "registerWithWallet": "Registrarse con Wallet",
+    "noAccount": "¿No tienes una cuenta?",
+    "createAccount": "Crear cuenta",
+    "alreadyAccount": "¿Ya tienes una cuenta?",
+    "loginInstead": "Iniciar sesión",
+    "termsAgree": "Al registrarte, aceptas nuestros",
+    "termsLink": "Términos de Servicio",
+    "privacyLink": "Política de Privacidad",
+    "and": "y",
+    "languageSelector": "Idioma"
   },
   "loanRequests": {
     "title": "Solicitudes de Préstamos",
@@ -293,37 +320,37 @@
     "noPayments": "No hay historial de pagos disponible"
   },
   "borrowerDashboard": {
-  "title": "Panel del Prestatario",
-  "welcomeMessage": "¡Bienvenido a tu panel, {{name}}!",
-  "loanOverview": {
-    "activeLoans": "Préstamos Activos"
-  },
-  "currentLoan": {
-    "title": "Estado del Préstamo Actual",
-    "summary": "Resumen de tu préstamo activo",
-    "totalAmount": "Monto total",
-    "amountPaid": "Monto pagado",
-    "nextPayment": "Próximo pago",
-    "interestRate": "Tasa de interés",
-    "percentagePaid": "pagado",
-    "progressLabel": "Progreso del préstamo",
-    "remaining": "Saldo",
-    "completed": "Completado"
-  },
-  "paymentHistory": {
-    "title": "Historial de Pagos",
-    "date": "Fecha",
-    "amount": "Monto",
-    "status": "Estado",
-    "noPayments": "No hay historial de pagos disponible"
-  },
-  "upcomingPayments": {
-    "title": "Próximos Pagos",
-    "date": "Fecha",
-    "amount": "Monto",
-    "dueDate": "Fecha de Vencimiento",
-    "noUpcomingPayments": "No hay pagos próximos programados"
-  }
+    "title": "Panel del Prestatario",
+    "welcomeMessage": "¡Bienvenido a tu panel, {{name}}!",
+    "loanOverview": {
+      "activeLoans": "Préstamos Activos"
+    },
+    "currentLoan": {
+      "title": "Estado del Préstamo Actual",
+      "summary": "Resumen de tu préstamo activo",
+      "totalAmount": "Monto total",
+      "amountPaid": "Monto pagado",
+      "nextPayment": "Próximo pago",
+      "interestRate": "Tasa de interés",
+      "percentagePaid": "pagado",
+      "progressLabel": "Progreso del préstamo",
+      "remaining": "Saldo",
+      "completed": "Completado"
+    },
+    "paymentHistory": {
+      "title": "Historial de Pagos",
+      "date": "Fecha",
+      "amount": "Monto",
+      "status": "Estado",
+      "noPayments": "No hay historial de pagos disponible"
+    },
+    "upcomingPayments": {
+      "title": "Próximos Pagos",
+      "date": "Fecha",
+      "amount": "Monto",
+      "dueDate": "Fecha de Vencimiento",
+      "noUpcomingPayments": "No hay pagos próximos programados"
+    }
   },
   "loanDetails": {
     "title": "Detalles del Préstamo",
