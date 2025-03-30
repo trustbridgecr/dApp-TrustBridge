@@ -13,6 +13,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@babel/runtime": "^7.27.0",
     "@creit.tech/stellar-wallets-kit": "^1.4.1",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-alert-dialog": "^1.1.4",
