@@ -1,3 +1,4 @@
+import React from "react";
 import { useTwoFactor } from "./hooks/useTwoFactor.hook";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -8,7 +9,7 @@ interface TwoFactorAuthProps {
 }
 
 const TwoFactorAuth = ({ email, onLogin }: TwoFactorAuthProps) => {
-  const { otp, setOtp, error, handleSubmit } = useTwoFactor(email, onLogin);
+  const { otp, setOtp, error, isLoading, handleSubmit } = useTwoFactor(email, onLogin);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
@@ -34,8 +35,9 @@ const TwoFactorAuth = ({ email, onLogin }: TwoFactorAuthProps) => {
         <button 
           type="submit" 
           className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          disabled={isLoading}
         >
-          Verify OTP
+          {isLoading ? "Verifying OTP..." : "Verify OTP"}
         </button>
       </form>
     </div>

@@ -9,12 +9,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Moon, Sun, Globe, Bell } from "lucide-react";
+import { Moon, Sun, Globe, Bell, User } from "lucide-react";
 import { useWallet } from "../auth/hooks/useWallet.hook";
 import RoleSelectionModal from "@/components/ui/role";
 import useHeaderWithoutAuth from "../../hooks/use-header";
 import { SidebarTrigger } from "../ui/sidebar";
 import { Dispatch, SetStateAction } from "react";
+import Link from "next/link";
 
 type Theme = "light" | "dark";
 
@@ -27,7 +28,7 @@ export interface DashboardHeaderProps {
   theme: "light" | "dark";
   setTheme: Dispatch<SetStateAction<"light" | "dark">>;
   setLanguage: Dispatch<SetStateAction<"es" | "en" | "fr" | "de">>;
-  address?: string | null; // Add the address prop
+  address?: string | null;
 }
 
 export function DashboardHeader({
@@ -46,8 +47,7 @@ export function DashboardHeader({
     setShowRoleModal,
   } = useWallet();
 
-  // This should come from your notifications system
-  const hasUnreadNotifications = true; // Example state
+  const hasUnreadNotifications = true;
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -74,6 +74,23 @@ export function DashboardHeader({
                   {lang.name}
                 </DropdownMenuItem>
               ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <User className="h-[1.2rem] w-[1.2rem] text-cyan-300 stroke-2" />
+                <span className="sr-only">Toggle Access System</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href="/auth/register">Register</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/auth/login">Login</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
