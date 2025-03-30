@@ -62,9 +62,10 @@ export async function loginUser(data: LoginData) {
     }
 
     throw new Error("Credenciales inválidas");
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error al iniciar sesión:", error);
-    throw error;
+    throw new Error(error?.response?.errors?.[0]?.message || "Invalid credentials");
+
   }
 }
 
@@ -91,9 +92,9 @@ export async function registerUser(data: RegisterData) {
     });
 
     return response.register;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error al registrar usuario:", error);
-    throw error;
+    throw new Error(error?.response?.errors?.[0]?.message || "Registration failed");
   }
 }
 
