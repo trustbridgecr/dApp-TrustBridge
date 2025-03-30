@@ -1,8 +1,11 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { LoginForm } from "@/components/auth/login-form"
+"use client"
+import { useRouter } from "next/navigation"
+import Login from "@/components/email-auth/login/login"
 
 export default function LoginPage() {
-    const router = useRouter();
-    return <LoginForm onSuccess={() => alert("Welcome your credentials are valid")}/>
-};
+  const router = useRouter()
+
+  return (
+    <Login onSuccess={() => alert("Welcome your credentials are valid")} />
+  )
+}
