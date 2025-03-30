@@ -2,7 +2,10 @@
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import ClientLayout from "./layouts/client-layout";
+// Removing the unused import
+import { AppProvider } from "@/contexts/AppContext";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ApolloContextProvider } from "@/contexts/ApolloContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,15 +28,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-darkbg`}
-      >
-        <ClientLayout>{children}</ClientLayout>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body>
+        <AppProvider>
+          <AuthProvider>
+            <ApolloContextProvider>
+              {children}
+            </ApolloContextProvider>
+          </AuthProvider>
+        </AppProvider>
       </body>
     </html>
   );
