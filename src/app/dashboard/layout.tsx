@@ -2,18 +2,28 @@
 
 import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
 import { redirect } from "next/navigation";
-import React from "react";
+import type React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { TrustBridgeSidebar } from "@/layouts/sidebar/Sidebar";
+import { Header } from "@/layouts/header/Header";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { address } = useGlobalAuthenticationStore();
 
-  if (address === "") {
+  if (!address) {
     redirect("/");
   }
+
   return (
-    <div className="relative flex h-screen overflow-hidden">
-      <div className="flex-1 ">{children}</div>
-    </div>
+    <SidebarProvider>
+      <div className="flex h-screen overflow-hidden w-full">
+        <TrustBridgeSidebar />
+        <div className="flex-1 ">
+          <Header />
+          {children}
+        </div>
+      </div>
+    </SidebarProvider>
   );
 };
 

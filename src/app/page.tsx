@@ -2,6 +2,7 @@
 
 import Home from "@/components/auth/Home";
 import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
+import { HeaderHome } from "@/layouts/header/HeaderHome";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -15,5 +16,10 @@ export default function Page() {
     }
   }, [address, router]);
 
-  return <Home />;
+  return (
+    <div>
+      <HeaderHome />
+      <Home />
+    </div>
+  );
 }
