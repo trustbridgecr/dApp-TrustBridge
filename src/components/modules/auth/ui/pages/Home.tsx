@@ -1,7 +1,7 @@
 import { ArrowRight, Wallet, Shield, Globe } from "lucide-react";
 import Image from "next/image";
-import { useWallet } from "../auth/hooks/useWallet.hook";
-import { useGlobalAuthenticationStore } from "../auth/store/data";
+import { useWallet } from "../../hooks/useWallet.hook";
+import { useGlobalAuthenticationStore } from "../../store/data";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 

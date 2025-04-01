@@ -4,8 +4,8 @@ import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
 import { redirect } from "next/navigation";
 import type React from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { TrustBridgeSidebar } from "@/layouts/sidebar/Sidebar";
-import { Header } from "@/layouts/header/Header";
+import { TrustBridgeSidebar } from "@/components/layouts/sidebar/Sidebar";
+import { Header } from "@/components/layouts/header/Header";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { address } = useGlobalAuthenticationStore();

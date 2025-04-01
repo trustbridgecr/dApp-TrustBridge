@@ -2,7 +2,7 @@
 
 import Home from "@/components/auth/Home";
 import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
-import { HeaderHome } from "@/layouts/header/HeaderHome";
+import { HeaderHome } from "@/components/layouts/header/HeaderHome";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
