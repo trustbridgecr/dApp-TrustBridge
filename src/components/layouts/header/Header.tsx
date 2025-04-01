@@ -22,7 +22,7 @@ export function Header() {
           size="icon"
           className="h-9 w-9"
         >
-          <LogOut className="h-4 w-4" />
+          <LogOut className="text-red-500 h-4 w-4" />
         </Button>
       </div>
     </header>
