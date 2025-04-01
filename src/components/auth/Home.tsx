@@ -1,10 +1,14 @@
 import { ArrowRight, Wallet, Shield, Globe } from "lucide-react";
 import Image from "next/image";
-
+import { useWallet } from "../auth/hooks/useWallet.hook";
+import { useGlobalAuthenticationStore } from "../auth/store/data";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export default function Home() {
+  const { handleConnect, handleDisconnect } = useWallet();
+  const { address } = useGlobalAuthenticationStore();
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <main className="flex-1 flex items-center">
@@ -22,9 +26,12 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button className="bg-[var(--custom-blue)] hover:bg-blue-700 text-white">
+                  <Button
+                    className="bg-[var(--custom-blue)] hover:bg-blue-700 text-white"
+                    onClick={address ? handleDisconnect : handleConnect}
+                  >
                     <Wallet className="mr-2 h-4 w-4" />
-                    Connect Wallet
+                    {address ? "Disconnect Wallet" : "Connect Wallet"}
                   </Button>
                   <Button
                     variant="outline"
