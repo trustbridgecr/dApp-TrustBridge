@@ -1,8 +1,8 @@
 "use client";
 
-import Home from "@/components/auth/Home";
-import { useGlobalAuthenticationStore } from "@/components/auth/store/data";
 import { HeaderHome } from "@/components/layouts/header/HeaderHome";
+import { useGlobalAuthenticationStore } from "@/components/modules/auth/store/data";
+import HomePage from "@/components/modules/auth/ui/pages/Home";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -19,7 +19,7 @@ export default function Page() {
   return (
     <div>
       <HeaderHome />
-      <Home />
+      <HomePage />
     </div>
   );
 }

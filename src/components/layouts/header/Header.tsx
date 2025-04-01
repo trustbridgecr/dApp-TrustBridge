@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { LogOut } from "lucide-react";
-import { useWallet } from "@/components/auth/hooks/useWallet.hook";
 import ThemeToggle from "./ThemeToggle";
+import { useWallet } from "@/components/modules/auth/hooks/useWallet.hook";
 
 export function Header() {
   const { handleDisconnect } = useWallet();

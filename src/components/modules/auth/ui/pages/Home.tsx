@@ -5,7 +5,7 @@ import { useGlobalAuthenticationStore } from "../../store/data";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-export default function Home() {
+export default function HomePage() {
   const { handleConnect, handleDisconnect } = useWallet();
   const { address } = useGlobalAuthenticationStore();
 
