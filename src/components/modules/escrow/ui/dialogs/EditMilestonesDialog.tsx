@@ -51,7 +51,7 @@ const EditMilestonesDialog = ({
         <DialogHeader>
           <DialogTitle>Editing - {selectedEscrow?.title}</DialogTitle>
           <DialogDescription>
-            You can edit escrow milestones, but not if they're completed or
+            You can edit escrow milestones, but not if they are completed or
             approved.
           </DialogDescription>
         </DialogHeader>

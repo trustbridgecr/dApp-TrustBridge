@@ -99,7 +99,7 @@ const EscrowDetailDialog = ({
   return (
     <>
       <Dialog open={isDialogOpen} onOpenChange={handleClose}>
-        <DialogContent className="w-11/12 md:w-2/3 h-auto max-h-screen overflow-y-auto">
+        <DialogContent className="w-full !max-w-[1000px] h-auto max-h-[90vh] overflow-y-auto rounded-xl p-6 bg-background">
           <DialogHeader>
             <div className="md:w-2/4 w-full">
               <div className="flex flex-col gap-2">
@@ -270,21 +270,11 @@ const EscrowDetailDialog = ({
               <Button
                 onClick={(e) => {
                   e.stopPropagation();
-                  dialogStates.qr.setIsOpen(true);
-                }}
-                className="w-full mb-3"
-                variant="outline"
-              >
-                Show QR Address
-              </Button>
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
                   dialogStates.second.setIsOpen(true);
                 }}
                 className="w-full"
               >
-                Fund Escrow
+                Fund Loan
               </Button>
 
               {(userRolesInEscrow.includes("approver") ||

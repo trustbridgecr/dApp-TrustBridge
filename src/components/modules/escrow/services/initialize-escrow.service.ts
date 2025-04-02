@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { EscrowPayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";

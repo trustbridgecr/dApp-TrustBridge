@@ -4,13 +4,6 @@ import Loader from "@/components/utils/ui/Loader";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useEscrowBoundedStore } from "@/components/modules/escrow/store/ui";
 import MyEscrowsTable from "@/components/modules/escrow/ui/tables/MyEscrowsTable";
 import MyEscrowsCards from "@/components/modules/escrow/ui/cards/MyEscrowsCards";
@@ -18,12 +11,10 @@ import MyEscrowsFilter from "@/components/modules/escrow/ui/filters/MyEscrowsFil
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import Joyride from "react-joyride";
 import { useState } from "react";
-import { CircleHelp } from "lucide-react";
 
 const MyEscrows = () => {
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
   const setActiveTab = useEscrowBoundedStore((state) => state.setActiveTab);
-  const setActiveMode = useEscrowBoundedStore((state) => state.setActiveMode);
   const activeMode = useEscrowBoundedStore((state) => state.activeMode);
   const theme = useGlobalUIBoundedStore((state) => state.theme);
 
@@ -113,32 +104,6 @@ const MyEscrows = () => {
                     Platform Address
                   </TabsTrigger>
                 </TabsList>
-
-                <div className="flex items-center gap-2 mt-10 sm:mt-10 xl:mt-10 2xl:mt-0">
-                  <Select
-                    value={activeMode}
-                    onValueChange={(value) =>
-                      setActiveMode(value as "table" | "cards")
-                    }
-                  >
-                    <SelectTrigger className="w-32">
-                      <SelectValue placeholder="Select view" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="table">Table</SelectItem>
-                      <SelectItem value="cards">Cards</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <button
-                  title="Help"
-                  className="btn-dark"
-                  type="button"
-                  onClick={() => setRun(true)}
-                >
-                  <CircleHelp size={29} />
-                </button>
               </div>
 
               <TabsContent value="issuer" className="flex flex-col gap-3">

@@ -26,8 +26,8 @@ const MyEscrowsFilter = () => {
 
         <CreateButton
           className="mr-auto w-full md:w-auto"
-          label="Create Escrow"
-          url={"/dashboard/escrow/initialize-escrow"}
+          label="Loan Request"
+          url={"/dashboard/loans/loan-request"}
           id="step-2"
         />
       </div>
