@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useGlobalAuthenticationStore } from "@/components/modules/auth/store/data";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 export function TrustBridgeSidebar() {
   const { address } = useGlobalAuthenticationStore();

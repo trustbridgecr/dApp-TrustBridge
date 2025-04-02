@@ -1,5 +1,5 @@
-import LoanDashboard from "@/components/modules/loans/ui/pages/Loans";
+import MyEscrows from "@/components/modules/escrow/ui/pages/MyEscrows";
 
 export default function Page() {
-  return <LoanDashboard />;
+  return <MyEscrows />;
 }
