@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type * as React from "react";
 import {
   ChevronRight,
@@ -10,6 +11,8 @@ import {
   Users,
   Settings,
   History,
+  HandCoins,
+  ShoppingBag,
 } from "lucide-react";
 import {
   Sidebar,
@@ -27,13 +30,38 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { db } from "@/core/config/firebase/firebase";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { usePathname } from "next/navigation";
 
 export function TrustBridgeSidebar() {
   const { address } = useGlobalAuthenticationStore();
+  const pathname = usePathname();
 
   const formattedAddress = address
     ? `${address.substring(0, 8)}...${address.substring(address.length - 4)}`
     : "";
+
+  const [hasNewRequest, setHasNewRequest] = useState(false);
+
+  useEffect(() => {
+    const q = query(
+      collection(db, "loan_offers"),
+      where("status", "==", "pending"),
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setHasNewRequest(!snapshot.empty);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (pathname === "/dashboard/admin/loan-requests") {
+      setHasNewRequest(false);
+    }
+  }, [pathname]);
 
   return (
     <Sidebar className="border-r">
@@ -54,6 +82,7 @@ export function TrustBridgeSidebar() {
           </div>
         </div>
       </SidebarHeader>
+
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -85,9 +114,33 @@ export function TrustBridgeSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
+                  <a href="/dashboard/offer">
+                    <HandCoins className="h-4 w-4" />
+                    <span>Offer Loan</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
                   <a href="/dashboard/history">
                     <History className="h-4 w-4" />
                     <span>History</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Marketplace</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a href="/dashboard/marketplace">
+                    <ShoppingBag className="h-4 w-4" />
+                    <span>Explore Offers</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -119,30 +172,32 @@ export function TrustBridgeSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>Administration</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="/dashboard/admin/users">
-                    <Users className="h-4 w-4" />
-                    <span>Users</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="/dashboard/admin/settings">
-                    <Settings className="h-4 w-4" />
-                    <span>Settings</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {address ===
+          "GBZ7KCIUGD2ME7J7YSQW6WVM2RRNYA3AQWVEKVM2VK5LMQL3CKYARBWX" && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Administration</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <a
+                      href="/dashboard/admin/loan-requests"
+                      className="flex items-center gap-2"
+                    >
+                      <HandCoins className="h-4 w-4" />
+                      <span>Loan Requests</span>
+                      {hasNewRequest && (
+                        <span className="ml-2 h-2 w-2 rounded-full bg-red-500 animate-ping" />
+                      )}
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
+
       <SidebarFooter className="border-t p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -165,6 +220,7 @@ export function TrustBridgeSidebar() {
           </Button>
         </div>
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   );
