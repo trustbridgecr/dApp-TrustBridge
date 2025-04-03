@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,9 +14,9 @@ import { Input } from "@/components/ui/input";
 import { useInitializeEscrow } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import SelectField from "@/components/utils/ui/SelectSearch";
-import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { DollarSign, Trash2 } from "lucide-react";
+import { useMarketplaceStore } from "@/components/modules/dashboard/marketplace/store/marketplace";
 
 const InitializeEscrowForm = () => {
   const {
@@ -31,6 +32,24 @@ const InitializeEscrowForm = () => {
     toggleField,
     isAnyMilestoneEmpty,
   } = useInitializeEscrow();
+
+  const { selectedLoan, clearSelectedLoan } = useMarketplaceStore();
+
+  useEffect(() => {
+    if (selectedLoan) {
+      form.setValue("amount", selectedLoan.maxAmount?.toString() || "");
+      form.setValue("platformFee", selectedLoan.platformFee?.toString() || "");
+      form.setValue("platformAddress", selectedLoan.platformAddress || "");
+      form.setValue("approver", selectedLoan.approver || "");
+      form.setValue("releaseSigner", selectedLoan.releaseSigner || "");
+      form.setValue("disputeResolver", selectedLoan.disputeResolver || "");
+      form.setValue("milestones", selectedLoan.milestones || []);
+    }
+
+    return () => {
+      clearSelectedLoan();
+    };
+  }, [selectedLoan]);
 
   return (
     <Form {...form}>
@@ -108,11 +127,6 @@ const InitializeEscrowForm = () => {
                     Approver<span className="text-destructive ml-1">*</span>
                     <TooltipInfo content="Address of the approver for this escrow." />
                   </span>
-                  <Switch
-                    checked={showSelect.approver}
-                    onCheckedChange={(value) => toggleField("approver", value)}
-                    title="Show Users List?"
-                  />
                 </FormLabel>
 
                 <FormControl>
@@ -126,12 +140,10 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter approver address"
+                      readOnly
+                      className="bg-gray-100 cursor-not-allowed"
+                      placeholder="Auto-filled approver address"
                       {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleFieldChange("approver", e.target.value);
-                      }}
                     />
                   )}
                 </FormControl>
@@ -150,13 +162,6 @@ const InitializeEscrowForm = () => {
                     <span className="text-destructive ml-1">*</span>
                     <TooltipInfo content="Address of the service provider for this escrow." />
                   </span>
-                  <Switch
-                    checked={showSelect.serviceProvider}
-                    onCheckedChange={(value) =>
-                      toggleField("serviceProvider", value)
-                    }
-                    title="Show Users List?"
-                  />
                 </FormLabel>
                 <FormControl>
                   {showSelect.serviceProvider ? (
@@ -196,13 +201,6 @@ const InitializeEscrowForm = () => {
                     <span className="text-destructive ml-1">*</span>
                     <TooltipInfo content="Entity authorized to release funds from escrow." />
                   </span>
-                  <Switch
-                    checked={showSelect.releaseSigner}
-                    onCheckedChange={(value) =>
-                      toggleField("releaseSigner", value)
-                    }
-                    title="Show Users List?"
-                  />
                 </FormLabel>
                 <FormControl>
                   {showSelect.releaseSigner ? (
@@ -215,12 +213,10 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter service provider address"
+                      readOnly
+                      className="bg-gray-100 cursor-not-allowed"
+                      placeholder="Auto-filled release signer"
                       {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleFieldChange("releaseSigner", e.target.value);
-                      }}
                     />
                   )}
                 </FormControl>
@@ -240,13 +236,6 @@ const InitializeEscrowForm = () => {
                     <span className="text-destructive ml-1">*</span>
                     <TooltipInfo content="Entity responsible for resolving disputes." />
                   </span>
-                  <Switch
-                    checked={showSelect.disputeResolver}
-                    onCheckedChange={(value) =>
-                      toggleField("disputeResolver", value)
-                    }
-                    title="Show Users List?"
-                  />
                 </FormLabel>
                 <FormControl>
                   {showSelect.disputeResolver ? (
@@ -259,12 +248,10 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter service provider address"
+                      readOnly
+                      className="bg-gray-100 cursor-not-allowed"
+                      placeholder="Auto-filled dispute resolver"
                       {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleFieldChange("disputeResolver", e.target.value);
-                      }}
                     />
                   )}
                 </FormControl>
@@ -287,13 +274,6 @@ const InitializeEscrowForm = () => {
                       <span className="text-destructive ml-1">*</span>
                       <TooltipInfo content="Public key of the platform managing the escrow." />
                     </span>
-                    <Switch
-                      checked={showSelect.platformAddress}
-                      onCheckedChange={(value) =>
-                        toggleField("platformAddress", value)
-                      }
-                      title="Show Users List?"
-                    />
                   </FormLabel>
                   <FormControl>
                     {showSelect.platformAddress ? (
@@ -306,12 +286,10 @@ const InitializeEscrowForm = () => {
                       />
                     ) : (
                       <Input
-                        placeholder="Enter service provider address"
+                        readOnly
+                        className="bg-gray-100 cursor-not-allowed"
+                        placeholder="Auto-filled platform address"
                         {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          handleFieldChange("platformAddress", e.target.value);
-                        }}
                       />
                     )}
                   </FormControl>
@@ -333,19 +311,10 @@ const InitializeEscrowForm = () => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter platform fee"
+                      readOnly
+                      className="bg-gray-100 cursor-not-allowed"
+                      placeholder="Auto-filled platform fee"
                       value={field.value !== "" ? `${field.value}%` : ""}
-                      onChange={(e) => {
-                        let rawValue = e.target.value;
-                        rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-                        if (rawValue.split(".").length > 2) {
-                          rawValue = rawValue.slice(0, -1);
-                        }
-
-                        field.onChange(rawValue);
-                        handleFieldChange("platformFee", rawValue);
-                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -431,29 +400,7 @@ const InitializeEscrowForm = () => {
                     handleFieldChange("milestones", updatedMilestones);
                   }}
                 />
-
-                <Button
-                  onClick={() => handleRemoveMilestone(index)}
-                  className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
-                  disabled={index === 0}
-                >
-                  <Trash2 className="h-5 w-5" />
-                </Button>
               </div>
-
-              {index === milestones.length - 1 && (
-                <div className="flex justify-end">
-                  <Button
-                    disabled={isAnyMilestoneEmpty}
-                    className="w-full md:w-1/4"
-                    variant="outline"
-                    onClick={handleAddMilestone}
-                    type="button"
-                  >
-                    Add Item
-                  </Button>
-                </div>
-              )}
             </>
           ))}
         </div>

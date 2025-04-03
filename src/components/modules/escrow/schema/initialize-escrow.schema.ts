@@ -1,7 +1,7 @@
 import { useValidData } from "@/utils/hook/valid-data.hook";
 import { z } from "zod";
 
-export const GetFormSchema = () => {
+export const GetFormSchema = (maxAmount: number = Infinity) => {
   const { isValidWallet } = useValidData();
 
   return z.object({
@@ -17,15 +17,19 @@ export const GetFormSchema = () => {
       .refine((value) => isValidWallet(value), {
         message: "Approver must be a valid wallet.",
       }),
+
     engagementId: z.string().min(1, {
       message: "Engagement is required.",
     }),
+
     title: z.string().min(1, {
       message: "Title is required.",
     }),
+
     description: z.string().min(1, {
       message: "Description is required.",
     }),
+
     serviceProvider: z
       .string()
       .min(1, {
@@ -34,6 +38,7 @@ export const GetFormSchema = () => {
       .refine((value) => isValidWallet(value), {
         message: "Service provider must be a valid wallet.",
       }),
+
     platformAddress: z
       .string()
       .min(1, {
@@ -42,6 +47,7 @@ export const GetFormSchema = () => {
       .refine((value) => isValidWallet(value), {
         message: "Platform address must be a valid wallet.",
       }),
+
     platformFee: z
       .string()
       .min(1, {
@@ -51,6 +57,7 @@ export const GetFormSchema = () => {
         message:
           "Platform fee must be a number with at most one decimal place.",
       }),
+
     amount: z
       .string()
       .min(1, {
@@ -58,7 +65,11 @@ export const GetFormSchema = () => {
       })
       .regex(/^[1-9][0-9]*$/, {
         message: "Amount must be a whole number greater than 0 (no decimals).",
+      })
+      .refine((val) => Number(val) <= maxAmount, {
+        message: `Amount must be less than or equal to ${maxAmount}`,
       }),
+
     releaseSigner: z
       .string()
       .min(1, {
@@ -67,6 +78,7 @@ export const GetFormSchema = () => {
       .refine((value) => isValidWallet(value), {
         message: "Release signer must be a valid wallet.",
       }),
+
     disputeResolver: z
       .string()
       .min(1, {
@@ -75,6 +87,7 @@ export const GetFormSchema = () => {
       .refine((value) => isValidWallet(value), {
         message: "Dispute resolver must be a valid wallet.",
       }),
+
     milestones: z
       .array(
         z.object({

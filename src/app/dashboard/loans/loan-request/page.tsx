@@ -1,5 +1,9 @@
 import InitializeEscrow from "@/components/modules/escrow/ui/pages/InitEscrow";
 
 export default function Page() {
-  return <InitializeEscrow />;
+  return (
+    <div className="h-screen overflow-auto p-10">
+      <InitializeEscrow />
+    </div>
+  );
 }

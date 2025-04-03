@@ -23,13 +23,6 @@ const MyEscrowsFilter = () => {
             <Trash2 className="h-5 w-5" />
           </Button>
         </div>
-
-        <CreateButton
-          className="mr-auto w-full md:w-auto"
-          label="Loan Request"
-          url={"/dashboard/loans/loan-request"}
-          id="step-2"
-        />
       </div>
 
       <Divider type="horizontal" />

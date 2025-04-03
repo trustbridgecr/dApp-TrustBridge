@@ -166,7 +166,7 @@ export const useInitializeEscrow = () => {
         setCurrentStep(1);
         form.reset();
         resetForm();
-        router.push("/dashboard/escrow/my-escrows");
+        router.push("/dashboard/loans");
         setIsLoading(false);
       } else {
         console.error("initializeEscrow failed:", data);
@@ -194,7 +194,13 @@ export const useInitializeEscrow = () => {
 
   // Update store whenever form fields change
   const handleFieldChange = (name: string, value: any) => {
-    setFormData({ [name]: value });
+    const currentValues = form.getValues();
+    const updatedFormData = {
+      ...currentValues,
+      [name]: value,
+    };
+    setFormData(updatedFormData);
+    form.setValue(name as any, value, { shouldValidate: true });
   };
 
   const userOptions = useMemo(() => {

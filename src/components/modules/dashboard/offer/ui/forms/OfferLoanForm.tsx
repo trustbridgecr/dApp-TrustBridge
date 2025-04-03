@@ -138,9 +138,11 @@ export function OfferLoanForm() {
         </div>
       </div>
 
-      <Button type="submit" className="w-full py-6 text-base font-medium">
-        Submit Loan Offer
-      </Button>
+      <div className="flex justify-start">
+        <Button className="w-full md:w-1/4" type="submit">
+          Submit Loan Offer
+        </Button>
+      </div>
     </form>
   );
 }

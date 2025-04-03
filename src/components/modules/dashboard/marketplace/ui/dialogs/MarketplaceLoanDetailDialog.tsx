@@ -12,6 +12,7 @@ import {
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { Copy, Check } from "lucide-react";
+import { useMarketplaceStore } from "../../store/marketplace";
 
 interface MarketplaceLoanDetailDialogProps {
   isDialogOpen: boolean;
@@ -24,12 +25,12 @@ const MarketplaceLoanDetailDialog = ({
   isDialogOpen,
   setIsDialogOpen,
   selectedLoan,
-  setSelectedLoan,
 }: MarketplaceLoanDetailDialogProps) => {
   const { formatDollar, formatAddress, formatDateFromFirebase } =
     useFormatUtils();
   const { copyText, copiedKeyId } = useCopyUtils();
   const router = useRouter();
+  const { setSelectedLoan } = useMarketplaceStore();
 
   const handleClose = () => {
     setIsDialogOpen(false);
@@ -37,7 +38,7 @@ const MarketplaceLoanDetailDialog = ({
   };
 
   const handleRequestLoan = () => {
-    handleClose();
+    setSelectedLoan(selectedLoan);
     router.push("/dashboard/loans/loan-request");
   };
 
