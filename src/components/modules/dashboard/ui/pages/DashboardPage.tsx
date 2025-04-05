@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
-import { cn } from "@/lib/utils";
 import {
   TrendingUp,
   DollarSign,
@@ -21,7 +20,6 @@ import {
   Clock,
   CheckCircle2,
   ArrowRight,
-  Calendar,
   Wallet,
   PiggyBank,
   Activity,
@@ -42,10 +40,8 @@ export function DashboardOverview() {
     stats,
     recentActivity,
     loanTrends,
-    upcomingMilestones,
     formatCurrency,
     formatDate,
-    formatDueDate,
   } = useDashboard();
 
   const getActivityIcon = (type: string) => {
