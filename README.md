@@ -1,97 +1,140 @@
 # 🚀 TrustBridge
 
-**TrustBridge** is a decentralized platform aimed at enhancing P2P transactions by providing secure microloan agreements powered by blockchain and trustless technologies. Our goal is to ensure transparency, trust, and automation in financial transactions, making lending seamless and cost-effective.
+**TrustBridge** is a decentralized lending platform built on the Stellar blockchain and integrated with Trustless Work for smart contract management. It enables users to request and fund secure loans, ensuring transparency, automation, and security without traditional intermediaries.
 
 ## 🎯 Key Benefits and Objectives
 
-- Enhance trust in microloan agreements through blockchain transparency.
-- Provide automated and secure smart contract execution.
-- Minimize transaction costs and maximize accessibility.
+- Facilitate access to secure, decentralized loans via the Stellar network.
+- Connect borrowers and lenders through a transparent marketplace.
+- Automate escrow creation with Trustless Work for secure fund handling.
 
 ## 🔒 Why Choose TrustBridge?
 
 ### ⚙️ Core Advantages
 
-- **Security:** End-to-end encryption and decentralized architecture protect sensitive data.
-- **Transparency:** Blockchain ledger ensures all transactions are publicly verifiable.
-- **Decentralization:** Removes intermediaries, reducing costs and increasing efficiency.
-- **Automation:** Smart contracts handle agreement execution without manual intervention.
+- **Security:** Funds are managed by smart contracts, not centralized entities.
+- **Transparency:** All loan activities are verifiable on the blockchain.
+- **Efficiency:** Fast transactions and no intermediaries.
+- **Smart Automation:** Conditions are enforced automatically via escrow contracts.
 
-## 🌟 Key Features
+## 🌟 Marketplace Features
 
-- **🏦 Secure Microloan Agreements:** Ensure safety and compliance in financial transactions.
-- **🔗 Blockchain-Powered Transparency:** All actions are recorded and verifiable.
-- **⚡ Smart Contract Automation:** Automate loan agreements with predefined conditions.
-- **💰 Low Transaction Fees:** Cost-effective solutions with minimal overhead.
+- 🧾 Browse approved loan requests
+- 📊 View key loan details: amount, borrower, date, conditions
+- 🔎 Search and filter by title, minimum amount, and date
+- 🧩 Fund directly from wallet via Trustless Work API
+- 🔐 Fully decentralized and trustless escrow deployment
 
 ## 🛠️ How It Works
 
-### Step-by-Step Process
+1. **Borrower submits a loan request.**
+2. **Loan is reviewed and approved by the platform.**
+3. **The request appears in the marketplace.**
+4. **Lenders fund loans via their Stellar wallet.**
+5. **A smart contract is deployed through Trustless Work.**
+6. **Loan is disbursed automatically.**
 
-1. **🏗️ Loan Creation:** Borrower submits a loan request through the TrustBridge platform.
-2. **💵 Funding:** Investors review and fund loan requests via secure wallets.
-3. **📄 Agreement Execution:** Smart contracts automate terms and conditions.
-4. **🔄 Loan Repayment or Default Handling:** Repayments are tracked, and defaults managed transparently.
+---
 
 ## ⚙️ Getting Started
 
-### 📋 Prerequisites
+Follow the steps below to get started with this project:
 
-- **🖥️ Node.js** (v14 or later)
-- **🔐 Wallet Integration** (Albedo, Freighter)
-- **🌐 API Access Setup** (Registration required)
+### 📦 Installation
 
-### 🛠️ Installation
+1. Install dependencies:
 
-1. **🍴 Forking and Cloning the Repository**
-   ```bash
-   git clone https://github.com/TrustBridgeCR/dApp-TrustBridge.git
-   cd dApp-TrustBridge
-   ```
-2. **🔄 Adding Remote Upstream**
-   ```bash
-   git remote add upstream https://github.com/TrustBridgeCR/dApp-TrustBridge.git
-   ```
-3. **⚙️ Setting Up Environment Variables**
-   Create a `.env` file and configure required API keys.
-4. **📦 Installing Dependencies**
-   ```bash
-   npm install
-   ```
-5. **▶️ Running the Development Server**
-   ```bash
-   npm run dev
-   ```
+```bash
+npm i
+```
 
-## 📡 API Reference
+2. Format the code using Prettier:
 
-### Key Endpoints
+```bash
+npx prettier --write .
+```
 
-- **🆕 `/loan/initiate`** - Start a new loan agreement.
-- **💰 `/loan/fund`** - Fund an existing agreement.
-- **✅ `/loan/settle`** - Settle a completed agreement.
+3. Start the development server:
 
-## 🏗️ Tech Stack
+```bash
+npm run dev
+```
 
-- **💻 Frontend:** Next.js, TypeScript, Tailwind CSS.
-- **🔐 Blockchain:** Smart Contracts, Trustless Transactions.
-- **🌐 Backend Integration:** API services for seamless escrow management.
+---
 
-## 🧪 Testing Infrastructure
+## 🔐 Environment Variables
 
-### Guidelines
+Create a `.env` file in the root of the project with the following:
 
-- **🧩 Unit and E2E Testing:** Implemented with Jest and Cypress.
-- **🏃 Running Tests:**
-  ```bash
-  npm test
-  npm run test:e2e
-  npm run test:coverage
-  ```
-- **🔄 CI/CD Setup:** Automated using GitHub Actions.
+```env
+# Firebase configuration
+NEXT_PUBLIC_FIREBASE_API_KEY=TU_API_KEY
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=TU_AUTH_DOMAIN
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=TU_PROJECT_ID
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=TU_STORAGE_BUCKET
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=TU_MESSAGING_SENDER_ID
+NEXT_PUBLIC_FIREBASE_APP_ID=TU_APP_ID
+
+# Trustless Work API
+NEXT_PUBLIC_API_URL=https://dev.api.trustlesswork.com
+NEXT_PUBLIC_API_KEY=TU_API_KEY
+```
+
+### API Key Video
+
+[dApp Trustless Work](https://dapp.trustlesswork.com)
+
+https://github.com/user-attachments/assets/69f0adf2-cb5f-48ff-a4eb-bb1870fa35fa
+
+### Firebase Video
+
+[Firebase](https://firebase.google.com)
+
+https://github.com/user-attachments/assets/0c4a8a80-33f1-41ae-819b-6a38abf30e4b
+
+---
+
+## 🔥 Firebase Setup
+
+Once you have your Firebase database ready, add the following document in the `trustlines` collection:
+
+```
+name: "USDC" (string)
+trustline: "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5" (string)
+trustlineDecimals: 10000000 (number)
+```
+
+---
+
+## 🔑 Wallet Requirements
+
+To use this platform, install one of the following wallets:
+
+- Freighter
+- Albedo
+- xBull
+- LOBSTR
+
+### Wallet Usage Note
+
+Ensure your wallet is set to "test net". If you see "Not Available" in Freighter:
+
+- Go to **Security > Manage Connected Wallets**
+- Remove **localhost**
+- Reload and reconnect
+
+If problems persist, contact support.
+
+---
+
+## 🧠 IMPORTANT NOTE (Husky Setup)
+
+We use **Husky** to ensure code formatting and linting on `git push`. If `npm run format` or `npm run lint` fail, your push will be blocked.
+
+Fix any errors before retrying your push.
+
+---
 
 ## 📜 License
 
 © 2025 TrustBridge. Released under the MIT License.
-
-🌟 Join TrustBridge today and transform how you manage microloans! 🌟
