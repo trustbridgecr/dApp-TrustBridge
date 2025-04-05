@@ -11,7 +11,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <div className="flex h-screen overflow-hidden w-full">
         <TrustBridgeSidebar />
         <div className="flex-1 ">
-          <Header />
+          <div className="z-index-10000">
+            <Header />
+          </div>
           {children}
         </div>
       </div>

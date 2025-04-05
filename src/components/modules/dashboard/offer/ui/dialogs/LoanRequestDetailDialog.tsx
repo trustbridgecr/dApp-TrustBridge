@@ -54,7 +54,7 @@ const LoanRequestDetailDialog = ({
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleClose}>
       <DialogContent className="w-full !max-w-4xl rounded-xl p-0 overflow-hidden">
-        <div className="bg-gradient-to-r from-emerald-600 to-teal-500 p-6 text-white">
+        <div className="bg-gradient-to-r from-emerald-600 to-teal-900 p-6 text-white">
           <DialogHeader>
             <div className="flex items-center justify-between">
               <DialogTitle className="text-2xl font-bold text-white">
@@ -346,7 +346,7 @@ const LoanRequestDetailDialog = ({
         <div className="p-6 border-t bg-muted/30">
           <div className="flex justify-end">
             <Button
-              className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white px-6"
+              className="bg-gradient-to-r from-emerald-600 to-teal-900 hover:from-emerald-700 hover:to-teal-600 text-white px-6"
               onClick={() => {
                 handleClose();
                 setTimeout(() => {

@@ -15,7 +15,6 @@ export function Header() {
         <SidebarTrigger />
       </div>
       <div className="flex items-center gap-2">
-        <ThemeToggle />
         <Button
           variant="ghost"
           onClick={handleDisconnect}

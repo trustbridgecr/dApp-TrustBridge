@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 import {
   TrendingUp,
   DollarSign,
@@ -20,6 +21,7 @@ import {
   Clock,
   CheckCircle2,
   ArrowRight,
+  Calendar,
   Wallet,
   PiggyBank,
   Activity,
@@ -152,15 +154,18 @@ export function DashboardOverview() {
   return (
     <div className="p-6 space-y-6 pb-32">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-1 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full" />
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        </div>
+        <p className="text-muted-foreground pl-3 border-l-2 border-muted">
           Welcome back! Here's an overview of your loan activity and financial
           status.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="overflow-hidden bg-card 50 border-border">
+        <Card className="overflow-hidden border-border shadow-sm hover:shadow-md transition-shadow">
           <div className="h-1 bg-gradient-to-r from-emerald-500 to-teal-500" />
           <CardHeader className="pb-2">
             <CardDescription>Total Loan Volume</CardDescription>
@@ -181,15 +186,15 @@ export function DashboardOverview() {
           </CardContent>
         </Card>
 
-        <Card className="overflow-hidden bg-card 50 border-border">
-          <div className="h-1 bg-gradient-to-r from-blue-500 to-indigo-500" />
+        <Card className="overflow-hidden border-border shadow-sm hover:shadow-md transition-shadow">
+          <div className="h-1 bg-gradient-to-r from-teal-500 to-emerald-500" />
           <CardHeader className="pb-2">
             <CardDescription>Active Loans</CardDescription>
             <CardTitle className="text-2xl">{stats.activeLoans}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center text-blue-600">
+              <div className="flex items-center text-teal-600">
                 <CreditCard className="h-4 w-4 mr-1" />
                 <span>{formatCurrency(stats.totalAmount * 0.4)}</span>
               </div>
@@ -198,8 +203,8 @@ export function DashboardOverview() {
           </CardContent>
         </Card>
 
-        <Card className="overflow-hidden bg-card 50 border-border">
-          <div className="h-1 bg-gradient-to-r from-amber-500 to-orange-500" />
+        <Card className="overflow-hidden border-border shadow-sm hover:shadow-md transition-shadow">
+          <div className="h-1 bg-gradient-to-r from-emerald-500 to-teal-500" />
           <CardHeader className="pb-2">
             <CardDescription>Available Balance</CardDescription>
             <CardTitle className="text-2xl">
@@ -208,30 +213,38 @@ export function DashboardOverview() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center text-amber-600">
+              <div className="flex items-center text-emerald-600">
                 <Wallet className="h-4 w-4 mr-1" />
                 <span>Available to withdraw</span>
               </div>
-              <Button variant="ghost" size="sm" className="h-7 px-2 text-xs">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 px-2 text-xs text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
+              >
                 Withdraw
               </Button>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="overflow-hidden bg-card 50 border-border">
-          <div className="h-1 bg-gradient-to-r from-purple-500 to-pink-500" />
+        <Card className="overflow-hidden border-border shadow-sm hover:shadow-md transition-shadow">
+          <div className="h-1 bg-gradient-to-r from-teal-500 to-emerald-500" />
           <CardHeader className="pb-2">
             <CardDescription>Pending Approvals</CardDescription>
             <CardTitle className="text-2xl">{stats.pendingApprovals}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center text-purple-600">
+              <div className="flex items-center text-teal-600">
                 <Clock className="h-4 w-4 mr-1" />
                 <span>Awaiting review</span>
               </div>
-              <Button variant="ghost" size="sm" className="h-7 px-2 text-xs">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 px-2 text-xs text-teal-600 hover:text-teal-700 hover:bg-teal-50"
+              >
                 Review
               </Button>
             </div>
@@ -242,18 +255,37 @@ export function DashboardOverview() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Tabs defaultValue="earnings" className="lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
-            <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="loans">Loans</TabsTrigger>
-              <TabsTrigger value="earnings">Earnings</TabsTrigger>
+            <TabsList className="bg-muted/80">
+              <TabsTrigger
+                value="overview"
+                className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-950"
+              >
+                Overview
+              </TabsTrigger>
+              <TabsTrigger
+                value="loans"
+                className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-950"
+              >
+                Loans
+              </TabsTrigger>
+              <TabsTrigger
+                value="earnings"
+                className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-950"
+              >
+                Earnings
+              </TabsTrigger>
             </TabsList>
-            <Button variant="outline" size="sm" className="h-8 gap-1">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-1 border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+            >
               <BarChart4 className="h-3.5 w-3.5" />
               <span>Reports</span>
             </Button>
           </div>
 
-          <Card className="bg-card 50 border-border">
+          <Card className="border-border shadow-sm">
             <TabsContent value="overview" className="m-0">
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
@@ -264,7 +296,7 @@ export function DashboardOverview() {
                       Loans
                     </span>
                     <span className="flex items-center gap-1">
-                      <div className="h-3 w-3 rounded-full bg-blue-500" />
+                      <div className="h-3 w-3 rounded-full bg-teal-500" />
                       Repayments
                     </span>
                   </div>
@@ -280,10 +312,12 @@ export function DashboardOverview() {
                       <div className="w-full flex items-end justify-center gap-1 h-[250px]">
                         <div
                           className="w-3 bg-emerald-500 rounded-t-sm"
-                          style={{ height: `${(data.amount / 30000) * 100}%` }}
+                          style={{
+                            height: `${(data.amount / 30000) * 100}%`,
+                          }}
                         />
                         <div
-                          className="w-3 bg-blue-500 rounded-t-sm"
+                          className="w-3 bg-teal-500 rounded-t-sm"
                           style={{
                             height: `${((data.amount * 0.7) / 30000) * 100}%`,
                           }}
@@ -327,7 +361,7 @@ export function DashboardOverview() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="flex items-center gap-2">
-                        <div className="h-3 w-3 rounded-full bg-amber-500" />
+                        <div className="h-3 w-3 rounded-full bg-teal-500" />
                         Pending Loans
                       </span>
                       <span className="font-medium">
@@ -348,7 +382,7 @@ export function DashboardOverview() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="flex items-center gap-2">
-                        <div className="h-3 w-3 rounded-full bg-blue-500" />
+                        <div className="h-3 w-3 rounded-full bg-emerald-400" />
                         Completed Loans
                       </span>
                       <span className="font-medium">
@@ -403,7 +437,7 @@ export function DashboardOverview() {
               <CardContent className="pb-6">
                 <div className="space-y-6">
                   <div className="grid grid-cols-2 gap-4">
-                    <Card className="bg-muted/40 border-none">
+                    <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border-emerald-100 dark:border-emerald-900/50">
                       <CardContent className="p-4">
                         <div className="flex items-center gap-3">
                           <div className="bg-emerald-100 rounded-full p-2">
@@ -421,11 +455,11 @@ export function DashboardOverview() {
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-muted/40 border-none">
+                    <Card className="bg-gradient-to-br from-teal-50 to-emerald-50 dark:from-teal-950/30 dark:to-emerald-950/30 border-teal-100 dark:border-teal-900/50">
                       <CardContent className="p-4">
                         <div className="flex items-center gap-3">
-                          <div className="bg-blue-100 rounded-full p-2">
-                            <PiggyBank className="h-5 w-5 text-blue-600" />
+                          <div className="bg-teal-100 rounded-full p-2">
+                            <PiggyBank className="h-5 w-5 text-teal-600" />
                           </div>
                           <div>
                             <p className="text-xs text-muted-foreground">
@@ -454,7 +488,7 @@ export function DashboardOverview() {
                       </div>
                       <div className="flex items-center justify-between text-sm">
                         <span className="flex items-center gap-2">
-                          <ShieldCheck className="h-4 w-4 text-blue-600" />
+                          <ShieldCheck className="h-4 w-4 text-teal-600" />
                           Platform Fees
                         </span>
                         <span className="font-medium">
@@ -463,7 +497,7 @@ export function DashboardOverview() {
                       </div>
                       <div className="flex items-center justify-between text-sm">
                         <span className="flex items-center gap-2">
-                          <BadgeCheck className="h-4 w-4 text-purple-600" />
+                          <BadgeCheck className="h-4 w-4 text-emerald-600" />
                           Milestone Bonuses
                         </span>
                         <span className="font-medium">
@@ -473,7 +507,7 @@ export function DashboardOverview() {
                     </div>
                   </div>
 
-                  <Button variant="outline" className="w-full">
+                  <Button className="w-full bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white">
                     View Detailed Report
                   </Button>
                 </div>
@@ -483,7 +517,7 @@ export function DashboardOverview() {
         </Tabs>
 
         <div className="space-y-6">
-          <Card className="bg-card 50 border-border">
+          <Card className="border-border shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-base">Recent Activity</CardTitle>
             </CardHeader>
@@ -519,7 +553,7 @@ export function DashboardOverview() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="w-full text-xs justify-between"
+                className="w-full text-xs justify-between text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
               >
                 View All Activity
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -527,118 +561,6 @@ export function DashboardOverview() {
             </CardFooter>
           </Card>
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-2 bg-card 50 border-border">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Quick Actions</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Button
-                variant="outline"
-                className="h-auto flex-col py-4 px-2 space-y-2 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200"
-              >
-                <div className="bg-emerald-100 rounded-full p-2">
-                  <DollarSign className="h-5 w-5 text-emerald-600" />
-                </div>
-                <span className="text-sm font-medium">Offer Loan</span>
-              </Button>
-
-              <Button
-                variant="outline"
-                className="h-auto flex-col py-4 px-2 space-y-2 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200"
-              >
-                <div className="bg-blue-100 rounded-full p-2">
-                  <CreditCard className="h-5 w-5 text-blue-600" />
-                </div>
-                <span className="text-sm font-medium">View Loans</span>
-              </Button>
-
-              <Button
-                variant="outline"
-                className="h-auto flex-col py-4 px-2 space-y-2 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-200"
-              >
-                <div className="bg-purple-100 rounded-full p-2">
-                  <Wallet className="h-5 w-5 text-purple-600" />
-                </div>
-                <span className="text-sm font-medium">Withdraw</span>
-              </Button>
-
-              <Button
-                variant="outline"
-                className="h-auto flex-col py-4 px-2 space-y-2 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-200"
-              >
-                <div className="bg-amber-100 rounded-full p-2">
-                  <ShoppingBag className="h-5 w-5 text-amber-600" />
-                </div>
-                <span className="text-sm font-medium">Marketplace</span>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-card  border-border">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Platform Status</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-emerald-500" />
-                  <span className="text-sm">Loan Processing</span>
-                </div>
-                <Badge
-                  variant="outline"
-                  className="bg-emerald-50 text-emerald-700 border-emerald-200"
-                >
-                  Operational
-                </Badge>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-emerald-500" />
-                  <span className="text-sm">Payment System</span>
-                </div>
-                <Badge
-                  variant="outline"
-                  className="bg-emerald-50 text-emerald-700 border-emerald-200"
-                >
-                  Operational
-                </Badge>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-amber-500" />
-                  <span className="text-sm">Marketplace</span>
-                </div>
-                <Badge
-                  variant="outline"
-                  className="bg-amber-50 text-amber-700 border-amber-200"
-                >
-                  Maintenance
-                </Badge>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-emerald-500" />
-                  <span className="text-sm">Smart Contracts</span>
-                </div>
-                <Badge
-                  variant="outline"
-                  className="bg-emerald-50 text-emerald-700 border-emerald-200"
-                >
-                  Operational
-                </Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

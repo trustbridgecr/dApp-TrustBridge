@@ -150,7 +150,7 @@ export default function LoanOfferRequests() {
               <Button
                 className={cn(
                   "w-full flex items-center justify-center gap-2 transition-all",
-                  "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600",
+                  "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-900 hover:to-teal-600",
                 )}
                 onClick={(e) => {
                   e.stopPropagation();

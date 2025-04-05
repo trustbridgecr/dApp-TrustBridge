@@ -1,103 +1,102 @@
-import { ArrowRight, Wallet, Shield, Globe } from "lucide-react";
+"use client";
+
+import { ArrowRight, Wallet, BadgeCheck } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 import { useWallet } from "../../wallet/hooks/wallet.hook";
+import { useEffect } from "react";
 
 export default function HomePage() {
   const { handleConnect, handleDisconnect } = useWallet();
   const { address } = useGlobalAuthenticationStore();
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="flex-1 flex items-center">
-        <section className="w-full py-12 md:py-24">
-          <div className="container px-4 md:px-6">
-            <div className="grid items-center gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-              <div className="flex flex-col justify-center space-y-4 p-4 md:px-6">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none text-foreground">
-                    Decentralized Microloans for Everyone
-                  </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    Access low-interest microloans through blockchain
-                    technology. Fast, secure, and accessible to all.
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button
-                    className="bg-[var(--custom-blue)] hover:bg-blue-700 text-white"
-                    onClick={address ? handleDisconnect : handleConnect}
-                  >
-                    <Wallet className="mr-2 h-4 w-4" />
-                    {address ? "Disconnect Wallet" : "Connect Wallet"}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="border-[var(--custom-celeste)] text-[var(--custom-blue)] hover:bg-blue-50 dark:hover:bg-white/10"
-                  >
-                    Learn more
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
+    <div className="flex flex-col min-h-screen ">
+      <section className="w-full py-12 md:py-24 lg:py-32">
+        <div className="container px-4 md:px-6">
+          <div className="grid items-center gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px]">
+            <div className="flex flex-col justify-center space-y-4">
+              <div className="space-y-2">
+                <Badge
+                  variant="outline"
+                  className="bg-emerald-50 text-emerald-700 border-emerald-200 mb-4"
+                >
+                  Powered by Stellar Blockchain
+                </Badge>
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                  <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                    TrustBridge
+                  </span>
+                  <span className="block mt-1">Decentralized Microloans</span>
+                </h1>
+                <p className="max-w-[600px] text-muted-foreground md:text-xl mt-4">
+                  Connecting lenders and borrowers through secure, transparent,
+                  and efficient blockchain technology. Build trust, create
+                  opportunity.
+                </p>
               </div>
-              <div className="flex items-center justify-center">
-                <div className="grid grid-cols-2 gap-4 w-full">
-                  <Card className="p-6 border border-[var(--custom-celeste)] bg-white/50 dark:bg-[#151515] backdrop-blur-sm hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
-                    <Shield className="h-10 w-10 text-[var(--custom-blue)] mb-4" />
-                    <h3 className="font-medium text-lg mb-2 text-foreground">
-                      Secure Transactions
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Powered by Stellar blockchain technology
-                    </p>
-                  </Card>
-                  <Card className="p-6 border border-[var(--custom-celeste)] bg-white/50 dark:bg-[#151515] backdrop-blur-sm hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
-                    <div className="h-10 w-10 mb-4 flex items-center justify-center">
-                      <Image
-                        src="/img/trustless-work-logo.png"
-                        alt="Trustless Work Logo"
-                        width={40}
-                        height={40}
-                      />
+              <div className="flex flex-col gap-3 min-[400px]:flex-row mt-4">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"
+                  onClick={address ? handleDisconnect : handleConnect}
+                >
+                  <Wallet className="mr-2 h-5 w-5" />
+                  {address ? "Disconnect Wallet" : "Connect Wallet"}
+                </Button>
+                <Link href="/dashboard/marketplace" passHref>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                  >
+                    Explore Marketplace
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center">
+              <div className="relative w-full max-w-[500px] aspect-[4/3] bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 rounded-2xl p-1 shadow-xl">
+                <div className="absolute inset-0 rounded-2xl overflow-hidden border border-emerald-100 dark:border-emerald-900/50">
+                  <Image
+                    src="/placeholder.svg?height=400&width=500"
+                    alt="TrustBridge Platform"
+                    width={500}
+                    height={400}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="absolute -bottom-6 -right-6 bg-white dark:bg-gray-950 rounded-lg shadow-lg p-4 border border-emerald-100 dark:border-emerald-900/50">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-emerald-100 dark:bg-emerald-900/50 rounded-full p-2">
+                      <BadgeCheck className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
                     </div>
-                    <h3 className="font-medium text-lg mb-2 text-foreground">
-                      Trustless Work
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Secure escrow contracts with non-custodial management
-                    </p>
-                  </Card>
-                  <Card className="p-6 border border-[var(--custom-celeste)] bg-white/50 dark:bg-[#151515] backdrop-blur-sm hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
-                    <Globe className="h-10 w-10 text-[var(--custom-blue)] mb-4" />
-                    <h3 className="font-medium text-lg mb-2 text-foreground">
-                      Global Access
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Available to underserved populations
-                    </p>
-                  </Card>
-                  <Card className="p-6 border border-[var(--custom-celeste)] bg-white/50 dark:bg-[#151515] backdrop-blur-sm hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-[var(--custom-celeste)] rounded-full animate-ping opacity-25"></div>
-                      <div className="relative flex items-center justify-center h-10 w-10 rounded-full bg-[var(--custom-blue)] text-white font-bold">
-                        %
-                      </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">
+                        Total Loan Volume
+                      </p>
+                      <p className="text-lg font-bold">$1.2M+</p>
                     </div>
-                    <h3 className="font-medium text-lg mb-2 mt-4 text-foreground">
-                      Lower Rates
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Up to 70% lower than traditional banks
-                    </p>
-                  </Card>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }

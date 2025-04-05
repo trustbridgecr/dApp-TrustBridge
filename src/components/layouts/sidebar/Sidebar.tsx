@@ -1,5 +1,5 @@
 "use client";
-import { LogOut } from "lucide-react";
+import { Link, LogOut, SettingsIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -209,13 +209,12 @@ export function TrustBridgeSidebar() {
               </div>
             )}
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+          <a
+            href="/dashboard/settings"
+            className="h-8 w-8 flex items-center justify-center text-muted-foreground hover:text-foreground rounded-md transition-colors"
           >
-            <LogOut className="h-4 w-4" />
-          </Button>
+            <SettingsIcon className="h-4 w-4" />
+          </a>
         </div>
       </SidebarFooter>
 

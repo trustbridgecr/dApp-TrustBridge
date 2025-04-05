@@ -412,7 +412,7 @@ export function OfferLoanForm() {
           ) : (
             <Button
               type="submit"
-              className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 gap-1"
+              className="bg-gradient-to-r from-emerald-600 to-teal-900 hover:from-emerald-700 hover:to-teal-600 gap-1"
               disabled={isSubmitting || !isDirty}
             >
               {isSubmitting ? "Submitting..." : "Submit Loan Offer"}
