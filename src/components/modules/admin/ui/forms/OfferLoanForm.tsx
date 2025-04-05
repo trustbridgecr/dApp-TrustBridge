@@ -11,7 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useOfferLoanForm } from "../../hooks/offer-loan.hook";
+import { useOfferLoanForm } from "@/components/modules/dashboard/offer/hooks/offer-loan.hook";
 
 export function OfferLoanForm() {
   const { form, fieldArray, onSubmit } = useOfferLoanForm();
@@ -90,7 +90,7 @@ export function OfferLoanForm() {
       </div>
 
       <div className="space-y-2">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between ">
           <Label className="font-medium flex items-center gap-1">
             Milestones <span className="text-rose-500">*</span>
             <TooltipProvider>
@@ -105,36 +105,37 @@ export function OfferLoanForm() {
             </TooltipProvider>
           </Label>
         </div>
+        <div className="mb-6">
+          {fieldArray.fields.map((field, index) => (
+            <div key={field.id} className="flex items-center gap-2 mb-6">
+              <Input
+                placeholder="Milestone Description"
+                {...register(`milestones.${index}.description`)}
+                className="flex-1"
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => fieldArray.remove(index)}
+                className="text-rose-500 hover:text-rose-700 hover:bg-rose-50"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
 
-        {fieldArray.fields.map((field, index) => (
-          <div key={field.id} className="flex items-center gap-2">
-            <Input
-              placeholder="Milestone Description"
-              {...register(`milestones.${index}.description`)}
-              className="flex-1"
-            />
+          <div className="flex justify-end">
             <Button
               type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => fieldArray.remove(index)}
-              className="text-rose-500 hover:text-rose-700 hover:bg-rose-50"
+              variant="outline"
+              size="sm"
+              onClick={() => fieldArray.append({ description: "" })}
+              className="flex items-center gap-1"
             >
-              <Trash2 className="h-4 w-4" />
+              <Plus className="h-4 w-4" /> Add Milestone
             </Button>
           </div>
-        ))}
-
-        <div className="flex justify-end">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => fieldArray.append({ description: "" })}
-            className="flex items-center gap-1"
-          >
-            <Plus className="h-4 w-4" /> Add Milestone
-          </Button>
         </div>
       </div>
 
