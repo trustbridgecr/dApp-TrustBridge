@@ -90,7 +90,7 @@ export default function HomePage() {
 
             <div className="flex items-center justify-center">
               <div className="relative w-full max-w-[500px] aspect-[4/3] bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 rounded-2xl p-1 shadow-xl">
-                <div className="absolute -bottom-6 -right-6 z-20 bg-white dark:bg-gray-950 rounded-lg shadow-lg p-4 border border-emerald-100 dark:border-emerald-900/50">
+                <div className="absolute -bottom-6 -right-6 z-20 bg-white dark:bg-neutral-950 rounded-lg shadow-lg p-4 border border-emerald-100 dark:border-emerald-900/50">
                   <div className="flex items-center gap-3">
                     <div className="bg-emerald-100 dark:bg-emerald-900/50 rounded-full p-2">
                       <BadgeCheck className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
