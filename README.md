@@ -1,4 +1,3 @@
-
 # 🚀 TrustBridge
 
 **TrustBridge** is a decentralized lending platform built on the Stellar blockchain and integrated with Trustless Work for smart contract management. It enables users to request and fund secure loans, ensuring transparency, automation, and security without traditional intermediaries.
@@ -83,14 +82,13 @@ NEXT_PUBLIC_API_KEY=TU_API_KEY
 
 ### API Key Video
 
-[dApp Trustless Work](https://dapp.trustlesswork.com)  
+[dApp Trustless Work](https://dapp.trustlesswork.com)
 
 https://github.com/user-attachments/assets/69f0adf2-cb5f-48ff-a4eb-bb1870fa35fa
 
 ### Firebase Video
 
-[Firebase](https://firebase.google.com)  
-
+[Firebase](https://firebase.google.com)
 
 https://github.com/user-attachments/assets/0c4a8a80-33f1-41ae-819b-6a38abf30e4b
 
