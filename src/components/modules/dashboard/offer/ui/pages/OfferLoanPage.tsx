@@ -13,11 +13,6 @@ const CreateLoanOffer = () => {
         <Loader isLoading={isLoading} />
       ) : (
         <div className="p-8 flex flex-col gap-3">
-          <h1 className="text-4xl font-bold">Offer a New Loan</h1>
-          <h2>
-            Fill out the form below to publish a loan offer. Once approved, it
-            will appear in the marketplace for borrowers.
-          </h2>
           <OfferLoanForm />
         </div>
       )}

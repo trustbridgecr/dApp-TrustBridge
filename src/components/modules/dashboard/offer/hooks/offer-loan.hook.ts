@@ -24,9 +24,9 @@ export function useOfferLoanForm() {
       platformFee: "1.5",
       approver: "",
       releaseSigner: "",
-      disputeResolver: "",
-      platformAddress:
+      disputeResolver:
         "GBZ7KCIUGD2ME7J7YSQW6WVM2RRNYA3AQWVEKVM2VK5LMQL3CKYARBWX",
+      platformAddress: "",
       milestones: [{ description: "" }],
     },
   });

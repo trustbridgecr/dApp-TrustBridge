@@ -1,7 +1,7 @@
 "use client";
 
-import { HeaderHome } from "@/components/layouts/header/HeaderHome";
 import HomePage from "@/components/modules/auth/ui/pages/Home";
+import { GradientBackground } from "@/components/modules/dashboard/ui/pages/background/GradientBackground";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -17,9 +17,10 @@ export default function Page() {
   }, [address, router]);
 
   return (
-    <div>
-      <HeaderHome />
-      <HomePage />
-    </div>
+    <GradientBackground>
+      <div className="p-6 ">
+        <HomePage />
+      </div>
+    </GradientBackground>
   );
 }
