@@ -25,12 +25,13 @@ import {
 import { useMarketplaceStore } from "../../store/marketplace";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { ApprovedLoan } from "../../store/marketplace";
 
 interface MarketplaceLoanDetailDialogProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (value: boolean) => void;
-  selectedLoan?: any;
-  setSelectedLoan: (value?: any) => void;
+  selectedLoan?: ApprovedLoan;
+  setSelectedLoan: (value?: ApprovedLoan) => void;
 }
 
 const MarketplaceLoanDetailDialog = ({
@@ -46,11 +47,12 @@ const MarketplaceLoanDetailDialog = ({
 
   const handleClose = () => {
     setIsDialogOpen(false);
-    setSelectedLoan(undefined);
   };
 
   const handleRequestLoan = () => {
-    setSelectedLoan(selectedLoan);
+    if (selectedLoan) {
+      setSelectedLoan(selectedLoan);
+    }
     router.push("/dashboard/loans/loan-request");
   };
 
@@ -175,8 +177,8 @@ const MarketplaceLoanDetailDialog = ({
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <p className="text-sm">
                       {formatDateFromFirebase(
-                        selectedLoan.createdAt?.seconds,
-                        selectedLoan.createdAt?.nanoseconds,
+                        selectedLoan.createdAt?.seconds ?? 0,
+                        selectedLoan.createdAt?.nanoseconds ?? 0,
                       )}
                     </p>
                   </div>
@@ -195,9 +197,9 @@ const MarketplaceLoanDetailDialog = ({
                 <h3 className="font-medium">Loan Milestones</h3>
               </div>
 
-              {selectedLoan.milestones?.length > 0 ? (
+              {(selectedLoan.milestones?.length ?? 0 > 0) ? (
                 <div className="space-y-3">
-                  {selectedLoan.milestones?.map((m: any, idx: number) => (
+                  {selectedLoan.milestones?.map((m, idx) => (
                     <div
                       key={idx}
                       className="border p-4 rounded-md bg-muted/30 hover:bg-muted/50 transition-colors"

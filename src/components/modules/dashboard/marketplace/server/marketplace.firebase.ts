@@ -12,10 +12,43 @@ import {
   query,
   where,
   DocumentReference,
+  DocumentData,
+  QueryDocumentSnapshot,
 } from "firebase/firestore";
 
+interface LoanOffer {
+  borrower: string;
+  amount: number;
+  title: string;
+  maxAmount: number;
+  platformFee: number;
+  platformAddress: string;
+  approver: string;
+  disputeResolver: string;
+  releaseSigner: string;
+  submittedBy?: {
+    name?: string;
+    email?: string;
+    address?: string;
+  };
+  milestones?: {
+    description: string;
+  }[];
+  createdAt?: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  updatedAt?: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  status?: string;
+  lenderWallet?: string;
+  description?: string;
+}
+
 interface AddLoanOfferProps {
-  payload: any;
+  payload: LoanOffer;
   lenderWallet: string;
 }
 
@@ -25,12 +58,12 @@ const addLoanOffer = async ({
 }: AddLoanOfferProps): Promise<{
   success: boolean;
   message: string;
-  data?: any;
+  data?: { id: string } & LoanOffer;
 }> => {
   try {
     const ref = collection(db, "loan_offers");
 
-    const docRef: DocumentReference = await addDoc(ref, {
+    const docRef: DocumentReference<DocumentData> = await addDoc(ref, {
       ...payload,
       lenderWallet,
       status: "pending",
@@ -43,12 +76,13 @@ const addLoanOffer = async ({
     return {
       success: true,
       message: "Loan offer created successfully",
-      data: { id: docRef.id, ...createdDoc.data() },
+      data: { id: docRef.id, ...(createdDoc.data() as LoanOffer) },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
-      message: error.message || "Failed to create loan offer",
+      message:
+        error instanceof Error ? error.message : "Failed to create loan offer",
     };
   }
 };
@@ -59,7 +93,7 @@ const getLoanOffersByStatus = async ({
   status?: string;
 }): Promise<{
   success: boolean;
-  data?: any[];
+  data?: ({ id: string } & LoanOffer)[];
   message?: string;
 }> => {
   try {
@@ -68,26 +102,27 @@ const getLoanOffersByStatus = async ({
 
     const snapshot = await getDocs(q);
 
-    const offers = snapshot.docs.map((doc) => ({
+    const offers = snapshot.docs.map((doc: QueryDocumentSnapshot) => ({
       id: doc.id,
-      ...doc.data(),
+      ...(doc.data() as LoanOffer),
     }));
 
     return {
       success: true,
       data: offers,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
-      message: error.message || "Error retrieving loan offers",
+      message:
+        error instanceof Error ? error.message : "Error retrieving loan offers",
     };
   }
 };
 
 const getApprovedLoanOffers = async (): Promise<{
   success: boolean;
-  data?: any[];
+  data?: ({ id: string } & LoanOffer)[];
   message?: string;
 }> => getLoanOffersByStatus({ status: "approved" });
 
@@ -111,10 +146,11 @@ const approveLoanOffer = async ({
       success: true,
       message: `Loan offer ${offerId} approved successfully`,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
-      message: error.message || "Failed to approve loan offer",
+      message:
+        error instanceof Error ? error.message : "Failed to approve loan offer",
     };
   }
 };

@@ -12,7 +12,7 @@ interface LoanOffer {
   id: string;
   borrower: string;
   amount: number;
-  status: string;
+  status?: string;
   createdAt: number;
 }
 
@@ -39,7 +39,14 @@ export function useLoanOfferRequests() {
   const fetchOffers = async () => {
     setLoading(true);
     const res = await getAllLoanOffers({ status: "pending" });
-    if (res.success && res.data) setLoanOffers(res.data);
+    if (res.success && res.data) {
+      setLoanOffers(
+        res.data.map((offer) => ({
+          ...offer,
+          createdAt: offer.createdAt ? offer.createdAt.seconds : 0,
+        })),
+      );
+    }
     setLoading(false);
   };
 
@@ -62,7 +69,7 @@ export function useLoanOfferRequests() {
       } else {
         toast.error("Failed to approve offer");
       }
-    } catch (error) {
+    } catch {
       toast.error("An error occurred while approving the offer");
     }
   };

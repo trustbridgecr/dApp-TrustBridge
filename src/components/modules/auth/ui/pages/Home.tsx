@@ -2,20 +2,24 @@
 
 import { useEffect, useState } from "react";
 import { ArrowRight, Wallet, BadgeCheck } from "lucide-react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { useWallet } from "../../wallet/hooks/wallet.hook";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { format } from "date-fns";
 import { getApprovedLoanOffers } from "@/components/modules/dashboard/marketplace/server/marketplace.firebase";
+
+interface ApprovedLoan {
+  id: string;
+  title: string;
+  maxAmount: number;
+  platformFee: number;
+}
 
 export default function HomePage() {
   const { handleConnect, handleDisconnect } = useWallet();
   const { address } = useGlobalAuthenticationStore();
-  const [approvedLoans, setApprovedLoans] = useState<any[]>([]);
+  const [approvedLoans, setApprovedLoans] = useState<ApprovedLoan[]>([]);
 
   useEffect(() => {
     const fetchApprovedLoans = async () => {
@@ -35,11 +39,6 @@ export default function HomePage() {
       document.body.style.overflow = "auto";
     };
   }, []);
-
-  const formatDate = (seconds: number) => {
-    if (!seconds) return "Unknown date";
-    return format(new Date(seconds * 1000), "dd MMM yyyy");
-  };
 
   return (
     <div className="flex flex-col min-h-screen">

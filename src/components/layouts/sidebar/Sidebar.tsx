@@ -1,5 +1,5 @@
 "use client";
-import { Link, LogOut, SettingsIcon } from "lucide-react";
+import { SettingsIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -14,7 +14,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   Tooltip,

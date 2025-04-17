@@ -14,7 +14,6 @@ const MyEscrows = () => {
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
   const setActiveTab = useEscrowBoundedStore((state) => state.setActiveTab);
   const activeMode = useEscrowBoundedStore((state) => state.activeMode);
-  const theme = useGlobalUIBoundedStore((state) => state.theme);
 
   return (
     <>
