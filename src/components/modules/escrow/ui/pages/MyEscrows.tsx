@@ -9,8 +9,6 @@ import MyEscrowsTable from "@/components/modules/escrow/ui/tables/MyEscrowsTable
 import MyEscrowsCards from "@/components/modules/escrow/ui/cards/MyEscrowsCards";
 import MyEscrowsFilter from "@/components/modules/escrow/ui/filters/MyEscrowsFilter";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
-import Joyride from "react-joyride";
-import { useState } from "react";
 
 const MyEscrows = () => {
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
@@ -18,48 +16,12 @@ const MyEscrows = () => {
   const activeMode = useEscrowBoundedStore((state) => state.activeMode);
   const theme = useGlobalUIBoundedStore((state) => state.theme);
 
-  const [run, setRun] = useState(false);
-
   return (
     <>
       {isLoading ? (
         <Loader isLoading={isLoading} />
       ) : (
         <>
-          <Joyride
-            run={run}
-            continuous
-            showSkipButton
-            hideCloseButton
-            callback={(data) => {
-              const { status } = data;
-              if (status === "skipped" || status === "finished") {
-                setRun(false);
-              }
-            }}
-            disableOverlayClose
-            styles={{
-              options:
-                theme === "dark"
-                  ? {
-                      backgroundColor: "#19191B",
-                      overlayColor: "rgba(0, 0, 0, 0.80)",
-                      primaryColor: "#006BE4",
-                      textColor: "#FFF",
-                      width: 500,
-                      zIndex: 1000,
-                    }
-                  : {
-                      backgroundColor: "#FFFFFF",
-                      overlayColor: "rgba(0, 0, 0, 0.60)",
-                      primaryColor: "#006BE4",
-                      textColor: "#000",
-                      width: 500,
-                      zIndex: 1000,
-                    },
-            }}
-          />
-
           <div className="flex gap-3 w-full h-full p-6 justify-between">
             <Tabs defaultValue="issuer" className="w-full">
               <div className="flex w-full justify-between items-center flex-col 2xl:flex-row gap-16 md:gap-3">
