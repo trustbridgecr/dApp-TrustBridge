@@ -21,12 +21,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoanRequestDetail } from "@/components/modules/admin/hooks/useLoanRequestDetail.hook";
+import type { ApprovedLoan } from "@/components/modules/dashboard/marketplace/store/marketplace";
 
 interface LoanRequestDetailDialogProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (value: boolean) => void;
-  selectedRequest?: any;
-  setSelectedRequest: (value?: any) => void;
+  selectedRequest?: ApprovedLoan;
+  setSelectedRequest: (value?: ApprovedLoan) => void;
 }
 
 const LoanRequestDetailDialog = ({
@@ -169,8 +170,8 @@ const LoanRequestDetailDialog = ({
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <p className="text-sm">
                       {formatDateFromFirebase(
-                        selectedRequest.createdAt?.seconds,
-                        selectedRequest.createdAt?.nanoseconds,
+                        selectedRequest.createdAt?.seconds || 0,
+                        selectedRequest.createdAt?.nanoseconds || 0,
                       )}
                     </p>
                   </div>
@@ -189,9 +190,9 @@ const LoanRequestDetailDialog = ({
                 <h3 className="font-medium">Loan Milestones</h3>
               </div>
 
-              {selectedRequest.milestones?.length > 0 ? (
+              {(selectedRequest.milestones ?? []).length > 0 ? (
                 <div className="space-y-3">
-                  {selectedRequest.milestones?.map((m: any, idx: number) => (
+                  {selectedRequest.milestones?.map((m, idx) => (
                     <div
                       key={idx}
                       className="border p-4 rounded-md bg-muted/30 hover:bg-muted/50 transition-colors"

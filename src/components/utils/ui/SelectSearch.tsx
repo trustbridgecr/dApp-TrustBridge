@@ -1,4 +1,4 @@
-"use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState } from "react";
 import {
@@ -24,7 +24,7 @@ import {
   CommandItem,
   CommandList,
 } from "../../ui/command";
-import { useInitializeEscrow } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
+import { useInitializeEscrow } from "../../modules/escrow/hooks/initialize-escrow.hook";
 
 interface SelectFieldProps {
   control: any;

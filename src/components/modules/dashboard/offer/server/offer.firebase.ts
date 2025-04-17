@@ -12,10 +12,14 @@ import {
   query,
   where,
   DocumentReference,
+  DocumentData,
+  QueryDocumentSnapshot,
 } from "firebase/firestore";
 
+import type { ApprovedLoan } from "../../marketplace/store/marketplace";
+
 interface AddLoanOfferProps {
-  payload: any;
+  payload: ApprovedLoan;
   lenderWallet: string;
 }
 
@@ -25,12 +29,12 @@ const addLoanOffer = async ({
 }: AddLoanOfferProps): Promise<{
   success: boolean;
   message: string;
-  data?: any;
+  data?: { id: string } & ApprovedLoan;
 }> => {
   try {
     const ref = collection(db, "loan_offers");
 
-    const docRef: DocumentReference = await addDoc(ref, {
+    const docRef: DocumentReference<DocumentData> = await addDoc(ref, {
       ...payload,
       lenderWallet,
       status: "pending",
@@ -43,12 +47,16 @@ const addLoanOffer = async ({
     return {
       success: true,
       message: "Loan offer created successfully",
-      data: { id: docRef.id, ...createdDoc.data() },
+      data: {
+        id: docRef.id,
+        ...(createdDoc.data() as Omit<ApprovedLoan, "id">),
+      },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
-      message: error.message || "Failed to create loan offer",
+      message:
+        error instanceof Error ? error.message : "Failed to create loan offer",
     };
   }
 };
@@ -59,28 +67,28 @@ const getAllLoanOffers = async ({
   status?: string;
 }): Promise<{
   success: boolean;
-  data?: any[];
+  data?: ({ id: string } & ApprovedLoan)[];
   message?: string;
 }> => {
   try {
     const ref = collection(db, "loan_offers");
     const q = query(ref, where("status", "==", status));
-
     const snapshot = await getDocs(q);
 
-    const offers = snapshot.docs.map((doc) => ({
+    const offers = snapshot.docs.map((doc: QueryDocumentSnapshot) => ({
       id: doc.id,
-      ...doc.data(),
+      ...(doc.data() as Omit<ApprovedLoan, "id">),
     }));
 
     return {
       success: true,
       data: offers,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
-      message: error.message || "Error retrieving loan offers",
+      message:
+        error instanceof Error ? error.message : "Error retrieving loan offers",
     };
   }
 };
@@ -105,10 +113,11 @@ const approveLoanOffer = async ({
       success: true,
       message: `Loan offer ${offerId} approved successfully`,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
-      message: error.message || "Failed to approve loan offer",
+      message:
+        error instanceof Error ? error.message : "Failed to approve loan offer",
     };
   }
 };

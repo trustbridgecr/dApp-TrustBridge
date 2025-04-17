@@ -30,12 +30,15 @@ import {
 } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { ApprovedLoan } from "../../store/marketplace";
 
 export default function MarketplaceOffersList() {
-  const [loanOffers, setLoanOffers] = useState<any[]>([]);
+  const [loanOffers, setLoanOffers] = useState<ApprovedLoan[]>([]);
+  const [selectedLoan, setSelectedLoan] = useState<ApprovedLoan | undefined>(
+    undefined,
+  );
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedLoan, setSelectedLoan] = useState<any | undefined>(undefined);
   const [isFilterOpen, setIsFilterOpen] = useState(true);
 
   const [searchTitle, setSearchTitle] = useState("");
@@ -307,7 +310,9 @@ export default function MarketplaceOffersList() {
                 <div className="flex items-center gap-2 text-muted-foreground text-sm mb-4">
                   <User className="h-4 w-4" />
                   <p className="truncate">
-                    {formatAddress(offer.lenderWallet)}
+                    {offer.lenderWallet
+                      ? formatAddress(offer.lenderWallet)
+                      : "Unknown address"}
                   </p>
                 </div>
 
@@ -321,12 +326,12 @@ export default function MarketplaceOffersList() {
                   </div>
                 </div>
 
-                {offer.milestones?.length > 0 && (
+                {offer.milestones && offer.milestones.length > 0 && (
                   <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
                     <Milestone className="h-3.5 w-3.5" />
                     <span>
-                      {offer.milestones.length} milestone
-                      {offer.milestones.length !== 1 ? "s" : ""}
+                      {offer.milestones?.length || 0} milestone
+                      {offer.milestones?.length !== 1 ? "s" : ""}
                     </span>
                   </div>
                 )}
@@ -373,7 +378,7 @@ export default function MarketplaceOffersList() {
                     <div className="flex items-center gap-2 text-muted-foreground text-xs">
                       <User className="h-3.5 w-3.5" />
                       <p className="truncate">
-                        {formatAddress(offer.lenderWallet)}
+                        {formatAddress(offer.lenderWallet || "Unknown")}
                       </p>
                       <span className="text-muted-foreground/50">•</span>
                       <Calendar className="h-3.5 w-3.5" />

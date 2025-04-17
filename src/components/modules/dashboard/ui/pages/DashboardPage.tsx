@@ -30,7 +30,6 @@ import {
   CircleDollarSign,
   BadgeCheck,
   ShieldCheck,
-  ShoppingBag,
 } from "lucide-react";
 import { useDashboard } from "../../hooks/useDashboard.hook";
 
@@ -155,7 +154,7 @@ export function DashboardOverview() {
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
         </div>
         <p className="text-muted-foreground pl-3 border-l-2 border-muted">
-          Welcome back! Here's an overview of your loan activity and financial
+          Welcome back! Here is an overview of your loan activity and financial
           status.
         </p>
       </div>

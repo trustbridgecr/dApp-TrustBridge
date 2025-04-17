@@ -9,7 +9,6 @@ import MyEscrowsTable from "@/components/modules/escrow/ui/tables/MyEscrowsTable
 import MyEscrowsCards from "@/components/modules/escrow/ui/cards/MyEscrowsCards";
 import MyEscrowsFilter from "@/components/modules/escrow/ui/filters/MyEscrowsFilter";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
-import { useState } from "react";
 
 const MyEscrows = () => {
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);

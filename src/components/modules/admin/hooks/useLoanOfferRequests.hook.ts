@@ -62,7 +62,7 @@ export function useLoanOfferRequests() {
       } else {
         toast.error("Failed to approve offer");
       }
-    } catch (error) {
+    } catch {
       toast.error("An error occurred while approving the offer");
     }
   };

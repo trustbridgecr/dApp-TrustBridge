@@ -4,8 +4,7 @@ import useSettings from "./hooks/settings.hook";
 import ProfileSection from "./profileSection";
 
 const Settings = () => {
-  const { currentTab, setCurrentTab, saveProfile, theme, toggleTheme } =
-    useSettings();
+  const { currentTab, saveProfile } = useSettings();
 
   return (
     <div className="flex flex-col h-screen w-full">

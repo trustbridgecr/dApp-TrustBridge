@@ -17,8 +17,6 @@ import SelectField from "@/components/utils/ui/SelectSearch";
 import { Textarea } from "@/components/ui/textarea";
 import {
   DollarSign,
-  Trash2,
-  Plus,
   FileText,
   Briefcase,
   User,
@@ -47,13 +45,10 @@ const InitializeEscrowForm = () => {
     form,
     milestones,
     onSubmit,
-    handleAddMilestone,
-    handleRemoveMilestone,
     handleFieldChange,
     userOptions,
     trustlineOptions,
     showSelect,
-    toggleField,
     isAnyMilestoneEmpty,
   } = useInitializeEscrow();
 
