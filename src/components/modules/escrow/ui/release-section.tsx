@@ -67,7 +67,7 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
         <Button
           onClick={() => setShowConfirmDialog(true)}
           disabled={!areAllMilestonesCompleted || isLoading}
-          className="bg-green-800 hover:bg-green-700"
+          className=" bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"
         >
           Release Funds
         </Button>
