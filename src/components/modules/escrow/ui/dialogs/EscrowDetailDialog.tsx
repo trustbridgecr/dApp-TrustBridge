@@ -30,7 +30,6 @@ import ResolveDisputeEscrowDialog from "./ResolveDisputeEscrowDialog";
 import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
 import {
   Ban,
-  Check,
   CircleCheckBig,
   CircleDollarSign,
   Copy,
@@ -46,6 +45,7 @@ import { toast } from "@/hooks/toast.hook";
 import { useEscrowDialogs } from "./hooks/use-escrow-dialogs.hook";
 import { useEscrowAmounts } from "./hooks/use-escrow-amounts";
 import { useEffect } from "react";
+import { ReleaseSection } from "../release-section";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -248,24 +248,38 @@ const EscrowDetailDialog = ({
                 </span>
                 <div className="flex items-center justify-center">
                   {formatAddress(selectedEscrow.contractId)}
-                  <button
-                    onClick={() =>
-                      copyText(
-                        selectedEscrow?.contractId,
-                        selectedEscrow.contractId,
-                      )
-                    }
-                    className="p-1.5 hover:bg-muted rounded-md transition-colors"
-                    title="Copy Escrow ID"
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      copyText(selectedEscrow.contractId, selectedEscrow.contractId);
+                    }}
                   >
-                    {copiedKeyId ? (
-                      <Check className={cn("h-4 w-4 text-green-700")} />
-                    ) : (
-                      <Copy className={cn("h-4 w-4")} />
-                    )}
-                  </button>
+                    <Copy
+                      size={16}
+                      className={cn(
+                        "text-muted-foreground",
+                        copiedKeyId === selectedEscrow.contractId &&
+                          "text-primary",
+                      )}
+                    />
+                  </Button>
                 </div>
               </p>
+
+              {/* Add Release Section when ready */}
+              {areAllMilestonesCompletedAndFlag && !selectedEscrow.releaseFlag && !selectedEscrow.disputeFlag && (
+                <div className="mt-4">
+                  <ReleaseSection 
+                    escrow={selectedEscrow} 
+                    onSuccess={() => {
+                      dialogStates.successRelease.setIsOpen(true);
+                      handleClose();
+                    }}
+                  />
+                </div>
+              )}
 
               <Button
                 onClick={(e) => {

@@ -24,6 +24,7 @@ import {
   TriangleAlert,
 } from "lucide-react";
 import SkeletonCards from "../utils/SkeletonCards";
+import { ReleaseSection } from "../release-section";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
@@ -195,6 +196,20 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                       </p>
 
                       <ProgressEscrow escrow={escrow} />
+
+                      {/* Add Release Section when ready */}
+                      {escrow.milestones?.every((milestone) => milestone.status === "completed" && milestone.flag === true) && 
+                       !escrow.releaseFlag && 
+                       !escrow.disputeFlag && (
+                        <div className="mt-4">
+                          <ReleaseSection 
+                            escrow={escrow} 
+                            onSuccess={() => {
+                              setIsSuccessReleaseDialogOpen(true);
+                            }}
+                          />
+                        </div>
+                      )}
 
                       <p className="mt-3 text-xs text-muted-foreground text-end italic">
                         <strong>Created:</strong>{" "}
