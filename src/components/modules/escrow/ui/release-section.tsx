@@ -32,8 +32,13 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
       setIsLoading(true);
       const { address } = await kit.getAddress();
       
+      const contractId = escrow.contractId;
+      if (!contractId) {
+        throw new Error("Contract ID is missing");
+      }
+      
       await distributeEscrowEarnings({
-        contractId: escrow.contractId || "",
+        contractId,
         signer: address,
       });
       
