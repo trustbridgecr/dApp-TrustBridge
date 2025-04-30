@@ -40,9 +40,10 @@ export function OfferLoanForm() {
   const { form, fieldArray, onSubmit } = useOfferLoanForm();
   const {
     register,
-    formState: { errors, isSubmitting, isDirty },
+    formState: { errors, isSubmitting, isDirty, isValid },
     trigger,
-    getValues,
+    setError,
+    clearErrors,
   } = form;
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 3;
@@ -53,46 +54,60 @@ export function OfferLoanForm() {
     setShowValidationErrors(false);
   }, [currentStep]);
 
-  const handleNextStep = async () => {
-    if (currentStep < totalSteps) {
-      let isValid = false;
+  const validateCurrentStep = async () => {
+    let isValid = false;
 
-      if (currentStep === 1) {
-        isValid = await trigger(["title", "maxAmount", "description"]);
-        console.log(
-          "Step 1 validation:",
-          isValid,
-          getValues(["title", "maxAmount", "description"]),
-        );
-      } else if (currentStep === 2) {
-        const values = getValues([
-          "approver",
-          "releaseSigner",
-          "platformAddress",
-        ]);
-        isValid = values.every((value) => value.trim() !== "");
-        console.log("Step 2 validation:", isValid, values);
-      } else if (currentStep === 3) {
-        isValid = await trigger(["approver", "releaseSigner", "platformAddress"])
-        console.log("Step 2 validation:", isValid, getValues(["approver", "releaseSigner", "platformAddress"]))
-      }
-
-      if (isValid) {
-        setCurrentStep((prev) => prev + 1);
-
-        window.scrollTo({ top: 0, behavior: "smooth" });
+    if (currentStep === 1) {
+      isValid = await trigger(["title", "maxAmount", "description"], {
+        shouldFocus: true,
+      });
+    } else if (currentStep === 2) {
+      isValid = await trigger(
+        ["approver", "releaseSigner", "platformAddress"],
+        { shouldFocus: true }
+      );
+    } else if (currentStep === 3) {
+      isValid = await trigger(["milestones"], { shouldFocus: true });
+      if (fieldArray.fields.length === 0) {
+        setError("milestones", {
+          type: "manual",
+          message: "Please add at least one milestone",
+        });
+        isValid = false;
       } else {
-        setShowValidationErrors(true);
+        clearErrors("milestones");
       }
+    }
+
+    setShowValidationErrors(!isValid);
+    return isValid;
+  };
+
+  const handleNextStep = async () => {
+    const isValid = await validateCurrentStep();
+    if (isValid) {
+      setCurrentStep((prev) => prev + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   const handlePrevStep = () => {
     if (currentStep > 1) {
       setCurrentStep((prev) => prev - 1);
-
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
+  };
+
+  // Determine if the current step has errors
+  const currentStepHasErrors = () => {
+    if (currentStep === 1) {
+      return !!errors.title || !!errors.maxAmount || !!errors.description;
+    } else if (currentStep === 2) {
+      return !!errors.approver || !!errors.releaseSigner || !!errors.platformAddress;
+    } else if (currentStep === 3) {
+      return !!errors.milestones;
+    }
+    return false;
   };
 
   return (
@@ -117,7 +132,7 @@ export function OfferLoanForm() {
                     ? "bg-emerald-500"
                     : i + 1 < currentStep
                       ? "bg-emerald-200"
-                      : "bg-gray-200",
+                      : "bg-gray-200"
                 )}
               />
             ))}
@@ -152,9 +167,11 @@ export function OfferLoanForm() {
                       "pl-10",
                       errors.title
                         ? "border-rose-500 focus-visible:ring-rose-500"
-                        : "",
+                        : ""
                     )}
-                    {...register("title")}
+                    {...register("title", {
+                      onBlur: () => trigger("title"),
+                    })}
                   />
                 </div>
                 {errors.title && (
@@ -178,9 +195,11 @@ export function OfferLoanForm() {
                       "pl-10",
                       errors.maxAmount
                         ? "border-rose-500 focus-visible:ring-rose-500"
-                        : "",
+                        : ""
                     )}
-                    {...register("maxAmount")}
+                    {...register("maxAmount", {
+                      onBlur: () => trigger("maxAmount"),
+                    })}
                   />
                 </div>
                 {errors.maxAmount && (
@@ -203,9 +222,11 @@ export function OfferLoanForm() {
                 className={cn(
                   errors.description
                     ? "border-rose-500 focus-visible:ring-rose-500"
-                    : "",
+                    : ""
                 )}
-                {...register("description")}
+                {...register("description", {
+                  onBlur: () => trigger("description"),
+                })}
               />
               {errors.description && (
                 <p className="text-xs text-rose-500 flex items-center gap-1 mt-1">
@@ -243,9 +264,11 @@ export function OfferLoanForm() {
                       "pl-10 font-mono text-sm",
                       errors.approver
                         ? "border-rose-500 focus-visible:ring-rose-500"
-                        : "",
+                        : ""
                     )}
-                    {...register("approver")}
+                    {...register("approver", {
+                      onBlur: () => trigger("approver"),
+                    })}
                   />
                 </div>
                 {errors.approver && (
@@ -272,9 +295,11 @@ export function OfferLoanForm() {
                       "pl-10 font-mono text-sm",
                       errors.releaseSigner
                         ? "border-rose-500 focus-visible:ring-rose-500"
-                        : "",
+                        : ""
                     )}
-                    {...register("releaseSigner")}
+                    {...register("releaseSigner", {
+                      onBlur: () => trigger("releaseSigner"),
+                    })}
                   />
                 </div>
                 {errors.releaseSigner && (
@@ -302,9 +327,11 @@ export function OfferLoanForm() {
                     "pl-10 font-mono text-sm",
                     errors.platformAddress
                       ? "border-rose-500 focus-visible:ring-rose-500"
-                      : "",
+                      : ""
                   )}
-                  {...register("platformAddress")}
+                  {...register("platformAddress", {
+                    onBlur: () => trigger("platformAddress"),
+                  })}
                 />
               </div>
               {errors.platformAddress && (
@@ -384,12 +411,14 @@ export function OfferLoanForm() {
                           </div>
                           <Input
                             placeholder="Milestone Description"
-                            {...register(`milestones.${index}.description`)}
+                            {...register(`milestones.${index}.description`, {
+                              onBlur: () => trigger("milestones"),
+                            })}
                             className={cn(
                               "flex-1",
                               errors.milestones?.[index]?.description
                                 ? "border-rose-500 focus-visible:ring-rose-500"
-                                : "",
+                                : ""
                             )}
                           />
                           <Button
@@ -411,7 +440,10 @@ export function OfferLoanForm() {
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => fieldArray.append({ description: "" })}
+                      onClick={() => {
+                        fieldArray.append({ description: "" });
+                        trigger("milestones");
+                      }}
                       className="flex items-center gap-1"
                     >
                       <Plus className="h-4 w-4" /> Add Milestone
@@ -420,10 +452,10 @@ export function OfferLoanForm() {
                 </CardContent>
               </Card>
 
-              {fieldArray.fields.length === 0 && (
+              {errors.milestones && (
                 <p className="text-xs text-rose-500 flex items-center gap-1 mt-1">
                   <AlertCircle className="h-3 w-3" />
-                  Please add at least one milestone
+                  {errors.milestones.message?.toString()}
                 </p>
               )}
             </div>
@@ -440,14 +472,19 @@ export function OfferLoanForm() {
           )}
 
           {currentStep < totalSteps ? (
-            <Button type="button" onClick={handleNextStep} className="gap-1">
+            <Button
+              type="button"
+              disabled={currentStepHasErrors()}
+              onClick={handleNextStep}
+              className="gap-1"
+            >
               Next <ArrowRight className="h-4 w-4" />
             </Button>
           ) : (
             <Button
               type="submit"
               className="bg-gradient-to-r from-emerald-600 to-teal-900 hover:from-emerald-700 hover:to-teal-600 gap-1"
-              disabled={isSubmitting || !isDirty}
+              disabled={isSubmitting || !isDirty || !isValid}
             >
               {isSubmitting ? "Submitting..." : "Submit Loan Offer"}
             </Button>
