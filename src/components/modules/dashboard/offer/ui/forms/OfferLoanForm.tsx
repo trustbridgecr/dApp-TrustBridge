@@ -73,8 +73,8 @@ export function OfferLoanForm() {
         isValid = values.every((value) => value.trim() !== "");
         console.log("Step 2 validation:", isValid, values);
       } else if (currentStep === 3) {
-        isValid = fieldArray.fields.length > 0;
-        console.log("Step 3 validation:", isValid, fieldArray.fields);
+        isValid = await trigger(["approver", "releaseSigner", "platformAddress"])
+        console.log("Step 2 validation:", isValid, getValues(["approver", "releaseSigner", "platformAddress"]))
       }
 
       if (isValid) {

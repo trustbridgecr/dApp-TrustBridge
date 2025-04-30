@@ -1,8 +1,9 @@
-"use client";
+"use client"
 
-import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { useForm, useFieldArray } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -19,11 +20,12 @@ const formSchema = z.object({
       }),
     )
     .optional(),
-});
+})
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = z.infer<typeof formSchema>
 
 export function useOfferLoanForm() {
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,17 +38,20 @@ export function useOfferLoanForm() {
       disputeResolver: "",
       milestones: [],
     },
-  });
+  })
+
 
   const fieldArray = useFieldArray({
     control: form.control,
     name: "milestones",
-  });
+  })
+
 
   const onSubmit = form.handleSubmit((data) => {
-    console.log("Form submitted:", data);
-    alert("Form submitted successfully!");
-  });
 
-  return { form, fieldArray, onSubmit };
+    console.log("Form submitted:", data)
+    alert("Form submitted successfully!")
+  })
+
+  return { form, fieldArray, onSubmit }
 }
