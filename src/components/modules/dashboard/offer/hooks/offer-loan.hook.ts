@@ -1,72 +1,57 @@
-"use client";
+"use client"
 
-import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  OfferLoanSchema,
-  OfferLoanSchemaType,
-} from "../schema/apply-loan.schema";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { useGlobalUIBoundedStore } from "@/core/store/ui";
-import { addLoanOffer } from "../server/offer.firebase";
-import { toast } from "sonner";
+import { useForm, useFieldArray } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+
+
+const formSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  maxAmount: z.string().min(1, "Max amount is required"),
+  description: z.string().min(1, "Description is required"),
+  approver: z.string().min(1, "Approver address is required"),
+  releaseSigner: z.string().min(1, "Release signer address is required"),
+  platformAddress: z.string().min(1, "Platform address is required"),
+  disputeResolver: z.string().optional(),
+  milestones: z
+    .array(
+      z.object({
+        description: z.string().min(1, "Milestone description is required"),
+      }),
+    )
+    .optional(),
+})
+
+type FormValues = z.infer<typeof formSchema>
 
 export function useOfferLoanForm() {
-  const { address, loggedUser } = useGlobalAuthenticationStore();
-  const setIsLoading = useGlobalUIBoundedStore((state) => state.setIsLoading);
 
-  const form = useForm<OfferLoanSchemaType>({
-    resolver: zodResolver(OfferLoanSchema),
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      description: "",
       maxAmount: "",
-      platformFee: "1.5",
+      description: "",
       approver: "",
       releaseSigner: "",
-      disputeResolver:
-        "GBZ7KCIUGD2ME7J7YSQW6WVM2RRNYA3AQWVEKVM2VK5LMQL3CKYARBWX",
       platformAddress: "",
-      milestones: [{ description: "" }],
+      disputeResolver: "",
+      milestones: [],
     },
-  });
+  })
+
 
   const fieldArray = useFieldArray({
     control: form.control,
     name: "milestones",
-  });
+  })
 
-  const onSubmit = form.handleSubmit(async (values) => {
-    if (!address || !loggedUser) {
-      toast.error("User not authenticated");
-      return;
-    }
 
-    setIsLoading(true);
+  const onSubmit = form.handleSubmit((data) => {
 
-    const payload = {
-      ...values,
-      submittedBy: {
-        address,
-        name: `${loggedUser.firstName} ${loggedUser.lastName}`,
-        email: loggedUser.email || "",
-      },
-    };
+    console.log("Form submitted:", data)
+    alert("Form submitted successfully!")
+  })
 
-    const response = await addLoanOffer({
-      payload,
-      lenderWallet: address,
-    });
-
-    if (response.success) {
-      toast.success("Loan offer submitted!");
-      form.reset();
-    } else {
-      toast.error(response.message);
-    }
-
-    setIsLoading(false);
-  });
-
-  return { form, fieldArray, onSubmit };
+  return { form, fieldArray, onSubmit }
 }
