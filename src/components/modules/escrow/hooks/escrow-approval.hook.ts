@@ -23,7 +23,7 @@ export function useApproveEscrow() {
                 type: "approver",
             })
 
-            if (response.success && response.data) {
+            if (response.data) {
                 const pendingApprovalEscrows = response.data.filter((escrow: Escrow) =>
                     escrow.milestones.some((milestone) => milestone.flag === false),
                 )
