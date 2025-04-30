@@ -1,0 +1,12 @@
+{
+  "name": "trustbridge-websocket-server",
+  "version": "1.0.0",
+  "description": "WebSocket server for TrustBridge notifications",
+  "main": "websocket.js",
+  "scripts": {
+    "start": "node websocket.js"
+  },
+  "dependencies": {
+    "ws": "^8.16.0"
+  }
+}

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
+import NotificationButton from "@/components/modules/notifications/NotificationButton";
 import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useEffect, useState } from "react";
 
 export function Header() {
   const router = useRouter();
@@ -42,6 +42,7 @@ export function Header() {
       <SidebarTrigger />
       <div className="flex flex-1 items-center gap-4">
         <div className="ml-auto flex items-center gap-2">
+          {walletConnected && <NotificationButton />}
           {walletConnected ? (
             <Button
               variant="outline"
