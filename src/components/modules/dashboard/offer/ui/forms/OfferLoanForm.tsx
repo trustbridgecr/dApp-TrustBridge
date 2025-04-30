@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import {
   Info,
   Trash2,
@@ -13,75 +13,87 @@ import {
   Milestone,
   ArrowRight,
   AlertCircle,
-} from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { useOfferLoanForm } from "../../hooks/offer-loan.hook"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
+} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useOfferLoanForm } from "../../hooks/offer-loan.hook";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export function OfferLoanForm() {
-  const { form, fieldArray, onSubmit } = useOfferLoanForm()
+  const { form, fieldArray, onSubmit } = useOfferLoanForm();
   const {
     register,
     formState: { errors, isSubmitting, isDirty },
     trigger,
     getValues,
-  } = form
-  const [currentStep, setCurrentStep] = useState(1)
-  const totalSteps = 3
+  } = form;
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 3;
 
-
-  const [showValidationErrors, setShowValidationErrors] = useState(false)
-
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
 
   useEffect(() => {
-    setShowValidationErrors(false)
-  }, [currentStep])
+    setShowValidationErrors(false);
+  }, [currentStep]);
 
   const handleNextStep = async () => {
     if (currentStep < totalSteps) {
-
-      let isValid = false
+      let isValid = false;
 
       if (currentStep === 1) {
-
-        isValid = await trigger(["title", "maxAmount", "description"])
-        console.log("Step 1 validation:", isValid, getValues(["title", "maxAmount", "description"]))
+        isValid = await trigger(["title", "maxAmount", "description"]);
+        console.log(
+          "Step 1 validation:",
+          isValid,
+          getValues(["title", "maxAmount", "description"]),
+        );
       } else if (currentStep === 2) {
-
-        const values = getValues(["approver", "releaseSigner", "platformAddress"])
-        isValid = values.every((value) => value.trim() !== "")
-        console.log("Step 2 validation:", isValid, values)
+        const values = getValues([
+          "approver",
+          "releaseSigner",
+          "platformAddress",
+        ]);
+        isValid = values.every((value) => value.trim() !== "");
+        console.log("Step 2 validation:", isValid, values);
       } else if (currentStep === 3) {
-
-        isValid = fieldArray.fields.length > 0
-        console.log("Step 3 validation:", isValid, fieldArray.fields)
+        isValid = fieldArray.fields.length > 0;
+        console.log("Step 3 validation:", isValid, fieldArray.fields);
       }
-
 
       if (isValid) {
-        setCurrentStep((prev) => prev + 1)
+        setCurrentStep((prev) => prev + 1);
 
-        window.scrollTo({ top: 0, behavior: "smooth" })
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
-
-        setShowValidationErrors(true)
+        setShowValidationErrors(true);
       }
     }
-  }
+  };
 
   const handlePrevStep = () => {
     if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1)
+      setCurrentStep((prev) => prev - 1);
 
-      window.scrollTo({ top: 0, behavior: "smooth" })
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }
+  };
 
   return (
     <Card className="w-full border-muted shadow-sm">
@@ -91,7 +103,9 @@ export function OfferLoanForm() {
             <CardTitle className="text-2xl font-bold">
               <h1 className="text-4xl font-bold">Create Loan Offer</h1>
             </CardTitle>
-            <CardDescription>Define the terms and conditions for your loan offer</CardDescription>
+            <CardDescription>
+              Define the terms and conditions for your loan offer
+            </CardDescription>
           </div>
           <div className="flex items-center gap-1.5">
             {Array.from({ length: totalSteps }).map((_, i) => (
@@ -99,7 +113,11 @@ export function OfferLoanForm() {
                 key={i}
                 className={cn(
                   "h-2 w-8 rounded-full transition-colors",
-                  i + 1 === currentStep ? "bg-emerald-500" : i + 1 < currentStep ? "bg-emerald-200" : "bg-gray-200",
+                  i + 1 === currentStep
+                    ? "bg-emerald-500"
+                    : i + 1 < currentStep
+                      ? "bg-emerald-200"
+                      : "bg-gray-200",
                 )}
               />
             ))}
@@ -111,7 +129,10 @@ export function OfferLoanForm() {
         {currentStep === 1 && (
           <CardContent className="space-y-6 pt-2">
             <div className="flex items-center gap-2 mb-4">
-              <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1">
+              <Badge
+                variant="outline"
+                className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1"
+              >
                 Step 1
               </Badge>
               <h3 className="font-medium">Basic Information</h3>
@@ -127,7 +148,12 @@ export function OfferLoanForm() {
                   <Input
                     id="title"
                     placeholder="Loan title"
-                    className={cn("pl-10", errors.title ? "border-rose-500 focus-visible:ring-rose-500" : "")}
+                    className={cn(
+                      "pl-10",
+                      errors.title
+                        ? "border-rose-500 focus-visible:ring-rose-500"
+                        : "",
+                    )}
                     {...register("title")}
                   />
                 </div>
@@ -148,7 +174,12 @@ export function OfferLoanForm() {
                   <Input
                     id="maxAmount"
                     placeholder="100.00"
-                    className={cn("pl-10", errors.maxAmount ? "border-rose-500 focus-visible:ring-rose-500" : "")}
+                    className={cn(
+                      "pl-10",
+                      errors.maxAmount
+                        ? "border-rose-500 focus-visible:ring-rose-500"
+                        : "",
+                    )}
                     {...register("maxAmount")}
                   />
                 </div>
@@ -169,7 +200,11 @@ export function OfferLoanForm() {
                 id="description"
                 rows={4}
                 placeholder="Describe the purpose and terms of the loan"
-                className={cn(errors.description ? "border-rose-500 focus-visible:ring-rose-500" : "")}
+                className={cn(
+                  errors.description
+                    ? "border-rose-500 focus-visible:ring-rose-500"
+                    : "",
+                )}
                 {...register("description")}
               />
               {errors.description && (
@@ -185,7 +220,10 @@ export function OfferLoanForm() {
         {currentStep === 2 && (
           <CardContent className="space-y-6 pt-2">
             <div className="flex items-center gap-2 mb-4">
-              <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1">
+              <Badge
+                variant="outline"
+                className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1"
+              >
                 Step 2
               </Badge>
               <h3 className="font-medium">Wallet Addresses</h3>
@@ -203,7 +241,9 @@ export function OfferLoanForm() {
                     placeholder="Approver wallet address"
                     className={cn(
                       "pl-10 font-mono text-sm",
-                      errors.approver ? "border-rose-500 focus-visible:ring-rose-500" : "",
+                      errors.approver
+                        ? "border-rose-500 focus-visible:ring-rose-500"
+                        : "",
                     )}
                     {...register("approver")}
                   />
@@ -217,7 +257,10 @@ export function OfferLoanForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="releaseSigner" className="flex items-center gap-1">
+                <Label
+                  htmlFor="releaseSigner"
+                  className="flex items-center gap-1"
+                >
                   Release Signer <span className="text-rose-500">*</span>
                 </Label>
                 <div className="relative">
@@ -227,7 +270,9 @@ export function OfferLoanForm() {
                     placeholder="Signer wallet address"
                     className={cn(
                       "pl-10 font-mono text-sm",
-                      errors.releaseSigner ? "border-rose-500 focus-visible:ring-rose-500" : "",
+                      errors.releaseSigner
+                        ? "border-rose-500 focus-visible:ring-rose-500"
+                        : "",
                     )}
                     {...register("releaseSigner")}
                   />
@@ -242,7 +287,10 @@ export function OfferLoanForm() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="platformAddress" className="flex items-center gap-1">
+              <Label
+                htmlFor="platformAddress"
+                className="flex items-center gap-1"
+              >
                 Platform Address <span className="text-rose-500">*</span>
               </Label>
               <div className="relative">
@@ -252,7 +300,9 @@ export function OfferLoanForm() {
                   placeholder="Platform wallet address"
                   className={cn(
                     "pl-10 font-mono text-sm",
-                    errors.platformAddress ? "border-rose-500 focus-visible:ring-rose-500" : "",
+                    errors.platformAddress
+                      ? "border-rose-500 focus-visible:ring-rose-500"
+                      : "",
                   )}
                   {...register("platformAddress")}
                 />
@@ -266,7 +316,12 @@ export function OfferLoanForm() {
             </div>
 
             <div>
-              <Input readOnly hidden placeholder="Resolver wallet address" {...register("disputeResolver")} />
+              <Input
+                readOnly
+                hidden
+                placeholder="Resolver wallet address"
+                {...register("disputeResolver")}
+              />
             </div>
           </CardContent>
         )}
@@ -274,7 +329,10 @@ export function OfferLoanForm() {
         {currentStep === 3 && (
           <CardContent className="space-y-6 pt-2">
             <div className="flex items-center gap-2 mb-4">
-              <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1">
+              <Badge
+                variant="outline"
+                className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1"
+              >
                 Step 3
               </Badge>
               <h3 className="font-medium">Milestones</h3>
@@ -290,7 +348,10 @@ export function OfferLoanForm() {
                         <Info className="h-4 w-4 text-muted-foreground ml-1" />
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Define one or more conditions for the borrower to meet.</p>
+                        <p>
+                          Define one or more conditions for the borrower to
+                          meet.
+                        </p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -302,15 +363,24 @@ export function OfferLoanForm() {
                   {fieldArray.fields.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-6 text-center">
                       <Milestone className="h-10 w-10 text-muted-foreground mb-2" />
-                      <p className="text-muted-foreground">No milestones added yet</p>
-                      <p className="text-xs text-muted-foreground">Add at least one milestone to continue</p>
+                      <p className="text-muted-foreground">
+                        No milestones added yet
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Add at least one milestone to continue
+                      </p>
                     </div>
                   ) : (
                     <div className="space-y-3">
                       {fieldArray.fields.map((field, index) => (
-                        <div key={field.id} className="flex items-center gap-2 group">
+                        <div
+                          key={field.id}
+                          className="flex items-center gap-2 group"
+                        >
                           <div className="bg-muted/50 rounded-full p-1.5 flex-shrink-0">
-                            <span className="text-xs font-medium">{index + 1}</span>
+                            <span className="text-xs font-medium">
+                              {index + 1}
+                            </span>
                           </div>
                           <Input
                             placeholder="Milestone Description"
@@ -391,5 +461,5 @@ export function OfferLoanForm() {
         </CardFooter>
       </form>
     </Card>
-  )
+  );
 }
