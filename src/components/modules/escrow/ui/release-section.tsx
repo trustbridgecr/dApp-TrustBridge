@@ -11,8 +11,9 @@ import {
 import { toast } from "@/hooks/toast.hook";
 import { distributeEscrowEarnings } from "../services/distribute-escrow-earnings.service";
 import { Escrow } from "@/@types/escrow.entity";
-import { CircleDollarSign } from "lucide-react";
+import { CircleDollarSign, AlertTriangle } from "lucide-react";
 import { kit } from "@/components/modules/auth/wallet/constants/wallet-kit.constant";
+import { getErrorType, ERROR_MESSAGES } from "@/utils/errors/escrow-errors";
 
 interface ReleaseSectionProps {
   escrow: Escrow;
@@ -26,6 +27,11 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
   const areAllMilestonesCompleted = escrow.milestones?.every(
     (milestone) => milestone.status === "completed" && milestone.flag === true
   );
+
+  // If milestones are not completed, don't render anything
+  if (!areAllMilestonesCompleted) {
+    return null;
+  }
 
   const handleRelease = async () => {
     try {
@@ -49,9 +55,24 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
       
       onSuccess?.();
     } catch (error) {
+      console.error("Error releasing escrow funds:", error);
+      
+      let errorMessage = "Failed to release escrow funds";
+      
+      if (error instanceof Error) {
+        // Handle specific error types if needed
+        if (error.message.includes("insufficient funds")) {
+          errorMessage = "Insufficient funds to complete the transaction";
+        } else if (error.message.includes("rejected")) {
+          errorMessage = "Transaction was rejected. Please try again";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to release escrow funds",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -71,8 +92,8 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
         </div>
         <Button
           onClick={() => setShowConfirmDialog(true)}
-          disabled={!areAllMilestonesCompleted || isLoading}
-          className=" bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"
+          disabled={isLoading}
+          className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"
         >
           Release Funds
         </Button>
@@ -85,8 +106,14 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
               <CircleDollarSign className="text-green-800" size={24} />
               <DialogTitle>Confirm Release</DialogTitle>
             </div>
-            <DialogDescription>
-              Are you sure you want to release the escrow funds? This action cannot be undone.
+            <DialogDescription className="space-y-2">
+              <p>Are you sure you want to release the escrow funds? This action cannot be undone.</p>
+              <div className="flex items-center gap-2 mt-2 p-2 bg-yellow-50 rounded-md">
+                <AlertTriangle className="text-yellow-600" size={16} />
+                <span className="text-sm text-yellow-600">
+                  Please ensure your wallet is connected and has sufficient funds for gas fees.
+                </span>
+              </div>
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -100,7 +127,7 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
             <Button
               onClick={handleRelease}
               disabled={isLoading}
-              className="bg-green-800 hover:bg-green-700"
+              className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"
             >
               {isLoading ? "Releasing..." : "Confirm Release"}
             </Button>

@@ -197,10 +197,8 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
 
                       <ProgressEscrow escrow={escrow} />
 
-                      {/* Add Release Section when ready */}
-                      {escrow.milestones?.every((milestone) => milestone.status === "completed" && milestone.flag === true) && 
-                       !escrow.releaseFlag && 
-                       !escrow.disputeFlag && (
+                      {/* Show Release Section when escrow is pending release */}
+                      {pendingRelease && (
                         <div className="mt-4">
                           <ReleaseSection 
                             escrow={escrow} 
