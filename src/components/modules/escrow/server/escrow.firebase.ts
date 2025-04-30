@@ -87,10 +87,25 @@ const getAllEscrowsByUser = async ({
       query(collectionRef, where(type, "==", address)),
     );
 
-    const escrowList = escrowCollectionSnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
+    const escrowList = escrowCollectionSnapshot.docs.map((doc) => {
+      const data = doc.data();
+
+      const safeTimestamps = (field: any) =>
+        field?.seconds ? new Date(field.seconds * 1000) : null;
+
+      return {
+        ...data,
+        id: doc.id,
+        createdAt: safeTimestamps(data.createdAt),
+        updatedAt: safeTimestamps(data.updatedAt),
+        milestones: Array.isArray(data.milestones)
+          ? data.milestones.map((m) => ({
+              ...m,
+              completedAt: safeTimestamps(m.completedAt),
+            }))
+          : [],
+      };
+    });
 
     return { success: false, data: escrowList };
   } catch (error: any) {
