@@ -6,8 +6,11 @@ import { useGlobalAuthenticationSlice } from "./slices/authentication.slice";
 import { AuthenticationGlobalStore } from "./@types/authentication.entity";
 import { TrustlineGlobalStore } from "./@types/trustlines.entity";
 import { useGlobalTrustlinesSlice } from "./slices/trustlines.slice";
+import { DisputeGlobalStore } from "./@types/dispute.entity";
+import { useGlobalDisputeSlice } from "./slices/dispute.slice";
 
-type GlobalState = EscrowGlobalStore & TrustlineGlobalStore;
+// Update GlobalState type to include disputes
+type GlobalState = EscrowGlobalStore & TrustlineGlobalStore & DisputeGlobalStore;
 type AuthState = AuthenticationGlobalStore;
 
 const devtoolsOptions: DevtoolsOptions = {
@@ -43,6 +46,7 @@ export const useGlobalBoundedStore = create<GlobalState>()(
     (...a) => ({
       ...useGlobalEscrowsSlice(...a),
       ...useGlobalTrustlinesSlice(...a),
+      ...useGlobalDisputeSlice(...a), // Add the dispute slice
     }),
     devtoolsOptions,
   ),
@@ -58,3 +62,14 @@ export const useGlobalAuthenticationStore = create<AuthState>()(
     },
   ),
 );
+
+// Export a convenient hook to use as a shorthand for both stores
+export const useStore = () => {
+  const boundedStore = useGlobalBoundedStore();
+  const authStore = useGlobalAuthenticationStore();
+  
+  return {
+    ...boundedStore,
+    ...authStore,
+  };
+};
