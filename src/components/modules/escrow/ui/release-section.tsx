@@ -13,7 +13,6 @@ import { distributeEscrowEarnings } from "../services/distribute-escrow-earnings
 import { Escrow } from "@/@types/escrow.entity";
 import { CircleDollarSign, AlertTriangle } from "lucide-react";
 import { kit } from "@/components/modules/auth/wallet/constants/wallet-kit.constant";
-import { getErrorType, ERROR_MESSAGES } from "@/utils/errors/escrow-errors";
 
 interface ReleaseSectionProps {
   escrow: Escrow;
@@ -60,10 +59,10 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
       let errorMessage = "Failed to release escrow funds";
       
       if (error instanceof Error) {
-        // Handle specific error types if needed
-        if (error.message.includes("insufficient funds")) {
+        // Handle specific error types
+        if (error.message.toLowerCase().includes("insufficient funds")) {
           errorMessage = "Insufficient funds to complete the transaction";
-        } else if (error.message.includes("rejected")) {
+        } else if (error.message.toLowerCase().includes("rejected")) {
           errorMessage = "Transaction was rejected. Please try again";
         } else {
           errorMessage = error.message;
