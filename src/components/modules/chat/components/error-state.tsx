@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import { AlertCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ErrorStateProps {
-  message: string
-  onRetry?: () => void
+  message: string;
+  onRetry?: () => void;
 }
 
 export function ErrorState({ message, onRetry }: ErrorStateProps) {
@@ -25,5 +25,5 @@ export function ErrorState({ message, onRetry }: ErrorStateProps) {
         )}
       </div>
     </div>
-  )
-} 
+  );
+}
