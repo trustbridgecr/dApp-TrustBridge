@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Menu } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Chat, Message, ChatState } from "./types";
 import { LoadingState } from "./components/loading-state";
 import { ErrorState } from "./components/error-state";
@@ -66,6 +66,15 @@ export function ChatWindow() {
   });
   const [message, setMessage] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const messageEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [state.activeChat?.messages]);
 
   const handleSendMessage = () => {
     if (!message.trim() || !state.activeChat) return;
@@ -100,48 +109,64 @@ export function ChatWindow() {
 
     setMessage("");
 
-    // Simulate message being sent
+    // Simulate message being sent with error handling
     setTimeout(() => {
-      const sentMessage = { ...newMessage, status: "sent" as const };
-      const updatedChatWithSent = {
-        ...updatedChat,
-        messages: updatedChat.messages.map((msg) =>
-          msg.id === newMessage.id ? sentMessage : msg,
-        ),
-      };
+      try {
+        if (Math.random() < 0.2) {
+          throw new Error('Failed to send message')
+        }
 
-      setState((prev) => ({
-        ...prev,
-        chats: prev.chats.map((chat) =>
-          chat.id === updatedChatWithSent.id ? updatedChatWithSent : chat,
-        ),
-        activeChat: updatedChatWithSent,
-      }));
+        const sentMessage = { ...newMessage, status: 'sent' as const }
+        const updatedChatWithSent = {
+          ...updatedChat,
+          messages: updatedChat.messages.map(msg =>
+            msg.id === newMessage.id ? sentMessage : msg
+          )
+        }
 
-      // Simulate message being delivered
-      setTimeout(() => {
-        const deliveredMessage = {
-          ...sentMessage,
-          status: "delivered" as const,
-        };
-        const updatedChatWithDelivered = {
-          ...updatedChatWithSent,
-          messages: updatedChatWithSent.messages.map((msg) =>
-            msg.id === sentMessage.id ? deliveredMessage : msg,
-          ),
-        };
-
-        setState((prev) => ({
+        setState(prev => ({
           ...prev,
-          chats: prev.chats.map((chat) =>
-            chat.id === updatedChatWithDelivered.id
-              ? updatedChatWithDelivered
-              : chat,
+          chats: prev.chats.map(chat =>
+            chat.id === updatedChatWithSent.id ? updatedChatWithSent : chat
           ),
-          activeChat: updatedChatWithDelivered,
-        }));
-      }, 1000);
-    }, 1000);
+          activeChat: updatedChatWithSent
+        }))
+
+        setTimeout(() => {
+          const deliveredMessage = { ...sentMessage, status: 'delivered' as const }
+          const updatedChatWithDelivered = {
+            ...updatedChatWithSent,
+            messages: updatedChatWithSent.messages.map(msg =>
+              msg.id === sentMessage.id ? deliveredMessage : msg
+            )
+          }
+
+          setState(prev => ({
+            ...prev,
+            chats: prev.chats.map(chat =>
+              chat.id === updatedChatWithDelivered.id ? updatedChatWithDelivered : chat
+            ),
+            activeChat: updatedChatWithDelivered
+          }))
+        }, 1000)
+      } catch (error: unknown) {
+        console.error('Error sending message:', error)
+        const errorMessage = { ...newMessage, status: 'error' as const }
+        const updatedChatWithError = {
+          ...updatedChat,
+          messages: updatedChat.messages.map(msg =>
+            msg.id === newMessage.id ? errorMessage : msg
+          )
+        }
+        setState(prev => ({
+          ...prev,
+          chats: prev.chats.map(chat =>
+            chat.id === updatedChatWithError.id ? updatedChatWithError : chat
+          ),
+          activeChat: updatedChatWithError
+        }))
+      }
+    }, 1000)
   };
 
   if (state.isLoading) {
@@ -199,7 +224,7 @@ export function ChatWindow() {
             >
               <div className="relative">
                 <Avatar>
-                  <AvatarImage src={chat.avatar} />
+                  <AvatarImage src={chat.avatar} alt={`${chat.name}'s avatar`} />
                   <AvatarFallback>{chat.name[0]}</AvatarFallback>
                 </Avatar>
                 {chat.status === "online" && (
@@ -244,7 +269,7 @@ export function ChatWindow() {
             <div className="flex items-center gap-3 p-4 border-b dark:border-[#1E3A5F] border-gray-200">
               <div className="relative">
                 <Avatar>
-                  <AvatarImage src={state.activeChat.avatar} />
+                  <AvatarImage src={state.activeChat.avatar} alt={`${state.activeChat.name}'s avatar`} />
                   <AvatarFallback>{state.activeChat.name[0]}</AvatarFallback>
                 </Avatar>
                 {state.activeChat.status === "online" && (
@@ -271,6 +296,7 @@ export function ChatWindow() {
                 {state.activeChat.messages.map((message) => (
                   <MessageBubble key={message.id} message={message} />
                 ))}
+                <div ref={messageEndRef} />
               </div>
             </ScrollArea>
 
