@@ -113,60 +113,65 @@ export function ChatWindow() {
     setTimeout(() => {
       try {
         if (Math.random() < 0.2) {
-          throw new Error('Failed to send message')
+          throw new Error("Failed to send message");
         }
 
-        const sentMessage = { ...newMessage, status: 'sent' as const }
+        const sentMessage = { ...newMessage, status: "sent" as const };
         const updatedChatWithSent = {
           ...updatedChat,
-          messages: updatedChat.messages.map(msg =>
-            msg.id === newMessage.id ? sentMessage : msg
-          )
-        }
-
-        setState(prev => ({
-          ...prev,
-          chats: prev.chats.map(chat =>
-            chat.id === updatedChatWithSent.id ? updatedChatWithSent : chat
+          messages: updatedChat.messages.map((msg) =>
+            msg.id === newMessage.id ? sentMessage : msg,
           ),
-          activeChat: updatedChatWithSent
-        }))
+        };
+
+        setState((prev) => ({
+          ...prev,
+          chats: prev.chats.map((chat) =>
+            chat.id === updatedChatWithSent.id ? updatedChatWithSent : chat,
+          ),
+          activeChat: updatedChatWithSent,
+        }));
 
         setTimeout(() => {
-          const deliveredMessage = { ...sentMessage, status: 'delivered' as const }
+          const deliveredMessage = {
+            ...sentMessage,
+            status: "delivered" as const,
+          };
           const updatedChatWithDelivered = {
             ...updatedChatWithSent,
-            messages: updatedChatWithSent.messages.map(msg =>
-              msg.id === sentMessage.id ? deliveredMessage : msg
-            )
-          }
-
-          setState(prev => ({
-            ...prev,
-            chats: prev.chats.map(chat =>
-              chat.id === updatedChatWithDelivered.id ? updatedChatWithDelivered : chat
+            messages: updatedChatWithSent.messages.map((msg) =>
+              msg.id === sentMessage.id ? deliveredMessage : msg,
             ),
-            activeChat: updatedChatWithDelivered
-          }))
-        }, 1000)
+          };
+
+          setState((prev) => ({
+            ...prev,
+            chats: prev.chats.map((chat) =>
+              chat.id === updatedChatWithDelivered.id
+                ? updatedChatWithDelivered
+                : chat,
+            ),
+            activeChat: updatedChatWithDelivered,
+          }));
+        }, 1000);
       } catch (error: unknown) {
-        console.error('Error sending message:', error)
-        const errorMessage = { ...newMessage, status: 'error' as const }
+        console.error("Error sending message:", error);
+        const errorMessage = { ...newMessage, status: "error" as const };
         const updatedChatWithError = {
           ...updatedChat,
-          messages: updatedChat.messages.map(msg =>
-            msg.id === newMessage.id ? errorMessage : msg
-          )
-        }
-        setState(prev => ({
-          ...prev,
-          chats: prev.chats.map(chat =>
-            chat.id === updatedChatWithError.id ? updatedChatWithError : chat
+          messages: updatedChat.messages.map((msg) =>
+            msg.id === newMessage.id ? errorMessage : msg,
           ),
-          activeChat: updatedChatWithError
-        }))
+        };
+        setState((prev) => ({
+          ...prev,
+          chats: prev.chats.map((chat) =>
+            chat.id === updatedChatWithError.id ? updatedChatWithError : chat,
+          ),
+          activeChat: updatedChatWithError,
+        }));
       }
-    }, 1000)
+    }, 1000);
   };
 
   if (state.isLoading) {
@@ -224,7 +229,10 @@ export function ChatWindow() {
             >
               <div className="relative">
                 <Avatar>
-                  <AvatarImage src={chat.avatar} alt={`${chat.name}'s avatar`} />
+                  <AvatarImage
+                    src={chat.avatar}
+                    alt={`${chat.name}'s avatar`}
+                  />
                   <AvatarFallback>{chat.name[0]}</AvatarFallback>
                 </Avatar>
                 {chat.status === "online" && (
@@ -269,7 +277,10 @@ export function ChatWindow() {
             <div className="flex items-center gap-3 p-4 border-b dark:border-[#1E3A5F] border-gray-200">
               <div className="relative">
                 <Avatar>
-                  <AvatarImage src={state.activeChat.avatar} alt={`${state.activeChat.name}'s avatar`} />
+                  <AvatarImage
+                    src={state.activeChat.avatar}
+                    alt={`${state.activeChat.name}'s avatar`}
+                  />
                   <AvatarFallback>{state.activeChat.name[0]}</AvatarFallback>
                 </Avatar>
                 {state.activeChat.status === "online" && (

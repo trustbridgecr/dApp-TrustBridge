@@ -5,7 +5,9 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar";
 
 import { cn } from "@/lib/utils";
 
-type AvatarProps = React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & {
+type AvatarProps = React.ComponentPropsWithoutRef<
+  typeof AvatarPrimitive.Root
+> & {
   className?: string;
 };
 
@@ -16,7 +18,9 @@ type AvatarImageProps = Omit<
   alt: string;
 } & ({ "aria-hidden": true } | { alt: string });
 
-type AvatarFallbackProps = React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback> & {
+type AvatarFallbackProps = React.ComponentPropsWithoutRef<
+  typeof AvatarPrimitive.Fallback
+> & {
   className?: string;
 };
 
