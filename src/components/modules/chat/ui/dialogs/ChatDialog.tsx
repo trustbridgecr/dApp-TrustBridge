@@ -92,6 +92,8 @@ export function ChatWindow() {
     // Update active chat with new message
     const updatedChat = {
       ...state.activeChat,
+      lastMessage: newMessage.content,
+      unread: 0,
       messages: [...state.activeChat.messages, newMessage],
     };
 
@@ -150,7 +152,10 @@ export function ChatWindow() {
                 ? updatedChatWithDelivered
                 : chat,
             ),
-            activeChat: updatedChatWithDelivered,
+            activeChat:
+              prev.activeChat?.id === updatedChatWithSent.id
+                ? updatedChatWithSent
+                : prev.activeChat,
           }));
         }, 1000);
       } catch (error: unknown) {
