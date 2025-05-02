@@ -45,7 +45,7 @@ import { toast } from "@/hooks/toast.hook";
 import { useEscrowDialogs } from "./hooks/use-escrow-dialogs.hook";
 import { useEscrowAmounts } from "./hooks/use-escrow-amounts";
 import { useEffect } from "react";
-import { ReleaseSection } from "../release-section";
+import { ReleaseSection} from "../pages/ReleaseSection";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;

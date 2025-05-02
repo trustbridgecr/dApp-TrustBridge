@@ -24,7 +24,7 @@ import {
   TriangleAlert,
 } from "lucide-react";
 import SkeletonCards from "../utils/SkeletonCards";
-import { ReleaseSection } from "../release-section";
+import { ReleaseSection } from "../pages/ReleaseSection";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
