@@ -7,10 +7,9 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Menu } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { Chat, Message, ChatState } from "./types";
-import { LoadingState } from "./components/loading-state";
-import { ErrorState } from "./components/error-state";
-import { MessageBubble } from "./components/message-bubble";
+import { Chat, Message, ChatState } from "@/@types/chat.entity";
+import Loader from "@/components/utils/ui/Loader";
+import { MessageBubble } from "../components/message-bubble";
 
 const mockChats: Chat[] = [
   {
@@ -175,24 +174,23 @@ export function ChatWindow() {
   };
 
   if (state.isLoading) {
-    return <LoadingState />;
+    return <Loader isLoading={state.isLoading} />;
   }
 
   if (state.error) {
     return (
-      <ErrorState
-        message={state.error}
-        onRetry={() => setState((prev) => ({ ...prev, error: null }))}
-      />
+      <div className="flex items-center justify-center h-full">
+        <p className="text-red-500">{state.error}</p>
+      </div>
     );
   }
 
   return (
-    <div className="flex h-screen w-full">
+    <div className="flex flex-1 w-full bg-[#151515]">
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-background border dark:border-[#1E3A5F] rounded-md"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-background border  rounded-md"
       >
         <Menu className="w-6 h-6" />
       </button>
@@ -200,7 +198,7 @@ export function ChatWindow() {
       {/* Chat List */}
       <div
         className={cn(
-          "w-80 border-r dark:border-[#1E3A5F] border-gray-200 flex flex-col bg-background",
+          "w-80 border-r flex flex-col bg-[#151515]",
           "fixed lg:relative h-full z-40",
           "transition-transform duration-300 ease-in-out",
           isMobileMenuOpen
@@ -208,7 +206,7 @@ export function ChatWindow() {
             : "-translate-x-full lg:translate-x-0",
         )}
       >
-        <div className="p-4 border-b dark:border-[#1E3A5F] border-gray-200">
+        <div className="p-4 border-b">
           <h2 className="text-lg font-semibold dark:text-white text-gray-900">
             Chats
           </h2>
@@ -218,9 +216,8 @@ export function ChatWindow() {
             <div
               key={chat.id}
               className={cn(
-                "flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1E3A5F]/50",
-                state.activeChat?.id === chat.id &&
-                  "bg-gray-100 dark:bg-[#1E3A5F]/50",
+                "flex items-center gap-3 p-4 cursor-pointer hover:bg-[#222]",
+                state.activeChat?.id === chat.id && "bg-[#212121]",
               )}
               onClick={() => {
                 setState((prev) => ({ ...prev, activeChat: chat }));
@@ -236,7 +233,7 @@ export function ChatWindow() {
                   <AvatarFallback>{chat.name[0]}</AvatarFallback>
                 </Avatar>
                 {chat.status === "online" && (
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
+                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
@@ -260,7 +257,7 @@ export function ChatWindow() {
                 </div>
               </div>
               {chat.unread > 0 && (
-                <div className="flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-[#00FFFF] rounded-full">
+                <div className="flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-emerald-600 rounded-full">
                   {chat.unread}
                 </div>
               )}
@@ -270,11 +267,11 @@ export function ChatWindow() {
       </div>
 
       {/* Chat Window */}
-      <div className="flex-1 flex flex-col bg-background lg:pl-0 pl-12">
+      <div className="flex-1 flex flex-col bg-[#151515] lg:pl-0 pl-12">
         {state.activeChat ? (
           <>
             {/* Chat Header */}
-            <div className="flex items-center gap-3 p-4 border-b dark:border-[#1E3A5F] border-gray-200">
+            <div className="flex items-center gap-3 p-4 border-b">
               <div className="relative">
                 <Avatar>
                   <AvatarImage
@@ -284,7 +281,7 @@ export function ChatWindow() {
                   <AvatarFallback>{state.activeChat.name[0]}</AvatarFallback>
                 </Avatar>
                 {state.activeChat.status === "online" && (
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
+                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2" />
                 )}
               </div>
               <div>
@@ -312,19 +309,19 @@ export function ChatWindow() {
             </ScrollArea>
 
             {/* Message Input */}
-            <div className="p-4 border-t dark:border-[#1E3A5F] border-gray-200">
+            <div className="p-4 border-t">
               <div className="flex gap-2">
                 <Input
                   placeholder="Type a message..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                  className="flex-1"
+                  className="flex-1 bg-[#222] border text-white placeholder:text-white focus:ring-emerald-600 focus:border-emerald-600"
                 />
                 <Button
                   onClick={handleSendMessage}
                   disabled={!message.trim()}
-                  className="bg-[#00FFFF]/10 hover:bg-[#00FFFF]/20 text-[#00FFFF]"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
                 >
                   <Send className="w-4 h-4" />
                 </Button>

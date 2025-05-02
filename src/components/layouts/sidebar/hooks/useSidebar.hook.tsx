@@ -11,6 +11,7 @@ import {
   ShoppingBag,
   CloudUpload,
   Bell,
+  MessageSquare,
 } from "lucide-react";
 
 export function useTrustBridgeSidebar() {
@@ -83,6 +84,18 @@ export function useTrustBridgeSidebar() {
           icon: <ShoppingBag className="h-4 w-4" />,
           label: "Explore Offers",
           active: pathname.startsWith("/dashboard/marketplace"),
+        },
+      ],
+    },
+    {
+      section: "Communication",
+      items: [
+        {
+          href: "/dashboard/chat",
+          icon: <MessageSquare className="h-4 w-4" />,
+          label: "Chat",
+          active: pathname === "/dashboard/chat",
+          notification: false,
         },
       ],
     },
