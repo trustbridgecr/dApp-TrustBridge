@@ -33,7 +33,7 @@ export default function LoanOfferRequests() {
 
   if (loading) {
     return (
-      <div className="p-6 md:p-8 flex flex-col gap-6">
+      <div className="p-6 md:p-8 mb-6 lex flex-col gap-6">
         <div className="space-y-2">
           <Skeleton className="h-10 w-64" />
           <Skeleton className="h-5 w-full max-w-2xl" />
@@ -59,7 +59,7 @@ export default function LoanOfferRequests() {
   }
 
   return (
-    <div className="p-6 md:p-8 flex flex-col gap-6">
+    <div className="p-6 md:p-8 flex mb-6 flex-col gap-6">
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <div className="h-8 w-1 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full" />
