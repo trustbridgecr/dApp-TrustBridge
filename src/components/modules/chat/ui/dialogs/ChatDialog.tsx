@@ -75,10 +75,7 @@ export function ChatDialog() {
     scrollToBottom();
   }, [state.activeChat?.messages]);
 
-  const simulateSendMessage = (
-    message: Message,
-    chatToUpdate: Chat
-  ) => {
+  const simulateSendMessage = (message: Message, chatToUpdate: Chat) => {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         try {
@@ -90,14 +87,14 @@ export function ChatDialog() {
           const updatedChatWithSent = {
             ...chatToUpdate,
             messages: chatToUpdate.messages.map((msg) =>
-              msg.id === message.id ? sentMessage : msg
+              msg.id === message.id ? sentMessage : msg,
             ),
           };
 
           setState((prev) => ({
             ...prev,
             chats: prev.chats.map((chat) =>
-              chat.id === updatedChatWithSent.id ? updatedChatWithSent : chat
+              chat.id === updatedChatWithSent.id ? updatedChatWithSent : chat,
             ),
             activeChat:
               prev.activeChat?.id === updatedChatWithSent.id
@@ -113,7 +110,7 @@ export function ChatDialog() {
             const updatedChatWithDelivered = {
               ...updatedChatWithSent,
               messages: updatedChatWithSent.messages.map((msg) =>
-                msg.id === sentMessage.id ? deliveredMessage : msg
+                msg.id === sentMessage.id ? deliveredMessage : msg,
               ),
             };
 
@@ -122,7 +119,7 @@ export function ChatDialog() {
               chats: prev.chats.map((chat) =>
                 chat.id === updatedChatWithDelivered.id
                   ? updatedChatWithDelivered
-                  : chat
+                  : chat,
               ),
               activeChat:
                 prev.activeChat?.id === updatedChatWithDelivered.id
@@ -137,13 +134,13 @@ export function ChatDialog() {
           const updatedChatWithError = {
             ...chatToUpdate,
             messages: chatToUpdate.messages.map((msg) =>
-              msg.id === message.id ? errorMessage : msg
+              msg.id === message.id ? errorMessage : msg,
             ),
           };
           setState((prev) => ({
             ...prev,
             chats: prev.chats.map((chat) =>
-              chat.id === updatedChatWithError.id ? updatedChatWithError : chat
+              chat.id === updatedChatWithError.id ? updatedChatWithError : chat,
             ),
             activeChat:
               prev.activeChat?.id === updatedChatWithError.id
@@ -198,7 +195,7 @@ export function ChatDialog() {
   const handleRetryMessage = (messageId: string) => {
     if (!state.activeChat) return;
     const failedMessage = state.activeChat.messages.find(
-      (msg) => msg.id === messageId && msg.status === "error"
+      (msg) => msg.id === messageId && msg.status === "error",
     );
     if (!failedMessage) return;
     const retryMessage: Message = {
@@ -211,7 +208,7 @@ export function ChatDialog() {
       messages: [...state.activeChat.messages, retryMessage],
     };
     const updatedChats = state.chats.map((chat) =>
-      chat.id === updatedChat.id ? updatedChat : chat
+      chat.id === updatedChat.id ? updatedChat : chat,
     );
     setState((prev) => ({
       ...prev,
