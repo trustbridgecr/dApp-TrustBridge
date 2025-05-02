@@ -56,7 +56,7 @@ const mockChats: Chat[] = [
   },
 ];
 
-export function ChatWindow() {
+export function ChatDialog() {
   const [state, setState] = useState<ChatState>({
     isLoading: false,
     error: null,
@@ -178,6 +178,89 @@ export function ChatWindow() {
     }, 1000);
   };
 
+  const handleRetryMessage = (messageId: string) => {
+    if (!state.activeChat) return;
+    const failedMessage = state.activeChat.messages.find(
+      (msg) => msg.id === messageId && msg.status === "error",
+    );
+    if (!failedMessage) return;
+    const retryMessage: Message = {
+      ...failedMessage,
+      id: Date.now().toString(),
+      status: "sending",
+    };
+    const updatedChat = {
+      ...state.activeChat,
+      messages: [...state.activeChat.messages, retryMessage],
+    };
+    const updatedChats = state.chats.map((chat) =>
+      chat.id === updatedChat.id ? updatedChat : chat,
+    );
+    setState((prev) => ({
+      ...prev,
+      chats: updatedChats,
+      activeChat: updatedChat,
+    }));
+    setTimeout(() => {
+      try {
+        if (Math.random() < 0.2) {
+          throw new Error("Failed to send message");
+        }
+        const sentMessage = { ...retryMessage, status: "sent" as const };
+        const updatedChatWithSent = {
+          ...updatedChat,
+          messages: updatedChat.messages.map((msg) =>
+            msg.id === retryMessage.id ? sentMessage : msg,
+          ),
+        };
+        setState((prev) => ({
+          ...prev,
+          chats: prev.chats.map((chat) =>
+            chat.id === updatedChatWithSent.id ? updatedChatWithSent : chat,
+          ),
+          activeChat: updatedChatWithSent,
+        }));
+        setTimeout(() => {
+          const deliveredMessage = {
+            ...sentMessage,
+            status: "delivered" as const,
+          };
+          const updatedChatWithDelivered = {
+            ...updatedChatWithSent,
+            messages: updatedChatWithSent.messages.map((msg) =>
+              msg.id === sentMessage.id ? deliveredMessage : msg,
+            ),
+          };
+          setState((prev) => ({
+            ...prev,
+            chats: prev.chats.map((chat) =>
+              chat.id === updatedChatWithDelivered.id
+                ? updatedChatWithDelivered
+                : chat,
+            ),
+            activeChat: updatedChatWithDelivered,
+          }));
+        }, 1000);
+      } catch (error: unknown) {
+        console.error("Error sending message:", error);
+        const errorMessage = { ...retryMessage, status: "error" as const };
+        const updatedChatWithError = {
+          ...updatedChat,
+          messages: updatedChat.messages.map((msg) =>
+            msg.id === retryMessage.id ? errorMessage : msg,
+          ),
+        };
+        setState((prev) => ({
+          ...prev,
+          chats: prev.chats.map((chat) =>
+            chat.id === updatedChatWithError.id ? updatedChatWithError : chat,
+          ),
+          activeChat: updatedChatWithError,
+        }));
+      }
+    }, 1000);
+  };
+
   if (state.isLoading) {
     return <Loader isLoading={state.isLoading} />;
   }
@@ -191,7 +274,7 @@ export function ChatWindow() {
   }
 
   return (
-    <div className="flex flex-1 w-full bg-[#151515]">
+    <div className="flex flex-1 w-full bg-background">
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -203,7 +286,7 @@ export function ChatWindow() {
       {/* Chat List */}
       <div
         className={cn(
-          "w-80 border-r flex flex-col bg-[#151515]",
+          "w-80 border-r flex flex-col bg-background",
           "fixed lg:relative h-full z-40",
           "transition-transform duration-300 ease-in-out",
           isMobileMenuOpen
@@ -221,8 +304,8 @@ export function ChatWindow() {
             <div
               key={chat.id}
               className={cn(
-                "flex items-center gap-3 p-4 cursor-pointer hover:bg-[#222]",
-                state.activeChat?.id === chat.id && "bg-[#212121]",
+                "flex items-center gap-3 p-4 cursor-pointer hover:bg-muted/50",
+                state.activeChat?.id === chat.id && "bg-muted",
               )}
               onClick={() => {
                 setState((prev) => ({ ...prev, activeChat: chat }));
@@ -272,7 +355,7 @@ export function ChatWindow() {
       </div>
 
       {/* Chat Window */}
-      <div className="flex-1 flex flex-col bg-[#151515] lg:pl-0 pl-12">
+      <div className="flex-1 flex flex-col bg-background lg:pl-0 pl-12">
         {state.activeChat ? (
           <>
             {/* Chat Header */}
@@ -307,7 +390,11 @@ export function ChatWindow() {
             <ScrollArea className="flex-1">
               <div className="p-4 space-y-4">
                 {state.activeChat.messages.map((message) => (
-                  <MessageBubble key={message.id} message={message} />
+                  <MessageBubble
+                    key={message.id}
+                    message={message}
+                    onRetry={handleRetryMessage}
+                  />
                 ))}
                 <div ref={messageEndRef} />
               </div>
@@ -321,7 +408,7 @@ export function ChatWindow() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                  className="flex-1 bg-[#222] border text-white placeholder:text-white focus:ring-emerald-600 focus:border-emerald-600"
+                  className="flex-1 bg-muted border text-foreground placeholder:text-muted-foreground focus:ring-emerald-600 focus:border-emerald-600"
                 />
                 <Button
                   onClick={handleSendMessage}

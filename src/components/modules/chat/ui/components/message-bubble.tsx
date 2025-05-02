@@ -6,9 +6,10 @@ import { Message } from "@/@types/chat.entity";
 
 interface MessageBubbleProps {
   message: Message;
+  onRetry?: (messageId: string) => void;
 }
 
-export function MessageBubble({ message }: MessageBubbleProps) {
+export function MessageBubble({ message, onRetry }: MessageBubbleProps) {
   const getStatusIcon = () => {
     switch (message.status) {
       case "sending":
@@ -45,6 +46,14 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         <div className="flex items-center gap-1 mt-1">
           <span className="text-xs opacity-50">{message.timestamp}</span>
           {message.sender === "user" && getStatusIcon()}
+          {message.status === "error" && onRetry && (
+            <button
+              onClick={() => onRetry(message.id)}
+              className="ml-2 text-xs text-red-500 underline hover:text-red-700"
+            >
+              Retry
+            </button>
+          )}
         </div>
       </div>
     </div>
