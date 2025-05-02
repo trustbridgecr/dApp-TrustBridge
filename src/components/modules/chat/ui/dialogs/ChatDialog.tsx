@@ -75,6 +75,87 @@ export function ChatDialog() {
     scrollToBottom();
   }, [state.activeChat?.messages]);
 
+  const simulateSendMessage = (
+    message: Message,
+    chatToUpdate: Chat
+  ) => {
+    return new Promise<void>((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          if (Math.random() < 0.2) {
+            throw new Error("Failed to send message");
+          }
+
+          const sentMessage = { ...message, status: "sent" as const };
+          const updatedChatWithSent = {
+            ...chatToUpdate,
+            messages: chatToUpdate.messages.map((msg) =>
+              msg.id === message.id ? sentMessage : msg
+            ),
+          };
+
+          setState((prev) => ({
+            ...prev,
+            chats: prev.chats.map((chat) =>
+              chat.id === updatedChatWithSent.id ? updatedChatWithSent : chat
+            ),
+            activeChat:
+              prev.activeChat?.id === updatedChatWithSent.id
+                ? updatedChatWithSent
+                : prev.activeChat,
+          }));
+
+          setTimeout(() => {
+            const deliveredMessage = {
+              ...sentMessage,
+              status: "delivered" as const,
+            };
+            const updatedChatWithDelivered = {
+              ...updatedChatWithSent,
+              messages: updatedChatWithSent.messages.map((msg) =>
+                msg.id === sentMessage.id ? deliveredMessage : msg
+              ),
+            };
+
+            setState((prev) => ({
+              ...prev,
+              chats: prev.chats.map((chat) =>
+                chat.id === updatedChatWithDelivered.id
+                  ? updatedChatWithDelivered
+                  : chat
+              ),
+              activeChat:
+                prev.activeChat?.id === updatedChatWithDelivered.id
+                  ? updatedChatWithDelivered
+                  : prev.activeChat,
+            }));
+            resolve();
+          }, 1000);
+        } catch (error: unknown) {
+          console.error("Error sending message:", error);
+          const errorMessage = { ...message, status: "error" as const };
+          const updatedChatWithError = {
+            ...chatToUpdate,
+            messages: chatToUpdate.messages.map((msg) =>
+              msg.id === message.id ? errorMessage : msg
+            ),
+          };
+          setState((prev) => ({
+            ...prev,
+            chats: prev.chats.map((chat) =>
+              chat.id === updatedChatWithError.id ? updatedChatWithError : chat
+            ),
+            activeChat:
+              prev.activeChat?.id === updatedChatWithError.id
+                ? updatedChatWithError
+                : prev.activeChat,
+          }));
+          reject(error);
+        }
+      }, 1000);
+    });
+  };
+
   const handleSendMessage = () => {
     if (!message.trim() || !state.activeChat) return;
 
@@ -110,78 +191,14 @@ export function ChatDialog() {
 
     setMessage("");
 
-    // Simulate message being sent with error handling
-    setTimeout(() => {
-      try {
-        if (Math.random() < 0.2) {
-          throw new Error("Failed to send message");
-        }
-
-        const sentMessage = { ...newMessage, status: "sent" as const };
-        const updatedChatWithSent = {
-          ...updatedChat,
-          messages: updatedChat.messages.map((msg) =>
-            msg.id === newMessage.id ? sentMessage : msg,
-          ),
-        };
-
-        setState((prev) => ({
-          ...prev,
-          chats: prev.chats.map((chat) =>
-            chat.id === updatedChatWithSent.id ? updatedChatWithSent : chat,
-          ),
-          activeChat: updatedChatWithSent,
-        }));
-
-        setTimeout(() => {
-          const deliveredMessage = {
-            ...sentMessage,
-            status: "delivered" as const,
-          };
-          const updatedChatWithDelivered = {
-            ...updatedChatWithSent,
-            messages: updatedChatWithSent.messages.map((msg) =>
-              msg.id === sentMessage.id ? deliveredMessage : msg,
-            ),
-          };
-
-          setState((prev) => ({
-            ...prev,
-            chats: prev.chats.map((chat) =>
-              chat.id === updatedChatWithDelivered.id
-                ? updatedChatWithDelivered
-                : chat,
-            ),
-            activeChat:
-              prev.activeChat?.id === updatedChatWithSent.id
-                ? updatedChatWithSent
-                : prev.activeChat,
-          }));
-        }, 1000);
-      } catch (error: unknown) {
-        console.error("Error sending message:", error);
-        const errorMessage = { ...newMessage, status: "error" as const };
-        const updatedChatWithError = {
-          ...updatedChat,
-          messages: updatedChat.messages.map((msg) =>
-            msg.id === newMessage.id ? errorMessage : msg,
-          ),
-        };
-        setState((prev) => ({
-          ...prev,
-          chats: prev.chats.map((chat) =>
-            chat.id === updatedChatWithError.id ? updatedChatWithError : chat,
-          ),
-          activeChat: updatedChatWithError,
-        }));
-      }
-    }, 1000);
+    // Usa la función común
+    simulateSendMessage(newMessage, updatedChat).catch(() => {});
   };
 
   const handleRetryMessage = (messageId: string) => {
     if (!state.activeChat) return;
     const failedMessage = state.activeChat.messages.find(
-      (msg) => msg.id === messageId && msg.status === "error",
+      (msg) => msg.id === messageId && msg.status === "error"
     );
     if (!failedMessage) return;
     const retryMessage: Message = {
@@ -194,71 +211,14 @@ export function ChatDialog() {
       messages: [...state.activeChat.messages, retryMessage],
     };
     const updatedChats = state.chats.map((chat) =>
-      chat.id === updatedChat.id ? updatedChat : chat,
+      chat.id === updatedChat.id ? updatedChat : chat
     );
     setState((prev) => ({
       ...prev,
       chats: updatedChats,
       activeChat: updatedChat,
     }));
-    setTimeout(() => {
-      try {
-        if (Math.random() < 0.2) {
-          throw new Error("Failed to send message");
-        }
-        const sentMessage = { ...retryMessage, status: "sent" as const };
-        const updatedChatWithSent = {
-          ...updatedChat,
-          messages: updatedChat.messages.map((msg) =>
-            msg.id === retryMessage.id ? sentMessage : msg,
-          ),
-        };
-        setState((prev) => ({
-          ...prev,
-          chats: prev.chats.map((chat) =>
-            chat.id === updatedChatWithSent.id ? updatedChatWithSent : chat,
-          ),
-          activeChat: updatedChatWithSent,
-        }));
-        setTimeout(() => {
-          const deliveredMessage = {
-            ...sentMessage,
-            status: "delivered" as const,
-          };
-          const updatedChatWithDelivered = {
-            ...updatedChatWithSent,
-            messages: updatedChatWithSent.messages.map((msg) =>
-              msg.id === sentMessage.id ? deliveredMessage : msg,
-            ),
-          };
-          setState((prev) => ({
-            ...prev,
-            chats: prev.chats.map((chat) =>
-              chat.id === updatedChatWithDelivered.id
-                ? updatedChatWithDelivered
-                : chat,
-            ),
-            activeChat: updatedChatWithDelivered,
-          }));
-        }, 1000);
-      } catch (error: unknown) {
-        console.error("Error sending message:", error);
-        const errorMessage = { ...retryMessage, status: "error" as const };
-        const updatedChatWithError = {
-          ...updatedChat,
-          messages: updatedChat.messages.map((msg) =>
-            msg.id === retryMessage.id ? errorMessage : msg,
-          ),
-        };
-        setState((prev) => ({
-          ...prev,
-          chats: prev.chats.map((chat) =>
-            chat.id === updatedChatWithError.id ? updatedChatWithError : chat,
-          ),
-          activeChat: updatedChatWithError,
-        }));
-      }
-    }, 1000);
+    simulateSendMessage(retryMessage, updatedChat).catch(() => {});
   };
 
   if (state.isLoading) {
