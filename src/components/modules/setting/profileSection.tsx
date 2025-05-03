@@ -12,12 +12,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useProfile from "./hooks/profile-section.hook";
-import { UserPayload } from "@/@types/user.entity";
+import { User, UserPayload } from "@/@types/user.entity";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useFormatUtils } from "@/utils/hook/format.hook";
-import { Calendar, Camera, Info, Trash2, Upload, User } from "lucide-react";
+import { Calendar, Camera, Info, Trash2, Upload, User as UserIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface ProfileSectionProps {
@@ -25,13 +25,16 @@ interface ProfileSectionProps {
 }
 
 const ProfileSection = ({ onSave }: ProfileSectionProps) => {
-  const { form, onSubmit, handleProfileImageUpload, handleProfileImageDelete } =
-    useProfile({
-      onSave,
-    });
+  const {
+    form,
+    onSubmit,
+    handleProfileImageUpload,
+    handleProfileImageDelete,
+  } = useProfile({ onSave });
+
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const { formatDateFromFirebase } = useFormatUtils();
-  const [userData, setUserData] = useState<UserPayload | null>(null);
+  const [userData, setUserData] = useState<User | null>(null);
 
   useEffect(() => {
     if (loggedUser) {
@@ -49,7 +52,7 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
         Manage your personal details, update preferences, and customize your
         experience here.
       </p>
-      <Card className="overflow-hidden  border-border shadow-sm mb-20">
+      <Card className="overflow-hidden border-border shadow-sm mb-20">
         <CardHeader className="pb-0 pt-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -57,8 +60,8 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
                 <Avatar className="h-24 w-24 border-4 border-background shadow-md">
                   <AvatarImage
                     className="object-cover"
-                    src={userData?.profileImage || loggedUser?.profileImage}
-                    alt={userData?.firstName || loggedUser?.firstName}
+                    src={userData?.profileImage}
+                    alt={userData?.firstName}
                   />
                   <AvatarFallback className="bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-700 text-xl">
                     {userData?.firstName?.charAt(0) || "?"}{" "}
@@ -93,18 +96,17 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
 
               <div>
                 <h2 className="text-xl font-semibold">
-                  {userData?.firstName || loggedUser?.firstName}{" "}
-                  {userData?.lastName || loggedUser?.lastName}
+                  {userData?.firstName} {userData?.lastName}
                 </h2>
                 <p className="text-muted-foreground text-sm">
-                  {userData?.email || loggedUser?.email || "No email provided"}
+                  {userData?.email || "No email provided"}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
                   <Badge
                     variant="outline"
                     className="bg-emerald-50 text-emerald-700 border-emerald-200"
                   >
-                    <User className="h-3 w-3 mr-1" />
+                    <UserIcon className="h-3 w-3 mr-1" />
                     Account
                   </Badge>
                   <div className="flex items-center text-xs text-muted-foreground">
@@ -112,7 +114,7 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
                     Joined{" "}
                     {formatDateFromFirebase(
                       userData?.createdAt?.seconds ?? 0,
-                      userData?.createdAt?.nanoseconds ?? 0,
+                      userData?.createdAt?.nanoseconds ?? 0
                     )}
                   </div>
                 </div>
@@ -128,7 +130,7 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
                 <div className="space-y-6">
                   <div className="space-y-2">
                     <h3 className="text-base font-medium flex items-center">
-                      <User className="h-4 w-4 mr-2 text-emerald-600" />
+                      <UserIcon className="h-4 w-4 mr-2 text-emerald-600" />
                       Personal Information
                     </h3>
                     <div className="h-px bg-border" />
