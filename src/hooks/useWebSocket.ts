@@ -5,8 +5,11 @@ import {
 } from "@/core/store/notifications";
 import { useEffect, useRef, useState } from "react";
 
-const WS_URL = "ws://localhost:3001";
-const POLLING_INTERVAL = 10000; // 10 seconds
+const WS_URL = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:3001";
+const POLLING_INTERVAL = parseInt(
+  process.env.NEXT_PUBLIC_POLLING_INTERVAL || "30000",
+); // 30 seconds default
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 export const useWebSocket = () => {
   const wsRef = useRef<WebSocket | null>(null);
@@ -25,7 +28,7 @@ export const useWebSocket = () => {
 
     try {
       console.log("Attempting to connect to WebSocket with address:", address);
-      const ws = new WebSocket(`${WS_URL}?address=${address}`);
+      const ws = new WebSocket(`${WS_URL}/notifications?address=${address}`);
       wsRef.current = ws;
 
       ws.onopen = () => {
@@ -78,7 +81,7 @@ export const useWebSocket = () => {
       try {
         console.log("Polling for notifications...");
         const response = await fetch(
-          `http://localhost:3001/notifications?address=${address}`,
+          `${API_URL}/api/notifications?address=${address}`,
         );
         if (response.ok) {
           const notifications: Notification[] = await response.json();

@@ -3,8 +3,12 @@ import { Notification } from "@/@types/notification";
 class NotificationService {
   private ws: WebSocket | null = null;
   private reconnectAttempts = 0;
-  private maxReconnectAttempts = 5;
-  private reconnectTimeout = 1000;
+  private maxReconnectAttempts = parseInt(
+    process.env.NEXT_PUBLIC_MAX_RECONNECT_ATTEMPTS || "5",
+  );
+  private reconnectTimeout = parseInt(
+    process.env.NEXT_PUBLIC_RECONNECT_TIMEOUT || "1000",
+  );
   private onMessageCallback: ((notification: Notification) => void) | null =
     null;
   private onErrorCallback: ((error: string) => void) | null = null;
@@ -12,6 +16,7 @@ class NotificationService {
   constructor(
     private readonly wsUrl: string = process.env.NEXT_PUBLIC_WS_URL ||
       "ws://localhost:3001",
+    private readonly apiUrl: string = process.env.NEXT_PUBLIC_API_URL || "",
   ) {}
 
   connect(address: string) {
@@ -95,7 +100,9 @@ class NotificationService {
 
   async fetchNotifications(address: string): Promise<Notification[]> {
     try {
-      const response = await fetch(`/api/notifications?address=${address}`);
+      const response = await fetch(
+        `${this.apiUrl}/api/notifications?address=${address}`,
+      );
       if (!response.ok) throw new Error("Failed to fetch notifications");
       return await response.json();
     } catch (error) {

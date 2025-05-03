@@ -22,10 +22,19 @@ export const useNotificationsStore = create<NotificationsState>((set) => ({
   notifications: [],
   unreadCount: 0,
   addNotification: (notification) =>
-    set((state) => ({
-      notifications: [notification, ...state.notifications],
-      unreadCount: state.unreadCount + 1,
-    })),
+    set((state) => {
+      // Check if notification with same ID already exists
+      const exists = state.notifications.some((n) => n.id === notification.id);
+      if (exists) {
+        console.log("Duplicate notification skipped:", notification.id);
+        return state;
+      }
+
+      return {
+        notifications: [notification, ...state.notifications],
+        unreadCount: state.unreadCount + 1,
+      };
+    }),
   markAsRead: (id) =>
     set((state) => ({
       notifications: state.notifications.map((n) =>
