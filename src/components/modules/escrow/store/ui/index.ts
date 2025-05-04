@@ -12,13 +12,18 @@ import { useEscrowInitializeFormSlice } from "./slices/initialize-form.slice";
 import { InitializeFormEscrowStore } from "./@types/initialize-form.entity";
 import { useEscrowStepsSlice } from "./slices/steps.slice";
 import { StepsEscrowStore } from "./@types/steps.entity";
+import {
+  WalletConnectionStore,
+  useWalletConnectionSlice,
+} from "./slices/wallet.slice";
 
 type GlobalState = DialogEscrowStore &
   TabsEscrowStore &
   ViewModeEscrowStore &
   LoadersEscrowStore &
   InitializeFormEscrowStore &
-  StepsEscrowStore;
+  StepsEscrowStore &
+  WalletConnectionStore;
 
 const devtoolsOptions: DevtoolsOptions = {
   name: "Global State",
@@ -57,6 +62,7 @@ export const useEscrowBoundedStore = create<GlobalState>()(
       ...useEscrowLoadersSlice(...a),
       ...useEscrowInitializeFormSlice(...a),
       ...useEscrowStepsSlice(...a),
+      ...useWalletConnectionSlice(...a),
     }),
     devtoolsOptions,
   ),
