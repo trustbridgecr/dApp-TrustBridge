@@ -9,6 +9,7 @@ export interface Notification {
     url: string;
   };
   isRead: boolean;
+  address: string;
 }
 
 export interface NotificationState {

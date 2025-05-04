@@ -1,6 +1,7 @@
 {
   "name": "trustbridge-websocket-server",
   "version": "1.0.0",
+  "type": "module",
   "description": "WebSocket server for TrustBridge notifications",
   "main": "websocket.js",
   "scripts": {
@@ -8,6 +9,6 @@
   },
   "dependencies": {
     "ws": "^8.16.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.0"
   }
 }
