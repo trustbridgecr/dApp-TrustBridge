@@ -58,6 +58,9 @@ function generateRealisticNotification(): Notification {
     Date.now() - Math.floor(Math.random() * 86400000),
   ).toISOString();
 
+  // Generate a random address for mock data
+  const mockAddress = `0x${Math.random().toString(16).slice(2, 42)}`;
+
   return {
     id: randomUUID(),
     title: template.title,
@@ -66,6 +69,7 @@ function generateRealisticNotification(): Notification {
     type: template.type,
     action: template.action,
     isRead: false,
+    address: mockAddress,
   };
 }
 
@@ -147,7 +151,13 @@ export async function GET(request: NextRequest) {
     // Calculate pagination
     const startIndex = (page - 1) * size;
     const endIndex = startIndex + size;
-    const paginatedNotifications = mockNotifications.slice(
+
+    // Filter notifications by address
+    const filteredNotifications = mockNotifications.filter(
+      (notification) => notification.address === address,
+    );
+
+    const paginatedNotifications = filteredNotifications.slice(
       startIndex,
       endIndex,
     );
@@ -157,8 +167,8 @@ export async function GET(request: NextRequest) {
       pagination: {
         currentPage: page,
         pageSize: size,
-        totalItems: mockNotifications.length,
-        totalPages: Math.ceil(mockNotifications.length / size),
+        totalItems: filteredNotifications.length,
+        totalPages: Math.ceil(filteredNotifications.length / size),
       },
     });
   } catch (error) {

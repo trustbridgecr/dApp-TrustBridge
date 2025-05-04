@@ -29,10 +29,11 @@ wss.on("connection", (ws, req) => {
   const welcomeNotification = {
     id: uuidv4(),
     title: "Welcome to TrustBridge",
-    message: "Thank you for connecting to the notification service!",
+    message: `Thank you for connecting to the notification service! Your address: ${address}`,
     timestamp: new Date().toISOString(),
     type: "info",
     isRead: false,
+    address: address,
   };
 
   console.log("Sending welcome notification:", welcomeNotification);
@@ -46,10 +47,11 @@ wss.on("connection", (ws, req) => {
     const notification = {
       id: uuidv4(),
       title: `New ${randomType} notification`,
-      message: `This is a ${randomType} notification sent at ${new Date().toLocaleTimeString()}`,
+      message: `This is a ${randomType} notification for address ${address} sent at ${new Date().toLocaleTimeString()}`,
       timestamp: new Date().toISOString(),
       type: randomType,
       isRead: false,
+      address: address,
     };
 
     console.log("Sending random notification:", notification);
