@@ -1,7 +1,7 @@
 "use client";
 
 import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
-import NotificationButton from "@/components/modules/notifications/NotificationButton";
+import NotificationButton from "@/components/modules/notifications/ui/buttons/NotificationButton";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { LogOut } from "lucide-react";

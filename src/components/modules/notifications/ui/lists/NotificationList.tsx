@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/hooks/useNotifications";
 import { Loader2Icon } from "lucide-react";
 import { FC } from "react";
-import NotificationCard from "./NotificationCard";
+import NotificationCard from "../cards/NotificationCard";
+
 
 const NotificationList: FC = () => {
   const { notifications, isLoading, error, markAsRead, refetch } =

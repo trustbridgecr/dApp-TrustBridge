@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/popover";
 import { useNotifications } from "@/hooks/useNotifications";
 import { BellIcon } from "lucide-react";
-import NotificationList from "./NotificationList";
+import NotificationList from "../lists/NotificationList";
 
 const NotificationButton = () => {
   const { hasUnread } = useNotifications();
