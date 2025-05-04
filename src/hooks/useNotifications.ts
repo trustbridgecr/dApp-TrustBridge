@@ -58,7 +58,7 @@ export function useNotifications() {
       const notifications =
         await notificationService.fetchNotifications(address);
       dispatch({ type: "SET_NOTIFICATIONS", payload: notifications });
-    } catch (error) {
+    } catch {
       dispatch({ type: "SET_ERROR", payload: "Failed to fetch notifications" });
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
