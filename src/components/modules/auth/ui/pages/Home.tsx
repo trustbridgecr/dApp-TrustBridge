@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, Wallet, BadgeCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
+// import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { useWallet } from "../../wallet/hooks/wallet.hook";
 import { getApprovedLoanOffers } from "@/components/modules/dashboard/marketplace/server/marketplace.firebase";
+import { useWalletStore } from "@/core/store/wallet/wallet.store";
 
 interface ApprovedLoan {
   id: string;
@@ -17,9 +18,12 @@ interface ApprovedLoan {
 }
 
 export default function HomePage() {
-  const { handleConnect, handleDisconnect } = useWallet();
-  const { address } = useGlobalAuthenticationStore();
+  // const { handleConnect, handleDisconnect } = useWallet();
+  const { connectWallet, disconnectWallet, getPublicKey } = useWallet();
+  // const { address } = useGlobalAuthenticationStore();
   const [approvedLoans, setApprovedLoans] = useState<ApprovedLoan[]>([]);
+  const publicKey = useWalletStore((state) => state.publicKey);
+  
 
   useEffect(() => {
     const fetchApprovedLoans = async () => {
@@ -30,7 +34,8 @@ export default function HomePage() {
     };
 
     fetchApprovedLoans();
-  }, []);
+    getPublicKey();
+  }, [getPublicKey]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -69,10 +74,10 @@ export default function HomePage() {
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"
-                  onClick={address ? handleDisconnect : handleConnect}
+                  onClick={publicKey ? disconnectWallet : connectWallet}
                 >
                   <Wallet className="mr-2 h-5 w-5" />
-                  {address ? "Disconnect Wallet" : "Connect Wallet"}
+                  {publicKey ? `Connected: ${publicKey.slice(0, 6)}...${publicKey.slice(-4)}` : "Connect Wallet"}
                 </Button>
                 <Link href="/dashboard/marketplace" passHref>
                   <Button
@@ -84,7 +89,7 @@ export default function HomePage() {
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
-              </div>
+              </div> 
             </div>
 
             <div className="flex items-center justify-center">

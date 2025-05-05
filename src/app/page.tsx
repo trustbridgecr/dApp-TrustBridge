@@ -2,23 +2,23 @@
 
 import HomePage from "@/components/modules/auth/ui/pages/Home";
 import { GradientBackground } from "@/components/modules/dashboard/ui/pages/background/GradientBackground";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { useWalletStore } from "@/core/store/wallet/wallet.store";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Page() {
-  const address = useGlobalAuthenticationStore((state) => state.address);
+  const publicKey = useWalletStore((state) => state.publicKey); // Access the wallet's public key
   const router = useRouter();
 
   useEffect(() => {
-    if (address) {
-      router.push("/dashboard");
+    if (publicKey) {
+      router.push("/dashboard"); 
     }
-  }, [address, router]);
+  }, [publicKey, router]);
 
   return (
     <GradientBackground>
-      <div className="p-6 ">
+      <div className="p-6">
         <HomePage />
       </div>
     </GradientBackground>

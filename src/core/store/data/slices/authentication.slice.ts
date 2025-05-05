@@ -28,6 +28,7 @@ export const useGlobalAuthenticationSlice: StateCreator<
     name: "",
     loggedUser: null,
     users: [],
+    isAuthenticated: true,
 
     // Modifiers
     connectWalletStore: async (address: string, name: string) => {
@@ -40,14 +41,14 @@ export const useGlobalAuthenticationSlice: StateCreator<
 
         if (registrationSuccess) {
           set(
-            { address, name, loggedUser: userData },
+            { address, name, loggedUser: userData, isAuthenticated: true  },
             false,
             AUTHENTICATION_ACTIONS.CONNECT_WALLET,
           );
         }
       } else {
         set(
-          { address, name, loggedUser: data },
+          { address, name, loggedUser: data, isAuthenticated: true  },
           false,
           AUTHENTICATION_ACTIONS.CONNECT_WALLET,
         );
@@ -56,7 +57,7 @@ export const useGlobalAuthenticationSlice: StateCreator<
 
     disconnectWalletStore: () =>
       set(
-        { address: "", name: "", loggedUser: null },
+        { address: "", name: "", loggedUser: null, isAuthenticated: false },
         false,
         AUTHENTICATION_ACTIONS.DISCONNECT_WALLET,
       ),

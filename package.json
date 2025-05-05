@@ -2,10 +2,7 @@
   "name": "project",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": "22.14.0",
-    "npm": "10.9.2"
-  },
+
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -39,6 +36,7 @@
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
     "firebase": "^11.6.0",
+    "js-cookie": "3.0.5",
     "lucide-react": "^0.485.0",
     "next": "15.2.4",
     "react": "^19.0.0",
@@ -55,6 +53,7 @@
     "@eslint/js": "^9.23.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
     "@tailwindcss/postcss": "^4",
+    "@types/js-cookie": "3.0.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
