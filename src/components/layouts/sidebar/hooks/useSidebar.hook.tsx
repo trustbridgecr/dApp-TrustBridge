@@ -11,7 +11,23 @@ import {
   ShoppingBag,
   CloudUpload,
   Bell,
+  MessageSquare,
 } from "lucide-react";
+import { ReactNode } from "react";
+
+type MenuItem = {
+  href: string;
+  icon: ReactNode;
+  label: string;
+  active: boolean;
+  highlight?: boolean;
+  notification?: boolean;
+};
+
+type MenuSection = {
+  section: string;
+  items: MenuItem[];
+};
 
 export function useTrustBridgeSidebar() {
   const { address } = useGlobalAuthenticationStore();
@@ -45,7 +61,7 @@ export function useTrustBridgeSidebar() {
     }
   }, [pathname]);
 
-  const menuItems = [
+  const menuItems: MenuSection[] = [
     {
       section: "Platform",
       items: [
@@ -86,9 +102,21 @@ export function useTrustBridgeSidebar() {
         },
       ],
     },
+    {
+      section: "Communication",
+      items: [
+        {
+          href: "/dashboard/chat",
+          icon: <MessageSquare className="h-4 w-4" />,
+          label: "Chat",
+          active: pathname === "/dashboard/chat",
+          notification: false,
+        },
+      ],
+    },
   ];
 
-  const adminItems = [
+  const adminItems: MenuSection[] = [
     {
       section: "Administration",
       items: [

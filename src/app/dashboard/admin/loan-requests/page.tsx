@@ -19,6 +19,9 @@ export default function Page() {
 
   if (!address) return null;
   if (address !== ADMIN_WALLET) return null;
-
-  return <LoanOfferRequests />;
+  return (
+    <div className="h-screen overflow-auto p-6 mb-8">
+      <LoanOfferRequests />
+    </div>
+  );
 }
