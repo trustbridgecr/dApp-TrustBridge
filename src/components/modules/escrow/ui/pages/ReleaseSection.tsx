@@ -15,8 +15,7 @@ import { CircleDollarSign, AlertTriangle, Lock } from "lucide-react";
 import { kit } from "@/components/modules/auth/wallet/constants/wallet-kit.constant";
 import { 
   createEscrowReleaseError, 
-  isEscrowReleaseError, 
-  EscrowReleaseError 
+  isEscrowReleaseError
 } from "../../types/errors";
 import {
   Tooltip,
@@ -57,6 +56,14 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
   const handleRelease = async () => {
     try {
       setIsLoading(true);
+      
+      // Validate milestones first
+      if (!areAllMilestonesCompleted) {
+        throw createEscrowReleaseError('MILESTONE_INCOMPLETE', {
+          incompleteCount: incompleteMilestones?.length,
+          milestones: incompleteMilestones
+        });
+      }
       
       // Check wallet connection
       const { address } = await kit.getAddress().catch(() => {
@@ -102,6 +109,11 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
 
       if (isEscrowReleaseError(error)) {
         errorMessage = error.message;
+        // Add additional context for milestone errors
+        if (error.type === 'MILESTONE_INCOMPLETE' && error.details) {
+          const details = error.details as { incompleteCount: number };
+          errorMessage = `${errorMessage} (${details.incompleteCount} milestone${details.incompleteCount > 1 ? 's' : ''} incomplete)`;
+        }
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
@@ -118,12 +130,12 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
   };
 
   return (
-    <div className="w-full h-screen flex items-center justify-center">
+    <div className="w-full flex items-center justify-center">
       <div className="space-y-4">
         <div className="flex items-center gap-5 justify-between">
           <div>
             <h3 className="text-lg font-semibold">Release Funds</h3>
-            <p className="text-sm text-muted-foreground w-3/4">
+            <p className="text-sm text-muted-foreground max-w-md">
               Release funds to the beneficiary once all milestones are completed
             </p>
           </div>
