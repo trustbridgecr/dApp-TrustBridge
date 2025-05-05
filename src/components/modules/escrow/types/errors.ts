@@ -44,6 +44,8 @@ export function isEscrowReleaseError(error: unknown): error is EscrowReleaseErro
     error !== null &&
     'type' in error &&
     'message' in error &&
+    typeof (error as EscrowReleaseError).type === 'string' &&
+    typeof (error as EscrowReleaseError).message === 'string' &&
     Object.keys(ESCROW_RELEASE_ERRORS).includes((error as EscrowReleaseError).type)
   );
 } 
