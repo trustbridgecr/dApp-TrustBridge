@@ -24,6 +24,7 @@ import { useDisputeStatusFormat, useDisputePermissions } from '../../../../utils
 import { DisputeTimeline } from './DisputeTimeline';
 import { ResolveDisputeModal } from './ResolveDisputeModal';
 import { format } from 'date-fns';
+import { getStatusBadgeClass } from '../../../../utils/ui/status-badges';
 
 interface DisputeDetailsProps {
   dispute: Dispute;
@@ -53,6 +54,14 @@ export const DisputeDetails: React.FC<DisputeDetailsProps> = ({
   const handleCloseResolveModal = () => {
     setIsResolveModalOpen(false);
   };
+
+  // Safe string truncation helper
+  const truncateString = (str: string, startLen = 8, endLen = 6): string => {
+    if (!str || str.length <= startLen + endLen) {
+      return str || '';
+    }
+    return `${str.substring(0, startLen)}...${str.substring(str.length - endLen)}`;
+  };
   
   return (
     <>
@@ -65,13 +74,13 @@ export const DisputeDetails: React.FC<DisputeDetailsProps> = ({
             </div>
             <Badge
               variant="outline"
-              className={`bg-${statusColor}-50 text-${statusColor}-700 border-${statusColor}-200`}
+              className={getStatusBadgeClass(statusColor)}
             >
               {statusText}
             </Badge>
           </div>
           <CardDescription>
-            Viewing details for dispute ID: {dispute.id.substring(0, 10)}...
+            Viewing details for dispute ID: {truncateString(dispute.id, 10, 0)}...
           </CardDescription>
         </CardHeader>
         
@@ -94,7 +103,7 @@ export const DisputeDetails: React.FC<DisputeDetailsProps> = ({
                 Initiated By
               </h4>
               <p className="text-sm font-mono">
-                {dispute.initiatedBy.substring(0, 8)}...{dispute.initiatedBy.substring(dispute.initiatedBy.length - 6)}
+                {truncateString(dispute.initiatedBy)}
               </p>
             </div>
             
@@ -115,7 +124,7 @@ export const DisputeDetails: React.FC<DisputeDetailsProps> = ({
               </h4>
               <div className="flex items-center space-x-2">
                 <p className="text-sm font-mono">
-                  {dispute.escrowId.substring(0, 8)}...{dispute.escrowId.substring(dispute.escrowId.length - 6)}
+                  {truncateString(dispute.escrowId)}
                 </p>
                 <Button variant="ghost" size="icon" asChild>
                   <a href={`/dashboard/escrows/${dispute.escrowId}`} target="_blank" rel="noreferrer">

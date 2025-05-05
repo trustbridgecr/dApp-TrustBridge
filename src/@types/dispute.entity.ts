@@ -53,4 +53,5 @@ export interface DisputeResolutionPayload {
   resolution: DisputeResolution;
   details?: string;
   signature: string;
+  timestamp?: number; 
 }

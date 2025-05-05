@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { 
   DisputeCreationPayload, 
   DisputeResolution, 
-  DisputeResolutionPayload 
+  DisputeResolutionPayload,
+  DisputeStatus
 } from '../../../../../@types/dispute.entity';
 import { useDisputeAPI } from './useDisputeAPI';
 import { useDisputeState } from './useDisputeState';
@@ -76,8 +77,9 @@ export const useDispute = ({ escrowId, disputeId }: UseDisputeProps = {}) => {
     setIsStartingDispute(true);
     
     try {
-      // Create message to sign (format may vary based on implementation)
-      const message = `I want to start a dispute for escrow ${escrowId} with reason: ${reason}`;
+      // Create message to sign with timestamp to prevent replay attacks
+      const timestamp = Date.now();
+      const message = `I want to start a dispute for escrow ${escrowId} with reason: ${reason} at timestamp ${timestamp}`;
       
       // Get signature
       const signature = await getSignedMessage(wallet, message);
@@ -91,6 +93,7 @@ export const useDispute = ({ escrowId, disputeId }: UseDisputeProps = {}) => {
         escrowId,
         disputeReason: reason,
         signature,
+        timestamp,
       };
       
       // Start dispute through API
@@ -132,8 +135,9 @@ export const useDispute = ({ escrowId, disputeId }: UseDisputeProps = {}) => {
     setIsResolvingDispute(true);
     
     try {
-      // Create message to sign
-      const message = `I want to resolve dispute ${disputeId} with resolution: ${resolution}`;
+      // Create message to sign with timestamp to prevent replay attacks
+      const timestamp = Date.now();
+      const message = `I want to resolve dispute ${disputeId} with resolution: ${resolution} at timestamp ${timestamp}`;
       
       // Get signature
       const signature = await getSignedMessage(wallet, message);
@@ -148,6 +152,7 @@ export const useDispute = ({ escrowId, disputeId }: UseDisputeProps = {}) => {
         resolution,
         details,
         signature,
+        timestamp,
       };
       
       // Resolve dispute through API
@@ -205,6 +210,6 @@ export const useDispute = ({ escrowId, disputeId }: UseDisputeProps = {}) => {
     
     // Check if user can resolve a dispute
     canResolveDispute: activeDispute !== undefined && 
-      activeDispute.status !== DisputeResolution.RESOLVED,
+      activeDispute.status !== DisputeStatus.RESOLVED,
   };
 };

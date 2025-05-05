@@ -64,6 +64,11 @@ export const StartDisputeModal: React.FC<StartDisputeModalProps> = ({
       }
     } catch (error) {
       console.error('Error starting dispute:', error);
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Failed to start the dispute. Please try again.',
+        variant: 'destructive',
+      });
     } finally {
       setIsSubmitting(false);
     }

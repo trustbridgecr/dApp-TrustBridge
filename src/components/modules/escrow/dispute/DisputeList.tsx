@@ -15,17 +15,23 @@ import {
   AlertTriangle, 
   Clock, 
   CheckCircle2, 
-  ChevronRight 
+  ChevronRight,
+  Loader2,
+  RefreshCw 
 } from 'lucide-react';
 import { useDisputeStatusFormat } from '../../../../utils/hook/dispute.hook';
 import { format } from 'date-fns';
 import { StartDisputeButton } from './StartDisputeButton';
+import { getStatusBadgeClass } from '../../../../utils/ui/status-badges';
 
 interface DisputesListProps {
   disputes: Dispute[];
   escrowId: string;
   onSelectDispute?: (dispute: Dispute) => void;
   className?: string;
+  isLoading?: boolean;
+  error?: Error | null;
+  onRetry?: () => void;
 }
 
 export const DisputesList: React.FC<DisputesListProps> = ({
@@ -33,6 +39,9 @@ export const DisputesList: React.FC<DisputesListProps> = ({
   escrowId,
   onSelectDispute,
   className = '',
+  isLoading = false,
+  error = null,
+  onRetry,
 }) => {
   const { getStatusText, getStatusColor } = useDisputeStatusFormat();
   
@@ -62,7 +71,27 @@ export const DisputesList: React.FC<DisputesListProps> = ({
       </CardHeader>
       
       <CardContent>
-        {sortedDisputes.length === 0 ? (
+        {isLoading && (
+          <div className="text-center py-8">
+            <Loader2 className="h-12 w-12 text-muted-foreground opacity-50 animate-spin mx-auto" />
+            <p className="mt-4 text-sm text-muted-foreground">Loading disputes...</p>
+          </div>
+        )}
+        
+        {error && (
+          <div className="text-center py-8 text-red-500">
+            <AlertTriangle className="h-12 w-12 opacity-50 mx-auto" />
+            <p className="mt-4 text-sm">Error loading disputes: {error.message}</p>
+            {onRetry && (
+              <Button variant="outline" size="sm" className="mt-4" onClick={onRetry}>
+                <RefreshCw className="h-3 w-3 mr-1" />
+                Try Again
+              </Button>
+            )}
+          </div>
+        )}
+        
+        {!isLoading && !error && sortedDisputes.length === 0 ? (
           <div className="text-center py-8">
             <div className="flex justify-center">
               <AlertTriangle className="h-12 w-12 text-muted-foreground opacity-20" />
@@ -72,7 +101,7 @@ export const DisputesList: React.FC<DisputesListProps> = ({
               There are no disputes for this escrow.
             </p>
           </div>
-        ) : (
+        ) : !isLoading && !error && (
           <div className="space-y-4">
             {sortedDisputes.map((dispute, index) => {
               const statusText = getStatusText(dispute.status);
@@ -90,7 +119,7 @@ export const DisputesList: React.FC<DisputesListProps> = ({
                           </h3>
                           <Badge
                             variant="outline"
-                            className={`bg-${statusColor}-50 text-${statusColor}-700 border-${statusColor}-200`}
+                            className={getStatusBadgeClass(statusColor)}
                           >
                             {statusText}
                           </Badge>

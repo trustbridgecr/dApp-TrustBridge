@@ -22,6 +22,7 @@ import {
   TooltipTrigger,
 } from "../../../../components/ui/tooltip";
 import { format } from "date-fns";
+import { getStatusBadgeClass } from "../../../../utils/ui/status-badges";
 
 interface DisputeTimelineProps {
   dispute: Dispute;
@@ -41,6 +42,14 @@ export const DisputeTimeline: React.FC<DisputeTimelineProps> = ({
       </div>
     );
   }
+
+  // Safe string truncation helper
+  const truncateString = (str: string, startLen = 8, endLen = 6): string => {
+    if (!str || str.length <= startLen + endLen) {
+      return str || "";
+    }
+    return `${str.substring(0, startLen)}...${str.substring(str.length - endLen)}`;
+  };
 
   const getEventIcon = (eventType: string) => {
     switch (eventType) {
@@ -84,7 +93,7 @@ export const DisputeTimeline: React.FC<DisputeTimelineProps> = ({
             <p className="text-sm">
               A dispute was initiated for escrow{" "}
               <span className="font-mono text-xs">
-                {dispute.escrowId.substring(0, 8)}...
+                {truncateString(dispute.escrowId, 8, 0)}
               </span>
             </p>
             <p className="text-sm font-medium">Reason:</p>
@@ -140,11 +149,16 @@ export const DisputeTimeline: React.FC<DisputeTimelineProps> = ({
             {event.details.resolution && (
               <Badge
                 variant="outline"
-                className={`
-                  ${event.details.resolution === DisputeResolution.FAVOR_CLIENT ? "bg-blue-50 text-blue-700 border-blue-200" : ""}
-                  ${event.details.resolution === DisputeResolution.FAVOR_FREELANCER ? "bg-green-50 text-green-700 border-green-200" : ""}
-                  ${event.details.resolution === DisputeResolution.SPLIT ? "bg-purple-50 text-purple-700 border-purple-200" : ""}
-                `}
+                className={
+                  event.details.resolution === DisputeResolution.FAVOR_CLIENT
+                    ? getStatusBadgeClass("blue")
+                    : event.details.resolution ===
+                        DisputeResolution.FAVOR_FREELANCER
+                      ? getStatusBadgeClass("green")
+                      : event.details.resolution === DisputeResolution.SPLIT
+                        ? getStatusBadgeClass("purple")
+                        : getStatusBadgeClass("gray")
+                }
               >
                 {event.details.resolution}
               </Badge>
@@ -215,8 +229,7 @@ export const DisputeTimeline: React.FC<DisputeTimelineProps> = ({
               <div className="mt-3 flex items-center text-xs text-muted-foreground">
                 <User className="h-3 w-3 mr-1" />
                 <span className="font-mono">
-                  {event.performedBy.substring(0, 6)}...
-                  {event.performedBy.substring(event.performedBy.length - 4)}
+                  {truncateString(event.performedBy)}
                 </span>
               </div>
             </div>

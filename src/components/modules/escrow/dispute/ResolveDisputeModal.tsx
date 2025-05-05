@@ -79,6 +79,11 @@ export const ResolveDisputeModal: React.FC<ResolveDisputeModalProps> = ({
       }
     } catch (error) {
       console.error('Error resolving dispute:', error);
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Failed to resolve dispute',
+        variant: 'destructive',
+      });
     } finally {
       setIsSubmitting(false);
     }
