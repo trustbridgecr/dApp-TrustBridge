@@ -23,7 +23,6 @@ export default function HomePage() {
   // const { address } = useGlobalAuthenticationStore();
   const [approvedLoans, setApprovedLoans] = useState<ApprovedLoan[]>([]);
   const publicKey = useWalletStore((state) => state.publicKey);
-  
 
   useEffect(() => {
     const fetchApprovedLoans = async () => {
@@ -77,7 +76,9 @@ export default function HomePage() {
                   onClick={publicKey ? disconnectWallet : connectWallet}
                 >
                   <Wallet className="mr-2 h-5 w-5" />
-                  {publicKey ? `Connected: ${publicKey.slice(0, 6)}...${publicKey.slice(-4)}` : "Connect Wallet"}
+                  {publicKey
+                    ? `Connected: ${publicKey.slice(0, 6)}...${publicKey.slice(-4)}`
+                    : "Connect Wallet"}
                 </Button>
                 <Link href="/dashboard/marketplace" passHref>
                   <Button
@@ -89,7 +90,7 @@ export default function HomePage() {
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
-              </div> 
+              </div>
             </div>
 
             <div className="flex items-center justify-center">

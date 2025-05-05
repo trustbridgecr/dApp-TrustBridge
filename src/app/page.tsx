@@ -12,7 +12,7 @@ export default function Page() {
 
   useEffect(() => {
     if (publicKey) {
-      router.push("/dashboard"); 
+      router.push("/dashboard");
     }
   }, [publicKey, router]);
 

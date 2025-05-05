@@ -6,7 +6,8 @@ interface WalletState {
 }
 
 export const useWalletStore = create<WalletState>((set) => ({
-  publicKey: typeof window !== "undefined" ? localStorage.getItem("publicKey") : null,
+  publicKey:
+    typeof window !== "undefined" ? localStorage.getItem("publicKey") : null,
   setPublicKey: (publicKey) => {
     if (publicKey) {
       localStorage.setItem("publicKey", publicKey); // Persist to localStorage

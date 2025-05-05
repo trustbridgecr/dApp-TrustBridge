@@ -41,14 +41,14 @@ export const useGlobalAuthenticationSlice: StateCreator<
 
         if (registrationSuccess) {
           set(
-            { address, name, loggedUser: userData, isAuthenticated: true  },
+            { address, name, loggedUser: userData, isAuthenticated: true },
             false,
             AUTHENTICATION_ACTIONS.CONNECT_WALLET,
           );
         }
       } else {
         set(
-          { address, name, loggedUser: data, isAuthenticated: true  },
+          { address, name, loggedUser: data, isAuthenticated: true },
           false,
           AUTHENTICATION_ACTIONS.CONNECT_WALLET,
         );

@@ -11,22 +11,21 @@ function getSelectedWalletId() {
   return localStorage.getItem(SELECTED_WALLET_ID);
 }
 
-
-
 export const useWallet = () => {
-  const { connectWalletStore, disconnectWalletStore } = useGlobalAuthenticationStore();
+  const { connectWalletStore, disconnectWalletStore } =
+    useGlobalAuthenticationStore();
   const [publicKey, setPublicKey] = useState<string | null>(null);
 
   const connectWallet = async () => {
     const { setPublicKey } = useWalletStore.getState();
-  
+
     await kit.openModal({
       modalTitle: "Connect to your favorite wallet",
       onWalletSelected: async (option: ISupportedWallet) => {
         try {
           localStorage.setItem(SELECTED_WALLET_ID, option.id);
           kit.setWallet(option.id);
-  
+
           const { address } = await kit.getAddress();
           setPublicKey(address); // Update the global state with the wallet address
           connectWalletStore(address, option.name);

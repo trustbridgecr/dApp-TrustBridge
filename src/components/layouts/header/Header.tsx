@@ -12,7 +12,7 @@ import { useWalletStore } from "@/core/store/wallet/wallet.store"; // Zustand st
 export function Header() {
   const router = useRouter();
   // const [walletConnected, setWalletConnected] = useState(false);
-  // const { handleConnect, handleDisconnect } = useWallet(); 
+  // const { handleConnect, handleDisconnect } = useWallet();
   const setPublicKey = useWalletStore((state) => state.setPublicKey);
   // useEffect(() => {
   //   const stellarWallet = localStorage.getItem("address-wallet");
@@ -35,23 +35,22 @@ export function Header() {
     router.push("/");
   };
 
-
-
   return (
     <header className="flex h-14 items-center justify-between border-b bg-muted/40 px-4 lg:px-6">
       <SidebarTrigger />
       <div className="flex flex-1 items-center gap-4">
         <div className="ml-auto flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="bg-transparent border-white/10 text-white hover:bg-white/10 hover:text-gray-200 hidden sm:flex"
-              onClick={handleDisconnectWallet}
-            >
-              <LogOut className="h-3.5 w-3.5 mr-1.5" />
-              Disconnect Wallet
-            </Button>
-        
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-transparent border-white/10 text-white hover:bg-white/10 hover:text-gray-200 hidden sm:flex"
+            onClick={() => {
+              handleDisconnectWallet();
+            }}
+          >
+            <LogOut className="h-3.5 w-3.5 mr-1.5" />
+            Disconnect Wallet
+          </Button>
         </div>
       </div>
     </header>

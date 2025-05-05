@@ -9,11 +9,11 @@ interface RequireWalletProps {
 }
 
 const RequireWallet = ({ children }: RequireWalletProps) => {
-  const publicKey = useWalletStore((state) => state.publicKey); 
+  const publicKey = useWalletStore((state) => state.publicKey);
   const router = useRouter();
 
   useEffect(() => {
-    console.log("publicKey:", publicKey); 
+    console.log("publicKey:", publicKey);
     if (!publicKey) {
       router.push("/");
     }
