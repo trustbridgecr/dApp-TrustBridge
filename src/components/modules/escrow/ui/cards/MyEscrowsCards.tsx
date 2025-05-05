@@ -24,6 +24,7 @@ import {
   TriangleAlert,
 } from "lucide-react";
 import SkeletonCards from "../utils/SkeletonCards";
+import { ReleaseSection } from "../pages/ReleaseSection";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
@@ -195,6 +196,18 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                       </p>
 
                       <ProgressEscrow escrow={escrow} />
+
+                      {/* Show Release Section when escrow is pending release */}
+                      {pendingRelease && (
+                        <div className="mt-4">
+                          <ReleaseSection
+                            escrow={escrow}
+                            onSuccess={() => {
+                              setIsSuccessReleaseDialogOpen(true);
+                            }}
+                          />
+                        </div>
+                      )}
 
                       <p className="mt-3 text-xs text-muted-foreground text-end italic">
                         <strong>Created:</strong>{" "}

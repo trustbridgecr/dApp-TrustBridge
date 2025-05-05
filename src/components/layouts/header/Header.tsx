@@ -6,6 +6,7 @@ import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function Header() {
   const router = useRouter();
@@ -38,6 +39,7 @@ export function Header() {
 
   return (
     <header className="flex h-14 items-center justify-between border-b bg-muted/40 px-4 lg:px-6">
+      <SidebarTrigger />
       <div className="flex flex-1 items-center gap-4">
         <div className="ml-auto flex items-center gap-2">
           {walletConnected ? (

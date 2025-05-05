@@ -80,19 +80,38 @@ const getAllEscrowsByUser = async ({
   message?: string;
   data?: any;
 }> => {
-  const collectionRef = collection(db, "escrows");
-
+  console.log(type);
+  const collectionRef = collection(db, "loan_offers");
   try {
     const escrowCollectionSnapshot = await getDocs(
       query(collectionRef, where(type, "==", address)),
     );
 
-    const escrowList = escrowCollectionSnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
+    const escrowList = escrowCollectionSnapshot.docs.map((doc) => {
+      const data = doc.data();
+      // Convert Firebase timestamps to plain objects
+      const convertedData = {
+        ...data,
+        createdAt: data.createdAt
+          ? {
+              seconds: data.createdAt.seconds,
+              nanoseconds: data.createdAt.nanoseconds,
+            }
+          : null,
+        updatedAt: data.updatedAt
+          ? {
+              seconds: data.updatedAt.seconds,
+              nanoseconds: data.updatedAt.nanoseconds,
+            }
+          : null,
+        id: doc.id,
+      };
+      return convertedData;
+    });
 
-    return { success: false, data: escrowList };
+    console.log(escrowList);
+
+    return { success: true, data: escrowList };
   } catch (error: any) {
     const errorMessage =
       error.response && error.response.data
