@@ -1,12 +1,12 @@
 "use client";
 
-import { FC } from "react";
-import Link from "next/link";
-import { format } from "date-fns";
-import { Bell, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Notification } from "../server/notifications.firebase";
+import { format } from "date-fns";
+import { ArrowRight, Bell, Check } from "lucide-react";
+import Link from "next/link";
+import { FC } from "react";
+import { Notification } from "../../server/notifications.firebase";
 
 interface NotificationItemProps {
   notification: Notification;

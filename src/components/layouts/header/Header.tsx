@@ -7,7 +7,8 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { NotificationPanel } from "@/components/modules/notifications/ui/NotificationPanel";
+import { NotificationPanel } from "@/components/modules/notifications/ui/notificationPanel/NotificationPanel";
+
 
 export function Header() {
   const router = useRouter();

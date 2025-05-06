@@ -1,11 +1,12 @@
 "use client";
 
-import { FC } from "react";
-import { Bell, Loader2, CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { NotificationItem } from "./NotificationItem";
-import { Notification } from "../server/notifications.firebase";
+import { Bell, CheckCheck, Loader2 } from "lucide-react";
+import { FC } from "react";
+import { Notification } from "../../server/notifications.firebase";
+import { NotificationItem } from "../notificationItem/NotificationItem";
+
 
 interface NotificationListProps {
   notifications: Notification[];

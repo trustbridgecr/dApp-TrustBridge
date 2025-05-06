@@ -1,15 +1,15 @@
 "use client";
 
-import { FC, useState, useEffect } from "react";
-import { Bell } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { NotificationList } from "./NotificationList";
-import { useNotifications } from "../hooks/notifications.hook";
+import { Bell } from "lucide-react";
+import { FC, useEffect, useState } from "react";
+import { useNotifications } from "../../hooks/notifications.hook";
+import { NotificationList } from "../notificationList/NotificationList";
 
 interface NotificationPanelProps {
   showInitialAlert?: boolean;
