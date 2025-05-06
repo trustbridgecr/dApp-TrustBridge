@@ -200,8 +200,8 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                       {/* Show Release Section when escrow is pending release */}
                       {pendingRelease && (
                         <div className="mt-4">
-                          <ReleaseSection 
-                            escrow={escrow} 
+                          <ReleaseSection
+                            escrow={escrow}
                             onSuccess={() => {
                               setIsSuccessReleaseDialogOpen(true);
                             }}

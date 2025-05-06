@@ -45,7 +45,7 @@ import { toast } from "@/hooks/toast.hook";
 import { useEscrowDialogs } from "./hooks/use-escrow-dialogs.hook";
 import { useEscrowAmounts } from "./hooks/use-escrow-amounts";
 import { useEffect } from "react";
-import { ReleaseSection} from "../pages/ReleaseSection";
+import { ReleaseSection } from "../pages/ReleaseSection";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -253,7 +253,10 @@ const EscrowDetailDialog = ({
                     size="icon"
                     onClick={(e) => {
                       e.stopPropagation();
-                      copyText(selectedEscrow.contractId, selectedEscrow.contractId);
+                      copyText(
+                        selectedEscrow.contractId,
+                        selectedEscrow.contractId,
+                      );
                     }}
                   >
                     <Copy
@@ -269,17 +272,19 @@ const EscrowDetailDialog = ({
               </p>
 
               {/* Add Release Section when ready */}
-              {areAllMilestonesCompletedAndFlag && !selectedEscrow.releaseFlag && !selectedEscrow.disputeFlag && (
-                <div className="mt-4">
-                  <ReleaseSection 
-                    escrow={selectedEscrow} 
-                    onSuccess={() => {
-                      dialogStates.successRelease.setIsOpen(true);
-                      handleClose();
-                    }}
-                  />
-                </div>
-              )}
+              {areAllMilestonesCompletedAndFlag &&
+                !selectedEscrow.releaseFlag &&
+                !selectedEscrow.disputeFlag && (
+                  <div className="mt-4">
+                    <ReleaseSection
+                      escrow={selectedEscrow}
+                      onSuccess={() => {
+                        dialogStates.successRelease.setIsOpen(true);
+                        handleClose();
+                      }}
+                    />
+                  </div>
+                )}
 
               <Button
                 onClick={(e) => {

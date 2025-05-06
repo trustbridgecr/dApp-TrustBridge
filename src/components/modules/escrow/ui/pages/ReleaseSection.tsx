@@ -13,9 +13,9 @@ import { distributeEscrowEarnings } from "@/components/modules/escrow/services/d
 import { Escrow } from "@/@types/escrow.entity";
 import { CircleDollarSign, AlertTriangle, Lock } from "lucide-react";
 import { kit } from "@/components/modules/auth/wallet/constants/wallet-kit.constant";
-import { 
-  createEscrowReleaseError, 
-  isEscrowReleaseError
+import {
+  createEscrowReleaseError,
+  isEscrowReleaseError,
 } from "../../types/errors";
 import {
   Tooltip,
@@ -39,7 +39,7 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
   );
 
   const incompleteMilestones = escrow.milestones?.filter(
-    (milestone) => milestone.status !== "completed" || milestone.flag !== true
+    (milestone) => milestone.status !== "completed" || milestone.flag !== true,
   );
 
   const getDisabledTooltipMessage = () => {
@@ -48,7 +48,7 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
     }
     if (!areAllMilestonesCompleted) {
       const count = incompleteMilestones?.length || 0;
-      return `${count} milestone${count > 1 ? 's' : ''} still need${count === 1 ? 's' : ''} to be completed and approved`;
+      return `${count} milestone${count > 1 ? "s" : ""} still need${count === 1 ? "s" : ""} to be completed and approved`;
     }
     return "";
   };
@@ -56,24 +56,24 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
   const handleRelease = async () => {
     try {
       setIsLoading(true);
-      
+
       // Validate milestones first
       if (!areAllMilestonesCompleted) {
-        throw createEscrowReleaseError('MILESTONE_INCOMPLETE', {
+        throw createEscrowReleaseError("MILESTONE_INCOMPLETE", {
           incompleteCount: incompleteMilestones?.length,
-          milestones: incompleteMilestones
+          milestones: incompleteMilestones,
         });
       }
-      
+
       // Check wallet connection
       const { address } = await kit.getAddress().catch(() => {
-        throw createEscrowReleaseError('WALLET_NOT_CONNECTED');
+        throw createEscrowReleaseError("WALLET_NOT_CONNECTED");
       });
 
       // Validate contract ID
       const contractId = escrow.contractId;
       if (!contractId) {
-        throw createEscrowReleaseError('INVALID_CONTRACT');
+        throw createEscrowReleaseError("INVALID_CONTRACT");
       }
 
       // Attempt to release funds
@@ -81,19 +81,19 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
         contractId,
         signer: address,
       }).catch((error) => {
-        if (error.message?.toLowerCase().includes('insufficient funds')) {
-          throw createEscrowReleaseError('INSUFFICIENT_FUNDS', error);
+        if (error.message?.toLowerCase().includes("insufficient funds")) {
+          throw createEscrowReleaseError("INSUFFICIENT_FUNDS", error);
         }
-        if (error.message?.toLowerCase().includes('rejected')) {
-          throw createEscrowReleaseError('TRANSACTION_REJECTED', error);
+        if (error.message?.toLowerCase().includes("rejected")) {
+          throw createEscrowReleaseError("TRANSACTION_REJECTED", error);
         }
-        if (error.message?.toLowerCase().includes('unauthorized')) {
-          throw createEscrowReleaseError('UNAUTHORIZED', error);
+        if (error.message?.toLowerCase().includes("unauthorized")) {
+          throw createEscrowReleaseError("UNAUTHORIZED", error);
         }
-        if (error.message?.toLowerCase().includes('contract')) {
-          throw createEscrowReleaseError('CONTRACT_ERROR', error);
+        if (error.message?.toLowerCase().includes("contract")) {
+          throw createEscrowReleaseError("CONTRACT_ERROR", error);
         }
-        throw createEscrowReleaseError('UNKNOWN_ERROR', error);
+        throw createEscrowReleaseError("UNKNOWN_ERROR", error);
       });
 
       toast({
@@ -110,9 +110,9 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
       if (isEscrowReleaseError(error)) {
         errorMessage = error.message;
         // Add additional context for milestone errors
-        if (error.type === 'MILESTONE_INCOMPLETE' && error.details) {
+        if (error.type === "MILESTONE_INCOMPLETE" && error.details) {
           const details = error.details as { incompleteCount: number };
-          errorMessage = `${errorMessage} (${details.incompleteCount} milestone${details.incompleteCount > 1 ? 's' : ''} incomplete)`;
+          errorMessage = `${errorMessage} (${details.incompleteCount} milestone${details.incompleteCount > 1 ? "s" : ""} incomplete)`;
         }
       } else if (error instanceof Error) {
         errorMessage = error.message;
@@ -148,10 +148,13 @@ export function ReleaseSection({ escrow, onSuccess }: ReleaseSectionProps) {
                     disabled={!areAllMilestonesCompleted || isLoading}
                     className={cn(
                       "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white cursor-pointer",
-                      (!areAllMilestonesCompleted || isLoading) && "opacity-50 cursor-not-allowed"
+                      (!areAllMilestonesCompleted || isLoading) &&
+                        "opacity-50 cursor-not-allowed",
                     )}
                   >
-                    {!areAllMilestonesCompleted && <Lock className="w-4 h-4 mr-2" />}
+                    {!areAllMilestonesCompleted && (
+                      <Lock className="w-4 h-4 mr-2" />
+                    )}
                     Release Funds
                   </Button>
                 </div>
