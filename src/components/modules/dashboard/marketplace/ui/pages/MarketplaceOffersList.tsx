@@ -45,7 +45,6 @@ export default function MarketplaceOffersList() {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [sortOption, setSortOption] = useState("Relevance");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  // const [isFilterOpen, setIsFilterOpen] = useState(true);
 
   // Filter states
   const [lenderRating, setLenderRating] = useState({
