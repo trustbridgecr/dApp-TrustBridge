@@ -18,6 +18,15 @@ import LoanRequestDetailDialog from "@/components/modules/dashboard/offer/ui/dia
 import { useLoanOfferRequests } from "../../hooks/useLoanOfferRequests.hook";
 
 export default function LoanOfferRequests() {
+  interface LoanOffer {
+    id: string;
+    title: string;
+    lenderWallet: string;
+    maxAmount: number;
+    milestones?: { id: string; description: string }[];
+    platformFee?: number;
+    createdAt?: { seconds: number };
+  }
   const {
     loanOffers,
     loading,
@@ -87,7 +96,7 @@ export default function LoanOfferRequests() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {loanOffers.map((offer) => (
+        {loanOffers.map((offer: LoanOffer) => (
           <Card
             key={offer.id}
             className="overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group border-muted"

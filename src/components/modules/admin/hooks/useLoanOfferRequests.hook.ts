@@ -10,10 +10,12 @@ import {
 
 interface LoanOffer {
   id: string;
-  borrower: string;
-  amount: number;
-  status?: string;
-  createdAt: number;
+  title: string;
+  lenderWallet: string;
+  maxAmount: number;
+  milestones?: { id: string; description: string }[];
+  platformFee?: number;
+  createdAt?: { seconds: number };
 }
 
 interface LoanOfferRequest {
