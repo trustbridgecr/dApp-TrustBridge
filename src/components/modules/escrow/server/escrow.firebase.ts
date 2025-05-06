@@ -89,27 +89,23 @@ const getAllEscrowsByUser = async ({
 
     const escrowList = escrowCollectionSnapshot.docs.map((doc) => {
       const data = doc.data();
-      // Convert Firebase timestamps to plain objects
-      const convertedData = {
-        ...data,
-        createdAt: data.createdAt
-          ? {
-              seconds: data.createdAt.seconds,
-              nanoseconds: data.createdAt.nanoseconds,
-            }
-          : null,
-        updatedAt: data.updatedAt
-          ? {
-              seconds: data.updatedAt.seconds,
-              nanoseconds: data.updatedAt.nanoseconds,
-            }
-          : null,
-        id: doc.id,
-      };
-      return convertedData;
-    });
 
-    console.log(escrowList);
+      const safeTimestamps = (field: any) =>
+        field?.seconds ? new Date(field.seconds * 1000) : null;
+
+      return {
+        ...data,
+        id: doc.id,
+        createdAt: safeTimestamps(data.createdAt),
+        updatedAt: safeTimestamps(data.updatedAt),
+        milestones: Array.isArray(data.milestones)
+          ? data.milestones.map((m) => ({
+              ...m,
+              completedAt: safeTimestamps(m.completedAt),
+            }))
+          : [],
+      };
+    });
 
     return { success: true, data: escrowList };
   } catch (error: any) {
