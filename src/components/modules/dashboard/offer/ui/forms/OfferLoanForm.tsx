@@ -35,21 +35,43 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export function OfferLoanForm() {
   const { form, fieldArray, onSubmit } = useOfferLoanForm();
   const {
     register,
     formState: { errors, isSubmitting, isDirty },
+    trigger,
   } = form;
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 3;
 
-  const handleNextStep = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep((prev) => prev + 1);
-      // Scroll to top of form
-      window.scrollTo({ top: 0, behavior: "smooth" });
+  const stepValidationFields = {
+    1: ["title", "description", "maxAmount"],
+    2: ["approver", "releaseSigner", "platformAddress"],
+    3: ["milestones"],
+  };
+
+  const handleNextStep = async () => {
+    // Validate current step fields before proceeding
+    const isStepValid = await trigger(stepValidationFields[currentStep]);
+
+    if (isStepValid) {
+      if (currentStep < totalSteps) {
+        setCurrentStep((prev) => prev + 1);
+        // Scroll to top of form
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else {
+      // Show toast notification if validation fails
+      toast.error("Please complete all required fields before proceeding.");
+
+      // Find the first error field and focus it
+      const firstErrorField = document.querySelector('[aria-invalid="true"]');
+      if (firstErrorField) {
+        (firstErrorField as HTMLElement).focus();
+      }
     }
   };
 

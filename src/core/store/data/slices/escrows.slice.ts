@@ -54,6 +54,7 @@ export const useGlobalEscrowsSlice: StateCreator<
       set({ loadingEscrows: true }, false, ESCROW_ACTIONS.SET_LOADING_ESCROWS);
       try {
         const escrows = await fetchAllEscrows({ address, type });
+
         set(
           { escrows, loadingEscrows: false },
           false,

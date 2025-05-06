@@ -211,11 +211,10 @@ export default function MarketplaceOffersList() {
         {[...Array(5)].map((_, i) => (
           <Star
             key={i}
-            className={`h-4 w-4 ${
-              i < Math.floor(rating)
+            className={`h-4 w-4 ${i < Math.floor(rating)
                 ? "fill-emerald-500 text-emerald-500"
                 : "fill-muted stroke-muted-foreground"
-            }`}
+              }`}
           />
         ))}
         <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>
