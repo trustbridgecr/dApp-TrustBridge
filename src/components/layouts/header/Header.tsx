@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { NotificationPanel } from "@/components/modules/notifications/ui/notificationPanel/NotificationPanel";
+
 
 export function Header() {
   const router = useRouter();
@@ -42,6 +44,7 @@ export function Header() {
       <SidebarTrigger />
       <div className="flex flex-1 items-center gap-4">
         <div className="ml-auto flex items-center gap-2">
+          {walletConnected && <NotificationPanel />}
           {walletConnected ? (
             <Button
               variant="outline"
