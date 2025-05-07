@@ -45,6 +45,7 @@ export default function MarketplaceOffersList() {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [sortOption, setSortOption] = useState("Relevance");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  // const [isFilterOpen, setIsFilterOpen] = useState(true);
 
   // Filter states
   const [lenderRating, setLenderRating] = useState({
@@ -210,11 +211,10 @@ export default function MarketplaceOffersList() {
         {[...Array(5)].map((_, i) => (
           <Star
             key={i}
-            className={`h-4 w-4 ${
-              i < Math.floor(rating)
+            className={`h-4 w-4 ${i < Math.floor(rating)
                 ? "fill-emerald-500 text-emerald-500"
                 : "fill-muted stroke-muted-foreground"
-            }`}
+              }`}
           />
         ))}
         <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>
