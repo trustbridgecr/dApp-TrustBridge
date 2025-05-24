@@ -22,7 +22,6 @@ import {
   Shield,
   Gavel,
   Wallet,
-  Percent,
   Milestone,
   ArrowRight,
   CheckCircle2,
