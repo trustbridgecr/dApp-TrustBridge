@@ -11,7 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useInitializeEscrow } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import SelectField from "@/components/utils/ui/SelectSearch";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,6 +26,7 @@ import {
   Milestone,
   ArrowRight,
   CheckCircle2,
+  Loader2,
 } from "lucide-react";
 import { useMarketplaceStore } from "@/components/modules/dashboard/marketplace/store/marketplace";
 import {
@@ -39,17 +39,25 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useInitializeEscrow } from "../../hooks/initialize-escrow.hook";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const InitializeEscrowForm = () => {
   const {
     form,
     milestones,
     onSubmit,
-    handleFieldChange,
     userOptions,
-    trustlineOptions,
     showSelect,
+    trustlinesOptions,
     isAnyMilestoneEmpty,
+    isSendingTransaction,
   } = useInitializeEscrow();
 
   const { selectedLoan, clearSelectedLoan } = useMarketplaceStore();
@@ -60,11 +68,25 @@ const InitializeEscrowForm = () => {
     if (selectedLoan) {
       form.setValue("amount", selectedLoan.maxAmount?.toString() || "");
       form.setValue("platformFee", selectedLoan.platformFee?.toString() || "");
-      form.setValue("platformAddress", selectedLoan.platformAddress || "");
-      form.setValue("approver", selectedLoan.approver || "");
-      form.setValue("releaseSigner", selectedLoan.releaseSigner || "");
-      form.setValue("disputeResolver", selectedLoan.disputeResolver || "");
-      form.setValue("milestones", selectedLoan.milestones || []);
+      form.setValue(
+        "roles.platformAddress",
+        selectedLoan.platformAddress || "",
+      );
+      form.setValue("roles.approver", selectedLoan.approver || "");
+      form.setValue("roles.releaseSigner", selectedLoan.releaseSigner || "");
+      form.setValue(
+        "roles.disputeResolver",
+        selectedLoan.disputeResolver || "",
+      );
+      form.setValue(
+        "milestones",
+        (selectedLoan.milestones || []).map((m: any) => ({
+          description: m.description,
+          status: m.status ?? "pending",
+          evidence: m.evidence ?? "",
+          approvedFlag: m.approvedFlag ?? false,
+        })),
+      );
     }
 
     return () => {
@@ -152,7 +174,6 @@ const InitializeEscrowForm = () => {
                             {...field}
                             onChange={(e) => {
                               field.onChange(e);
-                              handleFieldChange("title", e.target.value);
                             }}
                           />
                         </div>
@@ -181,7 +202,6 @@ const InitializeEscrowForm = () => {
                             {...field}
                             onChange={(e) => {
                               field.onChange(e);
-                              handleFieldChange("engagementId", e.target.value);
                             }}
                           />
                         </div>
@@ -192,17 +212,42 @@ const InitializeEscrowForm = () => {
                 />
 
                 <div className="space-y-2">
-                  <FormLabel className="flex items-center gap-1">
-                    Trustline<span className="text-destructive ml-1">*</span>
-                    <TooltipInfo content="Trustline to be used for the escrow." />
-                  </FormLabel>
-                  <SelectField
-                    required
+                  <FormField
                     control={form.control}
-                    name="trustline"
-                    label=""
-                    tooltipContent="Trustline to be used for the escrow."
-                    options={trustlineOptions}
+                    name="trustline.address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Trustline</FormLabel>
+                        <FormControl>
+                          <Select
+                            onValueChange={(value) => {
+                              const selectedOption = trustlinesOptions.find(
+                                (opt) => opt.value === value,
+                              );
+                              if (selectedOption) {
+                                field.onChange(selectedOption.value);
+                              }
+                            }}
+                            value={field.value || ""}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select a trustline" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {trustlinesOptions.map((option) => (
+                                <SelectItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
               </div>
@@ -225,7 +270,6 @@ const InitializeEscrowForm = () => {
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
-                            handleFieldChange("description", e.target.value);
                           }}
                         />
                       </FormControl>
@@ -255,34 +299,7 @@ const InitializeEscrowForm = () => {
                             {...field}
                             onChange={(e) => {
                               field.onChange(e);
-                              handleFieldChange("amount", e.target.value);
                             }}
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="platformFee"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-1">
-                        Platform Fee
-                        <span className="text-destructive ml-1">*</span>
-                        <TooltipInfo content="Fee charged by the platform for this escrow." />
-                      </FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Percent className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            readOnly
-                            className="bg-gray-100 cursor-not-allowed pl-10"
-                            placeholder="Auto-filled platform fee"
-                            value={field.value !== "" ? `${field.value}%` : ""}
                           />
                         </div>
                       </FormControl>
@@ -309,7 +326,7 @@ const InitializeEscrowForm = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
-                  name="approver"
+                  name="roles.approver"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center justify-between">
@@ -324,7 +341,7 @@ const InitializeEscrowForm = () => {
                         {showSelect.approver ? (
                           <SelectField
                             control={form.control}
-                            name="approver"
+                            name="roles.approver"
                             label=""
                             tooltipContent="A"
                             options={userOptions}
@@ -347,7 +364,7 @@ const InitializeEscrowForm = () => {
                 />
                 <FormField
                   control={form.control}
-                  name="serviceProvider"
+                  name="roles.serviceProvider"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center justify-between">
@@ -361,7 +378,7 @@ const InitializeEscrowForm = () => {
                         {showSelect.serviceProvider ? (
                           <SelectField
                             control={form.control}
-                            name="serviceProvider"
+                            name="roles.serviceProvider"
                             label=""
                             tooltipContent=""
                             options={userOptions}
@@ -375,10 +392,45 @@ const InitializeEscrowForm = () => {
                               {...field}
                               onChange={(e) => {
                                 field.onChange(e);
-                                handleFieldChange(
-                                  "serviceProvider",
-                                  e.target.value,
-                                );
+                              }}
+                            />
+                          </div>
+                        )}
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="roles.receiver"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center justify-between">
+                        <span className="flex items-center gap-1">
+                          Receiver
+                          <span className="text-destructive ml-1">*</span>
+                          <TooltipInfo content="Address of the receiver for this escrow." />
+                        </span>
+                      </FormLabel>
+                      <FormControl>
+                        {showSelect.receiver ? (
+                          <SelectField
+                            control={form.control}
+                            name="roles.receiver"
+                            label=""
+                            tooltipContent=""
+                            options={userOptions}
+                          />
+                        ) : (
+                          <div className="relative">
+                            <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              placeholder="Enter service provider address"
+                              className="pl-10 font-mono text-sm"
+                              {...field}
+                              onChange={(e) => {
+                                field.onChange(e);
                               }}
                             />
                           </div>
@@ -393,7 +445,7 @@ const InitializeEscrowForm = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
-                  name="releaseSigner"
+                  name="roles.releaseSigner"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center justify-between">
@@ -407,7 +459,7 @@ const InitializeEscrowForm = () => {
                         {showSelect.releaseSigner ? (
                           <SelectField
                             control={form.control}
-                            name="releaseSigner"
+                            name="roles.releaseSigner"
                             label=""
                             tooltipContent=""
                             options={userOptions}
@@ -431,7 +483,7 @@ const InitializeEscrowForm = () => {
 
                 <FormField
                   control={form.control}
-                  name="disputeResolver"
+                  name="roles.disputeResolver"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center justify-between">
@@ -445,7 +497,7 @@ const InitializeEscrowForm = () => {
                         {showSelect.disputeResolver ? (
                           <SelectField
                             control={form.control}
-                            name="disputeResolver"
+                            name="roles.disputeResolver"
                             label=""
                             tooltipContent=""
                             options={userOptions}
@@ -470,7 +522,7 @@ const InitializeEscrowForm = () => {
               <div className=" mb-6">
                 <FormField
                   control={form.control}
-                  name="platformAddress"
+                  name="roles.platformAddress"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center justify-between">
@@ -484,7 +536,7 @@ const InitializeEscrowForm = () => {
                         {showSelect.platformAddress ? (
                           <SelectField
                             control={form.control}
-                            name="platformAddress"
+                            name="roles.platformAddress"
                             label=""
                             tooltipContent=""
                             options={userOptions}
@@ -561,10 +613,6 @@ const InitializeEscrowForm = () => {
                                 updatedMilestones[index].description =
                                   e.target.value;
                                 form.setValue("milestones", updatedMilestones);
-                                handleFieldChange(
-                                  "milestones",
-                                  updatedMilestones,
-                                );
                               }}
                             />
                           </div>
@@ -593,10 +641,20 @@ const InitializeEscrowForm = () => {
             ) : (
               <Button
                 type="submit"
-                className="bg-gradient-to-r from-emerald-600 to-teal-900 hover:from-emerald-700 hover:to-teal-600 gap-1"
-                disabled={isAnyMilestoneEmpty}
+                className="w-full"
+                disabled={isAnyMilestoneEmpty || isSendingTransaction}
               >
-                Initialize Escrow
+                {isSendingTransaction ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Initializing Escrow...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="mr-2 h-4 w-4" />
+                    Initialize Escrow
+                  </>
+                )}
               </Button>
             )}
           </CardFooter>

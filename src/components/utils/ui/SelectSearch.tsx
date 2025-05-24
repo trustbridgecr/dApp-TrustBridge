@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import React, { useState } from "react";
+import React from "react";
 import {
   FormControl,
   FormField,
@@ -24,7 +22,6 @@ import {
   CommandItem,
   CommandList,
 } from "../../ui/command";
-import { useInitializeEscrow } from "../../modules/escrow/hooks/initialize-escrow.hook";
 
 interface SelectFieldProps {
   control: any;
@@ -45,44 +42,31 @@ const SelectField: React.FC<SelectFieldProps> = ({
   className,
   required,
 }) => {
-  const { handleFieldChange } = useInitializeEscrow();
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(options[0]);
-
-  const handleSelect = (option: {
-    value: string | undefined;
-    label: string;
-  }) => {
-    setSelected(option);
-    handleFieldChange(name, option.value);
-    setOpen(false);
-  };
-
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => {
+        const selectedOption = options.find((opt) => opt.value === field.value);
+
         return (
           <FormItem className={className}>
             {label && (
               <FormLabel className="flex items-center">
-                {label}{" "}
+                {label}
                 {required && <span className="text-destructive ml-1">*</span>}
                 {tooltipContent && <TooltipInfo content={tooltipContent} />}
               </FormLabel>
             )}
             <FormControl>
-              <Popover open={open} onOpenChange={setOpen}>
+              <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     role="combobox"
                     className="w-full justify-between font-normal"
-                    aria-expanded={open}
-                    onClick={() => setOpen(!open)}
                   >
-                    {selected ? selected.label : "Select"}
+                    {selectedOption?.label ?? "Select"}
                     <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -96,9 +80,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
                           <CommandItem
                             key={option.value}
                             onSelect={() => {
-                              setSelected(option);
                               field.onChange(option.value);
-                              handleSelect(option);
                             }}
                           >
                             {option.label}

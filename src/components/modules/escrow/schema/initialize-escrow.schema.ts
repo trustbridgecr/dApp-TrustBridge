@@ -1,14 +1,29 @@
-import { useValidData } from "@/utils/hook/valid-data.hook";
+import { isValidWallet } from "@/helpers/is-valid-wallet.helper";
 import { z } from "zod";
 
-export const GetFormSchema = (maxAmount: number = Infinity) => {
-  const { isValidWallet } = useValidData();
-
-  return z.object({
-    trustline: z.string().min(1, {
-      message: "Trustline is required.",
-    }),
-
+export const formSchema = z.object({
+  signer: z.string().min(1, {
+    message: "Signer is required.",
+  }),
+  engagementId: z.string().min(1, {
+    message: "Engagement is required.",
+  }),
+  title: z.string().min(1, {
+    message: "Title is required.",
+  }),
+  description: z.string().min(10, {
+    message: "Description must be at least 10 characters long.",
+  }),
+  amount: z.string().min(1, {
+    message: "Amount is required.",
+  }),
+  platformFee: z.string().min(1, {
+    message: "Platform fee is required.",
+  }),
+  receiverMemo: z.number().min(0, {
+    message: "Receiver memo must be a non-negative number.",
+  }),
+  roles: z.object({
     approver: z
       .string()
       .min(1, {
@@ -17,19 +32,6 @@ export const GetFormSchema = (maxAmount: number = Infinity) => {
       .refine((value) => isValidWallet(value), {
         message: "Approver must be a valid wallet.",
       }),
-
-    engagementId: z.string().min(1, {
-      message: "Engagement is required.",
-    }),
-
-    title: z.string().min(1, {
-      message: "Title is required.",
-    }),
-
-    description: z.string().min(1, {
-      message: "Description is required.",
-    }),
-
     serviceProvider: z
       .string()
       .min(1, {
@@ -38,7 +40,6 @@ export const GetFormSchema = (maxAmount: number = Infinity) => {
       .refine((value) => isValidWallet(value), {
         message: "Service provider must be a valid wallet.",
       }),
-
     platformAddress: z
       .string()
       .min(1, {
@@ -47,29 +48,6 @@ export const GetFormSchema = (maxAmount: number = Infinity) => {
       .refine((value) => isValidWallet(value), {
         message: "Platform address must be a valid wallet.",
       }),
-
-    platformFee: z
-      .string()
-      .min(1, {
-        message: "Platform fee is required.",
-      })
-      .regex(/^\d+(\.\d{1})?$/, {
-        message:
-          "Platform fee must be a number with at most one decimal place.",
-      }),
-
-    amount: z
-      .string()
-      .min(1, {
-        message: "Amount is required.",
-      })
-      .regex(/^[1-9][0-9]*$/, {
-        message: "Amount must be a whole number greater than 0 (no decimals).",
-      })
-      .refine((val) => Number(val) <= maxAmount, {
-        message: `Amount must be less than or equal to ${maxAmount}`,
-      }),
-
     releaseSigner: z
       .string()
       .min(1, {
@@ -78,7 +56,6 @@ export const GetFormSchema = (maxAmount: number = Infinity) => {
       .refine((value) => isValidWallet(value), {
         message: "Release signer must be a valid wallet.",
       }),
-
     disputeResolver: z
       .string()
       .min(1, {
@@ -87,15 +64,31 @@ export const GetFormSchema = (maxAmount: number = Infinity) => {
       .refine((value) => isValidWallet(value), {
         message: "Dispute resolver must be a valid wallet.",
       }),
-
-    milestones: z
-      .array(
-        z.object({
-          description: z.string().min(1, {
-            message: "Milestone description is required.",
-          }),
+    receiver: z
+      .string()
+      .min(1, {
+        message: "Receiver address is required.",
+      })
+      .refine((value) => isValidWallet(value), {
+        message: "Receiver address must be a valid wallet.",
+      }),
+  }),
+  trustline: z.object({
+    address: z.string().min(1, {
+      message: "Trustline address is required.",
+    }),
+    decimals: z.number().default(10000000),
+  }),
+  milestones: z
+    .array(
+      z.object({
+        description: z.string().min(1, {
+          message: "Milestone description is required.",
         }),
-      )
-      .min(1, { message: "At least one milestone is required." }),
-  });
-};
+        status: z.string().default("pending"),
+        evidence: z.string().default(""),
+        approvedFlag: z.boolean().default(false),
+      }),
+    )
+    .min(1, { message: "At least one milestone is required." }),
+});
