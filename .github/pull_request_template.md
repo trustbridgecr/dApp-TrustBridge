@@ -27,6 +27,28 @@ Add here some information
 
 - **Video**: [Link to Loom video](https://loom.com)
 
+---
+
+## ✅ ESLint Compliance (Mandatory)
+
+To ensure that the code follows project standards, please run the following command and attach a screenshot of the output:
+
+```bash
+npm run lint
+```
+
+You should see:
+
+```
+✔ No ESLint warnings or errors
+```
+
+📸 **Attach a screenshot showing the result of the lint check:**
+
+> ⚠️ **Pull requests without this screenshot will be rejected.**
+
+---
+
 ## 📂 Related Issue
 
 <!-- Link the related issue so it automatically closes when this pull request is merged. -->
