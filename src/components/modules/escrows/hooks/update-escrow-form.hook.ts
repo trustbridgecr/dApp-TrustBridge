@@ -87,7 +87,7 @@ export const useUpdateEscrowForm = () => {
 
       if (!unsignedTransaction) {
         throw new Error(
-          "Unsigned transaction is missing from updateEscrow response."
+          "Unsigned transaction is missing from updateEscrow response.",
         );
       }
 
@@ -142,7 +142,7 @@ export const useUpdateEscrowForm = () => {
       console.error("Error:", mappedError.message);
 
       toast.error(
-        mappedError ? mappedError.message : "An unknown error occurred"
+        mappedError ? mappedError.message : "An unknown error occurred",
       );
     } finally {
       setLoading(false);

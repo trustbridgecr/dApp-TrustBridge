@@ -18,7 +18,7 @@ export const EscrowCreatedSection = () => {
   const completedMilestones =
     escrow?.milestones.filter(
       (m: Milestone) =>
-        m.status === "approved" || m.status === "completed" || m.approvedFlag
+        m.status === "approved" || m.status === "completed" || m.approvedFlag,
     ).length || 0;
   const progressPercentage =
     totalMilestones > 0 ? (completedMilestones / totalMilestones) * 100 : 0;

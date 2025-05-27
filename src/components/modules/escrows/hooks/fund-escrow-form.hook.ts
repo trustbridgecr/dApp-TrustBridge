@@ -49,7 +49,7 @@ export const useFundEscrowForm = () => {
 
       if (!unsignedTransaction) {
         throw new Error(
-          "Unsigned transaction is missing from fundEscrow response."
+          "Unsigned transaction is missing from fundEscrow response.",
         );
       }
 
@@ -86,7 +86,7 @@ export const useFundEscrowForm = () => {
       console.error("Error:", mappedError.message);
 
       toast.error(
-        mappedError ? mappedError.message : "An unknown error occurred"
+        mappedError ? mappedError.message : "An unknown error occurred",
       );
     } finally {
       setLoading(false);

@@ -54,7 +54,7 @@ export const useResolveDisputeForm = () => {
 
       if (!unsignedTransaction) {
         throw new Error(
-          "Unsigned transaction is missing from resolveDispute response."
+          "Unsigned transaction is missing from resolveDispute response.",
         );
       }
 
@@ -115,7 +115,7 @@ export const useResolveDisputeForm = () => {
       console.error("Error:", mappedError.message);
 
       toast.error(
-        mappedError ? mappedError.message : "An unknown error occurred"
+        mappedError ? mappedError.message : "An unknown error occurred",
       );
     } finally {
       setLoading(false);

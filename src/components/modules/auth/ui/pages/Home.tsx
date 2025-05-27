@@ -1,37 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
+import { useWalletContext } from "@/providers/wallet.provider";
+import { useEffect } from "react";
 import { ArrowRight, Wallet, BadgeCheck, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import Image from "next/image";
-import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
-import { useWalletContext } from "@/providers/wallet.provider";
-import { getApprovedLoanOffers } from "@/components/modules/dashboard/marketplace/server/marketplace.firebase";
-
-interface ApprovedLoan {
-  id: string;
-  title: string;
-  maxAmount: number;
-  platformFee: number;
-}
 
 export default function HomePage() {
   const { walletAddress } = useWalletContext();
   const { handleConnect, handleDisconnect } = useWallet();
-  const [approvedLoans, setApprovedLoans] = useState<ApprovedLoan[]>([]);
-
-  useEffect(() => {
-    const fetchApprovedLoans = async () => {
-      const res = await getApprovedLoanOffers();
-      if (res.success && res.data) {
-        setApprovedLoans(res.data);
-      }
-    };
-
-    fetchApprovedLoans();
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -129,31 +109,15 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="absolute inset-0 p-4 z-10">
-                  <div className="h-full overflow-hidden">
-                    <div className="loan-scroll-container">
-                      {[
-                        ...approvedLoans,
-                        ...approvedLoans,
-                        ...approvedLoans,
-                      ].map((loan, index) => (
-                        <div
-                          key={`${loan.id}-${index}`}
-                          className="bg-neutral-950 rounded-lg p-4 mb-3 border border-emerald-900/20 shadow-md"
-                        >
-                          <h3 className="text-lg font-semibold text-emerald-400">
-                            {loan.title}
-                          </h3>
-                          <p className="text-sm text-gray-400">
-                            Loan Amount: ${loan.maxAmount}
-                          </p>
-                          <p className="text-sm text-gray-400">
-                            Fee: {loan.platformFee}%
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                {/* Imagen decorativa o espacio para gráficos */}
+                <div className="absolute inset-0 p-4 z-10 flex items-center justify-center">
+                  <Image
+                    src="/img/illustration-loan.png"
+                    alt="Loan Illustration"
+                    width={300}
+                    height={200}
+                    className="object-contain"
+                  />
                 </div>
               </div>
             </div>

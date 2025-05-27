@@ -88,7 +88,7 @@ export const formSchema = z.object({
         status: z.string().default("pending"),
         evidence: z.string().default(""),
         approvedFlag: z.boolean().default(false),
-      })
+      }),
     )
     .min(1, { message: "At least one milestone is required." }),
 });

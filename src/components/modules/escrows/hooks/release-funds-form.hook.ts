@@ -53,7 +53,7 @@ export const useReleaseFundsForm = () => {
 
       if (!unsignedTransaction) {
         throw new Error(
-          "Unsigned transaction is missing from releaseFunds response."
+          "Unsigned transaction is missing from releaseFunds response.",
         );
       }
 
@@ -110,7 +110,7 @@ export const useReleaseFundsForm = () => {
       console.error("Error:", mappedError.message);
 
       toast.error(
-        mappedError ? mappedError.message : "An unknown error occurred"
+        mappedError ? mappedError.message : "An unknown error occurred",
       );
     } finally {
       setLoading(false);

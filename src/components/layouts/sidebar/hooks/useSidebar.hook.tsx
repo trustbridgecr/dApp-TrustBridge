@@ -1,15 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  CreditCard,
-  ShoppingBag,
-  CloudUpload,
-  Bell,
-  MessageSquare,
-} from "lucide-react";
+import { LayoutDashboard, CreditCard, MessageSquare } from "lucide-react";
 import { ReactNode } from "react";
 import { useWalletContext } from "@/providers/wallet.provider";
 

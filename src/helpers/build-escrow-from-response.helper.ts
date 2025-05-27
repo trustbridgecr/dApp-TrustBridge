@@ -10,7 +10,7 @@ import {
  */
 export const buildEscrowFromResponse = (
   result: InitializeEscrowResponse | UpdateEscrowResponse,
-  walletAddress: string
+  walletAddress: string,
 ): Escrow => ({
   contractId: result.contractId,
   signer: walletAddress || "",

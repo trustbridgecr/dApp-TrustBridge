@@ -1,4 +1,3 @@
-import React from "react";
 import {
   FormControl,
   FormField,
@@ -22,10 +21,11 @@ import {
   CommandItem,
   CommandList,
 } from "../../ui/command";
+import { Control, FieldValues, Path } from "react-hook-form";
 
-interface SelectFieldProps {
-  control: any;
-  name: string;
+interface SelectFieldProps<T extends FieldValues> {
+  control: Control<T>;
+  name: Path<T>;
   label: string;
   tooltipContent: string;
   options: { value: string | undefined; label: string }[];
@@ -33,7 +33,7 @@ interface SelectFieldProps {
   required?: boolean;
 }
 
-const SelectField: React.FC<SelectFieldProps> = ({
+const SelectField = <T extends FieldValues>({
   control,
   name,
   label,
@@ -41,7 +41,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   options,
   className,
   required,
-}) => {
+}: SelectFieldProps<T>) => {
   return (
     <FormField
       control={control}

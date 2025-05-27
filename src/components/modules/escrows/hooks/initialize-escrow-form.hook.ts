@@ -31,7 +31,7 @@ export const useInitializeEscrow = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<InitializeEscrowResponse | null>(
-    null
+    null,
   );
   const { walletAddress } = useWalletContext();
   const { setEscrow } = useEscrowContext();
@@ -78,7 +78,7 @@ export const useInitializeEscrow = () => {
     (trustline: Trustline & { name?: string }) => ({
       value: trustline.address,
       label: trustline.name,
-    })
+    }),
   );
 
   const addMilestone = () => {
@@ -94,7 +94,7 @@ export const useInitializeEscrow = () => {
     if (currentMilestones.length > 1) {
       form.setValue(
         "milestones",
-        currentMilestones.filter((_, i) => i !== index)
+        currentMilestones.filter((_, i) => i !== index),
       );
     }
   };
@@ -103,7 +103,7 @@ export const useInitializeEscrow = () => {
     form.setValue("title", "Sample TW Escrow");
     form.setValue(
       "description",
-      "This is a sample TW escrow for testing purposes"
+      "This is a sample TW escrow for testing purposes",
     );
     form.setValue("engagementId", "ENG12345");
     form.setValue("amount", "50");
@@ -117,7 +117,7 @@ export const useInitializeEscrow = () => {
     form.setValue("receiverMemo", 90909090);
     form.setValue(
       "trustline.address",
-      trustlines.find((t) => t.name === "USDC")?.address || ""
+      trustlines.find((t) => t.name === "USDC")?.address || "",
     );
     form.setValue("milestones", [
       {
@@ -163,7 +163,7 @@ export const useInitializeEscrow = () => {
 
       if (!unsignedTransaction) {
         throw new Error(
-          "Unsigned transaction is missing from deployEscrow response."
+          "Unsigned transaction is missing from deployEscrow response.",
         );
       }
 
@@ -205,7 +205,7 @@ export const useInitializeEscrow = () => {
       if (data && data.status === "SUCCESS") {
         const escrow = buildEscrowFromResponse(
           data as InitializeEscrowResponse,
-          walletAddress || ""
+          walletAddress || "",
         );
         setEscrow(escrow);
         setActiveTab("escrow");
@@ -216,7 +216,7 @@ export const useInitializeEscrow = () => {
       console.error("Error:", mappedError.message);
 
       toast.error(
-        mappedError ? mappedError.message : "An unknown error occurred"
+        mappedError ? mappedError.message : "An unknown error occurred",
       );
     } finally {
       setLoading(false);
@@ -237,7 +237,7 @@ export const useInitializeEscrow = () => {
   };
 
   const getStepFields = (
-    step: number
+    step: number,
   ): (keyof z.infer<typeof formSchema>)[] => {
     switch (step) {
       case 0:
