@@ -2,9 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { db } from "@/core/config/firebase/firebase";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
 import {
   LayoutDashboard,
   CreditCard,
@@ -14,6 +11,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { ReactNode } from "react";
+import { useWalletContext } from "@/providers/wallet.provider";
 
 type MenuItem = {
   href: string;
@@ -30,36 +28,17 @@ type MenuSection = {
 };
 
 export function useTrustBridgeSidebar() {
-  const { address } = useGlobalAuthenticationStore();
+  const { walletAddress } = useWalletContext();
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
-  const [hasNewRequest, setHasNewRequest] = useState(false);
 
-  const formattedAddress = address
-    ? `${address.substring(0, 8)}...${address.substring(address.length - 4)}`
+  const formattedAddress = walletAddress
+    ? `${walletAddress.substring(0, 8)}...${walletAddress.substring(walletAddress.length - 4)}`
     : "";
 
   const isAdmin =
-    address === "GBZ7KCIUGD2ME7J7YSQW6WVM2RRNYA3AQWVEKVM2VK5LMQL3CKYARBWX";
-
-  useEffect(() => {
-    const q = query(
-      collection(db, "loan_offers"),
-      where("status", "==", "pending"),
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setHasNewRequest(!snapshot.empty);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (pathname === "/dashboard/admin/loan-requests") {
-      setHasNewRequest(false);
-    }
-  }, [pathname]);
+    walletAddress ===
+    "GBZ7KCIUGD2ME7J7YSQW6WVM2RRNYA3AQWVEKVM2VK5LMQL3CKYARBWX";
 
   const menuItems: MenuSection[] = [
     {
@@ -116,20 +95,22 @@ export function useTrustBridgeSidebar() {
     },
   ];
 
-  const adminItems: MenuSection[] = [
-    {
-      section: "Administration",
-      items: [
+  const adminItems: MenuSection[] = isAdmin
+    ? [
         {
-          href: "/dashboard/admin/loan-requests",
-          icon: <Bell className="h-4 w-4" />,
-          label: "Loan Requests",
-          active: pathname === "/dashboard/admin/loan-requests",
-          notification: hasNewRequest,
+          section: "Administration",
+          items: [
+            {
+              href: "/dashboard/admin/loan-requests",
+              icon: <Bell className="h-4 w-4" />,
+              label: "Loan Requests",
+              active: pathname === "/dashboard/admin/loan-requests",
+              notification: false,
+            },
+          ],
         },
-      ],
-    },
-  ];
+      ]
+    : [];
 
   const toggleCollapsed = () => setCollapsed(!collapsed);
 

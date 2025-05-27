@@ -1,42 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
+import { useWalletContext } from "@/providers/wallet.provider";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
+import { LogIn, LogOut, Wallet } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { NotificationPanel } from "@/components/modules/notifications/ui/notificationPanel/NotificationPanel";
-
 
 export function Header() {
-  const router = useRouter();
-  const [walletConnected, setWalletConnected] = useState(false);
+  const { walletAddress } = useWalletContext();
   const { handleConnect, handleDisconnect } = useWallet();
 
-  useEffect(() => {
-    const stellarWallet = localStorage.getItem("address-wallet");
-    const metamaskWallet = localStorage.getItem("metamask-wallet");
-
-    if (stellarWallet || metamaskWallet) {
-      setWalletConnected(true);
-    }
-  }, []);
-
-  const handleDisconnectWallet = () => {
-    handleDisconnect();
-    localStorage.removeItem("address-wallet");
-    localStorage.removeItem("@StellarWalletsKit/usedWalletsIds");
-    setWalletConnected(false);
-    console.log("Wallet disconnected");
-    router.push("/");
-  };
-
-  const handleConnectWallet = () => {
-    handleConnect();
-    setWalletConnected(true);
-    console.log("Wallet connected");
+  const truncateAddress = (address: string) => {
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
   return (
@@ -44,24 +19,32 @@ export function Header() {
       <SidebarTrigger />
       <div className="flex flex-1 items-center gap-4">
         <div className="ml-auto flex items-center gap-2">
-          {walletConnected && <NotificationPanel />}
-          {walletConnected ? (
-            <Button
-              variant="outline"
-              size="sm"
-              className="bg-transparent border-white/10 text-white hover:bg-white/10 hover:text-gray-200 hidden sm:flex"
-              onClick={handleDisconnectWallet}
-            >
-              <LogOut className="h-3.5 w-3.5 mr-1.5" />
-              Disconnect Wallet
-            </Button>
+          {walletAddress ? (
+            <>
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-950 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                <Wallet className="w-4 h-4 text-emerald-600" />
+                <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                  {truncateAddress(walletAddress)}
+                </span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-transparent border-white/10 text-white hover:bg-white/10 hover:text-gray-200 hidden sm:flex"
+                onClick={handleDisconnect}
+              >
+                <LogOut className="h-3.5 w-3.5 mr-1.5" />
+                Disconnect Wallet
+              </Button>
+            </>
           ) : (
             <Button
               variant="outline"
               size="sm"
               className="border-0 text-white hidden sm:flex"
-              onClick={handleConnectWallet}
+              onClick={handleConnect}
             >
+              <LogIn className="h-3.5 w-3.5 mr-1.5" />
               Connect Wallet
             </Button>
           )}

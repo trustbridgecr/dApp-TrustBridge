@@ -1,4 +1,4 @@
-import { CreatedAt, UpdatedAt } from "./dates.entity";
+import { CreatedAt, UpdatedAt } from "./date.entity";
 
 export interface User {
   id: string;

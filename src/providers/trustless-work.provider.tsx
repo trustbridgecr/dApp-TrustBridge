@@ -6,7 +6,7 @@ import {
   development,
 
   // mainnet environment = "https://api.trustlesswork.com"
-  mainNet,
+  // mainNet,
   TrustlessWorkConfig,
 } from "@trustless-work/escrow";
 

@@ -1,5 +1,7 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { useWalletContext } from "@/providers/wallet.provider";
 
 interface DashboardStats {
   totalLoans: number;
@@ -39,7 +41,7 @@ interface UpcomingMilestone {
 }
 
 export function useDashboard() {
-  const { address } = useGlobalAuthenticationStore();
+  const { walletAddress: address } = useWalletContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [stats, setStats] = useState<DashboardStats>({
     totalLoans: 0,

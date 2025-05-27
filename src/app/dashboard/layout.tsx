@@ -8,7 +8,7 @@ import { Header } from "@/components/layouts/header/Header";
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <SidebarProvider>
-      <div className="flex h-screen overflow-hidden w-full">
+      <div className="flex h-screen w-full">
         <TrustBridgeSidebar />
         <div className="flex-1 ">
           <div className="z-index-10000">
