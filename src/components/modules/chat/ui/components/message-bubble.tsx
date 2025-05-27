@@ -1,58 +1,67 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Check, CheckCheck, Clock, AlertCircle } from "lucide-react";
-import { Message } from "@/@types/chat.entity";
+import { Check, CheckCheck, Clock } from "lucide-react";
+
+interface Message {
+  id: string;
+  content: string;
+  sender: "user" | "other";
+  timestamp: string;
+  status: "sent" | "delivered" | "read";
+}
 
 interface MessageBubbleProps {
   message: Message;
-  onRetry?: (messageId: string) => void;
 }
 
-export function MessageBubble({ message, onRetry }: MessageBubbleProps) {
+export function MessageBubble({ message }: MessageBubbleProps) {
+  const isUser = message.sender === "user";
+
   const getStatusIcon = () => {
     switch (message.status) {
-      case "sending":
-        return <Clock className="w-3 h-3 text-gray-400" />;
       case "sent":
-        return <Check className="w-3 h-3 text-gray-400" />;
+        return <Check className="w-3 h-3" />;
       case "delivered":
-        return <CheckCheck className="w-3 h-3 text-gray-400" />;
+        return <CheckCheck className="w-3 h-3" />;
       case "read":
-        return <CheckCheck className="w-3 h-3 text-emerald-400" />;
-      case "error":
-        return <AlertCircle className="w-3 h-3 text-red-500" />;
+        return <CheckCheck className="w-3 h-3 text-blue-500" />;
       default:
-        return null;
+        return <Clock className="w-3 h-3" />;
     }
   };
 
   return (
-    <div
-      className={cn(
-        "flex",
-        message.sender === "user" ? "justify-end" : "justify-start",
-      )}
-    >
-      <div
-        className={cn(
-          "max-w-[70%] md:max-w-[60%] lg:max-w-[50%] rounded-lg p-3",
-          message.sender === "user"
-            ? "bg-emerald-600 text-white"
-            : "bg-[#2D2D2D] text-gray-100",
-        )}
-      >
-        <p className="text-sm break-words">{message.content}</p>
-        <div className="flex items-center gap-1 mt-1">
-          <span className="text-xs opacity-50">{message.timestamp}</span>
-          {message.sender === "user" && getStatusIcon()}
-          {message.status === "error" && onRetry && (
-            <button
-              onClick={() => onRetry(message.id)}
-              className="ml-2 text-xs text-red-500 underline hover:text-red-700"
+    <div className={cn("flex", isUser ? "justify-end" : "justify-start")}>
+      <div className={cn("max-w-[70%] space-y-1")}>
+        <div
+          className={cn(
+            "rounded-2xl px-4 py-2 text-sm break-words",
+            isUser
+              ? "bg-emerald-600 text-white rounded-br-md"
+              : "bg-muted text-foreground rounded-bl-md",
+          )}
+        >
+          {message.content}
+        </div>
+        <div
+          className={cn(
+            "flex items-center gap-1 text-xs text-muted-foreground px-1",
+            isUser ? "justify-end" : "justify-start",
+          )}
+        >
+          <span>{message.timestamp}</span>
+          {isUser && (
+            <span
+              className={cn(
+                "flex items-center",
+                message.status === "read"
+                  ? "text-blue-500"
+                  : "text-muted-foreground",
+              )}
             >
-              Retry
-            </button>
+              {getStatusIcon()}
+            </span>
           )}
         </div>
       </div>

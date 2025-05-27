@@ -1,71 +1,35 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { useState, useRef, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Menu } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
-import { Chat, Message, ChatState } from "@/@types/chat.entity";
-import Loader from "@/components/utils/ui/Loader";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Send, Menu, ArrowLeft, Copy, Check } from "lucide-react";
 import { MessageBubble } from "../components/message-bubble";
-
-const mockChats: Chat[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    avatar: "https://github.com/shadcn.png",
-    lastMessage: "Hey, how are you?",
-    unread: 2,
-    status: "online",
-    messages: [
-      {
-        id: "1",
-        content: "Hey, how are you?",
-        sender: "other",
-        timestamp: "10:30 AM",
-        status: "read",
-      },
-      {
-        id: "2",
-        content: "I'm good, thanks! How about you?",
-        sender: "user",
-        timestamp: "10:32 AM",
-        status: "read",
-      },
-    ],
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    avatar: "https://github.com/shadcn.png",
-    lastMessage: "Can we discuss the loan terms?",
-    unread: 0,
-    status: "offline",
-    lastSeen: "2 hours ago",
-    messages: [
-      {
-        id: "1",
-        content: "Can we discuss the loan terms?",
-        sender: "other",
-        timestamp: "9:15 AM",
-        status: "delivered",
-      },
-    ],
-  },
-];
+import { useWalletContext } from "@/providers/wallet.provider";
+import { useParams, useRouter } from "next/navigation";
+import { useWalletChat } from "../../hooks/wallet-chat.hook";
+import { toast } from "sonner";
 
 export function ChatDialog() {
-  const [state, setState] = useState<ChatState>({
-    isLoading: false,
-    error: null,
-    chats: mockChats,
-    activeChat: mockChats[0],
-  });
+  const { walletAddress } = useWalletContext();
+  const { wallet: otherWallet } = useParams();
   const [message, setMessage] = useState("");
+  const [targetWallet, setTargetWallet] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [copiedAddress, setCopiedAddress] = useState(false);
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  const { messages, sendMessage, loading, error } = useWalletChat(
+    walletAddress!,
+    otherWallet as string,
+  );
 
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -73,324 +37,244 @@ export function ChatDialog() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [state.activeChat?.messages]);
+  }, [messages]);
 
-  const simulateSendMessage = (message: Message, chatToUpdate: Chat) => {
-    return new Promise<void>((resolve, reject) => {
-      setTimeout(() => {
-        try {
-          if (Math.random() < 0.2) {
-            throw new Error("Failed to send message");
-          }
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
-          const sentMessage = { ...message, status: "sent" as const };
-          const updatedChatWithSent = {
-            ...chatToUpdate,
-            messages: chatToUpdate.messages.map((msg) =>
-              msg.id === message.id ? sentMessage : msg,
-            ),
-          };
+  const handleSendMessage = async () => {
+    if (!message.trim() || isSending) return;
 
-          setState((prev) => ({
-            ...prev,
-            chats: prev.chats.map((chat) =>
-              chat.id === updatedChatWithSent.id ? updatedChatWithSent : chat,
-            ),
-            activeChat:
-              prev.activeChat?.id === updatedChatWithSent.id
-                ? updatedChatWithSent
-                : prev.activeChat,
-          }));
-
-          setTimeout(() => {
-            const deliveredMessage = {
-              ...sentMessage,
-              status: "delivered" as const,
-            };
-            const updatedChatWithDelivered = {
-              ...updatedChatWithSent,
-              messages: updatedChatWithSent.messages.map((msg) =>
-                msg.id === sentMessage.id ? deliveredMessage : msg,
-              ),
-            };
-
-            setState((prev) => ({
-              ...prev,
-              chats: prev.chats.map((chat) =>
-                chat.id === updatedChatWithDelivered.id
-                  ? updatedChatWithDelivered
-                  : chat,
-              ),
-              activeChat:
-                prev.activeChat?.id === updatedChatWithDelivered.id
-                  ? updatedChatWithDelivered
-                  : prev.activeChat,
-            }));
-            resolve();
-          }, 1000);
-        } catch (error: unknown) {
-          console.error("Error sending message:", error);
-          const errorMessage = { ...message, status: "error" as const };
-          const updatedChatWithError = {
-            ...chatToUpdate,
-            messages: chatToUpdate.messages.map((msg) =>
-              msg.id === message.id ? errorMessage : msg,
-            ),
-          };
-          setState((prev) => ({
-            ...prev,
-            chats: prev.chats.map((chat) =>
-              chat.id === updatedChatWithError.id ? updatedChatWithError : chat,
-            ),
-            activeChat:
-              prev.activeChat?.id === updatedChatWithError.id
-                ? updatedChatWithError
-                : prev.activeChat,
-          }));
-          reject(error);
-        }
-      }, 1000);
-    });
+    try {
+      setIsSending(true);
+      await sendMessage(message);
+      setMessage("");
+      inputRef.current?.focus();
+    } catch {
+      toast.error("Failed to send message");
+    } finally {
+      setIsSending(false);
+    }
   };
 
-  const handleSendMessage = () => {
-    if (!message.trim() || !state.activeChat) return;
-
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      content: message,
-      sender: "user",
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      status: "sending",
-    };
-
-    // Update active chat with new message
-    const updatedChat = {
-      ...state.activeChat,
-      lastMessage: newMessage.content,
-      unread: 0,
-      messages: [...state.activeChat.messages, newMessage],
-    };
-
-    // Update chats list
-    const updatedChats = state.chats.map((chat) =>
-      chat.id === updatedChat.id ? updatedChat : chat,
-    );
-
-    setState((prev) => ({
-      ...prev,
-      chats: updatedChats,
-      activeChat: updatedChat,
-    }));
-
-    setMessage("");
-
-    // Usa la función común
-    simulateSendMessage(newMessage, updatedChat).catch(() => {});
+  const handleStartChat = () => {
+    if (!targetWallet.trim()) return;
+    router.push(`/dashboard/chat/${targetWallet}`);
+    setTargetWallet("");
   };
 
-  const handleRetryMessage = (messageId: string) => {
-    if (!state.activeChat) return;
-    const failedMessage = state.activeChat.messages.find(
-      (msg) => msg.id === messageId && msg.status === "error",
-    );
-    if (!failedMessage) return;
-    const retryMessage: Message = {
-      ...failedMessage,
-      id: Date.now().toString(),
-      status: "sending",
-    };
-    const updatedChat = {
-      ...state.activeChat,
-      messages: [...state.activeChat.messages, retryMessage],
-    };
-    const updatedChats = state.chats.map((chat) =>
-      chat.id === updatedChat.id ? updatedChat : chat,
-    );
-    setState((prev) => ({
-      ...prev,
-      chats: updatedChats,
-      activeChat: updatedChat,
-    }));
-    simulateSendMessage(retryMessage, updatedChat).catch(() => {});
+  const copyAddress = async (address: string) => {
+    try {
+      await navigator.clipboard.writeText(address);
+      setCopiedAddress(true);
+      toast.success("Address copied to clipboard");
+      setTimeout(() => setCopiedAddress(false), 2000);
+    } catch {
+      toast.error("Failed to copy address");
+    }
   };
 
-  if (state.isLoading) {
-    return <Loader isLoading={state.isLoading} />;
-  }
+  const formatAddress = (address: string) => {
+    if (!address) return "";
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
 
-  if (state.error) {
+  if (!walletAddress || !otherWallet) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-red-500">{state.error}</p>
+        <Card className="p-8">
+          <p className="text-muted-foreground text-center">
+            Wallet not connected or invalid target.
+          </p>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-1 w-full bg-background">
+    <div className="flex flex-1 w-full bg-background min-h-screen">
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-background border  rounded-md"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-background border rounded-md shadow-md"
       >
         <Menu className="w-6 h-6" />
       </button>
 
-      {/* Chat List */}
-      <div
-        className={cn(
-          "w-80 border-r flex flex-col bg-background",
-          "fixed lg:relative h-full z-40",
-          "transition-transform duration-300 ease-in-out",
-          isMobileMenuOpen
-            ? "translate-x-0"
-            : "-translate-x-full lg:translate-x-0",
-        )}
-      >
-        <div className="p-4 border-b">
-          <h2 className="text-lg font-semibold dark:text-white text-gray-900">
-            Chats
-          </h2>
-        </div>
-        <ScrollArea className="flex-1">
-          {state.chats.map((chat) => (
-            <div
-              key={chat.id}
-              className={cn(
-                "flex items-center gap-3 p-4 cursor-pointer hover:bg-muted/50",
-                state.activeChat?.id === chat.id && "bg-muted",
-              )}
-              onClick={() => {
-                setState((prev) => ({ ...prev, activeChat: chat }));
-                setIsMobileMenuOpen(false);
-              }}
-            >
+      {/* Chat Window */}
+      <div className="flex-1 flex flex-col bg-background max-w-4xl mx-auto">
+        {/* New Chat Selector */}
+        <Card className="m-4 mb-0">
+          <CardHeader className="pb-3">
+            <div className="flex gap-2 items-center">
+              <Input
+                value={targetWallet}
+                onChange={(e) => setTargetWallet(e.target.value)}
+                placeholder="Enter wallet address to start new chat"
+                className="flex-1"
+              />
+              <Button
+                onClick={handleStartChat}
+                disabled={!targetWallet.trim()}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              >
+                Start Chat
+              </Button>
+            </div>
+          </CardHeader>
+        </Card>
+
+        {/* Main Chat Card */}
+        <Card className="m-4 flex-1 flex flex-col">
+          {/* Header */}
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => router.back()}
+                className="p-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </Button>
+
               <div className="relative">
-                <Avatar>
+                <Avatar className="w-10 h-10">
                   <AvatarImage
-                    src={chat.avatar}
-                    alt={`${chat.name}'s avatar`}
+                    src={`https://avatar.vercel.sh/${otherWallet}.svg`}
+                    alt={`Avatar for ${otherWallet}`}
                   />
-                  <AvatarFallback>{chat.name[0]}</AvatarFallback>
+                  <AvatarFallback className="bg-emerald-100 text-emerald-700">
+                    {(otherWallet as string).slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
-                {chat.status === "online" && (
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2" />
-                )}
+                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between">
-                  <p className="font-medium truncate dark:text-white text-gray-900">
-                    {chat.name}
-                  </p>
-                  <span className="text-xs dark:text-gray-400 text-gray-500">
-                    {chat.messages[chat.messages.length - 1]?.timestamp}
+
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-foreground">
+                    {formatAddress(otherWallet as string)}
+                  </h3>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => copyAddress(otherWallet as string)}
+                    className="p-1 h-6 w-6"
+                  >
+                    {copiedAddress ? (
+                      <Check className="w-3 h-3 text-green-600" />
+                    ) : (
+                      <Copy className="w-3 h-3" />
+                    )}
+                  </Button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary" className="text-xs">
+                    Wallet Chat
+                  </Badge>
+                  <span className="text-xs text-muted-foreground">
+                    {messages.length} messages
                   </span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <p className="text-sm truncate dark:text-gray-400 text-gray-600">
-                    {chat.lastMessage}
-                  </p>
-                  {chat.status === "offline" && chat.lastSeen && (
-                    <span className="text-xs text-gray-400">
-                      · {chat.lastSeen}
-                    </span>
-                  )}
-                </div>
-              </div>
-              {chat.unread > 0 && (
-                <div className="flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-emerald-600 rounded-full">
-                  {chat.unread}
-                </div>
-              )}
-            </div>
-          ))}
-        </ScrollArea>
-      </div>
-
-      {/* Chat Window */}
-      <div className="flex-1 flex flex-col bg-background lg:pl-0 pl-12">
-        {state.activeChat ? (
-          <>
-            {/* Chat Header */}
-            <div className="flex items-center gap-3 p-4 border-b">
-              <div className="relative">
-                <Avatar>
-                  <AvatarImage
-                    src={state.activeChat.avatar}
-                    alt={`${state.activeChat.name}'s avatar`}
-                  />
-                  <AvatarFallback>{state.activeChat.name[0]}</AvatarFallback>
-                </Avatar>
-                {state.activeChat.status === "online" && (
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2" />
-                )}
-              </div>
-              <div>
-                <h3 className="font-medium dark:text-white text-gray-900">
-                  {state.activeChat.name}
-                </h3>
-                <p className="text-sm dark:text-gray-400 text-gray-600">
-                  {state.activeChat.status === "online"
-                    ? "Online"
-                    : state.activeChat.lastSeen
-                      ? `Last seen ${state.activeChat.lastSeen}`
-                      : "Offline"}
-                </p>
               </div>
             </div>
+          </CardHeader>
 
-            {/* Messages */}
-            <ScrollArea className="flex-1">
+          {/* Messages */}
+          <CardContent className="flex-1 p-0">
+            <ScrollArea className="h-[60vh]">
               <div className="p-4 space-y-4">
-                {state.activeChat.messages.map((message) => (
-                  <MessageBubble
-                    key={message.id}
-                    message={message}
-                    onRetry={handleRetryMessage}
-                  />
-                ))}
+                {loading && messages.length === 0 ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+                  </div>
+                ) : messages.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-12 text-center">
+                    <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                      <Send className="w-8 h-8 text-emerald-600" />
+                    </div>
+                    <h3 className="font-semibold text-lg mb-2">
+                      Start the conversation
+                    </h3>
+                    <p className="text-muted-foreground text-sm max-w-sm">
+                      Send your first message to{" "}
+                      {formatAddress(otherWallet as string)} to begin chatting.
+                    </p>
+                  </div>
+                ) : (
+                  messages.map((msg) => (
+                    <MessageBubble
+                      key={msg.id}
+                      message={{
+                        id: msg.id,
+                        content: msg.content,
+                        sender: msg.from === walletAddress ? "user" : "other",
+                        timestamp: new Date(msg.timestamp).toLocaleTimeString(
+                          [],
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          },
+                        ),
+                        status: msg.status || "sent",
+                      }}
+                    />
+                  ))
+                )}
                 <div ref={messageEndRef} />
               </div>
             </ScrollArea>
+          </CardContent>
 
-            {/* Message Input */}
-            <div className="p-4 border-t">
-              <div className="flex gap-2">
+          {/* Input */}
+          <div className="p-4 border-t bg-muted/20">
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
                 <Input
-                  placeholder="Type a message..."
+                  ref={inputRef}
+                  placeholder="Type your message..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                  className="flex-1 bg-muted border text-foreground placeholder:text-muted-foreground focus:ring-emerald-600 focus:border-emerald-600"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage();
+                    }
+                  }}
+                  disabled={isSending}
+                  className="pr-12 bg-background border-border focus:ring-emerald-600 focus:border-emerald-600"
                 />
-                <Button
-                  onClick={handleSendMessage}
-                  disabled={!message.trim()}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                >
-                  <Send className="w-4 h-4" />
-                </Button>
+                {message.trim() && (
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-muted-foreground">
+                    {message.length}/500
+                  </div>
+                )}
               </div>
+              <Button
+                onClick={handleSendMessage}
+                disabled={!message.trim() || isSending}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white min-w-[44px]"
+              >
+                {isSending ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
+              </Button>
             </div>
-          </>
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-gray-500">Select a chat to start messaging</p>
+            <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
+              <span>Press Enter to send, Shift + Enter for new line</span>
+              {error && (
+                <span className="text-red-500">Failed to send message</span>
+              )}
+            </div>
           </div>
-        )}
+        </Card>
       </div>
-
-      {/* Overlay for mobile menu */}
-      {isMobileMenuOpen && (
-        <div
-          className="fixed inset-0 bg-black/20 z-30 lg:hidden"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-      )}
     </div>
   );
 }
