@@ -61,7 +61,7 @@ export function useTrustBridgeSidebar() {
       section: "Communication",
       items: [
         {
-          href: "/dashboard/chat",
+          href: "/dashboard/chat/[wallet]",
           icon: <MessageSquare className="h-4 w-4" />,
           label: "Chat",
           active: pathname === "/dashboard/chat",
