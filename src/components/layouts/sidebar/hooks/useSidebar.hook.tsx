@@ -61,26 +61,9 @@ export function useTrustBridgeSidebar() {
           label: "Loans",
           active: pathname.startsWith("/dashboard/loans"),
         },
-        {
-          href: "/dashboard/offer",
-          icon: <CloudUpload className="h-4 w-4 text-muted-foreground" />,
-          label: "Offer Loan",
-          active: pathname === "/dashboard/offer",
-          highlight: true,
-        },
       ],
     },
-    {
-      section: "Marketplace",
-      items: [
-        {
-          href: "/dashboard/marketplace",
-          icon: <ShoppingBag className="h-4 w-4" />,
-          label: "Explore Offers",
-          active: pathname.startsWith("/dashboard/marketplace"),
-        },
-      ],
-    },
+
     {
       section: "Communication",
       items: [
@@ -95,23 +78,6 @@ export function useTrustBridgeSidebar() {
     },
   ];
 
-  const adminItems: MenuSection[] = isAdmin
-    ? [
-        {
-          section: "Administration",
-          items: [
-            {
-              href: "/dashboard/admin/loan-requests",
-              icon: <Bell className="h-4 w-4" />,
-              label: "Loan Requests",
-              active: pathname === "/dashboard/admin/loan-requests",
-              notification: false,
-            },
-          ],
-        },
-      ]
-    : [];
-
   const toggleCollapsed = () => setCollapsed(!collapsed);
 
   return {
@@ -119,7 +85,6 @@ export function useTrustBridgeSidebar() {
     collapsed,
     toggleCollapsed,
     menuItems,
-    adminItems,
     isAdmin,
   };
 }
