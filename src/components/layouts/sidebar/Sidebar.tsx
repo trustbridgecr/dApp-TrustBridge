@@ -24,8 +24,7 @@ import {
 import { useTrustBridgeSidebar } from "./hooks/useSidebar.hook";
 
 export function TrustBridgeSidebar() {
-  const { formattedAddress, collapsed, menuItems, adminItems, isAdmin } =
-    useTrustBridgeSidebar();
+  const { formattedAddress, collapsed, menuItems } = useTrustBridgeSidebar();
 
   return (
     <Sidebar className="border-r bg-white dark:bg-gray-950">
@@ -122,69 +121,6 @@ export function TrustBridgeSidebar() {
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
-
-        {isAdmin && (
-          <>
-            {!collapsed && <div className="h-px bg-border mx-2 my-2" />}
-            {adminItems.map((section, idx) => (
-              <SidebarGroup key={idx} className="mb-3">
-                {!collapsed && (
-                  <SidebarGroupLabel className="text-xs font-medium text-muted-foreground px-2 mb-1">
-                    {section.section}
-                  </SidebarGroupLabel>
-                )}
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {section.items.map((item, itemIdx) => (
-                      <TooltipProvider key={itemIdx}>
-                        <Tooltip delayDuration={collapsed ? 100 : 1000}>
-                          <TooltipTrigger asChild>
-                            <SidebarMenuItem>
-                              <SidebarMenuButton
-                                asChild
-                                className={cn(
-                                  "group relative flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                                  item.active
-                                    ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
-                                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                                )}
-                              >
-                                <a
-                                  href={item.href}
-                                  className="flex items-center gap-3 w-full"
-                                >
-                                  <span
-                                    className={cn(
-                                      "flex-shrink-0",
-                                      item.active
-                                        ? "text-emerald-600 dark:text-emerald-400"
-                                        : "text-muted-foreground group-hover:text-foreground",
-                                    )}
-                                  >
-                                    {item.icon}
-                                  </span>
-                                  {!collapsed && <span>{item.label}</span>}
-                                  {item.notification && (
-                                    <span className="absolute right-2 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-                                  )}
-                                </a>
-                              </SidebarMenuButton>
-                            </SidebarMenuItem>
-                          </TooltipTrigger>
-                          {collapsed && (
-                            <TooltipContent side="right">
-                              {item.label}
-                            </TooltipContent>
-                          )}
-                        </Tooltip>
-                      </TooltipProvider>
-                    ))}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </SidebarGroup>
-            ))}
-          </>
-        )}
       </SidebarContent>
 
       <SidebarFooter className="border-t p-4">
@@ -195,9 +131,7 @@ export function TrustBridgeSidebar() {
                 src="/placeholder.svg?height=32&width=32"
                 alt="User"
               />
-              <AvatarFallback className="bg-emerald-100 text-emerald-700">
-                U
-              </AvatarFallback>
+              <AvatarFallback className="bg-emerald-100 text-emerald-700"></AvatarFallback>
             </Avatar>
             {!collapsed && (
               <div className="flex flex-col">

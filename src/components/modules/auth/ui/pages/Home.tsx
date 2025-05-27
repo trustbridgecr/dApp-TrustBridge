@@ -1,44 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ArrowRight, Wallet, BadgeCheck } from "lucide-react";
+import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
+import { useWalletContext } from "@/providers/wallet.provider";
+import { useEffect } from "react";
+import { ArrowRight, Wallet, BadgeCheck, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { useWallet } from "../../wallet/hooks/wallet.hook";
-import { getApprovedLoanOffers } from "@/components/modules/dashboard/marketplace/server/marketplace.firebase";
-
-interface ApprovedLoan {
-  id: string;
-  title: string;
-  maxAmount: number;
-  platformFee: number;
-}
+import Image from "next/image";
 
 export default function HomePage() {
+  const { walletAddress } = useWalletContext();
   const { handleConnect, handleDisconnect } = useWallet();
-  const { address } = useGlobalAuthenticationStore();
-  const [approvedLoans, setApprovedLoans] = useState<ApprovedLoan[]>([]);
-
-  useEffect(() => {
-    const fetchApprovedLoans = async () => {
-      const res = await getApprovedLoanOffers();
-      if (res.success && res.data) {
-        setApprovedLoans(res.data);
-      }
-    };
-
-    fetchApprovedLoans();
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-
     return () => {
       document.body.style.overflow = "auto";
     };
   }, []);
+
+  const truncateAddress = (address: string) => {
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -65,15 +49,37 @@ export default function HomePage() {
                   opportunity.
                 </p>
               </div>
+
               <div className="flex flex-col gap-3 min-[400px]:flex-row mt-4">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"
-                  onClick={address ? handleDisconnect : handleConnect}
-                >
-                  <Wallet className="mr-2 h-5 w-5" />
-                  {address ? "Disconnect Wallet" : "Connect Wallet"}
-                </Button>
+                {walletAddress ? (
+                  <>
+                    <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-950 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                      <Wallet className="w-4 h-4 text-emerald-600" />
+                      <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                        {truncateAddress(walletAddress)}
+                      </span>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      onClick={handleDisconnect}
+                      className="hover:bg-red-50 hover:border-red-200 hover:text-red-700 dark:hover:bg-red-950 dark:hover:border-red-800 dark:hover:text-red-300"
+                    >
+                      <LogOut className="w-5 h-5" />
+                      <span className="ml-2">Disconnect Wallet</span>
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    size="lg"
+                    onClick={handleConnect}
+                    className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white border-0"
+                  >
+                    <LogIn className="w-5 h-5" />
+                    <span className="ml-2">Connect Wallet</span>
+                  </Button>
+                )}
+
                 <Link href="/dashboard/marketplace" passHref>
                   <Button
                     size="lg"
@@ -103,31 +109,15 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="absolute inset-0 p-4 z-10">
-                  <div className="h-full overflow-hidden">
-                    <div className="loan-scroll-container">
-                      {[
-                        ...approvedLoans,
-                        ...approvedLoans,
-                        ...approvedLoans,
-                      ].map((loan, index) => (
-                        <div
-                          key={`${loan.id}-${index}`}
-                          className="bg-neutral-950 rounded-lg p-4 mb-3 border border-emerald-900/20 shadow-md"
-                        >
-                          <h3 className="text-lg font-semibold text-emerald-400">
-                            {loan.title}
-                          </h3>
-                          <p className="text-sm text-gray-400">
-                            Loan Amount: ${loan.maxAmount}
-                          </p>
-                          <p className="text-sm text-gray-400">
-                            Fee: {loan.platformFee}%
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                {/* Imagen decorativa o espacio para gráficos */}
+                <div className="absolute inset-0 p-4 z-10 flex items-center justify-center">
+                  <Image
+                    src="/img/illustration-loan.png"
+                    alt="Loan Illustration"
+                    width={300}
+                    height={200}
+                    className="object-contain"
+                  />
                 </div>
               </div>
             </div>
