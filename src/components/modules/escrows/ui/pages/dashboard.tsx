@@ -15,7 +15,7 @@ export function Loans() {
   const { walletAddress } = useWalletContext();
 
   return (
-    <div className="space-y-8 p-6">
+    <div className="space-y-8 p-4">
       <Card className="shadow-none border-0">
         <CardHeader className="pb-3">
           <CardTitle className="text-2xl font-bold">Loans</CardTitle>
