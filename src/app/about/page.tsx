@@ -17,10 +17,11 @@ interface AboutData {
 
 // Mock API fetch function
 async function fetchAboutData(): Promise<AboutData> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
-        mission: "To empower individuals and communities with direct financial access by removing traditional barriers, fees, and intermediaries through a trustless system.",
+        mission:
+          "To empower individuals and communities with direct financial access by removing traditional barriers, fees, and intermediaries through a trustless system.",
         story: `TrustBridge was born in 2024 when a group of friends passionate about blockchain technologies came together with a common vision: to create a bridge of trust between capital and opportunity.\n\nBuilt on the Stellar blockchain, we chose this technology for its speed, low cost, and focus on financial inclusion, values that are at the core of our identity.`,
         team: [
           {
@@ -36,7 +37,8 @@ async function fetchAboutData(): Promise<AboutData> {
             role: "CO-Founder & FrontEnd Developer",
           },
         ],
-        technology: "We use the Stellar blockchain to provide fast, secure, and low-cost transactions. Our platform is designed to be accessible to both experienced cryptocurrency users and those new to this technology.",
+        technology:
+          "We use the Stellar blockchain to provide fast, secure, and low-cost transactions. Our platform is designed to be accessible to both experienced cryptocurrency users and those new to this technology.",
       });
     }, 800);
   });
@@ -63,31 +65,47 @@ export default function AboutPage() {
         </Link>
         <h1 className="text-4xl font-bold text-emerald-400 mb-8">About Us</h1>
         {loading ? (
-          <div className="text-emerald-300 text-lg py-16 text-center">Loading...</div>
+          <div className="text-emerald-300 text-lg py-16 text-center">
+            Loading...
+          </div>
         ) : data ? (
           <>
             <section className="mb-6 rounded-xl border border-emerald-900 bg-black/80 p-6">
-              <h2 className="text-2xl font-semibold text-emerald-300 mb-2">Our Mission</h2>
+              <h2 className="text-2xl font-semibold text-emerald-300 mb-2">
+                Our Mission
+              </h2>
               <p className="text-white/90">{data.mission}</p>
             </section>
             <section className="mb-6 rounded-xl border border-emerald-900 bg-black/80 p-6">
-              <h2 className="text-2xl font-semibold text-emerald-300 mb-2">Our Story</h2>
-              <p className="text-white/90" style={{ whiteSpace: 'pre-line' }}>{data.story}</p>
+              <h2 className="text-2xl font-semibold text-emerald-300 mb-2">
+                Our Story
+              </h2>
+              <p className="text-white/90" style={{ whiteSpace: "pre-line" }}>
+                {data.story}
+              </p>
             </section>
             <section className="mb-6 rounded-xl border border-emerald-900 bg-black/80 p-6">
-              <h2 className="text-2xl font-semibold text-emerald-300 mb-4">Our Team</h2>
+              <h2 className="text-2xl font-semibold text-emerald-300 mb-4">
+                Our Team
+              </h2>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-8">
                 {data.team.map((member: TeamMember) => (
                   <div className="flex flex-col items-center" key={member.name}>
                     <div className="w-16 h-16 rounded-full bg-emerald-600 mb-2" />
-                    <span className="text-white font-semibold">{member.name}</span>
-                    <span className="text-emerald-300 text-sm">{member.role}</span>
+                    <span className="text-white font-semibold">
+                      {member.name}
+                    </span>
+                    <span className="text-emerald-300 text-sm">
+                      {member.role}
+                    </span>
                   </div>
                 ))}
               </div>
             </section>
             <section className="rounded-xl border border-emerald-900 bg-black/80 p-6">
-              <h2 className="text-2xl font-semibold text-emerald-300 mb-2">Blockchain Technology</h2>
+              <h2 className="text-2xl font-semibold text-emerald-300 mb-2">
+                Blockchain Technology
+              </h2>
               <p className="text-white/90">{data.technology}</p>
             </section>
           </>
@@ -95,4 +113,4 @@ export default function AboutPage() {
       </div>
     </div>
   );
-} 
+}
