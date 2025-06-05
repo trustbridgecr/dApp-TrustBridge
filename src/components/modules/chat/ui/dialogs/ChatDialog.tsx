@@ -32,12 +32,6 @@ export function ChatDialog() {
   const router = useRouter();
 
   const { chats, loading: chatsLoading } = useAllChats(walletAddress!);
-  const currentChat = chats.find(
-    (chat) =>
-      chat.participants.includes(walletAddress!) &&
-      chat.participants.includes(otherWallet as string),
-  );
-
   const {
     messages,
     sendMessage,
@@ -163,14 +157,6 @@ export function ChatDialog() {
               <Card className="p-8">
                 <p className="text-muted-foreground text-center">
                   Select a chat or start a new conversation.
-                </p>
-              </Card>
-            </div>
-          ) : !currentChat ? (
-            <div className="flex items-center justify-center h-full">
-              <Card className="p-8">
-                <p className="text-muted-foreground text-center">
-                  Start a conversation by sending a message.
                 </p>
               </Card>
             </div>

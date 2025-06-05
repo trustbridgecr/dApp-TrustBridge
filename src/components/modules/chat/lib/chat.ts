@@ -110,9 +110,7 @@ export const sendMessage = async (
   }
 };
 
-const convertTimestamp = (
-  timestamp: Timestamp | Date | number | null | undefined,
-): number => {
+const convertTimestamp = (timestamp: Timestamp | Date | number): number => {
   if (timestamp instanceof Timestamp) {
     return timestamp.toMillis();
   }
