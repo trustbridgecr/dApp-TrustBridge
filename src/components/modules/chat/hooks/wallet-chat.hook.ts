@@ -61,6 +61,8 @@ export const useWalletChat = (walletA: string, walletB: string) => {
     try {
       setError(null);
       await sendMessage(walletA, walletB, content);
+      // No necesitamos actualizar el estado local aquí porque listenToMessages
+      // se encargará de actualizar los mensajes en tiempo real
     } catch (err) {
       console.error("Error sending message:", err);
       setError("Error sending message");

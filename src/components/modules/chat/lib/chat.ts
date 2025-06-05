@@ -181,8 +181,12 @@ export const listenToMessages = async (
   const chatDoc = await getDoc(chatDocRef);
 
   if (!chatDoc.exists()) {
-    callback([]);
-    return () => {};
+    await setDoc(chatDocRef, {
+      participants: [walletA, walletB].sort(),
+      createdAt: serverTimestamp(),
+      lastMessage: null,
+      lastMessageTime: null,
+    });
   }
 
   const messagesCol = collection(db, "chats", chatId, "messages");
