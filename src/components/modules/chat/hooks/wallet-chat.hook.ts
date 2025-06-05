@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { listenToMessages, sendMessage, initializeChat } from "../lib/chat";
+import { listenToMessages, sendMessage } from "../lib/chat";
 
 type ChatMessage = {
   id: string;
@@ -18,7 +18,12 @@ export const useWalletChat = (walletA: string, walletB: string) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!walletA || !walletB) {
+    if (
+      !walletA ||
+      !walletB ||
+      walletA === "[wallet]" ||
+      walletB === "[wallet]"
+    ) {
       setLoading(false);
       return;
     }
@@ -29,8 +34,6 @@ export const useWalletChat = (walletA: string, walletB: string) => {
       try {
         setLoading(true);
         setError(null);
-
-        await initializeChat(walletA, walletB);
 
         unsubscribe = await listenToMessages(
           walletA,
