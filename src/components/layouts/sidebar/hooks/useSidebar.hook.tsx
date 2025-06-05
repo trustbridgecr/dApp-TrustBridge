@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, CreditCard, MessageSquare } from "lucide-react";
+import {
+  LayoutDashboard,
+  CreditCard,
+  MessageSquare,
+  Settings,
+} from "lucide-react";
 import { ReactNode } from "react";
 import { useWalletContext } from "@/providers/wallet.provider";
 
@@ -56,7 +61,6 @@ export function useTrustBridgeSidebar() {
         },
       ],
     },
-
     {
       section: "Communication",
       items: [
@@ -66,6 +70,17 @@ export function useTrustBridgeSidebar() {
           label: "Chat",
           active: pathname === "/dashboard/chat",
           notification: false,
+        },
+      ],
+    },
+    {
+      section: "Settings",
+      items: [
+        {
+          href: "/dashboard/profile",
+          icon: <Settings className="h-4 w-4" />,
+          label: "Profile Settings",
+          active: pathname === "/dashboard/profile",
         },
       ],
     },
