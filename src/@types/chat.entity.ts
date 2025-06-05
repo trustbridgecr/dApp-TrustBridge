@@ -23,3 +23,21 @@ export interface ChatState {
   chats: Chat[];
   activeChat: Chat | null;
 }
+
+export type ChatMessage = {
+  id: string;
+  from: string;
+  to: string;
+  content: string;
+  timestamp: number;
+  status?: "sent" | "delivered" | "read";
+};
+
+export type ChatWithMessages = {
+  id: string;
+  participants: string[];
+  lastMessage: string | null;
+  lastMessageTime: number | null;
+  createdAt: number;
+  messages: ChatMessage[];
+};

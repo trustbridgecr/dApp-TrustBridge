@@ -14,3 +14,9 @@ export interface UserProfileFormData {
   country: string;
   phoneNumber: string;
 }
+
+export interface UserChatData {
+  firstName: string;
+  lastName: string;
+  walletAddress: string;
+}
