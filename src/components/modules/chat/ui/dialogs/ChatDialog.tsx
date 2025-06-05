@@ -121,9 +121,9 @@ export function ChatDialog() {
       <div className="container flex-1 flex flex-col lg:flex-row bg-background mx-auto gap-10">
         {/* Chat List Sidebar */}
         <div
-          className={`lg:w-lg border-r ${isMobileMenuOpen ? "block" : "hidden lg:block pr-10"}`}
+          className={`lg:w-lg border-r ${isMobileMenuOpen ? "block" : "hidden lg:block pr-4 pl-4"}`}
         >
-          <Card className="my-4 mb-0">
+          <Card className="my-4 mb-0 ml-4">
             <CardHeader>
               <div className="flex gap-2 items-center">
                 <Input
@@ -151,7 +151,7 @@ export function ChatDialog() {
         </div>
 
         {/* Main Chat Content */}
-        <div className="flex-1">
+        <div className="flex-1 pr-10">
           {!otherWallet ? (
             <div className="flex items-center justify-center h-full">
               <Card className="p-8">
