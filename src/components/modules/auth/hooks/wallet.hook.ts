@@ -1,6 +1,10 @@
 import { kit } from "@/config/wallet-kit";
 import { useWalletContext } from "@/providers/wallet.provider";
 import { ISupportedWallet } from "@creit.tech/stellar-wallets-kit";
+import { db } from "@/lib/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { UserProfile } from "@/@types/user.entity";
+import { toast } from "sonner";
 
 export const useWallet = () => {
   // Get wallet info from wallet context
@@ -19,6 +23,30 @@ export const useWallet = () => {
         const { name } = option;
 
         setWalletInfo(address, name);
+
+        // Check if user profile exists and create if it doesn't
+        try {
+          const userDoc = await getDoc(doc(db, "users", address));
+
+          if (!userDoc.exists()) {
+            const now = Date.now();
+            const initialProfile: UserProfile = {
+              walletAddress: address,
+              firstName: "",
+              lastName: "",
+              country: "",
+              phoneNumber: "",
+              createdAt: now,
+              updatedAt: now,
+            };
+
+            await setDoc(doc(db, "users", address), initialProfile);
+            toast.success("Welcome! Please complete your profile.");
+          }
+        } catch (error) {
+          console.error("Error creating initial profile:", error);
+          toast.error("Failed to create initial profile");
+        }
       },
     });
   };
