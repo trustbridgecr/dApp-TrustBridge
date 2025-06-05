@@ -4,7 +4,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useUserProfile } from "@/components/modules/profile/hooks/use-user-profile.hook";
+import { useUserContext } from "@/providers/user.provider";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -30,7 +30,7 @@ import { useWalletContext } from "@/providers/wallet.provider";
 type FormValues = z.infer<typeof profileSchema>;
 
 export const UserProfileForm = () => {
-  const { profile, loading, saving, saveProfile } = useUserProfile();
+  const { profile, loading, saving, saveProfile } = useUserContext();
   const { walletAddress } = useWalletContext();
 
   const form = useForm<FormValues>({
