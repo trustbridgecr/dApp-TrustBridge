@@ -25,11 +25,13 @@ import {
 import { Loader2, User, MapPin, Phone, Wallet } from "lucide-react";
 import { profileSchema } from "../schemas/profile.schema";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useWalletContext } from "@/providers/wallet.provider";
 
 type FormValues = z.infer<typeof profileSchema>;
 
 export const UserProfileForm = () => {
   const { profile, loading, saving, saveProfile } = useUserProfile();
+  const { walletAddress } = useWalletContext();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(profileSchema),
@@ -38,7 +40,7 @@ export const UserProfileForm = () => {
       lastName: profile?.lastName || "",
       country: profile?.country || "",
       phoneNumber: profile?.phoneNumber || "",
-      walletAddress: profile?.walletAddress || "",
+      walletAddress: walletAddress || "",
     },
   });
 
@@ -50,7 +52,7 @@ export const UserProfileForm = () => {
         lastName: profile.lastName || "",
         country: profile.country || "",
         phoneNumber: profile.phoneNumber || "",
-        walletAddress: profile.walletAddress || "",
+        walletAddress: walletAddress || "",
       });
     }
   }, [profile, form]);
