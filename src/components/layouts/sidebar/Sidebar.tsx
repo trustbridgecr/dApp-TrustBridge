@@ -22,9 +22,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useTrustBridgeSidebar } from "./hooks/useSidebar.hook";
-
+import { useUserContext } from "@/providers/user.provider";
 export function TrustBridgeSidebar() {
   const { formattedAddress, collapsed, menuItems } = useTrustBridgeSidebar();
+  const { profile } = useUserContext();
 
   return (
     <Sidebar className="border-r bg-white dark:bg-gray-950">
@@ -135,7 +136,9 @@ export function TrustBridgeSidebar() {
             </Avatar>
             {!collapsed && (
               <div className="flex flex-col">
-                <span className="text-sm font-medium">User</span>
+                <span className="text-sm font-medium truncate">
+                  {profile?.firstName} {profile?.lastName}
+                </span>
                 <span className="text-xs text-muted-foreground truncate max-w-[140px]">
                   {formattedAddress}
                 </span>
