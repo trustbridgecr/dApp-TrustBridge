@@ -15,7 +15,6 @@ interface ValidationErrors {
 
 export default function ComplianceStep({ data, updateData }: ComplianceStepProps) {
   const [errors, setErrors] = useState<ValidationErrors>({});
-  const [showValidation, setShowValidation] = useState(false);
 
   const handleInputChange = (field: keyof BusinessData, value: string | boolean) => {
     updateData({ [field]: value });
