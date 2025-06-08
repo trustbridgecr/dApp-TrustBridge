@@ -28,7 +28,7 @@ export default function ComplianceStep({ data, updateData }: ComplianceStepProps
   const getCheckboxClassName = (fieldName: keyof ValidationErrors, isChecked: boolean) => {
     const baseClasses = "w-4 h-4 text-green-500 bg-gray-700 rounded focus:ring-green-500 mt-1";
     
-    if (showValidation && !isChecked) {
+    if (!isChecked) {
       return `${baseClasses} border-2 border-red-500`;
     }
     
@@ -46,11 +46,11 @@ export default function ComplianceStep({ data, updateData }: ComplianceStepProps
                               data.additionalInfoConsent &&
                               data.privacyPolicyConsent;
     // Only update if the validation status has changed
-    if ((data as any)._complianceStepValid !== allRequiredChecked) {
-      updateData({
-        _complianceStepValid: allRequiredChecked
-      } as Partial<BusinessData>);
-    }
+    if (data._complianceStepValid !== allRequiredChecked) {
+   updateData({
+     _complianceStepValid: allRequiredChecked
+   });
+ }
   }, [
     data.accurateInformation,
     data.notIllegalActivities,
