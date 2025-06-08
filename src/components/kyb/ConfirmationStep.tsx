@@ -26,7 +26,7 @@ export default function ConfirmationStep() {
           </div>
           
           <button 
-            onClick={() => window.location.href = '/'}
+            onClick={() => router.push('/')}
             className="w-full px-6 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600"
           >
             Return to Dashboard

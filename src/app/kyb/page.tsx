@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, Check } from 'lucide-react';
 import BusinessInformationStep from '@/components/kyb/BusinessInformationStep';
 import OwnershipStructureStep from '@/components/kyb/OwnershipStructureStep';
@@ -78,7 +79,11 @@ const steps = [
 ];
 
 export default function KYBPage() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [businessData, setBusinessData] = useState<BusinessData>({
     // Business Information
@@ -136,7 +141,47 @@ export default function KYBPage() {
     setBusinessData(prev => ({ ...prev, ...updates }));
   };
 
+  const validateCurrentStep = (): boolean => {
+    switch (currentStep) {
+      case 1: // Business Information
+        const requiredBusinessFields = ['legalCompanyName', 'entityType', 'registrationNumber', 'email'];
+        return requiredBusinessFields.every(field => 
+          businessData[field as keyof BusinessData] && 
+          String(businessData[field as keyof BusinessData]).trim() !== ''
+        );
+      
+      case 2: // Ownership Structure
+        return businessData.ownershipStructure && businessData.ubos.length > 0;
+      
+      case 3: // Document Upload
+        const requiredDocs = ['certificateOfIncorporation', 'articlesOfAssociation', 'proofOfBusinessAddress', 'financialStatements'];
+        return requiredDocs.every(doc => businessData.documents[doc as keyof typeof businessData.documents]);
+      
+      case 4: // Financial Information
+        const requiredFinancialFields = ['annualRevenue', 'primarySourceOfFunds', 'expectedMonthlyTransactionVolume', 'businessPurpose'];
+        return requiredFinancialFields.every(field => 
+          businessData[field as keyof BusinessData] && 
+          String(businessData[field as keyof BusinessData]).trim() !== ''
+        );
+      
+      case 5: // Compliance
+        return businessData.accurateInformation && 
+               businessData.notIllegalActivities && 
+               businessData.additionalInfoConsent && 
+               businessData.privacyPolicyConsent;
+      
+      default:
+        return true;
+    }
+  };
+
   const handleNext = () => {
+    if (!validateCurrentStep()) {
+      // Show validation error or trigger validation in child components
+      alert('Please complete all required fields before proceeding.');
+      return;
+    }
+    
     if (currentStep < 6) {
       setCurrentStep(prev => prev + 1);
     }
@@ -149,13 +194,23 @@ export default function KYBPage() {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
+    setError(null);
+    
     try {
       // Here you would submit to your backend/Firebase
       console.log('Submitting KYB data:', businessData);
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       setIsSubmitted(true);
       setCurrentStep(6);
     } catch (error) {
       console.error('Error submitting KYB:', error);
+      setError('Failed to submit KYB data. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -168,7 +223,10 @@ export default function KYBPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <button className="flex items-center text-green-400 hover:text-green-300 mb-4">
+          <button 
+            onClick={() => router.push('/')}
+            className="flex items-center text-green-400 hover:text-green-300 mb-4 transition-colors"
+          >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Home
           </button>
@@ -208,6 +266,19 @@ export default function KYBPage() {
             ))}
           </div>
         </div>
+
+        {/* Error Display */}
+        {error && (
+          <div className="mb-6 bg-red-900 border border-red-700 rounded-lg p-4">
+            <div className="flex items-start">
+              <div className="text-red-400 mr-3 mt-1">⚠️</div>
+              <div>
+                <h4 className="text-red-300 font-medium mb-1">Submission Error</h4>
+                <p className="text-red-200 text-sm">{error}</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Step Content */}
         <div className="bg-gray-800 rounded-lg p-6 mb-8">
@@ -260,14 +331,31 @@ export default function KYBPage() {
           {currentStep === 5 ? (
             <button
               onClick={handleSubmit}
-              className="px-6 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600"
+              disabled={isLoading}
+              className={`px-6 py-3 rounded-lg font-medium ${
+                isLoading
+                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  : 'bg-green-500 text-white hover:bg-green-600'
+              }`}
             >
-              Submit KYB
+              {isLoading ? (
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Submitting...
+                </div>
+              ) : (
+                'Submit KYB'
+              )}
             </button>
           ) : (
             <button
               onClick={handleNext}
-              className="px-6 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600"
+              disabled={isLoading}
+              className={`px-6 py-3 rounded-lg font-medium ${
+                isLoading
+                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  : 'bg-green-500 text-white hover:bg-green-600'
+              }`}
             >
               Next
             </button>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { BusinessData } from '@/app/kyb/page';
 
 interface ComplianceStepProps {
@@ -5,10 +6,77 @@ interface ComplianceStepProps {
   updateData: (updates: Partial<BusinessData>) => void;
 }
 
+interface ValidationErrors {
+  accurateInformation?: string;
+  notIllegalActivities?: string;
+  additionalInfoConsent?: string;
+  privacyPolicyConsent?: string;
+}
+
 export default function ComplianceStep({ data, updateData }: ComplianceStepProps) {
+  const [errors, setErrors] = useState<ValidationErrors>({});
+  const [showValidation, setShowValidation] = useState(false);
+
   const handleInputChange = (field: keyof BusinessData, value: string | boolean) => {
     updateData({ [field]: value });
+    
+    // Clear error when user checks the box
+    if (value === true && errors[field as keyof ValidationErrors]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
   };
+
+  const validateRequiredDeclarations = () => {
+    const newErrors: ValidationErrors = {};
+    
+    if (!data.accurateInformation) {
+      newErrors.accurateInformation = 'This declaration is required';
+    }
+    
+    if (!data.notIllegalActivities) {
+      newErrors.notIllegalActivities = 'This declaration is required';
+    }
+    
+    if (!data.additionalInfoConsent) {
+      newErrors.additionalInfoConsent = 'This consent is required';
+    }
+    
+    if (!data.privacyPolicyConsent) {
+      newErrors.privacyPolicyConsent = 'Privacy policy consent is required';
+    }
+    
+    setErrors(newErrors);
+    setShowValidation(true);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const getCheckboxClassName = (fieldName: keyof ValidationErrors, isChecked: boolean) => {
+    const baseClasses = "w-4 h-4 text-green-500 bg-gray-700 rounded focus:ring-green-500 mt-1";
+    
+    if (showValidation && !isChecked) {
+      return `${baseClasses} border-2 border-red-500`;
+    }
+    
+    if (isChecked) {
+      return `${baseClasses} border border-green-500`;
+    }
+    
+    return `${baseClasses} border border-gray-600`;
+  };
+
+  // Expose validation function to parent component
+  useEffect(() => {
+    const allRequiredChecked = data.accurateInformation && 
+                              data.notIllegalActivities && 
+                              data.additionalInfoConsent && 
+                              data.privacyPolicyConsent;
+    
+    // Store validation status in parent component if needed
+    updateData({ 
+      ...data, 
+      _complianceStepValid: allRequiredChecked 
+    } as any);
+  }, [data.accurateInformation, data.notIllegalActivities, data.additionalInfoConsent, data.privacyPolicyConsent, updateData]);
 
   return (
     <div>
@@ -88,9 +156,11 @@ export default function ComplianceStep({ data, updateData }: ComplianceStepProps
           </div>
         </div>
 
-        {/* Declarations */}
+        {/* Required Declarations */}
         <div>
-          <h3 className="text-lg font-semibold text-white mb-4">Declarations</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">
+            Required Declarations <span className="text-red-400">*</span>
+          </h3>
           <div className="space-y-4">
             <div>
               <label className="flex items-start space-x-3">
@@ -98,12 +168,15 @@ export default function ComplianceStep({ data, updateData }: ComplianceStepProps
                   type="checkbox"
                   checked={data.accurateInformation}
                   onChange={(e) => handleInputChange('accurateInformation', e.target.checked)}
-                  className="w-4 h-4 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-500 mt-1"
+                  className={getCheckboxClassName('accurateInformation', data.accurateInformation)}
                 />
-                <div>
+                <div className="flex-1">
                   <span className="text-gray-300">
-                    I confirm that all information provided is accurate, complete, and up-to-date.
+                    I confirm that all information provided is accurate, complete, and up-to-date. <span className="text-red-400">*</span>
                   </span>
+                  {showValidation && errors.accurateInformation && (
+                    <p className="mt-1 text-sm text-red-400">{errors.accurateInformation}</p>
+                  )}
                 </div>
               </label>
             </div>
@@ -114,13 +187,16 @@ export default function ComplianceStep({ data, updateData }: ComplianceStepProps
                   type="checkbox"
                   checked={data.notIllegalActivities}
                   onChange={(e) => handleInputChange('notIllegalActivities', e.target.checked)}
-                  className="w-4 h-4 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-500 mt-1"
+                  className={getCheckboxClassName('notIllegalActivities', data.notIllegalActivities)}
                 />
-                <div>
+                <div className="flex-1">
                   <span className="text-gray-300">
                     I confirm that the company is not involved in any illegal activities, including but not limited to money 
-                    laundering, terrorist financing, fraud, or tax evasion.
+                    laundering, terrorist financing, fraud, or tax evasion. <span className="text-red-400">*</span>
                   </span>
+                  {showValidation && errors.notIllegalActivities && (
+                    <p className="mt-1 text-sm text-red-400">{errors.notIllegalActivities}</p>
+                  )}
                 </div>
               </label>
             </div>
@@ -131,13 +207,16 @@ export default function ComplianceStep({ data, updateData }: ComplianceStepProps
                   type="checkbox"
                   checked={data.additionalInfoConsent}
                   onChange={(e) => handleInputChange('additionalInfoConsent', e.target.checked)}
-                  className="w-4 h-4 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-500 mt-1"
+                  className={getCheckboxClassName('additionalInfoConsent', data.additionalInfoConsent)}
                 />
-                <div>
+                <div className="flex-1">
                   <span className="text-gray-300">
                     I understand that TrustBridge may request additional information or documentation to complete the 
-                    verification process.
+                    verification process. <span className="text-red-400">*</span>
                   </span>
+                  {showValidation && errors.additionalInfoConsent && (
+                    <p className="mt-1 text-sm text-red-400">{errors.additionalInfoConsent}</p>
+                  )}
                 </div>
               </label>
             </div>
@@ -148,17 +227,50 @@ export default function ComplianceStep({ data, updateData }: ComplianceStepProps
                   type="checkbox"
                   checked={data.privacyPolicyConsent}
                   onChange={(e) => handleInputChange('privacyPolicyConsent', e.target.checked)}
-                  className="w-4 h-4 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-500 mt-1"
+                  className={getCheckboxClassName('privacyPolicyConsent', data.privacyPolicyConsent)}
                 />
-                <div>
+                <div className="flex-1">
                   <span className="text-gray-300">
                     I consent to TrustBridge processing the provided information for KYB verification purposes in accordance with 
-                    the Privacy Policy.
+                    the Privacy Policy. <span className="text-red-400">*</span>
                   </span>
+                  {showValidation && errors.privacyPolicyConsent && (
+                    <p className="mt-1 text-sm text-red-400">{errors.privacyPolicyConsent}</p>
+                  )}
                 </div>
               </label>
             </div>
           </div>
+
+          {/* Validation Summary */}
+          {showValidation && Object.keys(errors).length > 0 && (
+            <div className="mt-4 bg-red-900 border border-red-700 rounded-lg p-4">
+              <div className="flex items-start">
+                <div className="text-red-400 mr-3 mt-1">⚠️</div>
+                <div>
+                  <h4 className="text-red-300 font-medium mb-1">Required Declarations Missing</h4>
+                  <p className="text-red-200 text-sm">
+                    All declarations marked with (*) must be accepted to proceed with KYB verification.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Success Indicator */}
+          {showValidation && Object.keys(errors).length === 0 && (
+            <div className="mt-4 bg-green-900 border border-green-700 rounded-lg p-4">
+              <div className="flex items-start">
+                <div className="text-green-400 mr-3 mt-1">✅</div>
+                <div>
+                  <h4 className="text-green-300 font-medium mb-1">All Declarations Complete</h4>
+                  <p className="text-green-200 text-sm">
+                    You have successfully completed all required compliance declarations.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Data Protection Notice */}
