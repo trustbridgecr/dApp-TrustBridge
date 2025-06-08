@@ -28,17 +28,12 @@ export default function ComplianceStep({ data, updateData }: ComplianceStepProps
   const getCheckboxClassName = (fieldName: keyof ValidationErrors, isChecked: boolean) => {
     const baseClasses = "w-4 h-4 text-green-500 bg-gray-700 rounded focus:ring-green-500 mt-1";
     
-    if (!isChecked) {
-      return `${baseClasses} border-2 border-red-500`;
-    }
-    
-    if (isChecked) {
-      return `${baseClasses} border border-green-500`;
-    }
-    
-    return `${baseClasses} border border-gray-600`;
-  };
-
+   if (!isChecked) {
+    return `${baseClasses} border-2 border-red-500`;
+  }
+  
+  return `${baseClasses} border border-green-500`;
+ };
   // Expose validation function to parent component
   useEffect(() => {
     const allRequiredChecked = data.accurateInformation &&
