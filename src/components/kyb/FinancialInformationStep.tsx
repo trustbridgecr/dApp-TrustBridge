@@ -40,45 +40,33 @@ export default function FinancialInformationStep({ data, updateData }: Financial
         if (!value) {
           newErrors.annualRevenue = 'Annual revenue is required';
         } else {
-          delete newErrors.annualRevenue;
+          newErrors.annualRevenue = undefined;
         }
         break;
       case 'primarySourceOfFunds':
         if (!value) {
           newErrors.primarySourceOfFunds = 'Primary source of funds is required';
         } else {
-          delete newErrors.primarySourceOfFunds;
+          newErrors.primarySourceOfFunds = undefined;
         }
         break;
       case 'expectedMonthlyTransactionVolume':
         if (!value) {
           newErrors.expectedMonthlyTransactionVolume = 'Expected transaction volume is required';
         } else {
-          delete newErrors.expectedMonthlyTransactionVolume;
+          newErrors.expectedMonthlyTransactionVolume = undefined;
         }
         break;
       case 'businessPurpose':
         if (!value || value.trim().length < 10) {
           newErrors.businessPurpose = 'Business purpose must be at least 10 characters';
         } else {
-          delete newErrors.businessPurpose;
+          newErrors.businessPurpose = undefined;
         }
         break;
     }
 
     setErrors(newErrors);
-  };
-
-  const validateAllFields = () => {
-    const requiredFields = ['annualRevenue', 'primarySourceOfFunds', 'expectedMonthlyTransactionVolume', 'businessPurpose'];
-    const newTouched: Record<string, boolean> = {};
-    
-    requiredFields.forEach(field => {
-      newTouched[field] = true;
-      validateField(field);
-    });
-    
-    setTouched(newTouched);
   };
 
   const getFieldClassName = (fieldName: keyof ValidationErrors, hasError: boolean) => {
@@ -97,17 +85,19 @@ export default function FinancialInformationStep({ data, updateData }: Financial
 
   // Expose validation function to parent component
   useEffect(() => {
-    // You could emit validation status to parent here if needed
     const hasErrors = Object.keys(errors).length > 0;
     const allFieldsFilled = data.annualRevenue && data.primarySourceOfFunds && 
                            data.expectedMonthlyTransactionVolume && data.businessPurpose;
     
-    // Store validation status in parent component if needed
-    updateData({ 
-      ...data, 
-      _financialStepValid: !hasErrors && allFieldsFilled 
-    } as any);
-  }, [errors, data, updateData]);
+   const isValid = !hasErrors && allFieldsFilled;
+  
+   // Only update if validation status has changed
+   if ((data as any)._financialStepValid !== isValid) {
+     updateData({ 
+        _financialStepValid: isValid 
+     } as Partial<BusinessData>);
+   }
+  }, [errors, data.annualRevenue, data.primarySourceOfFunds, data.expectedMonthlyTransactionVolume, data.businessPurpose, data, updateData]);
 
   return (
     <div>

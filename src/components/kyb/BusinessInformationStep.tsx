@@ -52,25 +52,28 @@ export default function BusinessInformationStep({ data, updateData }: BusinessIn
           delete newErrors.registrationNumber;
         }
         break;
-      case 'email':
-        const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+      case 'email': {
+       const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
         if (!value.trim()) {
           newErrors.email = 'Email is required';
         } else if (!emailPattern.test(value)) {
           newErrors.email = 'Please enter a valid email address';
         } else {
-          delete newErrors.email;
-        }
+         delete newErrors.email;
+       }
         break;
-      case 'phoneNumber':
-        const phonePattern = /^[+]?[0-9\s\-\(\)]{10,}$/;
+      }
+
+      case 'phoneNumber': {
+        const phonePattern = /^[+]?[0-9\s\-()]{10,}$/;
         if (value && !phonePattern.test(value)) {
-          newErrors.phoneNumber = 'Please enter a valid phone number';
+         newErrors.phoneNumber = 'Please enter a valid phone number';
         } else {
-          delete newErrors.phoneNumber;
+         delete newErrors.phoneNumber;
         }
         break;
-    }
+      }
+     }
 
     setErrors(newErrors);
   };

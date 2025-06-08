@@ -26,30 +26,6 @@ export default function ComplianceStep({ data, updateData }: ComplianceStepProps
     }
   };
 
-  const validateRequiredDeclarations = () => {
-    const newErrors: ValidationErrors = {};
-    
-    if (!data.accurateInformation) {
-      newErrors.accurateInformation = 'This declaration is required';
-    }
-    
-    if (!data.notIllegalActivities) {
-      newErrors.notIllegalActivities = 'This declaration is required';
-    }
-    
-    if (!data.additionalInfoConsent) {
-      newErrors.additionalInfoConsent = 'This consent is required';
-    }
-    
-    if (!data.privacyPolicyConsent) {
-      newErrors.privacyPolicyConsent = 'Privacy policy consent is required';
-    }
-    
-    setErrors(newErrors);
-    setShowValidation(true);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const getCheckboxClassName = (fieldName: keyof ValidationErrors, isChecked: boolean) => {
     const baseClasses = "w-4 h-4 text-green-500 bg-gray-700 rounded focus:ring-green-500 mt-1";
     
@@ -66,18 +42,24 @@ export default function ComplianceStep({ data, updateData }: ComplianceStepProps
 
   // Expose validation function to parent component
   useEffect(() => {
-    const allRequiredChecked = data.accurateInformation && 
-                              data.notIllegalActivities && 
-                              data.additionalInfoConsent && 
+    const allRequiredChecked = data.accurateInformation &&
+                              data.notIllegalActivities &&
+                              data.additionalInfoConsent &&
                               data.privacyPolicyConsent;
-    
-    // Store validation status in parent component if needed
-    updateData({ 
-      ...data, 
-      _complianceStepValid: allRequiredChecked 
-    } as any);
-  }, [data.accurateInformation, data.notIllegalActivities, data.additionalInfoConsent, data.privacyPolicyConsent, updateData]);
-
+    // Only update if the validation status has changed
+    if ((data as any)._complianceStepValid !== allRequiredChecked) {
+      updateData({
+        _complianceStepValid: allRequiredChecked
+      } as Partial<BusinessData>);
+    }
+  }, [
+    data.accurateInformation,
+    data.notIllegalActivities,
+    data.additionalInfoConsent,
+    data.privacyPolicyConsent,
+    data,
+    updateData
+  ]);
   return (
     <div>
       <h2 className="text-2xl font-bold text-green-400 mb-2">Compliance Information</h2>

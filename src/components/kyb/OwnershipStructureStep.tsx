@@ -8,7 +8,6 @@ interface OwnershipStructureStepProps {
 }
 
 export default function OwnershipStructureStep({ data, updateData }: OwnershipStructureStepProps) {
-  const [uboCounter, setUboCounter] = useState(1);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const addUBO = () => {
@@ -23,7 +22,6 @@ export default function OwnershipStructureStep({ data, updateData }: OwnershipSt
     updateData({
       ubos: [...data.ubos, newUBO]
     });
-    setUboCounter(prev => prev + 1);
   };
 
   const removeUBO = (id: string) => {

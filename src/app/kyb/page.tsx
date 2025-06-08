@@ -84,7 +84,6 @@ export default function KYBPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [businessData, setBusinessData] = useState<BusinessData>({
     // Business Information
     legalCompanyName: '',
@@ -143,26 +142,29 @@ export default function KYBPage() {
 
   const validateCurrentStep = (): boolean => {
     switch (currentStep) {
-      case 1: // Business Information
-        const requiredBusinessFields = ['legalCompanyName', 'entityType', 'registrationNumber', 'email'];
-        return requiredBusinessFields.every(field => 
-          businessData[field as keyof BusinessData] && 
-          String(businessData[field as keyof BusinessData]).trim() !== ''
-        );
+      case 1: { // Business Information
+       const requiredBusinessFields = ['legalCompanyName', 'entityType', 'registrationNumber', 'email'];
+       return requiredBusinessFields.every(field => 
+         businessData[field as keyof BusinessData] && 
+         String(businessData[field as keyof BusinessData]).trim() !== ''
+       );
+      }
       
       case 2: // Ownership Structure
         return businessData.ownershipStructure && businessData.ubos.length > 0;
       
-      case 3: // Document Upload
+      case 3: { // Document Upload
         const requiredDocs = ['certificateOfIncorporation', 'articlesOfAssociation', 'proofOfBusinessAddress', 'financialStatements'];
         return requiredDocs.every(doc => businessData.documents[doc as keyof typeof businessData.documents]);
-      
-      case 4: // Financial Information
+      }
+
+      case 4: { // Financial Information
         const requiredFinancialFields = ['annualRevenue', 'primarySourceOfFunds', 'expectedMonthlyTransactionVolume', 'businessPurpose'];
         return requiredFinancialFields.every(field => 
-          businessData[field as keyof BusinessData] && 
-          String(businessData[field as keyof BusinessData]).trim() !== ''
+         businessData[field as keyof BusinessData] && 
+         String(businessData[field as keyof BusinessData]).trim() !== ''
         );
+      }
       
       case 5: // Compliance
         return businessData.accurateInformation && 
@@ -177,13 +179,12 @@ export default function KYBPage() {
 
   const handleNext = () => {
     if (!validateCurrentStep()) {
-      // Show validation error or trigger validation in child components
-      alert('Please complete all required fields before proceeding.');
+     setError('Please complete all required fields before proceeding.');
       return;
     }
     
     if (currentStep < 6) {
-      setCurrentStep(prev => prev + 1);
+      setError(null); // Clear error on successful navigation
     }
   };
 
