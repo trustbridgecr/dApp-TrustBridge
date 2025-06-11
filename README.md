@@ -1,4 +1,6 @@
-# 🚀 TrustBridge
+![ ](https://github.com/user-attachments/assets/9201806d-7116-44d7-9df0-6f73c6f3d3f3)
+
+# TrustBridge
 
 **TrustBridge** is a decentralized lending platform built on the Stellar blockchain and integrated with Trustless Work for smart contract management. It enables users to request and fund secure loans, ensuring transparency, automation, and security without traditional intermediaries.
 
