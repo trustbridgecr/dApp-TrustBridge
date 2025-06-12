@@ -14,6 +14,8 @@ export const useAllChats = (walletAddress: string) => {
       return;
     }
 
+    let unsubscribe: (() => void) | undefined;
+
     const setupChats = async () => {
       try {
         setLoading(true);
@@ -26,7 +28,7 @@ export const useAllChats = (walletAddress: string) => {
           where("participants", "array-contains", walletAddress),
         );
 
-        const unsubscribe = onSnapshot(
+        unsubscribe = onSnapshot(
           q,
           async (snapshot) => {
             const updatedChats = await Promise.all(
@@ -54,10 +56,6 @@ export const useAllChats = (walletAddress: string) => {
             setLoading(false);
           },
         );
-
-        return () => {
-          unsubscribe();
-        };
       } catch (err) {
         console.error("Error setting up chats:", err);
         setError("Error setting up chats");
@@ -65,9 +63,10 @@ export const useAllChats = (walletAddress: string) => {
       }
     };
 
-    const cleanup = setupChats();
+    setupChats();
+
     return () => {
-      cleanup.then((unsubscribe) => unsubscribe && unsubscribe());
+      if (unsubscribe) unsubscribe();
     };
   }, [walletAddress]);
 
