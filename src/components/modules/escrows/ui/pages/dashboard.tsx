@@ -12,10 +12,18 @@ import { MainTabs } from "../tabs/MainTabs";
 import { ConnectWalletWarning } from "../ConnectWalletWarning";
 import { useUserEscrows } from "../../hooks/use-user-escrows.hook";
 import { EscrowList } from "../components/EscrowList";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 export function Loans() {
   const { walletAddress } = useWalletContext();
-  const { escrows, loading } = useUserEscrows(walletAddress || "");
+  const { escrows, loading, error } = useUserEscrows(walletAddress || "");
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   return (
     <div className="space-y-8 p-4">

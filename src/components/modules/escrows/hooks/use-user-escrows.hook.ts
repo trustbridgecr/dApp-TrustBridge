@@ -5,21 +5,30 @@ import { EscrowRecord } from "@/@types/escrow.entity";
 export const useUserEscrows = (walletAddress: string) => {
   const [escrows, setEscrows] = useState<EscrowRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const load = async () => {
       if (!walletAddress) {
         setEscrows([]);
         setLoading(false);
+        setError(null);
         return;
       }
-      setLoading(true);
-      const res = await getEscrowsForWallet(walletAddress);
-      setEscrows(res);
-      setLoading(false);
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await getEscrowsForWallet(walletAddress);
+        setEscrows(res);
+      } catch (err) {
+        console.error("Error loading escrows:", err);
+        setError("Failed to load escrows");
+      } finally {
+        setLoading(false);
+      }
     };
     load();
   }, [walletAddress]);
 
-  return { escrows, loading };
+  return { escrows, loading, error };
 };
