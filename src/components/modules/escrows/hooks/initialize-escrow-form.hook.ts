@@ -15,6 +15,7 @@ import { signTransaction } from "../../auth/helpers/stellar-wallet-kit.helper";
 import { handleError } from "@/errors/utils/handle-errors";
 import { AxiosError } from "axios";
 import { WalletError } from "@/@types/errors.entity";
+import { saveEscrow } from "../lib/escrow";
 import {
   useInitializeEscrow as useInitializeEscrowHook,
   useSendTransaction,
@@ -210,6 +211,12 @@ export const useInitializeEscrow = () => {
         setEscrow(escrow);
         setActiveTab("escrow");
         toast.success("Escrow Created");
+
+        try {
+          await saveEscrow(escrow, walletAddress || "");
+        } catch (err) {
+          console.error("Error saving escrow:", err);
+        }
       }
     } catch (error: unknown) {
       const mappedError = handleError(error as AxiosError | WalletError);
