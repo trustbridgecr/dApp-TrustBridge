@@ -10,9 +10,12 @@ import {
 import { useWalletContext } from "@/providers/wallet.provider";
 import { MainTabs } from "../tabs/MainTabs";
 import { ConnectWalletWarning } from "../ConnectWalletWarning";
+import { useUserEscrows } from "../../hooks/use-user-escrows.hook";
+import { EscrowList } from "../components/EscrowList";
 
 export function Loans() {
   const { walletAddress } = useWalletContext();
+  const { escrows, loading } = useUserEscrows(walletAddress || "");
 
   return (
     <div className="space-y-8 p-4">
@@ -28,6 +31,16 @@ export function Loans() {
           {walletAddress ? <MainTabs /> : <ConnectWalletWarning />}
         </CardContent>
       </Card>
+      {walletAddress && (
+        <Card className="shadow-none border">
+          <CardHeader>
+            <CardTitle className="text-xl">Your Escrows</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <EscrowList escrows={escrows} loading={loading} />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
