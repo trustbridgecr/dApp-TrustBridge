@@ -8,7 +8,14 @@ export const handleError = (error: AxiosError | WalletError): ErrorResponse => {
   if (axios.isAxiosError(error)) {
     const axiosError = error as AxiosError<ApiError>;
     const code = axiosError.response?.status || 500;
-    const message = axiosError.response?.data?.message || error.message;
+    let message = axiosError.response?.data?.message || error.message;
+    if (
+      typeof message === "string" &&
+      message.toLowerCase().includes("token not valid")
+    ) {
+      message =
+        "Invalid Trustless Work API key. Please check your configuration.";
+    }
     return {
       message,
       code,
