@@ -35,7 +35,7 @@ export const kit: StellarWalletsKit = new StellarWalletsKit({
 // Force Lobstr and Rabet modules to be marked as available
 kit.getSupportedWallets().then((wallets) => {
   const updated = wallets.map((w) =>
-    w.id === "lobstr" || w.id === "rabet" ? { ...w, isAvailable: true } : w
+    w.id === "lobstr" || w.id === "rabet" ? { ...w, isAvailable: true } : w,
   );
   setAllowedWallets(updated);
 });
