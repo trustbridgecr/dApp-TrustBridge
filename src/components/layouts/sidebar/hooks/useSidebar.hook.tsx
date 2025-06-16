@@ -7,6 +7,7 @@ import {
   CreditCard,
   MessageSquare,
   Settings,
+  ShoppingCart,
 } from "lucide-react";
 import { ReactNode } from "react";
 import { useWalletContext } from "@/providers/wallet.provider";
@@ -58,6 +59,12 @@ export function useTrustBridgeSidebar() {
           icon: <CreditCard className="h-4 w-4" />,
           label: "Loans",
           active: pathname.startsWith("/dashboard/loans"),
+        },
+        {
+          href: "/dashboard/marketplace",
+          icon: <ShoppingCart className="h-4 w-4" />,
+          label: "Marketplace",
+          active: pathname.startsWith("/dashboard/marketplace"),
         },
       ],
     },
