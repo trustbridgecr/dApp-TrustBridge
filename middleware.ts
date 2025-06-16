@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
+  // Support both new and old environment variable names
+  const envValue =
+    process.env.NEXT_PUBLIC_MAINTENANCE_MODE ?? process.env.MAINTENANCE_MODE;
+  const maintenanceMode = envValue?.trim().toLowerCase() === "true";
 
   // Maintenance mode activated
   if (
