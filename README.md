@@ -95,18 +95,6 @@ https://github.com/user-attachments/assets/0c4a8a80-33f1-41ae-819b-6a38abf30e4b
 
 ---
 
-## 🔥 Firebase Setup
-
-Once you have your Firebase database ready, add the following document in the `trustlines` collection:
-
-```
-name: "USDC" (string)
-trustline: "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5" (string)
-trustlineDecimals: 10000000 (number)
-```
-
----
-
 ## 🔑 Wallet Requirements
 
 To use this platform, install one of the following wallets:
