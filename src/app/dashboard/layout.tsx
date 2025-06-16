@@ -1,6 +1,3 @@
-"use client";
-
-import type React from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { TrustBridgeSidebar } from "@/components/layouts/sidebar/Sidebar";
 import { Header } from "@/components/layouts/header/Header";

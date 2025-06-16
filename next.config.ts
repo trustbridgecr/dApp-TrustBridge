@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    NEXT_PUBLIC_MAINTENANCE_MODE: process.env.NEXT_PUBLIC_MAINTENANCE_MODE,
+    NEXT_PUBLIC_MAINTENANCE_MODE: process.env.MAINTENANCE_MODE,
   },
   // Add configuration for handling static files
   async headers() {
@@ -11,7 +11,7 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=3600",
+            value: "public, max-age=3600", // Cache for 1 hour
           },
         ],
       },

@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Support both new and old environment variable names
-  const envValue =
-    process.env.NEXT_PUBLIC_MAINTENANCE_MODE ?? process.env.MAINTENANCE_MODE;
-  const maintenanceMode = envValue?.trim().toLowerCase() === "true";
+  const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
 
   // Maintenance mode activated
   if (
@@ -18,7 +15,7 @@ export function middleware(request: NextRequest) {
 
   // Maintenance mode deactivated
   if (!maintenanceMode && request.nextUrl.pathname === "/maintenance") {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
