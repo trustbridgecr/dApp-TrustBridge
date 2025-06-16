@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
 
   // Maintenance mode deactivated
   if (!maintenanceMode && request.nextUrl.pathname === "/maintenance") {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
