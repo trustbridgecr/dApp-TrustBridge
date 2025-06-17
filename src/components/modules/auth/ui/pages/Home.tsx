@@ -25,7 +25,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <section className="w-full py-12 md:py-24 lg:py-32 px-4">
+      <section className="w-full py-12 md:py-24 lg:py-18 px-4">
         <div className="container mx-auto max-w-4xl">
           <div className="flex flex-col justify-center space-y-6 text-center md:text-left">
             <div className="space-y-4">
