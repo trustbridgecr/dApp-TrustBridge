@@ -1,6 +1,5 @@
 "use client";
 
-<<<<<<< feat/about-us-page-141
 import React from "react";
 import Link from "next/link";
 
@@ -15,11 +14,6 @@ const HeaderHome: React.FC = () => {
         </Link>
       </div>
     </header>
-=======
-export function HeaderHome() {
-  return (
-    <header className="flex h-14 items-center justify-start border-b bg-muted/40 px-4 lg:px-6"></header>
->>>>>>> develop
   );
 };
 
