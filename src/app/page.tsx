@@ -20,9 +20,7 @@ export default function Page() {
   return (
     <GradientBackground>
       <HeaderHome />
-      <div className="p-6">
-        <HomePage />
-      </div>
+      <HomePage />
     </GradientBackground>
   );
 }
