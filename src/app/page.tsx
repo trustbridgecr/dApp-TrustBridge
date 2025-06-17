@@ -5,6 +5,7 @@ import { GradientBackground } from "@/components/modules/dashboard/ui/pages/back
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useWalletContext } from "@/providers/wallet.provider";
+import HeaderHome from "@/components/layouts/header/HeaderHome";
 
 export default function Page() {
   const { walletAddress } = useWalletContext();
@@ -18,6 +19,7 @@ export default function Page() {
 
   return (
     <GradientBackground>
+      <HeaderHome />
       <div className="p-6">
         <HomePage />
       </div>
