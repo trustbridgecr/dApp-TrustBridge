@@ -77,7 +77,7 @@ export function TrustBridgeSidebar() {
                                   : "text-muted-foreground hover:bg-muted hover:text-foreground",
                                 item.highlight &&
                                   !item.active &&
-                                  " text-muted-foreground hover:from-emerald-600 hover:to-teal-600",
+                                  " text-muted-foreground hover:from-emerald-600 hover:to-emerald-600",
                               )}
                             >
                               <a

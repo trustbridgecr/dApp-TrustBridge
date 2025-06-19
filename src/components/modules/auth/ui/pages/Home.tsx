@@ -37,7 +37,7 @@ export default function HomePage() {
               </Badge>
 
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent">
                   TrustBridge
                 </span>
                 <span className="block mt-2">Decentralized Microloans</span>
@@ -85,7 +85,7 @@ export default function HomePage() {
                 <Button
                   size="lg"
                   onClick={handleConnect}
-                  className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white border-0"
+                  className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-emerald-800 hover:from-emerald-700 hover:to-emerald-600 text-white border-0"
                 >
                   <LogIn className="w-5 h-5" />
                   <span className="ml-2">Connect Wallet</span>
