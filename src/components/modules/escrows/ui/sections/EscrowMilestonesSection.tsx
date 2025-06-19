@@ -17,7 +17,7 @@ export const EscrowMilestonesSection = ({
           key={index}
           className={`border rounded-lg p-4 transition-all ${
             milestone.status === "approved" || milestone.approvedFlag
-              ? "border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-900/20"
+              ? "border-emerald-800 dark:border-emerald-800 bg-emerald-800 dark:bg-emerald-800"
               : "hover:border-primary"
           }`}
         >
@@ -26,7 +26,7 @@ export const EscrowMilestonesSection = ({
               <div
                 className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full uppercase ${
                   milestone.status === "approved" || milestone.approvedFlag
-                    ? "bg-green-100 dark:bg-green-900/50"
+                    ? "bg-emerald-800 dark:bg-emerald-800"
                     : "bg-muted"
                 }`}
               >
@@ -48,7 +48,7 @@ export const EscrowMilestonesSection = ({
                     }
                     className={
                       milestone.status === "approved"
-                        ? "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-900/70 uppercase"
+                        ? "bg-emerald-800 dark:bg-emerald-800 text-emerald-800 dark:text-emerald-800 hover:bg-emerald-800 dark:hover:bg-emerald-800 uppercase"
                         : "uppercase"
                     }
                   >
@@ -64,7 +64,7 @@ export const EscrowMilestonesSection = ({
                 {milestone.approvedFlag && !milestone.status && (
                   <Badge
                     variant="outline"
-                    className="border-green-200 dark:border-green-900 text-green-800 dark:text-green-200 uppercase"
+                    className="border-emerald-800 dark:border-emerald-800 text-emerald-800 dark:text-emerald-800 uppercase"
                   >
                     <CheckCircle2 className="mr-1 h-3 w-3" /> Approved
                   </Badge>

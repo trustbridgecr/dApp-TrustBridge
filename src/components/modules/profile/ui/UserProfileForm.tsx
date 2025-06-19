@@ -64,7 +64,7 @@ export const UserProfileForm = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-800" />
       </div>
     );
   }
@@ -76,7 +76,7 @@ export const UserProfileForm = () => {
           <CardHeader className="pb-3">
             {/* Progress Bar */}
             <div className="w-full bg-primary rounded-full h-1 mb-8">
-              <div className="bg-emerald-600 h-1 rounded-full w-full"></div>
+              <div className="bg-emerald-800 h-1 rounded-full w-full"></div>
             </div>
 
             <h1 className="text-3xl font-bold mb-2">User Registration</h1>
@@ -261,7 +261,7 @@ export const UserProfileForm = () => {
                 <Button
                   type="submit"
                   disabled={saving}
-                  className="w-full bg-emerald-600 cursor-pointer hover:bg-emerald-700 text-white font-semibold py-3 rounded-lg transition-colors"
+                  className="w-full bg-emerald-800 cursor-pointer hover:bg-emerald-800 text-white font-semibold py-3 rounded-lg transition-colors"
                 >
                   {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Save Profile

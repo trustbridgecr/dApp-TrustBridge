@@ -40,7 +40,7 @@ export function TrustBridgeSidebar() {
             />
             {!collapsed && (
               <div className="flex flex-col">
-                <span className="text-md font-bold leading-none text-emerald-600">
+                <span className="text-md font-bold leading-none text-emerald-800">
                   TrustBridge
                 </span>
                 <span className="text-xs text-muted-foreground">
@@ -73,11 +73,11 @@ export function TrustBridgeSidebar() {
                               className={cn(
                                 "group relative flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                                 item.active
-                                  ? "bg-muted-foreground text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
+                                  ? "bg-muted-foreground text-emerald-800 dark:bg-emerald-800 dark:text-emerald-800"
                                   : "text-muted-foreground hover:bg-muted hover:text-foreground",
                                 item.highlight &&
                                   !item.active &&
-                                  " text-muted-foreground hover:from-emerald-600 hover:to-teal-600",
+                                  " text-muted-foreground hover:from-emerald-800 hover:to-teal-600",
                               )}
                             >
                               <a
@@ -88,7 +88,7 @@ export function TrustBridgeSidebar() {
                                   className={cn(
                                     "flex-shrink-0",
                                     item.active
-                                      ? "text-emerald-600 dark:text-emerald-400"
+                                      ? "text-emerald-800 dark:text-emerald-800"
                                       : item.highlight
                                         ? "text-white"
                                         : "text-muted-foreground group-hover:text-foreground",
@@ -135,7 +135,7 @@ export function TrustBridgeSidebar() {
                 src="/placeholder.svg?height=32&width=32"
                 alt="User"
               />
-              <AvatarFallback className="bg-emerald-100 text-emerald-700"></AvatarFallback>
+              <AvatarFallback className="bg-emerald-800 text-emerald-800"></AvatarFallback>
             </Avatar>
             {!collapsed && (
               <div className="flex flex-col">

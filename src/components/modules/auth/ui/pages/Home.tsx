@@ -31,13 +31,13 @@ export default function HomePage() {
             <div className="space-y-4">
               <Badge
                 variant="outline"
-                className="bg-emerald-50 text-emerald-700 border-emerald-200 mx-auto md:mx-0 w-fit"
+                className="bg-emerald-800 text-emerald-800 border-emerald-800 mx-auto md:mx-0 w-fit"
               >
                 Powered by Stellar Blockchain
               </Badge>
 
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-emerald-800 to-teal-500 bg-clip-text text-transparent">
                   TrustBridge
                 </span>
                 <span className="block mt-2">Decentralized Microloans</span>
@@ -52,9 +52,9 @@ export default function HomePage() {
 
             {/* Mobile wallet address display */}
             {walletAddress && (
-              <div className="flex sm:hidden items-center justify-center gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-950 rounded-lg border border-emerald-200 dark:border-emerald-800 mx-auto w-fit">
-                <Wallet className="w-4 h-4 text-emerald-600" />
-                <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+              <div className="flex sm:hidden items-center justify-center gap-2 px-3 py-2 bg-emerald-800 dark:bg-emerald-800 rounded-lg border border-emerald-800 dark:border-emerald-800 mx-auto w-fit">
+                <Wallet className="w-4 h-4 text-emerald-800" />
+                <span className="text-sm font-medium text-emerald-800 dark:text-emerald-800">
                   {truncateAddress(walletAddress)}
                 </span>
               </div>
@@ -64,9 +64,9 @@ export default function HomePage() {
               {walletAddress ? (
                 <>
                   {/* Desktop wallet address display */}
-                  <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-950 rounded-lg border border-emerald-200 dark:border-emerald-800">
-                    <Wallet className="w-4 h-4 text-emerald-600" />
-                    <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                  <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-emerald-800 dark:bg-emerald-800 rounded-lg border border-emerald-800 dark:border-emerald-800">
+                    <Wallet className="w-4 h-4 text-emerald-800" />
+                    <span className="text-sm font-medium text-emerald-800 dark:text-emerald-800">
                       {truncateAddress(walletAddress)}
                     </span>
                   </div>
@@ -85,7 +85,7 @@ export default function HomePage() {
                 <Button
                   size="lg"
                   onClick={handleConnect}
-                  className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white border-0"
+                  className="w-full sm:w-auto bg-gradient-to-r from-emerald-800 to-teal-500 hover:from-emerald-800 hover:to-teal-600 text-white border-0"
                 >
                   <LogIn className="w-5 h-5" />
                   <span className="ml-2">Connect Wallet</span>
@@ -96,7 +96,7 @@ export default function HomePage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-300 dark:hover:bg-emerald-950"
+                  className="w-full border-emerald-800 text-emerald-800 hover:bg-emerald-800 dark:border-emerald-800 dark:text-emerald-800 dark:hover:bg-emerald-800"
                 >
                   Explore Dashboard
                   <ArrowRight className="ml-2 h-5 w-5" />

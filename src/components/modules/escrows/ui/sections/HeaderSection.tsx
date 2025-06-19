@@ -47,7 +47,7 @@ export const HeaderSection = ({ escrow }: HeaderSectionProps) => {
             variant="outline"
             className={
               escrow?.flags?.releaseFlag || escrow?.flags?.resolvedFlag
-                ? "bg-green-100 text-green-800 hover:bg-green-200"
+                ? "bg-emerald-800 text-emerald-800 hover:bg-emerald-800"
                 : escrow?.flags?.disputeFlag
                   ? "bg-destructive text-white hover:bg-destructive/90"
                   : ""

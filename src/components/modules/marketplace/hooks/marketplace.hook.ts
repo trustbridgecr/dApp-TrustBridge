@@ -79,7 +79,7 @@ export function useMarketplace() {
         return {
           label: "Available",
           variant: "outline" as const,
-          className: "bg-emerald-50 text-emerald-700 border-emerald-200",
+          className: "bg-emerald-800 text-emerald-800 border-emerald-800",
         };
       case "pending":
         return {

@@ -52,7 +52,7 @@ export function DashboardOverview() {
       {/* Header */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-1 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full" />
+          <div className="h-8 w-1 bg-gradient-to-b from-emerald-800 to-teal-500 rounded-full" />
           <h1 className="text-3xl font-bold tracking-tight">
             Dashboard Overview
           </h1>
@@ -66,11 +66,11 @@ export function DashboardOverview() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Wallet Information Card */}
         <Card className="overflow-hidden border-border shadow-sm hover:shadow-md transition-shadow">
-          <div className="h-1 bg-gradient-to-r from-emerald-500 to-teal-500" />
+          <div className="h-1 bg-gradient-to-r from-emerald-800 to-teal-500" />
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
-              <div className="bg-emerald-100 rounded-full p-2">
-                <Wallet className="h-5 w-5 text-emerald-600" />
+              <div className="bg-emerald-800 rounded-full p-2">
+                <Wallet className="h-5 w-5 text-emerald-800" />
               </div>
               Wallet Information
             </CardTitle>
@@ -87,7 +87,7 @@ export function DashboardOverview() {
                     <>
                       <Badge
                         variant="outline"
-                        className="bg-emerald-50 text-emerald-700 border-emerald-200"
+                        className="bg-emerald-800 text-emerald-800 border-emerald-800"
                       >
                         <CheckCircle2 className="h-3 w-3 mr-1" />
                         Connected
@@ -125,7 +125,7 @@ export function DashboardOverview() {
 
         {/* User Profile Card */}
         <Card className="overflow-hidden border-border shadow-sm hover:shadow-md transition-shadow">
-          <div className="h-1 bg-gradient-to-r from-teal-500 to-emerald-500" />
+          <div className="h-1 bg-gradient-to-r from-teal-500 to-emerald-800" />
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
               <div className="bg-teal-100 rounded-full p-2">
@@ -165,7 +165,7 @@ export function DashboardOverview() {
                 <div className="pt-2 mt-3 border-t">
                   <Badge
                     variant="outline"
-                    className="bg-emerald-50 text-emerald-700 border-emerald-200"
+                    className="bg-emerald-800 text-emerald-800 border-emerald-800"
                   >
                     <CheckCircle2 className="h-3 w-3 mr-1" />
                     Profile Complete
@@ -193,11 +193,11 @@ export function DashboardOverview() {
 
         {/* Activity Summary Card */}
         <Card className="overflow-hidden border-border shadow-sm hover:shadow-md transition-shadow">
-          <div className="h-1 bg-gradient-to-r from-emerald-500 to-teal-500" />
+          <div className="h-1 bg-gradient-to-r from-emerald-800 to-teal-500" />
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
-              <div className="bg-emerald-100 rounded-full p-2">
-                <Activity className="h-5 w-5 text-emerald-600" />
+              <div className="bg-emerald-800 rounded-full p-2">
+                <Activity className="h-5 w-5 text-emerald-800" />
               </div>
               Activity Summary
             </CardTitle>
@@ -210,18 +210,18 @@ export function DashboardOverview() {
                   Total Chats
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl font-bold text-emerald-600">
+                  <span className="text-2xl font-bold text-emerald-800">
                     {chatCount}
                   </span>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 rounded-lg p-4">
+              <div className="bg-gradient-to-br from-emerald-800 to-teal-50 dark:from-emerald-800 dark:to-teal-950/30 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium">Chat Activity</span>
                   <Badge
                     variant="outline"
-                    className="bg-emerald-50 text-emerald-700 border-emerald-200"
+                    className="bg-emerald-800 text-emerald-800 border-emerald-800"
                   >
                     Active
                   </Badge>
@@ -240,7 +240,7 @@ export function DashboardOverview() {
                   <p className="text-xs text-muted-foreground">Engagement</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-lg font-bold text-emerald-600">
+                  <p className="text-lg font-bold text-emerald-800">
                     {chatCount > 5 ? "High" : chatCount > 0 ? "Medium" : "Low"}
                   </p>
                   <p className="text-xs text-muted-foreground">
@@ -263,7 +263,7 @@ export function DashboardOverview() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="flex items-center gap-3">
                 <div
-                  className={`w-3 h-3 rounded-full ${address ? "bg-emerald-500" : "bg-amber-500"}`}
+                  className={`w-3 h-3 rounded-full ${address ? "bg-emerald-800" : "bg-amber-500"}`}
                 />
                 <div>
                   <p className="font-medium">Wallet Connection</p>
@@ -275,7 +275,7 @@ export function DashboardOverview() {
 
               <div className="flex items-center gap-3">
                 <div
-                  className={`w-3 h-3 rounded-full ${profile ? "bg-emerald-500" : "bg-amber-500"}`}
+                  className={`w-3 h-3 rounded-full ${profile ? "bg-emerald-800" : "bg-amber-500"}`}
                 />
                 <div>
                   <p className="font-medium">Profile Setup</p>
@@ -289,7 +289,7 @@ export function DashboardOverview() {
 
               <div className="flex items-center gap-3">
                 <div
-                  className={`w-3 h-3 rounded-full ${chatCount > 0 ? "bg-emerald-500" : "bg-gray-400"}`}
+                  className={`w-3 h-3 rounded-full ${chatCount > 0 ? "bg-emerald-800" : "bg-gray-400"}`}
                 />
                 <div>
                   <p className="font-medium">Platform Activity</p>

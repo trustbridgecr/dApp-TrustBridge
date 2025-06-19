@@ -21,7 +21,7 @@ export function GradientBackground({
   children,
   className,
   opacity = 30,
-  primaryColor = "bg-emerald-500",
+  primaryColor = "bg-emerald-800",
   secondaryColor = "bg-teal-700",
   primaryPosition = "-top-40 -right-40",
   secondaryPosition = "top-1/2 -left-40",

@@ -56,7 +56,7 @@ export function MarketplacePage() {
       {/* Header */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <div className="h-6 md:h-8 w-1 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full" />
+          <div className="h-6 md:h-8 w-1 bg-gradient-to-b from-emerald-800 to-teal-500 rounded-full" />
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
             Marketplace
           </h1>
@@ -80,7 +80,7 @@ export function MarketplacePage() {
             </div>
             <Button
               onClick={toggleForm}
-              className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white gap-2 w-full sm:w-auto"
+              className="bg-gradient-to-r from-emerald-800 to-teal-500 hover:from-emerald-800 hover:to-teal-600 text-white gap-2 w-full sm:w-auto"
             >
               <Plus className="h-4 w-4" />
               {showForm ? "Cancel" : "Offer Loan"}
@@ -91,10 +91,10 @@ export function MarketplacePage() {
         <CardContent className="space-y-6">
           {/* Loan Creation Form */}
           {showForm && (
-            <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border-emerald-100 dark:border-emerald-900/50 mx-4 md:mx-0">
+            <Card className="bg-gradient-to-br from-emerald-800 to-teal-50 dark:from-emerald-800 dark:to-teal-950/30 border-emerald-800 dark:border-emerald-800 mx-4 md:mx-0">
               <CardHeader className="pb-3 px-4 md:px-6">
                 <CardTitle className="text-base md:text-lg flex items-center gap-2">
-                  <Plus className="h-4 md:h-5 w-4 md:w-5 text-emerald-600" />
+                  <Plus className="h-4 md:h-5 w-4 md:w-5 text-emerald-800" />
                   Create Loan Offer
                 </CardTitle>
                 <CardDescription className="text-sm">
@@ -157,7 +157,7 @@ export function MarketplacePage() {
                 <div className="flex justify-end pt-2">
                   <Button
                     onClick={addLoan}
-                    className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white w-full sm:w-auto"
+                    className="bg-gradient-to-r from-emerald-800 to-teal-500 hover:from-emerald-800 hover:to-teal-600 text-white w-full sm:w-auto"
                   >
                     Create Offer
                   </Button>
@@ -173,18 +173,18 @@ export function MarketplacePage() {
                 key={loan.id}
                 className="overflow-hidden border-border shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1"
               >
-                <div className="h-1 bg-gradient-to-r from-emerald-400 to-teal-400" />
+                <div className="h-1 bg-gradient-to-r from-emerald-800 to-teal-400" />
                 <CardHeader className="pb-3 px-4 md:px-6">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-base md:text-lg flex items-center gap-2">
-                      <User className="h-4 w-4 text-emerald-600" />
+                      <User className="h-4 w-4 text-emerald-800" />
                       {loan.lender}
                     </CardTitle>
                     {getStatusBadge(loan.status)}
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-xl md:text-2xl font-bold text-emerald-600">
+                      <span className="text-xl md:text-2xl font-bold text-emerald-800">
                         {formatCurrency(loan.amount)}
                       </span>
                       <span className="text-base md:text-lg font-semibold text-teal-600">
@@ -232,7 +232,7 @@ export function MarketplacePage() {
                     </div>
                     <Button
                       size="sm"
-                      className="w-full bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white gap-2 h-9"
+                      className="w-full bg-gradient-to-r from-emerald-800 to-teal-500 hover:from-emerald-800 hover:to-teal-600 text-white gap-2 h-9"
                       disabled={loan.status !== "available"}
                     >
                       {loan.status === "available" ? (
@@ -265,7 +265,7 @@ export function MarketplacePage() {
               </p>
               <Button
                 onClick={() => toggleForm()}
-                className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white w-full sm:w-auto"
+                className="bg-gradient-to-r from-emerald-800 to-teal-500 hover:from-emerald-800 hover:to-teal-600 text-white w-full sm:w-auto"
               >
                 Create First Offer
               </Button>

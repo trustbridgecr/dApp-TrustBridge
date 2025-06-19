@@ -135,7 +135,7 @@ export function ChatDialog() {
                 <Button
                   onClick={handleStartChat}
                   disabled={!targetWallet.trim()}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                  className="bg-emerald-800 hover:bg-emerald-800 text-white"
                 >
                   Start Chat
                 </Button>
@@ -180,13 +180,13 @@ export function ChatDialog() {
                         src={`https://avatar.vercel.sh/${otherWallet}.svg`}
                         alt={`Avatar for ${otherWallet}`}
                       />
-                      <AvatarFallback className="bg-emerald-100 text-emerald-700">
+                      <AvatarFallback className="bg-emerald-800 text-white">
                         {userData?.firstName?.slice(0, 2).toUpperCase() ||
                           (otherWallet as string).slice(0, 2).toUpperCase()}
                         {userData?.lastName?.slice(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
+                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-800 border-2 border-background rounded-full"></div>
                   </div>
 
                   <div className="flex-1">
@@ -203,7 +203,7 @@ export function ChatDialog() {
                         className="p-1 h-6 w-6"
                       >
                         {copiedAddress ? (
-                          <Check className="w-3 h-3 text-green-600" />
+                          <Check className="w-3 h-3 text-emerald-800" />
                         ) : (
                           <Copy className="w-3 h-3" />
                         )}
@@ -230,12 +230,12 @@ export function ChatDialog() {
                   <div className="p-4 space-y-4">
                     {loading && messages.length === 0 ? (
                       <div className="flex items-center justify-center py-8">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-800"></div>
                       </div>
                     ) : messages.length === 0 ? (
                       <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
-                          <Send className="w-8 h-8 text-emerald-600" />
+                        <div className="w-16 h-16 bg-emerald-800 rounded-full flex items-center justify-center mb-4">
+                          <Send className="w-8 h-8 text-white" />
                         </div>
                         <h3 className="font-semibold text-lg mb-2">
                           Start the conversation
@@ -289,7 +289,7 @@ export function ChatDialog() {
                         }
                       }}
                       disabled={isSending}
-                      className="pr-12 bg-background border-border focus:ring-emerald-600 focus:border-emerald-600"
+                      className="pr-12 bg-background border-border focus:ring-emerald-800 focus:border-emerald-800"
                     />
                     {message.trim() && (
                       <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-muted-foreground">
@@ -300,7 +300,7 @@ export function ChatDialog() {
                   <Button
                     onClick={handleSendMessage}
                     disabled={!message.trim() || isSending}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white min-w-[44px]"
+                    className="bg-emerald-800 hover:bg-emerald-800 text-white min-w-[44px]"
                   >
                     {isSending ? (
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>

@@ -46,7 +46,7 @@ export function ChatList({ chats, currentWallet, loading }: ChatListProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-800"></div>
       </div>
     );
   }
@@ -84,7 +84,7 @@ export function ChatList({ chats, currentWallet, loading }: ChatListProps) {
               className={cn(
                 "p-3 cursor-pointer transition-colors",
                 isActive
-                  ? "border-emerald-600 hover:border-emerald-700"
+                  ? "border-emerald-800 hover:border-emerald-800"
                   : "hover:bg-muted/50",
               )}
               onClick={() => router.push(`/dashboard/chat/${otherParticipant}`)}
@@ -95,7 +95,7 @@ export function ChatList({ chats, currentWallet, loading }: ChatListProps) {
                     src={`https://avatar.vercel.sh/${otherParticipant}.svg`} // todo: you can add profile image of the users in firebase, and then use it here
                     alt={`Avatar for ${otherParticipant}`}
                   />
-                  <AvatarFallback className="bg-emerald-100 text-emerald-700">
+                  <AvatarFallback className="bg-emerald-800 text-emerald-800">
                     {user?.firstName?.slice(0, 2).toUpperCase() ||
                       otherParticipant?.slice(0, 2).toUpperCase()}
                     {user?.lastName?.slice(0, 2).toUpperCase() ||
