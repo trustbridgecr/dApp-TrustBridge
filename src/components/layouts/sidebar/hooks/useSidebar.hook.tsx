@@ -4,7 +4,6 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  CreditCard,
   MessageSquare,
   Settings,
   ShoppingCart,
@@ -49,17 +48,17 @@ export function useTrustBridgeSidebar() {
           label: "Dashboard",
           active: pathname === "/dashboard",
         },
+        {
+          href: "/dashboard/stats",
+          icon: <LayoutDashboard className="h-4 w-4" />,
+          label: "Stats",
+          active: pathname === "/dashboard/stats",
+        },
       ],
     },
     {
       section: "Financial",
       items: [
-        {
-          href: "/dashboard/loans",
-          icon: <CreditCard className="h-4 w-4" />,
-          label: "Loans",
-          active: pathname.startsWith("/dashboard/loans"),
-        },
         {
           href: "/dashboard/marketplace",
           icon: <ShoppingCart className="h-4 w-4" />,

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 
-type Tabs = "deploy" | "escrow" | "helper";
+type Tabs = "deploy" | "helper";
 
 interface TabsContextType {
   activeTab: Tabs;
