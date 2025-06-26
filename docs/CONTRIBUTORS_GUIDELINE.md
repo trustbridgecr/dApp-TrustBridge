@@ -41,7 +41,6 @@ We’re thrilled that you’re interested in contributing to **TrustBridge**! Pl
 
 1. Make changes in your local repository.
 2. Follow **atomic commit principles**:
-
    - Each commit should address a single, logical change.
    - Avoid bundling unrelated changes in a single commit.
    - Write clear and descriptive commit messages using the format:
@@ -52,7 +51,6 @@ We’re thrilled that you’re interested in contributing to **TrustBridge**! Pl
    ```
 
    > Examples:
-
    - `feat(authentication): add support for OAuth login`
    - `fix(api): resolve 404 error in user endpoint`
    - `docs(readme): update contribution guidelines`
@@ -75,7 +73,6 @@ We’re thrilled that you’re interested in contributing to **TrustBridge**! Pl
    ```
 
 2. ⚠️ **Note:** This repository uses Husky for pre-push hooks. Husky will automatically run `npm run format` and `npm run lint` before allowing the push.
-
    - If you encounter errors, fix any formatting or linting issues before retrying the push.
 
 ---
