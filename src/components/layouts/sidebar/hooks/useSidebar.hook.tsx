@@ -48,12 +48,6 @@ export function useTrustBridgeSidebar() {
           label: "Dashboard",
           active: pathname === "/dashboard",
         },
-        {
-          href: "/dashboard/stats",
-          icon: <LayoutDashboard className="h-4 w-4" />,
-          label: "Stats",
-          active: pathname === "/dashboard/stats",
-        },
       ],
     },
     {

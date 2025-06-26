@@ -26,18 +26,9 @@ import {
 } from "lucide-react";
 import { useDashboard } from "../../hooks/useDashboard.hook";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useEffect, useState } from "react";
-import { fetchPools } from "@/lib/blend/helpers";
-import { PoolCard } from "@/components/modules/blend/ui/cards/PoolCard";
-import { PoolData } from "@/@types/pool.entity";
 
 export function DashboardOverview() {
   const { loading, profile, address, walletName } = useDashboard();
-  const [pools, setPools] = useState<PoolData[]>([]);
-
-  useEffect(() => {
-    fetchPools().then(setPools).catch(console.error);
-  }, []);
 
   const formatAddress = (addr: string) => {
     if (!addr) return "Not connected";
@@ -204,21 +195,6 @@ export function DashboardOverview() {
           </a>
         </CardFooter>
       </Card>
-
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold text-neutral-100">Markets</h2>
-        {pools.map((p) => (
-          <PoolCard
-            key={p.id}
-            id={p.id}
-            name={p.name}
-            state={p.state}
-            reserves={p.reserves}
-            depositApy={p.depositApy}
-            borrowApy={p.borrowApy}
-          />
-        ))}
-      </div>
     </div>
   );
 }

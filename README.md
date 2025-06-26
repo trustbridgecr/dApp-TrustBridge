@@ -15,7 +15,6 @@ npm install
 ```
 
 2. Copy the `.env.example` file to `.env` and configure the following variables:
-
    - Blend contract addresses
    - Wallet address
    - RPC or Soroban network details (testnet or mainnet)

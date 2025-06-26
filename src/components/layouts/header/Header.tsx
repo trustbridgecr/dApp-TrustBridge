@@ -46,13 +46,6 @@ export function Header() {
               Dashboard
             </Link>
             <Link
-              href="/dashboard/stats"
-              className="rounded-md px-3 py-1.5 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-neutral-100 transition-colors"
-              prefetch={false}
-            >
-              Stats
-            </Link>
-            <Link
               href="/dashboard/profile"
               className="rounded-md px-3 py-1.5 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-neutral-100 transition-colors"
               prefetch={false}
