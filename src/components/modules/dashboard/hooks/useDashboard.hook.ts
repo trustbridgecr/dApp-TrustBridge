@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useWalletContext } from "@/providers/wallet.provider";
 import { useUserContext } from "@/providers/user.provider";
-import { getUserChats } from "@/components/modules/chat/lib/chat";
+
 import { UserProfile } from "@/@types/user.entity";
 
 interface DashboardData {
@@ -27,16 +27,6 @@ export function useDashboard(): DashboardData {
         setChatCount(0);
         setChatsLoading(false);
         return;
-      }
-
-      try {
-        const chats = await getUserChats(address);
-        setChatCount(chats.length);
-      } catch (err) {
-        console.error("Error loading chats:", err);
-        setChatCount(0);
-      } finally {
-        setChatsLoading(false);
       }
     };
 

@@ -1,8 +1,8 @@
 "use client";
 
-import { UserProfileForm } from "@/components/modules/profile/ui/UserProfileForm";
 import { useWalletContext } from "@/providers/wallet.provider";
 import { Card } from "@/components/ui/card";
+import UserProfileForm from "@/components/modules/profile/ui/UserProfileForm";
 
 export default function SettingsPage() {
   const { walletAddress } = useWalletContext();

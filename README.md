@@ -1,129 +1,42 @@
-![ ](https://github.com/user-attachments/assets/9201806d-7116-44d7-9df0-6f73c6f3d3f3)
-
 # TrustBridge
 
-**TrustBridge** is a decentralized lending platform built on the Stellar blockchain and integrated with Trustless Work for smart contract management. It enables users to request and fund secure loans, ensuring transparency, automation, and security without traditional intermediaries.
+Integration prototype between **TrustBridge** and **Blend.Capital** enabling **cross-chain lending** on the Stellar blockchain using bridged assets and Blend’s permissionless lending infrastructure.
 
-## 🎯 Key Benefits and Objectives
+🔗 Built on Stellar + Soroban  
+🧪 MVP running on testnet  
+💱 Use case: Interoperable Lending with bridged assets (e.g., USDC, BLND)
 
-- Facilitate access to secure, decentralized loans via the Stellar network.
-- Connect borrowers and lenders through a transparent marketplace.
-- Automate escrow creation with Trustless Work for secure fund handling.
+## Getting Started
 
-## 🔒 Why Choose TrustBridge?
-
-### ⚙️ Core Advantages
-
-- **Security:** Funds are managed by smart contracts, not centralized entities.
-- **Transparency:** All loan activities are verifiable on the blockchain.
-- **Efficiency:** Fast transactions and no intermediaries.
-- **Smart Automation:** Conditions are enforced automatically via escrow contracts.
-
-## 🌟 Marketplace Features
-
-- 🧾 Browse approved loan requests
-- 📊 View key loan details: amount, borrower, date, conditions
-- 🔎 Search and filter by title, minimum amount, and date
-- 🧩 Fund directly from wallet via Trustless Work API
-- 🔐 Fully decentralized and trustless escrow deployment
-
-## 🛠️ How It Works
-
-1. **Borrower submits a loan request.**
-2. **Loan is reviewed and approved by the platform.**
-3. **The request appears in the marketplace.**
-4. **Lenders fund loans via their Stellar wallet.**
-5. **A smart contract is deployed through Trustless Work.**
-6. **Loan is disbursed automatically.**
-
----
-
-## ⚙️ Getting Started
-
-Follow the steps below to get started with this project:
-
-### 📦 Installation
-
-1. Install dependencies:
+1. Install dependencies, including the Blend SDK:
 
 ```bash
-npm i
+npm install
 ```
 
-2. Format the code using Prettier:
+2. Copy the `.env.example` file to `.env` and configure the following variables:
+   - Blend contract addresses
+   - Wallet address
+   - RPC or Soroban network details (testnet or mainnet)
 
-```bash
-npx prettier --write .
-```
-
-3. Start the development server:
+3. Launch the development server:
 
 ```bash
 npm run dev
 ```
 
----
+## Architecture Overview
 
-## 🔐 Environment Variables
+- **TrustBridge** handles asset bridging and cross-chain messaging.
+- **Blend** manages lending, borrowing, and liquidations in a permissionless environment.
+- Integration is implemented using Soroban smart contracts and TypeScript interfaces.
 
-Create a `.env` file in the root of the project with the following:
+## Status
 
-```env
-# Firebase configuration
-NEXT_PUBLIC_FIREBASE_API_KEY=TU_API_KEY
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=TU_AUTH_DOMAIN
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=TU_PROJECT_ID
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=TU_STORAGE_BUCKET
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=TU_MESSAGING_SENDER_ID
-NEXT_PUBLIC_FIREBASE_APP_ID=TU_APP_ID
+- Functional MVP live on Stellar testnet
+- Supports USDC and BLND lending pools
+- Oracle integration via custom `oracle-mock` Soroban contract
 
-# Trustless Work API
-NEXT_PUBLIC_API_KEY=TU_API_KEY
-```
+## License
 
-### API Key Video
-
-[dApp Trustless Work](https://dapp.trustlesswork.com)
-
-https://github.com/user-attachments/assets/69f0adf2-cb5f-48ff-a4eb-bb1870fa35fa
-
-### Firebase Video
-
-[Firebase](https://firebase.google.com)
-
-https://github.com/user-attachments/assets/0c4a8a80-33f1-41ae-819b-6a38abf30e4b
-
----
-
-## 🔑 Wallet Requirements
-
-To use this platform, install one of the following wallets:
-
-- Freighter
-- Albedo
-- xBull
-- LOBSTR
-
-### Wallet Usage Note
-
-Ensure your wallet is set to "test net". If you see "Not Available" in Freighter:
-
-- Go to **Security > Manage Connected Wallets**
-- Remove **localhost**
-- Reload and reconnect
-
-If problems persist, contact support.
-
----
-
-## 🧠 IMPORTANT NOTE (Husky Setup)
-
-We use **Husky** to ensure code formatting and linting on `git push`. If `npm run format` or `npm run lint` fail, your push will be blocked.
-
-Fix any errors before retrying your push.
-
----
-
-## 📜 License
-
-© 2025 TrustBridge. Released under the MIT License.
+MIT

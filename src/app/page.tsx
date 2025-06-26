@@ -1,7 +1,6 @@
 "use client";
 
 import HomePage from "@/components/modules/auth/ui/pages/Home";
-import { GradientBackground } from "@/components/modules/dashboard/ui/pages/background/GradientBackground";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useWalletContext } from "@/providers/wallet.provider";
@@ -18,9 +17,9 @@ export default function Page() {
   }, [walletAddress, router]);
 
   return (
-    <GradientBackground>
+    <>
       <HeaderHome />
       <HomePage />
-    </GradientBackground>
+    </>
   );
 }
