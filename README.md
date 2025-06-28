@@ -1,3 +1,5 @@
+![Banner2](https://github.com/user-attachments/assets/ae9fa07b-039e-4be8-8626-ff1ec83f869a)
+
 # TrustBridge
 
 Integration prototype between **TrustBridge** and **Blend.Capital** enabling **cross-chain lending** on the Stellar blockchain using bridged assets and Blend’s permissionless lending infrastructure.
