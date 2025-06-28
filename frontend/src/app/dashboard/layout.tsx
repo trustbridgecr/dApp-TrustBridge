@@ -1,15 +1,26 @@
+"use client";
+
+import React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { TrustBridgeSidebar } from "@/components/layouts/sidebar/Sidebar";
 import { Header } from "@/components/layouts/header/Header";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="flex h-screen w-full">
-      <div className="flex-1 flex flex-col">
-        <Header />
-        <ScrollArea className="flex-1">{children}</ScrollArea>
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-neutral-900">
+        <TrustBridgeSidebar />
+        <div className="flex-1 flex flex-col">
+          <Header />
+          <main className="flex-1 overflow-auto">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
-};
-
-export default Layout;
+}
