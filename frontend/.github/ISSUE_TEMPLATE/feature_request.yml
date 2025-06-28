@@ -1,0 +1,47 @@
+name: Feature Request ✨
+description: Suggest a new feature or improvement
+title: "[FEATURE] "
+labels: [enhancement]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ✨ Feature Request
+
+        Please describe your idea to improve the project.
+
+  - type: input
+    id: title
+    attributes:
+      label: 📝 Title
+      placeholder: "e.g., Add support for multi-chain bridge"
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 🔍 Description
+      description: What is the feature and why is it useful?
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 💡 Proposed Solution
+      description: How do you imagine this feature being implemented?
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 🧠 Motivation / Related Problem
+      description: What problem does this feature solve?
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 📸 Visuals / References
+      description: Include mockups, sketches, examples if applicable
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: 📚 Additional Notes
