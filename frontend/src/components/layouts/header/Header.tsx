@@ -11,6 +11,7 @@ import {
   Menu,
   MessageSquare,
   User,
+  ShoppingCart,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -31,7 +32,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-700 bg-neutral-800/80 backdrop-blur-md">
-      <div className="container mx-auto flex h-16 max-w-4xl items-center justify-between px-4">
+      <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
             <FlaskConical className="h-7 w-7 text-emerald-400" />
@@ -44,6 +45,14 @@ export function Header() {
               prefetch={false}
             >
               Dashboard
+            </Link>
+            <Link
+              href="/dashboard/marketplace"
+              className="rounded-md px-3 py-1.5 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-neutral-100 transition-colors flex items-center gap-2"
+              prefetch={false}
+            >
+              <ShoppingCart className="h-4 w-4" />
+              Marketplace
             </Link>
             <Link
               href="/dashboard/profile"
@@ -103,6 +112,15 @@ export function Header() {
                 align="end"
                 className="bg-neutral-800 border-neutral-700 text-neutral-200"
               >
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/dashboard/marketplace"
+                    className="flex items-center gap-2"
+                  >
+                    <ShoppingCart className="h-4 w-4" />
+                    <span>Marketplace</span>
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link
                     href="/dashboard/chat"
