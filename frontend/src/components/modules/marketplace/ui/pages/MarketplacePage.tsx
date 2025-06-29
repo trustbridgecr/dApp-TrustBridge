@@ -19,7 +19,6 @@ import {
   Percent,
   Users,
   Shield,
-  FlaskConical,
   Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
