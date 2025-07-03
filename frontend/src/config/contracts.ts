@@ -127,7 +127,7 @@ export const RESERVE_EMISSIONS = [
 export const DEFAULT_POOL_CONFIG = {
   backstop_take_rate: 1500000, // 15% in 7 decimals (15 * 100000)
   max_positions: 4,
-  min_collateral: 1000000 // $1 minimum collateral in oracle decimals (7 decimals)
+  // Removed min_collateral as it's not supported by current Blend SDK
 };
 
 // Testing Configuration
