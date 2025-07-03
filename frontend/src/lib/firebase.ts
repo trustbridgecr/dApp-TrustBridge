@@ -11,5 +11,29 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+// Temporarily disable Firebase to prevent connection errors during development
+// TODO: Re-enable when ready to use Firebase features
+// const app = initializeApp(firebaseConfig);
+// export const db = getFirestore(app);
+
+// Mock Firebase db object to prevent errors - proper Firestore API mock
+export const db = {} as any;
+
+// Mock doc function that returns proper Firestore document reference
+export const doc = (db: any, collection: string, id: string) => ({
+  path: `${collection}/${id}`,
+  id,
+  collection,
+});
+
+// Mock getDoc function
+export const getDoc = async (docRef: any) => ({
+  exists: () => false,
+  data: () => ({}),
+});
+
+// Mock setDoc function  
+export const setDoc = async (docRef: any, data: any) => {
+  console.log("Mock setDoc called:", { docRef, data });
+  return Promise.resolve();
+};
