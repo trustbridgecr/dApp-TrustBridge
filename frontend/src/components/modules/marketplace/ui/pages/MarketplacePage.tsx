@@ -201,6 +201,46 @@ export function MarketplacePage() {
     }
   };
 
+  const handleAdvancedDiagnosis = async () => {
+    if (!TRUSTBRIDGE_POOL_ID) {
+      toast.error("Pool ID not configured");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      toast.info("Running comprehensive pool diagnosis...");
+      
+      // Import the diagnosis function
+      const { diagnoseAndFixPool } = await import('@/scripts/diagnose-and-fix-pool');
+      const result = await diagnoseAndFixPool();
+      
+      if (result.success) {
+        toast.success("Pool diagnosis completed successfully");
+        console.log("✅ Diagnosis result:", result);
+        
+        if (result.recommendations) {
+          toast.info(`Recommendations: ${result.recommendations.join('; ')}`);
+        }
+      } else {
+        toast.error(`Pool issues detected: ${result.error}`);
+        console.error("❌ Diagnosis result:", result);
+        
+        if (result.fixes) {
+          console.log("🔧 Suggested fixes:");
+          result.fixes.forEach((fix, i) => console.log(`  ${i + 1}. ${fix}`));
+          toast.warning(`Check console for detailed fix recommendations`);
+        }
+      }
+      
+    } catch (error) {
+      console.error("Advanced diagnosis failed:", error);
+      toast.error("Failed to run advanced diagnosis");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="p-4 md:p-6 space-y-6">
@@ -267,22 +307,40 @@ export function MarketplacePage() {
               The TrustBridge lending pool is currently in development. If you encounter transaction failures (Error #1206), 
               the pool may need to be activated by administrators or require additional backstop funding.
             </p>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={handleCheckPoolStatus}
-              disabled={loading}
-              className="bg-amber-800/20 border-amber-600 text-amber-200 hover:bg-amber-700/30"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                  Checking...
-                </>
-              ) : (
-                "Check Pool Status"
-              )}
-            </Button>
+            <div className="flex gap-2 flex-wrap">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleCheckPoolStatus}
+                disabled={loading}
+                className="bg-amber-800/20 border-amber-600 text-amber-200 hover:bg-amber-700/30"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                    Checking...
+                  </>
+                ) : (
+                  "Quick Check"
+                )}
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleAdvancedDiagnosis}
+                disabled={loading}
+                className="bg-blue-800/20 border-blue-600 text-blue-200 hover:bg-blue-700/30"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                    Diagnosing...
+                  </>
+                ) : (
+                  "Advanced Diagnosis"
+                )}
+              </Button>
+            </div>
           </div>
         </AlertDescription>
       </Alert>
