@@ -23,6 +23,7 @@ import {
   Shield,
   FlaskConical,
   Loader2,
+  AlertTriangle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useWalletContext } from "@/providers/wallet.provider";
@@ -163,6 +164,43 @@ export function MarketplacePage() {
     }
   };
 
+  const handleCheckPoolStatus = async () => {
+    if (!TRUSTBRIDGE_POOL_ID) {
+      toast.error("Pool ID not configured");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      toast.info("Checking pool status...");
+      
+      // Simple check to see if pool contract exists and is responding
+      const { rpc } = await import('@stellar/stellar-sdk');
+      const server = new rpc.Server('https://soroban-testnet.stellar.org:443');
+      
+      try {
+        // Try to get contract account info to verify pool exists
+        const account = await server.getAccount(TRUSTBRIDGE_POOL_ID);
+        console.log("Pool contract account found:", account);
+        
+        toast.success("Pool contract exists and is responding. If transactions still fail with Error #1206, the pool may need admin activation or backstop funding.");
+      } catch (contractError: any) {
+        console.error("Pool contract check failed:", contractError);
+        if (contractError.message?.includes("not found")) {
+          toast.error("Pool contract not found. The pool may not be properly deployed.");
+        } else {
+          toast.warning("Unable to verify pool status. This may be normal if the pool exists but transactions are failing due to pool configuration.");
+        }
+      }
+      
+    } catch (error) {
+      console.error("Pool status check failed:", error);
+      toast.error("Failed to check pool status");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="p-4 md:p-6 space-y-6">
@@ -218,6 +256,36 @@ export function MarketplacePage() {
           </AlertDescription>
         </Alert>
       )}
+
+      {/* Pool Status Warning */}
+      <Alert className="bg-amber-900/20 border-amber-700 mb-6">
+        <AlertTriangle className="h-4 w-4 !text-amber-400" />
+        <AlertTitle className="text-amber-300">Pool Status Notice</AlertTitle>
+        <AlertDescription className="text-amber-200">
+          <div className="space-y-3">
+            <p>
+              The TrustBridge lending pool is currently in development. If you encounter transaction failures (Error #1206), 
+              the pool may need to be activated by administrators or require additional backstop funding.
+            </p>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleCheckPoolStatus}
+              disabled={loading}
+              className="bg-amber-800/20 border-amber-600 text-amber-200 hover:bg-amber-700/30"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                  Checking...
+                </>
+              ) : (
+                "Check Pool Status"
+              )}
+            </Button>
+          </div>
+        </AlertDescription>
+      </Alert>
 
       {/* Pool Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

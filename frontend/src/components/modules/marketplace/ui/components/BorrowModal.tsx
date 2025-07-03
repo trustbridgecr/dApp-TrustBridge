@@ -221,13 +221,17 @@ export function BorrowModal({ isOpen, onClose, poolId }: BorrowModalProps) {
       // Handle specific Blend protocol errors
       let userFriendlyMessage = errorMessage;
       if (errorMessage.includes("Error(Contract, #1206)")) {
-        userFriendlyMessage = "Insufficient reserves in the pool. Please wait for someone to supply USDC to the pool first, or supply USDC yourself before borrowing.";
+        userFriendlyMessage = "Pool is not currently active. The TrustBridge pool may need to be activated by the admin or require additional backstop funding. Please check back later or contact support.";
+      } else if (errorMessage.includes("Error(Contract, #1202)")) {
+        userFriendlyMessage = "Pool is not active yet. Please wait for pool activation.";
+      } else if (errorMessage.includes("Error(Contract, #1203)")) {
+        userFriendlyMessage = "USDC reserve is not enabled. Please contact support.";
       } else if (errorMessage.includes("Error(Contract, #1205)")) {
-        userFriendlyMessage = "Insufficient collateral. Please deposit more collateral or reduce your borrow amount.";
-      } else if (errorMessage.includes("Error(Contract, #1207)")) {
-        userFriendlyMessage = "Maximum borrowing capacity reached. Please try a smaller amount.";
+        userFriendlyMessage = "Insufficient pool liquidity for this borrow amount. Please try a smaller amount.";
+      } else if (errorMessage.includes("Error(Contract, #1001)")) {
+        userFriendlyMessage = "Insufficient collateral. Please supply more collateral before borrowing.";
       } else if (errorMessage.includes("Simulation failed")) {
-        userFriendlyMessage = "Transaction simulation failed. This might be due to insufficient reserves or collateral issues.";
+        userFriendlyMessage = "Transaction simulation failed. Please ensure you have sufficient collateral and the pool is active.";
       }
       
       toast.error(`Borrow failed: ${userFriendlyMessage}`);

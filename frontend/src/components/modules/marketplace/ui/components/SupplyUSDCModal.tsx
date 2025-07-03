@@ -190,12 +190,16 @@ export function SupplyUSDCModal({ isOpen, onClose, onSuccess }: SupplyUSDCModalP
       
       // Handle specific Blend protocol errors
       let userFriendlyMessage = errorMessage;
-      if (errorMessage.includes("Error(Contract, #1202)")) {
+      if (errorMessage.includes("Error(Contract, #1206)")) {
+        userFriendlyMessage = "Pool is not currently active. The TrustBridge pool may need to be activated by the admin or require additional backstop funding. Please check back later or contact support.";
+      } else if (errorMessage.includes("Error(Contract, #1202)")) {
         userFriendlyMessage = "Pool is not active yet. Please wait for pool activation.";
       } else if (errorMessage.includes("Error(Contract, #1203)")) {
-        userFriendlyMessage = "Reserve is not enabled. Please contact support.";
+        userFriendlyMessage = "USDC reserve is not enabled. Please contact support.";
+      } else if (errorMessage.includes("Error(Contract, #1205)")) {
+        userFriendlyMessage = "Pool supply cap reached. Please try a smaller amount.";
       } else if (errorMessage.includes("Simulation failed")) {
-        userFriendlyMessage = "Transaction simulation failed. This might be due to insufficient XLM balance for fees.";
+        userFriendlyMessage = "Transaction simulation failed. Please ensure you have sufficient USDC balance and the pool is active.";
       }
       
       toast.error(`Supply failed: ${userFriendlyMessage}`);
