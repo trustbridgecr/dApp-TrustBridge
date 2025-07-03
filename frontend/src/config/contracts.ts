@@ -6,7 +6,7 @@ export const NETWORK_CONFIG = {
 };
 
 // Official Blend Protocol Testnet Oracle (from blend-utils testnet.contracts.json)
-export const ORACLE_ID = 'CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA'; // Official Blend testnet oracle
+export const ORACLE_ID = 'CCYHURAC5VTN2ZU663UUS5F24S4GURDPO4FHZ75JLN5DMLRTLCG44H44'; // Official Blend testnet oraclemock
 
 // Disable fallback oracle for now to avoid address format issues
 export const FALLBACK_ORACLE_ID = null;
@@ -30,10 +30,13 @@ export const POOL_CONFIG = {
 } as const;
 
 // Pool Factory - Official Blend Protocol Factory on Stellar Testnet (from blend-utils)
-export const POOL_FACTORY_ID = 'CDMLFMKMMD7MWZP3FKUBZPVHTUEDLSX4BYGYKH4GCESXYHS3IHQ4EIG4';
+export const POOL_FACTORY_ID = 'CDIE73IJJKOWXWCPU5GWQ745FUKWCSH3YKZRF5IQW7GE3G7YAZ773MYK'; // Official poolFactoryV2
 
 // Deployed Pool ID - Successfully deployed on Stellar Testnet
 export const TRUSTBRIDGE_POOL_ID = "CB7BGBKLC4UNO2Q6V7O52622I44PVMDFDAMAJ6NT64GB3UQZX3FU7LA5";
+
+// Backstop Contract - Official Blend Protocol Backstop on Stellar Testnet  
+export const BACKSTOP_ID = "CC4TSDVQKBAYMK4BEDM65CSNB3ISI2A54OOBRO6IPSTFHJY3DEEKHRKV"; // Official backstopV2
 
 // Pool deployment configuration
 export const POOL_DEPLOYMENT_CONFIG = {
@@ -137,10 +140,11 @@ export const TESTING_CONFIG = {
   }
 };
 
-// Assets Configuration
+// Assets Configuration - Using Official Blend Testnet Addresses
 export const SUPPORTED_ASSETS = {
-  USDC: 'CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA',
-  XLM: 'CDMLFMKMMD7MWZP3FKUBZPVHTUEDLSX4BYGYKH4GCESXYHS3IHQ4EIG4',
+  USDC: 'CAQCFVLOBK5GIULPNZRGATJJMIZL5BSP7X5YJVMGCPTUEPFM4AVSRCJU', // Official Blend testnet USDC
+  XLM: 'CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC', // Official Blend testnet XLM
+  BLND: 'CB22KRA3YZVCNCQI64JQ5WE7UY2VAV7WFLK6A2JN3HEX56T2EDAFO7QF', // Official Blend testnet BLND
 };
 
 // Export all contract IDs for easy access
@@ -148,6 +152,8 @@ export const CONTRACT_IDS = {
   POOL_FACTORY: POOL_FACTORY_ID,
   ORACLE: ORACLE_ID,
   FALLBACK_ORACLE: FALLBACK_ORACLE_ID,
+  BACKSTOP: BACKSTOP_ID,
+  TRUSTBRIDGE_POOL: TRUSTBRIDGE_POOL_ID,
 };
 
 export default {

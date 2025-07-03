@@ -1,6 +1,6 @@
 import { PoolContract, BackstopContract, Pool } from "@blend-capital/blend-sdk";
-import { rpc, Keypair, TransactionBuilder } from "@stellar/stellar-sdk";
-import { NETWORK_CONFIG, TRUSTBRIDGE_POOL_ID, TOKENS } from "@/config/contracts";
+import { rpc, TransactionBuilder, xdr } from "@stellar/stellar-sdk";
+import { NETWORK_CONFIG, TRUSTBRIDGE_POOL_ID, TOKENS, BACKSTOP_ID } from "@/config/contracts";
 
 // Comprehensive pool diagnosis and potential fixes for Error #1206
 export async function diagnoseAndFixPool() {
@@ -10,22 +10,8 @@ export async function diagnoseAndFixPool() {
     console.log("🔍 Starting TrustBridge Pool Diagnosis...");
     console.log("Pool ID:", TRUSTBRIDGE_POOL_ID);
     
-    // 1. Check if pool contract exists and is responding
-    console.log("\n1. Checking pool contract existence...");
-    try {
-      const account = await server.getAccount(TRUSTBRIDGE_POOL_ID);
-      console.log("✅ Pool contract exists and is responding");
-    } catch (error) {
-      console.error("❌ Pool contract not found or not responding:", error);
-      return {
-        success: false,
-        error: "Pool contract does not exist",
-        fixes: ["Deploy a new pool using the official Blend deployment scripts"]
-      };
-    }
-
-    // 2. Load pool data using Blend SDK
-    console.log("\n2. Loading pool data...");
+    // 1. Check if pool contract exists and load pool data using Blend SDK
+    console.log("\n1. Checking pool contract existence and loading data...");
     let pool: Pool;
     try {
       const network = {
@@ -35,27 +21,29 @@ export async function diagnoseAndFixPool() {
       };
       
       pool = await Pool.load(network, TRUSTBRIDGE_POOL_ID);
-      console.log("✅ Pool data loaded successfully");
+      console.log("✅ Pool contract exists and data loaded successfully");
       console.log("Pool config:", {
         status: pool.config.status,
         backstopRate: pool.config.backstopRate,
         maxPositions: pool.config.maxPositions
       });
     } catch (error) {
-      console.error("❌ Failed to load pool data:", error);
+      console.error("❌ Pool contract not found or failed to load:", error);
       return {
         success: false,
-        error: "Cannot load pool configuration",
+        error: "Pool contract does not exist or failed to load",
+        details: `Address ${TRUSTBRIDGE_POOL_ID} may not be a valid deployed contract`,
         fixes: [
-          "Pool may not be properly initialized",
-          "Check if reserves are configured",
-          "Verify oracle configuration"
+          "Verify the pool contract address is correct in your config",
+          "Check if the pool was properly deployed to testnet", 
+          "Deploy a new pool using the official Blend deployment scripts",
+          "Ensure you're connected to the correct network (testnet)"
         ]
       };
     }
 
-    // 3. Check pool status
-    console.log("\n3. Checking pool status...");
+    // 2. Check pool status
+    console.log("\n2. Checking pool status...");
     const issues = [];
     const fixes = [];
 
@@ -66,8 +54,8 @@ export async function diagnoseAndFixPool() {
       console.log("✅ Pool status is Active (0)");
     }
 
-    // 4. Check reserves configuration
-    console.log("\n4. Checking reserves configuration...");
+    // 3. Check reserves configuration
+    console.log("\n3. Checking reserves configuration...");
     const reserves = pool.reserves;
     console.log(`Found ${reserves.size} reserves:`);
     
@@ -85,8 +73,8 @@ export async function diagnoseAndFixPool() {
       }
     });
 
-    // 5. Check oracle configuration
-    console.log("\n5. Checking oracle configuration...");
+    // 4. Check oracle configuration
+    console.log("\n4. Checking oracle configuration...");
     try {
       const oracle = await pool.loadOracle();
       console.log("✅ Oracle loaded successfully");
@@ -97,22 +85,22 @@ export async function diagnoseAndFixPool() {
       fixes.push("Check oracle configuration and price feeds");
     }
 
-    // 6. Check backstop funding (requires backstop contract)
-    console.log("\n6. Checking backstop information...");
+    // 5. Check backstop funding (requires backstop contract)
+    console.log("\n5. Checking backstop information...");
     try {
-      // From testnet.contracts.json
-      const BACKSTOP_ID = "CC4TSDVQKBAYMK4BEDM65CSNB3ISI2A54OOBRO6IPSTFHJY3DEEKHRKV";
-      
+      // Use the official BACKSTOP_ID from config
       const backstop = new BackstopContract(BACKSTOP_ID);
       console.log("ℹ️ Backstop contract loaded");
+      console.log("Using backstop contract:", BACKSTOP_ID);
       // Note: We can't easily check backstop funding without more complex queries
       issues.push("Backstop funding status unknown - may need funding");
       fixes.push("Fund the pool's backstop with BLND:USDC LP tokens");
     } catch (error) {
       console.error("⚠️ Could not check backstop:", error);
+      issues.push("Could not verify backstop configuration");
     }
 
-    // 7. Summary and recommendations
+    // 6. Summary and recommendations
     console.log("\n📊 DIAGNOSIS SUMMARY");
     console.log("==================");
     

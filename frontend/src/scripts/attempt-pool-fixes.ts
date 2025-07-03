@@ -1,6 +1,6 @@
 import { Pool, PoolContract } from "@blend-capital/blend-sdk";
 import { rpc, TransactionBuilder, xdr } from "@stellar/stellar-sdk";
-import { NETWORK_CONFIG, TRUSTBRIDGE_POOL_ID } from "@/config/contracts";
+import { NETWORK_CONFIG, TRUSTBRIDGE_POOL_ID, BACKSTOP_ID } from "@/config/contracts";
 import { signTransaction } from "@/components/modules/auth/helpers/stellar-wallet-kit.helper";
 
 // Attempt to fix common pool issues that cause Error #1206
