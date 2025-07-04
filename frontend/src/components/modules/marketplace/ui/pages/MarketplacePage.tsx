@@ -28,7 +28,12 @@ import { useWalletContext } from "@/providers/wallet.provider";
 import { BorrowModal } from "../components/BorrowModal";
 import { SupplyUSDCModal } from "../components/SupplyUSDCModal";
 import { SupplyXLMCollateralModal } from "../components/SupplyXLMCollateralModal";
-import { POOL_CONFIG, ORACLE_ID, TRUSTBRIDGE_POOL_ID } from "@/config/contracts";
+import { ProvideLiquidityModal } from "../components/ProvideLiquidityModal";
+import {
+  POOL_CONFIG,
+  ORACLE_ID,
+  TRUSTBRIDGE_POOL_ID,
+} from "@/config/contracts";
 import { deployTrustBridgePool, supplyUSDCToPool } from "@/helpers/pool-deployment.helper";
 import { kit } from "@/config/wallet-kit";
 import { usePoolData } from "@/hooks/usePoolData";
@@ -60,6 +65,7 @@ export function MarketplacePage() {
   const [showBorrowModal, setShowBorrowModal] = useState(false);
   const [showSupplyUSDCModal, setShowSupplyUSDCModal] = useState(false);
   const [showSupplyXLMModal, setShowSupplyXLMModal] = useState(false);
+  const [showProvideLiquidityModal, setShowProvideLiquidityModal] = useState(false);
   
   // Use real-time pool data from hook
   const realTimePoolData = usePoolData();
@@ -156,8 +162,6 @@ export function MarketplacePage() {
     }
   };
 
-
-
   if (loading) {
     return (
       <div className="p-4 md:p-6 space-y-6">
@@ -217,8 +221,6 @@ export function MarketplacePage() {
           </AlertDescription>
         </Alert>
       )}
-
-
 
       {/* Pool Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -414,6 +416,14 @@ export function MarketplacePage() {
               )}
               
               <Button
+                onClick={() => setShowProvideLiquidityModal(true)}
+                disabled={!walletAddress || !deployedPoolId}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Provide Liquidity
+              </Button>
+              
+              <Button
                 onClick={() => setShowBorrowModal(true)}
                 disabled={!walletAddress || !deployedPoolId}
                 className="bg-emerald-600 hover:bg-emerald-700 text-white"
@@ -425,7 +435,7 @@ export function MarketplacePage() {
         </CardFooter>
       </Card>
 
-      {/* Borrow Modal */}
+      {/* Modals */}
       <BorrowModal
         isOpen={showBorrowModal}
         onClose={() => setShowBorrowModal(false)}
@@ -433,18 +443,22 @@ export function MarketplacePage() {
         poolId={deployedPoolId || ""}
       />
       
-      {/* Supply USDC Modal */}
       <SupplyUSDCModal 
         isOpen={showSupplyUSDCModal}
         onClose={() => setShowSupplyUSDCModal(false)}
         onSuccess={() => realTimePoolData.refetch()}
       />
       
-      {/* Supply XLM Collateral Modal */}
       <SupplyXLMCollateralModal 
         isOpen={showSupplyXLMModal}
         onClose={() => setShowSupplyXLMModal(false)}
         onSuccess={() => realTimePoolData.refetch()}
+      />
+
+      <ProvideLiquidityModal
+        isOpen={showProvideLiquidityModal}
+        onClose={() => setShowProvideLiquidityModal(false)}
+        poolData={mockPoolData}
       />
     </div>
   );
