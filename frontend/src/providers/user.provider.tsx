@@ -38,7 +38,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       const userDoc = await getDoc(doc(db, "users", walletAddress));
 
       if (userDoc.exists()) {
-        setProfile(userDoc.data() as UserProfile);
+        setProfile(userDoc.data() as unknown as UserProfile);
       } else {
         setProfile(null);
       }

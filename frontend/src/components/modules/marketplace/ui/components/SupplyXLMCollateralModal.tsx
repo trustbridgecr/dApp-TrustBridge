@@ -15,9 +15,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import {
   Shield,
-  TrendingUp,
   Loader2,
-  CheckCircle,
   Info,
   AlertTriangle,
 } from "lucide-react";
@@ -27,13 +25,11 @@ import { signTransaction } from "@/components/modules/auth/helpers/stellar-walle
 import { toast } from "sonner";
 
 // Import Blend SDK and Stellar SDK
-import { PoolContract, RequestType } from "@blend-capital/blend-sdk";
+import { PoolContractV2, RequestType } from "@blend-capital/blend-sdk";
 import { 
   TransactionBuilder, 
   xdr, 
-  rpc,
-  Operation,
-  Account
+  rpc
 } from "@stellar/stellar-sdk";
 
 interface SupplyXLMCollateralModalProps {
@@ -113,7 +109,7 @@ export function SupplyXLMCollateralModal({ isOpen, onClose, onSuccess }: SupplyX
       const account = await server.getAccount(walletAddress);
       
       // Create pool contract instance and supply collateral operation
-      const pool = new PoolContract(TRUSTBRIDGE_POOL_ID);
+      const pool = new PoolContractV2(TRUSTBRIDGE_POOL_ID);
       const collateralOpXdr = pool.submit({
         from: walletAddress,
         spender: walletAddress,

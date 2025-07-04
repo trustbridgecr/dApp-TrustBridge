@@ -1,24 +1,8 @@
 import { kit } from "@/config/wallet-kit";
 import { NETWORK_CONFIG } from "@/config/contracts";
-import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
 import { Transaction, TransactionBuilder, Memo, Operation } from "@stellar/stellar-sdk";
 
-/**
- * Map network passphrases to WalletNetwork enum
- */
-const NETWORK_MAP: Record<string, WalletNetwork> = {
-  "Test SDF Network ; September 2015": WalletNetwork.TESTNET,
-  "Test SDF Future Network ; October 2022": WalletNetwork.FUTURENET,
-  "Standalone Network ; February 2017": WalletNetwork.STANDALONE,
-  "Public Global Stellar Network ; September 2015": WalletNetwork.PUBLIC,
-};
 
-/**
- * Get the wallet network based on the network passphrase
- */
-function getWalletNetwork(passphrase: string): WalletNetwork {
-  return NETWORK_MAP[passphrase] || WalletNetwork.TESTNET;
-}
 
 /**
  * Custom error type for wallet-related errors

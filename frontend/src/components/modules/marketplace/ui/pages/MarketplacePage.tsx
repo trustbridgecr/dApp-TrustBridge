@@ -7,8 +7,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -23,7 +23,6 @@ import {
   Shield,
   FlaskConical,
   Loader2,
-  AlertTriangle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useWalletContext } from "@/providers/wallet.provider";
@@ -31,7 +30,7 @@ import { BorrowModal } from "../components/BorrowModal";
 import { SupplyUSDCModal } from "../components/SupplyUSDCModal";
 import { SupplyXLMCollateralModal } from "../components/SupplyXLMCollateralModal";
 import { POOL_CONFIG, ORACLE_ID, TRUSTBRIDGE_POOL_ID } from "@/config/contracts";
-import { deployTrustBridgePool, supplyToPool } from "@/helpers/pool-deployment.helper";
+import { deployTrustBridgePool, supplyUSDCToPool } from "@/helpers/pool-deployment.helper";
 import { kit } from "@/config/wallet-kit";
 import { usePoolData } from "@/hooks/usePoolData";
 
@@ -122,7 +121,7 @@ export function MarketplacePage() {
         }
       };
       
-      const result = await deployTrustBridgePool(kitWrapper as any, walletAddress);
+      const result = await deployTrustBridgePool(kitWrapper as unknown as typeof kit, walletAddress);
       
       if (result.success) {
         setDeployedPoolId(result.poolAddress || "");
@@ -147,13 +146,7 @@ export function MarketplacePage() {
 
     setSupplying(true);
     try {
-      // Create a kit wrapper that includes the server
-      const kitWrapper = {
-        ...kit,
-        server: new (await import('@stellar/stellar-sdk')).rpc.Server('https://soroban-testnet.stellar.org:443'),
-      };
-      
-      await supplyToPool(kitWrapper as any, deployedPoolId, parseFloat(supplyAmount), walletAddress);
+      await supplyUSDCToPool(deployedPoolId, parseFloat(supplyAmount), walletAddress);
       setSupplyAmount("");
       toast.success("USDC supplied successfully! Users can now borrow from the pool.");
       
@@ -164,82 +157,7 @@ export function MarketplacePage() {
     }
   };
 
-  const handleCheckPoolStatus = async () => {
-    if (!TRUSTBRIDGE_POOL_ID) {
-      toast.error("Pool ID not configured");
-      return;
-    }
 
-    setLoading(true);
-    try {
-      toast.info("Checking pool status...");
-      
-      // Simple check to see if pool contract exists and is responding
-      const { rpc } = await import('@stellar/stellar-sdk');
-      const server = new rpc.Server('https://soroban-testnet.stellar.org:443');
-      
-      try {
-        // Try to get contract account info to verify pool exists
-        const account = await server.getAccount(TRUSTBRIDGE_POOL_ID);
-        console.log("Pool contract account found:", account);
-        
-        toast.success("Pool contract exists and is responding. If transactions still fail with Error #1206, the pool may need admin activation or backstop funding.");
-      } catch (contractError: any) {
-        console.error("Pool contract check failed:", contractError);
-        if (contractError.message?.includes("not found")) {
-          toast.error("Pool contract not found. The pool may not be properly deployed.");
-        } else {
-          toast.warning("Unable to verify pool status. This may be normal if the pool exists but transactions are failing due to pool configuration.");
-        }
-      }
-      
-    } catch (error) {
-      console.error("Pool status check failed:", error);
-      toast.error("Failed to check pool status");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleAdvancedDiagnosis = async () => {
-    if (!TRUSTBRIDGE_POOL_ID) {
-      toast.error("Pool ID not configured");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      toast.info("Running comprehensive pool diagnosis...");
-      
-      // Import the diagnosis function
-      const { diagnoseAndFixPool } = await import('@/scripts/diagnose-and-fix-pool');
-      const result = await diagnoseAndFixPool();
-      
-      if (result.success) {
-        toast.success("Pool diagnosis completed successfully");
-        console.log("✅ Diagnosis result:", result);
-        
-        if (result.recommendations) {
-          toast.info(`Recommendations: ${result.recommendations.join('; ')}`);
-        }
-      } else {
-        toast.error(`Pool issues detected: ${result.error}`);
-        console.error("❌ Diagnosis result:", result);
-        
-        if (result.fixes) {
-          console.log("🔧 Suggested fixes:");
-          result.fixes.forEach((fix, i) => console.log(`  ${i + 1}. ${fix}`));
-          toast.warning(`Check console for detailed fix recommendations`);
-        }
-      }
-      
-    } catch (error) {
-      console.error("Advanced diagnosis failed:", error);
-      toast.error("Failed to run advanced diagnosis");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -297,53 +215,7 @@ export function MarketplacePage() {
         </Alert>
       )}
 
-      {/* Pool Status Warning */}
-      <Alert className="bg-amber-900/20 border-amber-700 mb-6">
-        <AlertTriangle className="h-4 w-4 !text-amber-400" />
-        <AlertTitle className="text-amber-300">Pool Status Notice</AlertTitle>
-        <AlertDescription className="text-amber-200">
-          <div className="space-y-3">
-            <p>
-              The TrustBridge lending pool is currently in development. If you encounter transaction failures (Error #1206), 
-              the pool may need to be activated by administrators or require additional backstop funding.
-            </p>
-            <div className="flex gap-2 flex-wrap">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleCheckPoolStatus}
-                disabled={loading}
-                className="bg-amber-800/20 border-amber-600 text-amber-200 hover:bg-amber-700/30"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                    Checking...
-                  </>
-                ) : (
-                  "Quick Check"
-                )}
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleAdvancedDiagnosis}
-                disabled={loading}
-                className="bg-blue-800/20 border-blue-600 text-blue-200 hover:bg-blue-700/30"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                    Diagnosing...
-                  </>
-                ) : (
-                  "Advanced Diagnosis"
-                )}
-              </Button>
-            </div>
-          </div>
-        </AlertDescription>
-      </Alert>
+
 
       {/* Pool Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

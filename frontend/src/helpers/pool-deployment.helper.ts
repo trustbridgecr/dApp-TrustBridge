@@ -4,17 +4,15 @@ import {
   xdr, 
   nativeToScVal,
   Address,
-  Contract,
-  StrKey,
-  Account,
-  Keypair
+  Contract
 } from '@stellar/stellar-sdk';
 import { 
-  PoolContract,
-  RequestType
+  PoolContractV2,
+  RequestType,
+  Request
 } from '@blend-capital/blend-sdk';
 import { signTransaction } from "@/components/modules/auth/helpers/stellar-wallet-kit.helper";
-import { NETWORK_CONFIG, POOL_CONFIG, POOL_FACTORY_ID, ORACLE_ID, TOKENS, FALLBACK_ORACLE_ID, TESTING_CONFIG, DEFAULT_POOL_CONFIG } from "@/config/contracts";
+import { NETWORK_CONFIG, POOL_FACTORY_ID, ORACLE_ID, TOKENS, FALLBACK_ORACLE_ID } from "@/config/contracts";
 import { toast } from "sonner";
 import { kit } from "@/config/wallet-kit";
 
@@ -28,44 +26,7 @@ export interface PoolDeploymentResult {
   error?: string;
 }
 
-/**
- * Extract the deployed pool contract address from transaction result
- * 
- * @param txResult - The transaction result from Stellar
- * @returns The deployed pool contract address
- */
-function extractPoolAddress(txResult: any): string {
-  try {
-    // TODO: Implement proper pool address extraction from transaction meta
-    // For now, we'll use the transaction hash to generate a deterministic pool address
-    // In production, this should be replaced with proper event parsing from the transaction meta
-    
-    // Use transaction hash as seed for deterministic address generation
-    const txHash = txResult.hash || txResult.id || Date.now().toString();
-    const addressSeed = txHash.slice(-32); // Use last 32 chars of hash
-    
-    // Generate a contract address from the hash
-    const poolAddress = Address.contract(Buffer.from(addressSeed, 'hex').slice(0, 32)).toString();
-    
-    console.log("Generated pool address from transaction:", poolAddress);
-    console.log("Transaction hash:", txHash);
-    
-    // Log a note about proper implementation
-    console.warn("NOTE: Using simplified address generation. In production, extract actual address from transaction events.");
-    
-    return poolAddress;
-    
-  } catch (error) {
-    console.error("Error generating pool address:", error);
-    
-    // Final fallback: use timestamp-based address
-    const timestamp = Date.now().toString();
-    const poolAddress = Address.contract(Buffer.from(timestamp).slice(0, 32)).toString();
-    console.warn("Using timestamp-based fallback pool address:", poolAddress);
-    
-    return poolAddress;
-  }
-}
+
 
 /**
  * Deploy a new lending pool using the Blend protocol pool factory
@@ -135,22 +96,18 @@ export async function deployTrustBridgePool(
       
       if (rpc.Api.isSimulationError(simulation)) {
         console.error("Simulation failed:", simulation.error);
-        
-        // Temporarily disable fallback oracle to avoid address format issues
         throw new Error(`Pool deployment simulation failed: ${simulation.error}`);
       }
     } catch (simError) {
       console.error("Simulation error:", simError);
-      
-              // Temporarily disable fallback oracle to avoid address format issues
-        console.error('Pool deployment simulation failed:', simError);
-        throw new Error(`Pool deployment simulation error: ${simError}`);
+      console.error('Pool deployment simulation failed:', simError);
+      throw new Error(`Pool deployment simulation error: ${simError}`);
     }
 
     console.log("Signing transaction...");
 
-    // Sign transaction
-    const signedTransaction = await signTransaction(transaction.toXDR(), walletAddress, kit);
+    // Sign transaction - Fixed: only pass transaction XDR
+    const signedTransaction = await signTransaction(transaction.toXDR());
     
     console.log("Submitting transaction...");
 
@@ -208,11 +165,13 @@ export async function deployTrustBridgePool(
 
 /**
  * Attempt deployment with fallback oracle
+ * @deprecated Currently not used but kept for future fallback implementation
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function deployWithFallbackOracle(
   kit: StellarWalletKit,
   walletAddress: string,
-  originalConfig: any
+  originalConfig: { admin: string; name: string; salt: Buffer; oracle: string; backstop_take_rate: number; max_positions: number; min_collateral: bigint }
 ): Promise<PoolDeploymentResult> {
   try {
     console.log(`Trying deployment with fallback oracle: ${FALLBACK_ORACLE_ID}`);
@@ -223,6 +182,10 @@ async function deployWithFallbackOracle(
     const poolFactoryContract = new Contract(POOL_FACTORY_ID);
 
     // Use fallback oracle
+    if (!FALLBACK_ORACLE_ID) {
+      throw new Error("Fallback oracle not configured");
+    }
+    
     const fallbackConfig = {
       ...originalConfig,
       oracle: FALLBACK_ORACLE_ID
@@ -245,7 +208,7 @@ async function deployWithFallbackOracle(
       .setTimeout(300)
       .build();
 
-    const signedTransaction = await signTransaction(transaction.toXDR(), walletAddress, kit);
+    const signedTransaction = await signTransaction(transaction.toXDR());
     const result = await server.sendTransaction(signedTransaction);
     
     if (result.status === "PENDING") {
@@ -294,26 +257,25 @@ async function deployWithFallbackOracle(
 /**
  * Extract pool address from transaction result
  */
-function extractPoolAddressFromResult(result: any): string {
+function extractPoolAddressFromResult(result: unknown): string {
   try {
     // This is a simplified extraction - you may need to adjust based on actual result structure
-    if (result.returnValue) {
-      return result.returnValue;
+    if ((result as { returnValue?: string })?.returnValue) {
+      return (result as { returnValue: string }).returnValue;
     }
     
     // Fallback: generate a placeholder address for testing
     return `C${Math.random().toString(36).substring(2, 58).toUpperCase()}`;
-  } catch (error) {
+  } catch {
     console.warn("Could not extract pool address from result, generating placeholder");
     return `C${Math.random().toString(36).substring(2, 58).toUpperCase()}`;
   }
 }
 
 /**
- * Supply USDC to the deployed pool
+ * Supply USDC to the deployed pool using Blend SDK
  */
-export async function supplyToPool(
-  kit: StellarWalletKit,
+export async function supplyUSDCToPool(
   poolAddress: string,
   amount: number,
   walletAddress: string
@@ -324,22 +286,51 @@ export async function supplyToPool(
     // Create RPC server instance
     const server = new rpc.Server(NETWORK_CONFIG.sorobanRpcUrl);
     const account = await server.getAccount(walletAddress);
-    const poolContract = new Contract(poolAddress);
+    
+    // Use PoolContractV2 instead of abstract PoolContract
+    const pool = new PoolContractV2(poolAddress);
+    
+    // Create supply request
+    const supplyRequest: Request = {
+      amount: BigInt(amount * 1e7), // Convert to 7 decimals
+      request_type: RequestType.Supply, // Use Supply for lending to earn yield
+      address: TOKENS.USDC,
+    };
 
+    // Create submit operation XDR
+    const submitOpXdr = pool.submit({
+      from: walletAddress,
+      spender: walletAddress,
+      to: walletAddress,
+      requests: [supplyRequest],
+    });
+
+    // Convert XDR to operation
+    const operation = xdr.Operation.fromXDR(submitOpXdr, 'base64');
+
+    // Build transaction
     const transaction = new TransactionBuilder(account, {
-      fee: '100000',
-      networkPassphrase: NETWORK_CONFIG.networkPassphrase
+      fee: '1000000', // Higher fee for Soroban operations
+      networkPassphrase: NETWORK_CONFIG.networkPassphrase,
     })
-      .addOperation(poolContract.call(
-        'supply',
-        Address.fromString(walletAddress).toScVal(),
-        Address.fromString(TOKENS.USDC).toScVal(),
-        nativeToScVal(amount * 1e7, { type: 'i128' }) // Convert to 7 decimals
-      ))
-      .setTimeout(300)
+      .addOperation(operation)
+      .setTimeout(30)
       .build();
 
-    const signedTransaction = await signTransaction(transaction.toXDR(), walletAddress, kit);
+    // Simulate transaction
+    const simulation = await server.simulateTransaction(transaction);
+    
+    if (rpc.Api.isSimulationError(simulation)) {
+      throw new Error(`Supply simulation failed: ${simulation.error}`);
+    }
+
+    // Assemble transaction with simulation data
+    const assembledTx = rpc.assembleTransaction(transaction, simulation).build();
+
+    // Sign transaction - Fixed: only pass transaction XDR
+    const signedTransaction = await signTransaction(assembledTx.toXDR());
+    
+    // Submit transaction
     const result = await server.sendTransaction(signedTransaction);
     
     if (result.status === "PENDING") {
@@ -378,6 +369,208 @@ export async function supplyToPool(
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Supply failed'
+    };
+  }
+}
+
+/**
+ * Supply XLM as collateral to the deployed pool using Blend SDK
+ */
+export async function supplyXLMCollateral(
+  poolAddress: string,
+  amount: number,
+  walletAddress: string
+): Promise<PoolDeploymentResult> {
+  try {
+    console.log(`Supplying ${amount} XLM as collateral to pool: ${poolAddress}`);
+    
+    // Create RPC server instance
+    const server = new rpc.Server(NETWORK_CONFIG.sorobanRpcUrl);
+    const account = await server.getAccount(walletAddress);
+    
+    // Use PoolContractV2 instead of abstract PoolContract
+    const pool = new PoolContractV2(poolAddress);
+    
+    // Create supply collateral request
+    const supplyRequest: Request = {
+      amount: BigInt(amount * 1e7), // Convert to 7 decimals
+      request_type: RequestType.SupplyCollateral, // Use SupplyCollateral for collateral
+      address: TOKENS.XLM,
+    };
+
+    // Create submit operation XDR
+    const submitOpXdr = pool.submit({
+      from: walletAddress,
+      spender: walletAddress,
+      to: walletAddress,
+      requests: [supplyRequest],
+    });
+
+    // Convert XDR to operation
+    const operation = xdr.Operation.fromXDR(submitOpXdr, 'base64');
+
+    // Build transaction
+    const transaction = new TransactionBuilder(account, {
+      fee: '1000000', // Higher fee for Soroban operations
+      networkPassphrase: NETWORK_CONFIG.networkPassphrase,
+    })
+      .addOperation(operation)
+      .setTimeout(30)
+      .build();
+
+    // Simulate transaction
+    const simulation = await server.simulateTransaction(transaction);
+    
+    if (rpc.Api.isSimulationError(simulation)) {
+      throw new Error(`XLM collateral supply simulation failed: ${simulation.error}`);
+    }
+
+    // Assemble transaction with simulation data
+    const assembledTx = rpc.assembleTransaction(transaction, simulation).build();
+
+    // Sign transaction - Fixed: only pass transaction XDR
+    const signedTransaction = await signTransaction(assembledTx.toXDR());
+    
+    // Submit transaction
+    const result = await server.sendTransaction(signedTransaction);
+    
+    if (result.status === "PENDING") {
+      // Wait for confirmation
+      let attempts = 0;
+      const maxAttempts = 30;
+      
+      while (attempts < maxAttempts) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        try {
+          const txResult = await server.getTransaction(result.hash);
+          
+          if (txResult.status === "SUCCESS") {
+            return {
+              success: true,
+              transactionHash: result.hash
+            };
+          } else if (txResult.status === "FAILED") {
+            throw new Error(`XLM collateral supply failed: ${txResult.resultXdr || 'Unknown error'}`);
+          }
+        } catch (pollError) {
+          console.warn("Error polling transaction status:", pollError);
+        }
+        
+        attempts++;
+      }
+      
+      throw new Error("XLM collateral supply transaction timeout");
+    } else {
+      throw new Error(`XLM collateral supply failed: ${result.errorResult || 'Unknown error'}`);
+    }
+
+  } catch (error) {
+    console.error("XLM collateral supply failed:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'XLM collateral supply failed'
+    };
+  }
+}
+
+/**
+ * Borrow USDC from the deployed pool using Blend SDK
+ */
+export async function borrowUSDCFromPool(
+  poolAddress: string,
+  amount: number,
+  walletAddress: string
+): Promise<PoolDeploymentResult> {
+  try {
+    console.log(`Borrowing ${amount} USDC from pool: ${poolAddress}`);
+    
+    // Create RPC server instance
+    const server = new rpc.Server(NETWORK_CONFIG.sorobanRpcUrl);
+    const account = await server.getAccount(walletAddress);
+    
+    // Use PoolContractV2 instead of abstract PoolContract
+    const pool = new PoolContractV2(poolAddress);
+    
+    // Create borrow request
+    const borrowRequest: Request = {
+      amount: BigInt(amount * 1e7), // Convert to 7 decimals
+      request_type: RequestType.Borrow, // Use Borrow to borrow assets
+      address: TOKENS.USDC,
+    };
+
+    // Create submit operation XDR
+    const submitOpXdr = pool.submit({
+      from: walletAddress,
+      spender: walletAddress,
+      to: walletAddress,
+      requests: [borrowRequest],
+    });
+
+    // Convert XDR to operation
+    const operation = xdr.Operation.fromXDR(submitOpXdr, 'base64');
+
+    // Build transaction
+    const transaction = new TransactionBuilder(account, {
+      fee: '1000000', // Higher fee for Soroban operations
+      networkPassphrase: NETWORK_CONFIG.networkPassphrase,
+    })
+      .addOperation(operation)
+      .setTimeout(30)
+      .build();
+
+    // Simulate transaction
+    const simulation = await server.simulateTransaction(transaction);
+    
+    if (rpc.Api.isSimulationError(simulation)) {
+      throw new Error(`Borrow simulation failed: ${simulation.error}`);
+    }
+
+    // Assemble transaction with simulation data
+    const assembledTx = rpc.assembleTransaction(transaction, simulation).build();
+
+    // Sign transaction - Fixed: only pass transaction XDR
+    const signedTransaction = await signTransaction(assembledTx.toXDR());
+    
+    // Submit transaction
+    const result = await server.sendTransaction(signedTransaction);
+    
+    if (result.status === "PENDING") {
+      // Wait for confirmation
+      let attempts = 0;
+      const maxAttempts = 30;
+      
+      while (attempts < maxAttempts) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        try {
+          const txResult = await server.getTransaction(result.hash);
+          
+          if (txResult.status === "SUCCESS") {
+            return {
+              success: true,
+              transactionHash: result.hash
+            };
+          } else if (txResult.status === "FAILED") {
+            throw new Error(`Borrow failed: ${txResult.resultXdr || 'Unknown error'}`);
+          }
+        } catch (pollError) {
+          console.warn("Error polling transaction status:", pollError);
+        }
+        
+        attempts++;
+      }
+      
+      throw new Error("Borrow transaction timeout");
+    } else {
+      throw new Error(`Borrow failed: ${result.errorResult || 'Unknown error'}`);
+    }
+
+  } catch (error) {
+    console.error("Borrow failed:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Borrow failed'
     };
   }
 }
@@ -481,7 +674,7 @@ export async function setupPoolReserves(poolId: string, walletAddress: string): 
       .build();
 
       const preparedQueueTx = await server.prepareTransaction(queueTx);
-      const signedQueueTx = await signTransaction(preparedQueueTx);
+      const signedQueueTx = await signTransaction(preparedQueueTx.toXDR());
       const queueResponse = await server.sendTransaction(signedQueueTx);
       
       console.log(`Queue reserve ${i + 1} response:`, queueResponse);
@@ -499,7 +692,7 @@ export async function setupPoolReserves(poolId: string, walletAddress: string): 
       .build();
 
       const preparedSetTx = await server.prepareTransaction(setTx);
-      const signedSetTx = await signTransaction(preparedSetTx);
+      const signedSetTx = await signTransaction(preparedSetTx.toXDR());
       const setResponse = await server.sendTransaction(signedSetTx);
       
       console.log(`Set reserve ${i + 1} response:`, setResponse);
@@ -545,7 +738,7 @@ export async function activatePool(poolId: string, walletAddress: string): Promi
     .build();
 
     const preparedStatusTx = await server.prepareTransaction(setStatusTx);
-    const signedStatusTx = await signTransaction(preparedStatusTx);
+    const signedStatusTx = await signTransaction(preparedStatusTx.toXDR());
     await server.sendTransaction(signedStatusTx);
 
     // Update status to activate (assuming backstop is funded)
@@ -558,7 +751,7 @@ export async function activatePool(poolId: string, walletAddress: string): Promi
     .build();
 
     const preparedUpdateTx = await server.prepareTransaction(updateStatusTx);
-    const signedUpdateTx = await signTransaction(preparedUpdateTx);
+    const signedUpdateTx = await signTransaction(preparedUpdateTx.toXDR());
     await server.sendTransaction(signedUpdateTx);
     
     console.log("Activating pool:", poolId);
@@ -578,7 +771,7 @@ export async function activatePool(poolId: string, walletAddress: string): Promi
  * @param walletAddress - The wallet address of the pool admin
  * @returns The configured pool contract instance
  */
-export async function deployCompletePool(walletAddress: string): Promise<PoolContract> {
+export async function deployCompletePool(walletAddress: string): Promise<PoolContractV2> {
   try {
     // First deploy the pool
     const kit = {} as StellarWalletKit; // This would need to be passed as parameter
@@ -588,8 +781,8 @@ export async function deployCompletePool(walletAddress: string): Promise<PoolCon
       throw new Error(poolResult.error || "Pool deployment failed");
     }
     
-    // Create pool contract instance
-    const poolContract = new PoolContract(poolResult.poolAddress);
+    // Create pool contract instance - Fixed: use PoolContractV2
+    const poolContract = new PoolContractV2(poolResult.poolAddress);
     
     // Note: Additional configuration steps would go here:
     // 1. Add reserves using queue_set_reserve and set_reserve
@@ -633,8 +826,8 @@ export async function getUserPools(walletAddress: string): Promise<string[]> {
     // Prepare the transaction
     const preparedTx = await server.prepareTransaction(tx);
 
-    // Sign the transaction
-    const signedTx = await signTransaction(preparedTx);
+    // Sign the transaction - Fixed: only pass transaction XDR
+    const signedTx = await signTransaction(preparedTx.toXDR());
 
     // Submit the transaction
     const sendResponse = await server.sendTransaction(signedTx);

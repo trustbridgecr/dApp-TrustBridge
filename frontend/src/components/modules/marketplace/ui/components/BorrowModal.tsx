@@ -27,14 +27,11 @@ import { signTransaction } from "@/components/modules/auth/helpers/stellar-walle
 import { toast } from "sonner";
 
 // Import Blend SDK and Stellar SDK
-import { PoolContract, RequestType } from "@blend-capital/blend-sdk";
+import { PoolContractV2, RequestType } from "@blend-capital/blend-sdk";
 import { 
   TransactionBuilder, 
   xdr, 
-  Networks, 
-  rpc,
-  Operation,
-  Account
+  rpc
 } from "@stellar/stellar-sdk";
 
 interface PoolReserve {
@@ -125,7 +122,7 @@ export function BorrowModal({ isOpen, onClose, poolId }: BorrowModalProps) {
       const account = await server.getAccount(walletAddress);
       
       // Create pool contract instance and borrow operation
-      const pool = new PoolContract(poolId);
+      const pool = new PoolContractV2(poolId);
       const borrowOpXdr = pool.submit({
         from: walletAddress,
         spender: walletAddress,

@@ -17,7 +17,6 @@ import {
   TrendingUp,
   DollarSign,
   Loader2,
-  CheckCircle,
   Info,
 } from "lucide-react";
 import { useWalletContext } from "@/providers/wallet.provider";
@@ -26,13 +25,11 @@ import { signTransaction } from "@/components/modules/auth/helpers/stellar-walle
 import { toast } from "sonner";
 
 // Import Blend SDK and Stellar SDK
-import { PoolContract, RequestType } from "@blend-capital/blend-sdk";
+import { PoolContractV2, RequestType } from "@blend-capital/blend-sdk";
 import { 
   TransactionBuilder, 
   xdr, 
-  rpc,
-  Operation,
-  Account
+  rpc
 } from "@stellar/stellar-sdk";
 
 interface SupplyUSDCModalProps {
@@ -105,7 +102,7 @@ export function SupplyUSDCModal({ isOpen, onClose, onSuccess }: SupplyUSDCModalP
       const account = await server.getAccount(walletAddress);
       
       // Create pool contract instance and supply operation
-      const pool = new PoolContract(TRUSTBRIDGE_POOL_ID);
+      const pool = new PoolContractV2(TRUSTBRIDGE_POOL_ID);
       const supplyOpXdr = pool.submit({
         from: walletAddress,
         spender: walletAddress,
