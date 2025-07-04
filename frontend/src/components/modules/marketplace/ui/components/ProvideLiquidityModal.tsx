@@ -168,19 +168,19 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
 
       toast.info("Simulating deposit transaction...");
       
-      const pool = new PoolContract(TRUSTBRIDGE_POOL_ID);
-      const depositOpXdr = pool.submit({
-        from: walletAddress,
-        spender: walletAddress,
-        to: walletAddress,
-        requests: [
-          {
-            request_type: RequestType.Deposit,
-            address: currentAsset.address,
-            amount: amountInt,
-          },
-        ],
-      });
+              const pool = new PoolContract(TRUSTBRIDGE_POOL_ID);
+        const depositOpXdr = pool.submit({
+          from: walletAddress,
+          spender: walletAddress,
+          to: walletAddress,
+          requests: [
+            {
+              request_type: RequestType.Supply,
+              address: currentAsset.address,
+              amount: amountInt,
+            },
+          ],
+        });
       
       toast.info("Please sign the transaction in your wallet...");
       const signedTx = await signTransaction({ 
