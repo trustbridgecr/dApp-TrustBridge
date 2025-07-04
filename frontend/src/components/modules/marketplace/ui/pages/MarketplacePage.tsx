@@ -24,6 +24,7 @@ import {
 import { toast } from "sonner";
 import { useWalletContext } from "@/providers/wallet.provider";
 import { BorrowModal } from "../components/BorrowModal";
+import { ProvideLiquidityModal } from "../components/ProvideLiquidityModal";
 import {
   POOL_CONFIG,
   ORACLE_ID,
@@ -52,6 +53,7 @@ export function MarketplacePage() {
   const { walletAddress } = useWalletContext();
   const [loading, setLoading] = useState(true);
   const [showBorrowModal, setShowBorrowModal] = useState(false);
+  const [showProvideLiquidityModal, setShowProvideLiquidityModal] = useState(false);
   const [poolData, setPoolData] = useState<PoolData | null>(null);
   const [deploying, setDeploying] = useState(false);
 
@@ -314,6 +316,13 @@ export function MarketplacePage() {
               </Button>
             )}
             <Button
+              onClick={() => setShowProvideLiquidityModal(true)}
+              disabled={!walletAddress || !TRUSTBRIDGE_POOL_ID}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Provide Liquidity
+            </Button>
+            <Button
               onClick={() => setShowBorrowModal(true)}
               disabled={!walletAddress || !TRUSTBRIDGE_POOL_ID}
               className="bg-emerald-600 hover:bg-emerald-700 text-white"
@@ -328,6 +337,13 @@ export function MarketplacePage() {
       <BorrowModal
         isOpen={showBorrowModal}
         onClose={() => setShowBorrowModal(false)}
+        poolData={poolData}
+      />
+
+      {/* Provide Liquidity Modal */}
+      <ProvideLiquidityModal
+        isOpen={showProvideLiquidityModal}
+        onClose={() => setShowProvideLiquidityModal(false)}
         poolData={poolData}
       />
     </div>
