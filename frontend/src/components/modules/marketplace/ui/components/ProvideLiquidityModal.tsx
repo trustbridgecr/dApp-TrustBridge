@@ -60,7 +60,11 @@ interface DepositEstimate {
   gasFee: number;
 }
 
-export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiquidityModalProps) {
+export function ProvideLiquidityModal({
+  isOpen,
+  onClose,
+  poolData,
+}: ProvideLiquidityModalProps) {
   const { walletAddress } = useWalletContext();
   const [depositAmount, setDepositAmount] = useState("");
   const [selectedAsset, setSelectedAsset] = useState("USDC");
@@ -82,7 +86,9 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
     { symbol: "TBRG", address: TOKENS.TBRG, decimals: 7, apy: 4.1 },
   ];
 
-  const currentAsset = availableAssets.find(asset => asset.symbol === selectedAsset);
+  const currentAsset = availableAssets.find(
+    (asset) => asset.symbol === selectedAsset,
+  );
 
   // Mock wallet balance
   useEffect(() => {
@@ -92,7 +98,9 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
         XLM: 15000.0,
         TBRG: 2500.0,
       };
-      setWalletBalance(mockBalances[selectedAsset as keyof typeof mockBalances] || 0);
+      setWalletBalance(
+        mockBalances[selectedAsset as keyof typeof mockBalances] || 0,
+      );
     }
   }, [walletAddress, selectedAsset]);
 
@@ -100,17 +108,18 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
   useEffect(() => {
     if (depositAmount && Number(depositAmount) > 0 && currentAsset) {
       setEstimating(true);
-      
+
       setTimeout(() => {
         const amount = Number(depositAmount);
         const exchangeRate = 1.0;
         const bTokensEstimated = amount * exchangeRate;
-        
+
         setEstimates({
           bTokensEstimated,
           supplyAPY: currentAsset.apy,
-          newHealthFactor: Math.max(1.5, 2.5 + (amount / 10000)),
-          totalSupplyAfter: Number(poolData?.totalSupplied.replace(/,/g, '') || 0) + amount,
+          newHealthFactor: Math.max(1.5, 2.5 + amount / 10000),
+          totalSupplyAfter:
+            Number(poolData?.totalSupplied.replace(/,/g, "") || 0) + amount,
           gasFee: 0.0001,
         });
         setEstimating(false);
@@ -152,12 +161,14 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
     }
 
     setLoading(true);
-    
+
     try {
       const amountInt = BigInt(Math.floor(Number(depositAmount) * 1e7));
 
       if (!TRUSTBRIDGE_POOL_ID) {
-        toast.error("TrustBridge pool not yet deployed. Please deploy the pool first.");
+        toast.error(
+          "TrustBridge pool not yet deployed. Please deploy the pool first.",
+        );
         return;
       }
 
@@ -183,12 +194,12 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
 
       toast.info("Please sign the transaction in your wallet...");
       const signedTx = await signTransaction(depositOpXdr);
-      
+
       toast.success(
         `Successfully deposited ${depositAmount} ${selectedAsset}! ` +
-        `You received ${estimates.bTokensEstimated.toFixed(4)} b${selectedAsset} tokens.`
+          `You received ${estimates.bTokensEstimated.toFixed(4)} b${selectedAsset} tokens.`,
       );
-      
+
       console.log("Deposit transaction completed:", {
         amount: depositAmount,
         asset: selectedAsset,
@@ -196,12 +207,11 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
         supplyAPY: estimates.supplyAPY,
         signedTransaction: signedTx,
       });
-      
+
       onClose();
-      
     } catch (error) {
       console.error("Deposit transaction failed:", error);
-      
+
       if (error instanceof Error) {
         if (error.message.includes("User rejected")) {
           toast.error("Transaction cancelled by user");
@@ -238,7 +248,10 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
     }
   }, [isOpen]);
 
-  const isValidAmount = depositAmount && Number(depositAmount) > 0 && Number(depositAmount) <= walletBalance;
+  const isValidAmount =
+    depositAmount &&
+    Number(depositAmount) > 0 &&
+    Number(depositAmount) <= walletBalance;
   const hasEstimates = isValidAmount && estimates.bTokensEstimated > 0;
 
   return (
@@ -250,19 +263,24 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
             Provide Liquidity
           </DialogTitle>
           <DialogDescription className="text-neutral-400">
-            Deposit assets to earn interest and receive bTokens representing your share of the pool.
+            Deposit assets to earn interest and receive bTokens representing
+            your share of the pool.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
           {/* Asset Selection */}
           <div className="space-y-2">
-            <Label className="text-neutral-300 text-sm font-medium">Asset</Label>
+            <Label className="text-neutral-300 text-sm font-medium">
+              Asset
+            </Label>
             <div className="grid grid-cols-3 gap-2">
               {availableAssets.map((asset) => (
                 <Button
                   key={asset.symbol}
-                  variant={selectedAsset === asset.symbol ? "default" : "outline"}
+                  variant={
+                    selectedAsset === asset.symbol ? "default" : "outline"
+                  }
                   size="sm"
                   onClick={() => setSelectedAsset(asset.symbol)}
                   className={`${
@@ -288,7 +306,10 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
                 {walletBalance.toLocaleString()} {selectedAsset}
               </div>
               <div className="text-xs text-neutral-500">
-                ~${(walletBalance * (selectedAsset === "USDC" ? 1 : 0.1)).toLocaleString()}
+                ~$
+                {(
+                  walletBalance * (selectedAsset === "USDC" ? 1 : 0.1)
+                ).toLocaleString()}
               </div>
             </div>
           </div>
@@ -316,7 +337,7 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
                 MAX
               </Button>
             </div>
-            
+
             {/* Preset Buttons */}
             <div className="flex gap-2">
               {[25, 50, 75].map((percentage) => (
@@ -338,10 +359,14 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
             <div className="space-y-3 p-4 bg-neutral-800 rounded-lg border border-neutral-700">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp className="h-4 w-4 text-emerald-400" />
-                <span className="text-sm font-medium text-neutral-300">Transaction Preview</span>
-                {estimating && <Loader2 className="h-3 w-3 animate-spin text-emerald-400" />}
+                <span className="text-sm font-medium text-neutral-300">
+                  Transaction Preview
+                </span>
+                {estimating && (
+                  <Loader2 className="h-3 w-3 animate-spin text-emerald-400" />
+                )}
               </div>
-              
+
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-neutral-400">You will receive:</span>
@@ -376,17 +401,22 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
           <Alert className="bg-blue-900/40 border-blue-700 text-blue-300">
             <Info className="h-4 w-4 !text-blue-400" />
             <AlertDescription className="text-sm">
-              <strong>bTokens</strong> represent your share of the pool. They earn interest automatically
-              and can be redeemed for the underlying asset at any time.
+              <strong>bTokens</strong> represent your share of the pool. They
+              earn interest automatically and can be redeemed for the underlying
+              asset at any time.
             </AlertDescription>
           </Alert>
 
           {/* Error States */}
           {depositAmount && Number(depositAmount) > walletBalance && (
-            <Alert variant="destructive" className="bg-red-900/40 border-red-700 text-red-300">
+            <Alert
+              variant="destructive"
+              className="bg-red-900/40 border-red-700 text-red-300"
+            >
               <AlertTriangle className="h-4 w-4 !text-red-400" />
               <AlertDescription>
-                Insufficient balance. You have {walletBalance.toLocaleString()} {selectedAsset} available.
+                Insufficient balance. You have {walletBalance.toLocaleString()}{" "}
+                {selectedAsset} available.
               </AlertDescription>
             </Alert>
           )}
@@ -423,4 +453,4 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
       </DialogContent>
     </Dialog>
   );
-} 
+}

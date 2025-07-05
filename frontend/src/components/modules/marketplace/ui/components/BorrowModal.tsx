@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import {
   TrendingDown,
   Shield,
@@ -20,19 +20,11 @@ import {
   DollarSign,
   Loader2,
   CheckCircle,
+  ArrowRight,
+  Info,
+  Percent,
 } from "lucide-react";
-import { useWalletContext } from "@/providers/wallet.provider";
-import { TOKENS, NETWORK_CONFIG } from "@/config/contracts";
-import { signTransaction } from "@/components/modules/auth/helpers/stellar-wallet-kit.helper";
-import { toast } from "sonner";
-
-// Import Blend SDK and Stellar SDK
-import { PoolContractV2, RequestType } from "@blend-capital/blend-sdk";
-import { 
-  TransactionBuilder, 
-  xdr, 
-  rpc
-} from "@stellar/stellar-sdk";
+import { useBorrow } from "../../hooks/useBorrow.hook";
 
 interface PoolReserve {
   symbol: string;
@@ -58,223 +50,55 @@ interface BorrowModalProps {
 }
 
 export function BorrowModal({ isOpen, onClose, poolId }: BorrowModalProps) {
-  const { walletAddress } = useWalletContext();
-  const [borrowAmount, setBorrowAmount] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [estimates, setEstimates] = useState({
-    healthFactor: 0,
-    requiredCollateral: 0,
-    borrowAPY: 8.5,
-    liquidationThreshold: 75,
-  });
-
-  // Real-time calculations as user types
-  useEffect(() => {
-    if (borrowAmount && Number(borrowAmount) > 0) {
-      const amount = Number(borrowAmount);
-      
-      // Calculate real-time estimates
-      const healthFactor = Math.max(0.1, 1.5 - (amount / 10000)); // Simplified calculation
-      const requiredCollateral = amount * 1.2; // 120% collateralization
-      
-      setEstimates(prev => ({
-        ...prev,
-        healthFactor: Math.round(healthFactor * 100) / 100,
-        requiredCollateral: Math.round(requiredCollateral * 100) / 100,
-      }));
-    } else {
-      setEstimates(prev => ({
-        ...prev,
-        healthFactor: 0,
-        requiredCollateral: 0,
-      }));
-    }
-  }, [borrowAmount]);
-
-  const handleBorrow = async () => {
-    if (!walletAddress) {
-      toast.error("Please connect your wallet first");
-      return;
-    }
-
-    if (!borrowAmount || Number(borrowAmount) <= 0) {
-      toast.error("Please enter a valid borrow amount");
-      return;
-    }
-
-    if (!poolId) {
-      toast.error("TrustBridge pool not yet deployed. Please deploy the pool first.");
-      return;
-    }
-
-    setLoading(true);
-    
-    try {
-      // Convert UI amount to contract format (USDC has 7 decimals on Stellar)
-      const amountInt = BigInt(Number(borrowAmount) * 1e7);
-      
-      toast.info("Creating borrow transaction...");
-      
-      // Create RPC client
-      const server = new rpc.Server(NETWORK_CONFIG.sorobanRpcUrl);
-      
-      // Get account information
-      const account = await server.getAccount(walletAddress);
-      
-      // Create pool contract instance and borrow operation
-      const pool = new PoolContractV2(poolId);
-      const borrowOpXdr = pool.submit({
-        from: walletAddress,
-        spender: walletAddress,
-        to: walletAddress,
-        requests: [
-          {
-            request_type: RequestType.Borrow,
-            address: TOKENS.USDC,
-            amount: amountInt,
-          },
-        ],
-      });
-      
-      // Convert XDR to operation
-      const operation = xdr.Operation.fromXDR(borrowOpXdr, 'base64');
-      
-      // Build transaction
-      const transaction = new TransactionBuilder(account, {
-        fee: '1000000', // Higher fee for Soroban operations
-        networkPassphrase: NETWORK_CONFIG.networkPassphrase,
-      })
-        .addOperation(operation)
-        .setTimeout(30)
-        .build();
-      
-      // Simulate transaction to get SorobanData
-      toast.info("Simulating transaction...");
-      const simulationResult = await server.simulateTransaction(transaction);
-      
-      if (rpc.Api.isSimulationError(simulationResult)) {
-        throw new Error(`Simulation failed: ${simulationResult.error}`);
-      }
-      
-      // Update transaction with simulated data
-      const assembledTx = rpc.assembleTransaction(transaction, simulationResult).build();
-      
-      // Sign transaction with wallet
-      toast.info("Please sign the transaction in your wallet...");
-      const signedTx = await signTransaction(assembledTx.toXDR());
-      
-      if (!signedTx) {
-        throw new Error("Transaction signing was cancelled or failed");
-      }
-      
-      // Submit transaction to network
-      toast.info("Submitting transaction to Stellar network...");
-      const result = await server.sendTransaction(signedTx);
-      
-      // Wait for transaction confirmation
-      toast.info("Transaction submitted! Waiting for confirmation...");
-        
-        // Wait for transaction confirmation
-        let attempts = 0;
-        const maxAttempts = 30;
-        
-        while (attempts < maxAttempts) {
-          await new Promise(resolve => setTimeout(resolve, 2000));
-          
-          try {
-            const txResult = await server.getTransaction(result.hash);
-            
-            if (txResult.status === "SUCCESS") {
-              toast.success(`Successfully borrowed ${borrowAmount} USDC!`);
-              
-              // Log transaction details
-              console.log("Borrow transaction completed:", {
-                amount: borrowAmount,
-                asset: "USDC",
-                poolId: poolId,
-                healthFactor: estimates.healthFactor,
-                collateralRequired: estimates.requiredCollateral,
-                transactionHash: result.hash,
-              });
-              
-              onClose();
-              return;
-            } else if (txResult.status === "FAILED") {
-              throw new Error(`Transaction failed: ${txResult.resultXdr || 'Unknown error'}`);
-            }
-          } catch (pollError) {
-            console.warn("Error polling transaction status:", pollError);
-          }
-          
-          attempts++;
-        }
-        
-        throw new Error("Transaction confirmation timeout. Please check transaction status manually.");
-      
-    } catch (error: unknown) {
-      console.error("Borrow transaction failed:", error);
-      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-      
-      // Handle specific Blend protocol errors
-      let userFriendlyMessage = errorMessage;
-      if (errorMessage.includes("Error(Contract, #1206)")) {
-        userFriendlyMessage = "Pool is not currently active. The TrustBridge pool may need to be activated by the admin or require additional backstop funding. Please check back later or contact support.";
-      } else if (errorMessage.includes("Error(Contract, #1202)")) {
-        userFriendlyMessage = "Pool is not active yet. Please wait for pool activation.";
-      } else if (errorMessage.includes("Error(Contract, #1203)")) {
-        userFriendlyMessage = "USDC reserve is not enabled. Please contact support.";
-      } else if (errorMessage.includes("Error(Contract, #1205)")) {
-        userFriendlyMessage = "Insufficient pool liquidity for this borrow amount. Please try a smaller amount.";
-      } else if (errorMessage.includes("Error(Contract, #1001)")) {
-        userFriendlyMessage = "Insufficient collateral. Please supply more collateral before borrowing.";
-      } else if (errorMessage.includes("Simulation failed")) {
-        userFriendlyMessage = "Transaction simulation failed. Please ensure you have sufficient collateral and the pool is active.";
-      }
-      
-      toast.error(`Borrow failed: ${userFriendlyMessage}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const resetModal = () => {
-    setBorrowAmount("");
-    setEstimates({
-      healthFactor: 0,
-      requiredCollateral: 0,
-      borrowAPY: 8.5,
-      liquidationThreshold: 75,
-    });
-  };
-
-  // Reset when modal opens/closes
-  useEffect(() => {
-    if (!isOpen) {
-      resetModal();
-    }
-  }, [isOpen]);
-
-  const isHealthy = estimates.healthFactor >= 1.2;
-  const isAtRisk = estimates.healthFactor < 1.2 && estimates.healthFactor >= 1.0;
-  const isDangerous = estimates.healthFactor < 1.0 && estimates.healthFactor > 0;
+  const {
+    borrowAmount,
+    loading,
+    estimates,
+    setBorrowAmount,
+    handleBorrow,
+    isHealthy,
+    isAtRisk,
+    isDangerous,
+    isBorrowDisabled,
+  } = useBorrow({ isOpen, onClose, poolId });
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <TrendingDown className="h-5 w-5 text-blue-600" />
-            Borrow USDC
-          </DialogTitle>
-          <DialogDescription>
-            Borrow USDC from the TrustBridge lending pool. Make sure you have sufficient collateral.
-          </DialogDescription>
+      <DialogContent className="sm:max-w-[480px] bg-neutral-900 border-neutral-700 text-neutral-200 p-0 max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <DialogHeader className="p-5 pb-3">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-orange-900/30 rounded-lg">
+              <TrendingDown className="h-5 w-5 text-orange-400" />
+            </div>
+            <div>
+              <DialogTitle className="text-xl font-semibold text-neutral-100">
+                Borrow USDC
+              </DialogTitle>
+              <DialogDescription className="text-neutral-400 mt-1">
+                Borrow USDC against your collateral
+              </DialogDescription>
+            </div>
+          </div>
         </DialogHeader>
 
-        <div className="space-y-6">
-          {/* Borrow Amount Input */}
-          <div className="space-y-2">
-            <Label htmlFor="borrowAmount">Borrow Amount (USDC)</Label>
+        <div className="px-5 pb-5 space-y-5">
+          {/* Borrow Amount Section */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label
+                htmlFor="borrowAmount"
+                className="text-sm font-medium text-neutral-300"
+              >
+                Amount to Borrow
+              </Label>
+              <Badge
+                variant="outline"
+                className="text-xs text-neutral-400 border-neutral-600"
+              >
+                USDC
+              </Badge>
+            </div>
             <div className="relative">
               <Input
                 id="borrowAmount"
@@ -282,107 +106,215 @@ export function BorrowModal({ isOpen, onClose, poolId }: BorrowModalProps) {
                 placeholder="0.00"
                 value={borrowAmount}
                 onChange={(e) => setBorrowAmount(e.target.value)}
-                className="text-right pr-12"
+                className="bg-neutral-800 border-neutral-600 text-neutral-200 text-lg h-12 pr-16 font-medium placeholder:text-neutral-500"
                 min="0"
                 step="0.01"
                 disabled={loading}
               />
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 text-sm font-medium">
                 USDC
               </div>
             </div>
+
+            {/* Quick Amount Buttons */}
+            <div className="flex gap-2">
+              {[100, 500, 1000, 2500].map((amount) => (
+                <Button
+                  key={amount}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setBorrowAmount(amount.toString())}
+                  disabled={loading}
+                  className="flex-1 border-neutral-600 text-neutral-400 hover:bg-neutral-800 hover:text-neutral-200 bg-transparent text-xs"
+                >
+                  ${amount}
+                </Button>
+              ))}
+            </div>
           </div>
 
-          {/* Real-time Estimates */}
+          {/* Transaction Preview */}
           {borrowAmount && Number(borrowAmount) > 0 && (
-            <div className="space-y-3 p-4 bg-muted/50 rounded-lg">
-              <h4 className="font-medium text-sm">Transaction Estimates</h4>
-              
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <div className="text-muted-foreground">Health Factor</div>
-                  <div className={`font-medium ${
-                    isHealthy ? 'text-green-600' : 
-                    isAtRisk ? 'text-yellow-600' : 
-                    isDangerous ? 'text-red-600' : 'text-muted-foreground'
-                  }`}>
-                    {estimates.healthFactor > 0 ? estimates.healthFactor.toFixed(2) : '--'}
+            <div className="space-y-3">
+              <Separator className="bg-neutral-700" />
+
+              <div className="space-y-3">
+                <h3 className="text-sm font-medium text-neutral-300 flex items-center gap-2">
+                  <ArrowRight className="h-4 w-4" />
+                  Borrow Overview
+                </h3>
+
+                {/* Health Factor Card */}
+                <div className="p-3 rounded-lg bg-neutral-800 border border-neutral-700">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-neutral-400">
+                      Health Factor
+                    </span>
+                    <div className="flex items-center gap-1">
+                      {isHealthy ? (
+                        <CheckCircle className="h-4 w-4 text-green-400" />
+                      ) : (
+                        <AlertTriangle
+                          className={`h-4 w-4 ${isAtRisk ? "text-yellow-400" : "text-red-400"}`}
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <div
+                    className={`text-xl font-bold ${
+                      isHealthy
+                        ? "text-green-400"
+                        : isAtRisk
+                          ? "text-yellow-400"
+                          : "text-red-400"
+                    }`}
+                  >
+                    {estimates.healthFactor > 0
+                      ? estimates.healthFactor.toFixed(2)
+                      : "--"}
+                  </div>
+                  <div className="mt-2">
+                    <div className="w-full bg-neutral-700 rounded-full h-1.5">
+                      <div
+                        className={`h-1.5 rounded-full transition-all ${
+                          isHealthy
+                            ? "bg-green-400"
+                            : isAtRisk
+                              ? "bg-yellow-400"
+                              : "bg-red-400"
+                        }`}
+                        style={{
+                          width: `${Math.min(100, Math.max(0, (estimates.healthFactor / 3) * 100))}%`,
+                        }}
+                      />
+                    </div>
+                    <p className="text-xs text-neutral-500 mt-1">
+                      {isHealthy
+                        ? "Healthy position"
+                        : isAtRisk
+                          ? "At risk"
+                          : "Liquidation risk"}
+                    </p>
                   </div>
                 </div>
-                
-                <div>
-                  <div className="text-muted-foreground">Required Collateral</div>
-                  <div className="font-medium">
-                    ${estimates.requiredCollateral > 0 ? estimates.requiredCollateral.toLocaleString() : '--'}
+
+                {/* Borrow Stats */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="p-2 rounded-lg bg-neutral-800/50 border border-neutral-700">
+                    <div className="flex items-center gap-1 mb-1">
+                      <Percent className="h-3 w-3 text-orange-400" />
+                      <span className="text-xs text-neutral-400">
+                        Borrow APY
+                      </span>
+                    </div>
+                    <div className="text-sm font-semibold text-orange-400">
+                      {estimates.borrowAPY}%
+                    </div>
+                  </div>
+
+                  <div className="p-2 rounded-lg bg-neutral-800/50 border border-neutral-700">
+                    <div className="flex items-center gap-1 mb-1">
+                      <Shield className="h-3 w-3 text-neutral-400" />
+                      <span className="text-xs text-neutral-400">
+                        Liquidation Threshold
+                      </span>
+                    </div>
+                    <div className="text-sm font-semibold text-neutral-200">
+                      {estimates.liquidationThreshold}%
+                    </div>
                   </div>
                 </div>
-                
-                <div>
-                  <div className="text-muted-foreground">Borrow APY</div>
-                  <div className="font-medium text-orange-600">
-                    {estimates.borrowAPY}%
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="text-muted-foreground">Liquidation Threshold</div>
-                  <div className="font-medium">
-                    {estimates.liquidationThreshold}%
+
+                {/* Required Collateral */}
+                <div className="p-2 rounded-lg bg-neutral-800/50 border border-neutral-700">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <DollarSign className="h-3 w-3 text-neutral-400" />
+                      <span className="text-xs text-neutral-400">
+                        Required Collateral
+                      </span>
+                    </div>
+                    <div className="text-sm font-semibold text-neutral-200">
+                      $
+                      {estimates.requiredCollateral > 0
+                        ? estimates.requiredCollateral.toLocaleString()
+                        : "--"}
+                    </div>
                   </div>
                 </div>
               </div>
-
-              {/* Health Factor Warning */}
-              {estimates.healthFactor > 0 && (
-                <Alert className={`${
-                  isHealthy ? 'border-green-200 bg-green-50' :
-                  isAtRisk ? 'border-yellow-200 bg-yellow-50' :
-                  'border-red-200 bg-red-50'
-                }`}>
-                  <div className="flex items-center gap-2">
-                    {isHealthy ? (
-                      <CheckCircle className="h-4 w-4 text-green-600" />
-                    ) : (
-                      <AlertTriangle className={`h-4 w-4 ${isAtRisk ? 'text-yellow-600' : 'text-red-600'}`} />
-                    )}
-                    <AlertDescription className={`${
-                      isHealthy ? 'text-green-700' :
-                      isAtRisk ? 'text-yellow-700' :
-                      'text-red-700'
-                    }`}>
-                      {isHealthy && "Your position looks healthy. You have sufficient collateral buffer."}
-                      {isAtRisk && "Your position is at risk. Consider reducing borrow amount or adding more collateral."}
-                      {isDangerous && "Dangerous position! This could lead to immediate liquidation."}
-                    </AlertDescription>
-                  </div>
-                </Alert>
-              )}
             </div>
           )}
 
-          <Separator />
+          {/* Health Factor Warning */}
+          {estimates.healthFactor > 0 && (
+            <Alert
+              className={`${
+                isHealthy
+                  ? "bg-green-900/20 border-green-700/50"
+                  : isAtRisk
+                    ? "bg-yellow-900/20 border-yellow-700/50"
+                    : "bg-red-900/20 border-red-700/50"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                {isHealthy ? (
+                  <CheckCircle className="h-4 w-4 text-green-400" />
+                ) : (
+                  <AlertTriangle
+                    className={`h-4 w-4 ${isAtRisk ? "text-yellow-400" : "text-red-400"}`}
+                  />
+                )}
+                <AlertDescription
+                  className={`text-sm ${isHealthy ? "text-green-300" : isAtRisk ? "text-yellow-300" : "text-red-300"}`}
+                >
+                  {isHealthy && (
+                    <>
+                      <strong>Healthy Position:</strong> You have sufficient
+                      collateral buffer for this borrow amount.
+                    </>
+                  )}
+                  {isAtRisk && (
+                    <>
+                      <strong>Position At Risk:</strong> Consider reducing
+                      borrow amount or adding more collateral.
+                    </>
+                  )}
+                  {isDangerous && (
+                    <>
+                      <strong>Dangerous Position:</strong> This could lead to
+                      immediate liquidation!
+                    </>
+                  )}
+                </AlertDescription>
+              </div>
+            </Alert>
+          )}
+
+          {/* Risk Disclaimer */}
+          <Alert className="bg-blue-900/20 border-blue-700/50">
+            <Info className="h-4 w-4 text-blue-400" />
+            <AlertDescription className="text-blue-300 text-sm">
+              <strong>Risk Disclaimer:</strong> Borrowing involves liquidation
+              risk. Monitor your health factor regularly and maintain adequate
+              collateral ratios to avoid liquidation.
+            </AlertDescription>
+          </Alert>
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
+          <div className="flex gap-3 pt-2">
             <Button
               variant="outline"
               onClick={onClose}
-              className="flex-1"
               disabled={loading}
+              className="flex-1 border-neutral-600 text-neutral-300 hover:bg-neutral-800 bg-transparent"
             >
               Cancel
             </Button>
             <Button
               onClick={handleBorrow}
-              disabled={
-                loading || 
-                !borrowAmount || 
-                Number(borrowAmount) <= 0 || 
-                !walletAddress ||
-                !poolId ||
-                (estimates.healthFactor > 0 && estimates.healthFactor < 1.0)
-              }
-              className="flex-1"
+              disabled={isBorrowDisabled}
+              className="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-medium"
             >
               {loading ? (
                 <>
@@ -391,24 +323,14 @@ export function BorrowModal({ isOpen, onClose, poolId }: BorrowModalProps) {
                 </>
               ) : (
                 <>
-                  <DollarSign className="mr-2 h-4 w-4" />
+                  <TrendingDown className="mr-2 h-4 w-4" />
                   Borrow USDC
                 </>
               )}
             </Button>
           </div>
-
-          {/* Disclaimer */}
-          <Alert>
-            <Shield className="h-4 w-4" />
-            <AlertDescription className="text-xs">
-              <strong>Risk Disclaimer:</strong> Borrowing assets involves liquidation risk. 
-              Ensure you understand the risks and maintain adequate collateral ratios. 
-              Monitor your health factor regularly to avoid liquidation.
-            </AlertDescription>
-          </Alert>
         </div>
       </DialogContent>
     </Dialog>
   );
-} 
+}

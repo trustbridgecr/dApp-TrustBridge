@@ -5,4 +5,4 @@ import { MarketplacePage } from "@/components/modules/marketplace/ui/pages/Marke
 
 export default function Marketplace() {
   return <MarketplacePage />;
-} 
+}
