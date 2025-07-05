@@ -37,18 +37,6 @@ export default function HomePage() {
                   opportunity.
                 </p>
               </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 items-center justify-center md:justify-start pt-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-0 text-white"
-                  onClick={handleConnect}
-                >
-                  <LogIn className="h-3.5 w-3.5 mr-1.5" />
-                  Connect Wallet
-                </Button>
-              </div>
             </div>
           </div>
         </section>

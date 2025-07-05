@@ -17,9 +17,9 @@ export default function Page() {
   }, [walletAddress, router]);
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col w-full bg-neutral-900">
       <HeaderHome />
       <HomePage />
-    </>
+    </div>
   );
 }
