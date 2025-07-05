@@ -1,15 +1,19 @@
-import { Header } from "@/components/layouts/header/Header";
-import { ScrollArea } from "@/components/ui/scroll-area";
+"use client";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+import React from "react";
+import { Header } from "@/components/layouts/header/Header";
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="flex h-screen w-full">
-      <div className="flex-1 flex flex-col">
-        <Header />
-        <ScrollArea className="flex-1">{children}</ScrollArea>
-      </div>
+    <div className="min-h-screen flex flex-col w-full bg-neutral-900">
+      <Header />
+      <main className="flex-1 overflow-auto">
+        {children}
+      </main>
     </div>
   );
-};
-
-export default Layout;
+}

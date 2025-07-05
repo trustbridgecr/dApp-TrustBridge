@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db, doc, getDoc, setDoc } from "@/lib/firebase";
 import { UserProfile, UserProfileFormData } from "@/@types/user.entity";
 import { useWalletContext } from "@/providers/wallet.provider";
 import { toast } from "sonner";
@@ -39,7 +38,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       const userDoc = await getDoc(doc(db, "users", walletAddress));
 
       if (userDoc.exists()) {
-        setProfile(userDoc.data() as UserProfile);
+        setProfile(userDoc.data() as unknown as UserProfile);
       } else {
         setProfile(null);
       }
