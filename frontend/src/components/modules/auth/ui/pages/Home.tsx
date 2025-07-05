@@ -1,13 +1,8 @@
 "use client";
 
-import { LogIn } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
 
 export default function HomePage() {
-  const { handleConnect } = useWallet();
-
   return (
     <div className="flex flex-col bg-neutral-900 text-neutral-200">
       <main className="flex-grow">
