@@ -4,10 +4,12 @@ import { ISupportedWallet } from "@creit.tech/stellar-wallets-kit";
 import { db, doc, getDoc, setDoc } from "@/lib/firebase";
 import { UserProfile } from "@/@types/user.entity";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const useWallet = () => {
   // Get wallet info from wallet context
   const { setWalletInfo, clearWalletInfo } = useWalletContext();
+  const router = useRouter();
 
   /**
    * Connect to a wallet using the Stellar Wallet Kit and set the wallet info in the wallet context
@@ -75,6 +77,7 @@ export const useWallet = () => {
   const handleDisconnect = async () => {
     try {
       await disconnectWallet();
+      router.push("/");
     } catch (error) {
       console.error("Error disconnecting wallet:", error);
     }
