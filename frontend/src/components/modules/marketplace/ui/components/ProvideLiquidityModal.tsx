@@ -28,7 +28,7 @@ import { signTransaction } from "@/components/modules/auth/helpers/stellar-walle
 import { toast } from "sonner";
 
 // Import Blend SDK
-import { PoolContract, RequestType } from "@blend-capital/blend-sdk";
+import { PoolContractV2, RequestType } from "@blend-capital/blend-sdk";
 
 interface PoolReserve {
   symbol: string;
@@ -155,7 +155,7 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
     
     try {
       const amountInt = BigInt(Math.floor(Number(depositAmount) * 1e7));
-      
+
       if (!TRUSTBRIDGE_POOL_ID) {
         toast.error("TrustBridge pool not yet deployed. Please deploy the pool first.");
         return;
@@ -167,26 +167,22 @@ export function ProvideLiquidityModal({ isOpen, onClose, poolData }: ProvideLiqu
       }
 
       toast.info("Simulating deposit transaction...");
-      
-              const pool = new PoolContract(TRUSTBRIDGE_POOL_ID);
-        const depositOpXdr = pool.submit({
-          from: walletAddress,
-          spender: walletAddress,
-          to: walletAddress,
-          requests: [
-            {
-              request_type: RequestType.Supply,
-              address: currentAsset.address,
-              amount: amountInt,
-            },
-          ],
-        });
-      
-      toast.info("Please sign the transaction in your wallet...");
-      const signedTx = await signTransaction({ 
-        unsignedTransaction: depositOpXdr, 
-        address: walletAddress 
+      const pool = new PoolContractV2(TRUSTBRIDGE_POOL_ID);
+      const depositOpXdr = pool.submit({
+        from: walletAddress,
+        spender: walletAddress,
+        to: walletAddress,
+        requests: [
+          {
+            request_type: RequestType.Supply,
+            address: currentAsset.address,
+            amount: amountInt,
+          },
+        ],
       });
+
+      toast.info("Please sign the transaction in your wallet...");
+      const signedTx = await signTransaction(depositOpXdr);
       
       toast.success(
         `Successfully deposited ${depositAmount} ${selectedAsset}! ` +

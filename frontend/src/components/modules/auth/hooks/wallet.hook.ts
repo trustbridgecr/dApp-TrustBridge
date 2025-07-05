@@ -1,8 +1,7 @@
 import { kit } from "@/config/wallet-kit";
 import { useWalletContext } from "@/providers/wallet.provider";
 import { ISupportedWallet } from "@creit.tech/stellar-wallets-kit";
-import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db, doc, getDoc, setDoc } from "@/lib/firebase";
 import { UserProfile } from "@/@types/user.entity";
 import { toast } from "sonner";
 

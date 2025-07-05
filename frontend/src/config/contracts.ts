@@ -1,19 +1,22 @@
 // TrustBridge Contract Addresses - Stellar Testnet
 export const NETWORK_CONFIG = {
-  network: "TESTNET",
-  rpc: "https://soroban-testnet.stellar.org",
   networkPassphrase: "Test SDF Network ; September 2015",
-  horizonUrl: "https://horizon-testnet.stellar.org",
-} as const;
+  horizonUrl: 'https://horizon-testnet.stellar.org',
+  sorobanRpcUrl: 'https://soroban-testnet.stellar.org:443',
+};
 
-// Deployed Oracle Contract
-export const ORACLE_ID = "CBCIZHUC42CKOZHKKEYMSXVVY24ZK2EKEUU6NFGQS5YFG7GAMEU5L32M";
+// Official Blend Protocol Testnet Oracle (from blend-utils testnet.contracts.json)
+export const ORACLE_ID = 'CCYHURAC5VTN2ZU663UUS5F24S4GURDPO4FHZ75JLN5DMLRTLCG44H44'; // Official Blend testnet oraclemock
 
-// Token Addresses
+// Disable fallback oracle for now to avoid address format issues
+export const FALLBACK_ORACLE_ID = null;
+
+// Token Addresses - Official Blend Protocol Testnet Tokens (verified from blend-utils)
 export const TOKENS = {
-  USDC: "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA", // Stellar testnet USDC
-  XLM: "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQAOBKYCWXVB", // Native XLM wrapped for Soroban
-  TBRG: "CAAUAE53WKWR4X2BRCHXNUTDJGXTOBMHMK3KFTAPEUBA7MJEQBPWVWQU", // TrustBridge Token
+  USDC: "CAQCFVLOBK5GIULPNZRGATJJMIZL5BSP7X5YJVMGCPTUEPFM4AVSRCJU", // Official Blend testnet USDC (verified)
+  XLM: "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC", // Official Blend testnet XLM (verified)
+  BLND: "CB22KRA3YZVCNCQI64JQ5WE7UY2VAV7WFLK6A2JN3HEX56T2EDAFO7QF", // Official Blend testnet BLND (verified)
+  TBRG: "CAAUAE53WKWR4X2BRCHXNUTDJGXTOBMHMK3KFTAPEUBA7MJEQBPWVWQU", // TrustBridge Token (custom)
 } as const;
 
 // Pool Configuration for TrustBridge-MicroLoans
@@ -26,11 +29,14 @@ export const POOL_CONFIG = {
   feeVault: "", // Will be set during deployment
 } as const;
 
-// Pool Factory - Blend Protocol Factory on Stellar Testnet
-export const POOL_FACTORY_ID = "CCDEMRRGV4XHXR6PVHA6OXQ5NV3NWUGWFWRR5H3CEPSNKVPQRYVCTPPU"; // Blend Factory on testnet
+// Pool Factory - Official Blend Protocol Factory on Stellar Testnet (from blend-utils)
+export const POOL_FACTORY_ID = 'CDIE73IJJKOWXWCPU5GWQ745FUKWCSH3YKZRF5IQW7GE3G7YAZ773MYK'; // Official poolFactoryV2
 
-// Deployed Pool ID - Will be set after pool deployment
-export const TRUSTBRIDGE_POOL_ID = ""; // To be updated after pool deployment
+// Deployed Pool ID - Successfully deployed on Stellar Testnet
+export const TRUSTBRIDGE_POOL_ID = "CB7BGBKLC4UNO2Q6V7O52622I44PVMDFDAMAJ6NT64GB3UQZX3FU7LA5";
+
+// Backstop Contract - Official Blend Protocol Backstop on Stellar Testnet  
+export const BACKSTOP_ID = "CC4TSDVQKBAYMK4BEDM65CSNB3ISI2A54OOBRO6IPSTFHJY3DEEKHRKV"; // Official backstopV2
 
 // Pool deployment configuration
 export const POOL_DEPLOYMENT_CONFIG = {
@@ -40,7 +46,6 @@ export const POOL_DEPLOYMENT_CONFIG = {
   oracle: ORACLE_ID,
   backstopTakeRate: POOL_CONFIG.backstopRate * 100000, // Convert to 7 decimals (15% = 1500000)
   maxPositions: POOL_CONFIG.maxPositions,
-  minCollateral: BigInt(1 * 1e7), // $1 minimum collateral in oracle decimals
 } as const;
 
 // Reserve configurations for pool setup
@@ -116,4 +121,45 @@ export const RESERVE_EMISSIONS = [
     share: 2500000, // 25% of total pool emissions
   },
   // Total shares must equal 10000000 (100%)
-] as const; 
+] as const;
+
+// Pool Configuration Defaults
+export const DEFAULT_POOL_CONFIG = {
+  backstop_take_rate: 1500000, // 15% in 7 decimals (15 * 100000)
+  max_positions: 4,
+  // Removed min_collateral as it's not supported by current Blend SDK
+};
+
+// Testing Configuration
+export const TESTING_CONFIG = {
+  skipOracleValidation: true, // Set to true to bypass oracle checks during testing
+  useSimulatedValues: true,   // Use mock values for testing
+  mockOracleResponse: {
+    price: 100000000, // $1.00 in 7 decimals
+    timestamp: Date.now()
+  }
+};
+
+// Assets Configuration - Using Official Blend Testnet Addresses
+export const SUPPORTED_ASSETS = {
+  USDC: 'CAQCFVLOBK5GIULPNZRGATJJMIZL5BSP7X5YJVMGCPTUEPFM4AVSRCJU', // Official Blend testnet USDC
+  XLM: 'CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC', // Official Blend testnet XLM
+  BLND: 'CB22KRA3YZVCNCQI64JQ5WE7UY2VAV7WFLK6A2JN3HEX56T2EDAFO7QF', // Official Blend testnet BLND
+};
+
+// Export all contract IDs for easy access
+export const CONTRACT_IDS = {
+  POOL_FACTORY: POOL_FACTORY_ID,
+  ORACLE: ORACLE_ID,
+  FALLBACK_ORACLE: FALLBACK_ORACLE_ID,
+  BACKSTOP: BACKSTOP_ID,
+  TRUSTBRIDGE_POOL: TRUSTBRIDGE_POOL_ID,
+};
+
+export default {
+  NETWORK_CONFIG,
+  CONTRACT_IDS,
+  DEFAULT_POOL_CONFIG,
+  TESTING_CONFIG,
+  SUPPORTED_ASSETS
+}; 

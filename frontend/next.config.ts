@@ -17,6 +17,11 @@ const nextConfig = {
       },
     ];
   },
+  // Configure font optimization
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['@stellar/stellar-sdk']
+  },
 };
 
 export default nextConfig;
