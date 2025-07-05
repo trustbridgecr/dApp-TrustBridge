@@ -1,11 +1,13 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
+import { useWallet } from "@/components/modules/auth/hooks/wallet.hook";
 
 export default function HomePage() {
+  const { handleConnect } = useWallet();
+
   return (
     <div className="flex flex-col bg-neutral-900 text-neutral-200">
       <main className="flex-grow">
@@ -34,19 +36,6 @@ export default function HomePage() {
                   and efficient blockchain technology. Build trust, create
                   opportunity.
                 </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 items-center justify-center md:justify-start pt-4">
-                <Link href="/dashboard" className="w-full sm:w-auto">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="w-full border-emerald-600 text-emerald-300 hover:bg-emerald-700/30 hover:text-emerald-200 bg-transparent"
-                  >
-                    Explore Dashboard
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
               </div>
             </div>
           </div>
