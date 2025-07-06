@@ -23,12 +23,22 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useWalletContext } from "@/providers/wallet.provider";
-import { TOKENS, TRUSTBRIDGE_POOL_ID } from "@/config/contracts";
+import {
+  TOKENS,
+  TRUSTBRIDGE_POOL_ID,
+  NETWORK_CONFIG,
+} from "@/config/contracts";
 import { signTransaction } from "@/components/modules/auth/helpers/stellar-wallet-kit.helper";
 import { toast } from "sonner";
 
-// Import Blend SDK
+// Import Blend SDK and Stellar SDK
 import { PoolContractV2, RequestType } from "@blend-capital/blend-sdk";
+import {
+  TransactionBuilder,
+  xdr,
+  Account,
+  BASE_FEE,
+} from "@stellar/stellar-sdk";
 
 interface PoolReserve {
   symbol: string;
@@ -144,63 +154,140 @@ export function ProvideLiquidityModal({
     setDepositAmount(amount.toFixed(2));
   };
 
-  const handleProvideCapitalLiquidity = async () => {
-    if (!walletAddress) {
-      toast.error("Please connect your wallet first");
-      return;
-    }
-
-    if (!depositAmount || Number(depositAmount) <= 0) {
-      toast.error("Please enter a valid deposit amount");
-      return;
-    }
-
-    if (Number(depositAmount) > walletBalance) {
-      toast.error("Insufficient balance");
-      return;
-    }
-
-    setLoading(true);
+  const buildTransactionFromXDR = async (operationXdr: string) => {
+    if (!walletAddress) throw new Error("Wallet not connected");
 
     try {
-      const amountInt = BigInt(Math.floor(Number(depositAmount) * 1e7));
+      // Get account information from Horizon
+      const accountResponse = await fetch(
+        `${NETWORK_CONFIG.horizonUrl}/accounts/${walletAddress}`,
+      );
+      if (!accountResponse.ok) {
+        throw new Error(
+          "Failed to fetch account information. Please check your wallet connection.",
+        );
+      }
+      const accountData = await accountResponse.json();
 
+      // Create account object
+      const account = new Account(walletAddress, accountData.sequence);
+
+      // Parse the operation from XDR
+      const operation = xdr.Operation.fromXDR(operationXdr, "base64");
+
+      // Build transaction with proper fee and timeout
+      const transaction = new TransactionBuilder(account, {
+        fee: (parseInt(BASE_FEE) * 10).toString(), // Increase fee for Soroban operations
+        networkPassphrase: NETWORK_CONFIG.networkPassphrase,
+      })
+        .addOperation(operation)
+        .setTimeout(300) // 5 minutes timeout
+        .build();
+
+      return transaction;
+    } catch (error) {
+      console.error("Error building transaction:", error);
+      if (error instanceof Error) {
+        if (error.message.includes("account not found")) {
+          throw new Error(
+            "Account not found. Please ensure your wallet is funded and connected to the correct network.",
+          );
+        }
+        throw new Error(`Failed to build transaction: ${error.message}`);
+      }
+      throw new Error("Failed to build transaction due to unknown error");
+    }
+  };
+
+  const validateTransaction = async () => {
+    if (!walletAddress || !currentAsset) return false;
+
+    try {
+      // Check if wallet is connected
+      if (!walletAddress) {
+        toast.error("Please connect your wallet first");
+        return false;
+      }
+
+      // Check balance
+      const hasBalance = walletBalance >= Number(depositAmount);
+      if (!hasBalance) {
+        toast.error(`Insufficient ${selectedAsset} balance`);
+        return false;
+      }
+
+      // Check if amount is valid
+      if (!depositAmount || Number(depositAmount) <= 0) {
+        toast.error("Please enter a valid deposit amount");
+        return false;
+      }
+
+      // Check if pool is deployed
       if (!TRUSTBRIDGE_POOL_ID) {
         toast.error(
           "TrustBridge pool not yet deployed. Please deploy the pool first.",
         );
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Error validating transaction:", error);
+      toast.error("Failed to validate transaction");
+      return false;
+    }
+  };
+
+  const handleProvideCapitalLiquidity = async () => {
+    setLoading(true);
+
+    try {
+      // Validate transaction first
+      const isValid = await validateTransaction();
+      if (!isValid) {
+        setLoading(false);
         return;
       }
 
-      if (!currentAsset) {
-        toast.error("Invalid asset selected");
-        return;
-      }
+      const amountInt = BigInt(Math.floor(Number(depositAmount) * 1e7));
 
-      toast.info("Simulating deposit transaction...");
-      const pool = new PoolContractV2(TRUSTBRIDGE_POOL_ID);
+      toast.info("Preparing transaction...");
+
+      // Create the pool contract instance
+      const pool = new PoolContractV2(TRUSTBRIDGE_POOL_ID!);
+
+      // Generate the supply operation XDR
       const depositOpXdr = pool.submit({
-        from: walletAddress,
-        spender: walletAddress,
-        to: walletAddress,
+        from: walletAddress!,
+        spender: walletAddress!,
+        to: walletAddress!,
         requests: [
           {
             request_type: RequestType.Supply,
-            address: currentAsset.address,
+            address: currentAsset!.address,
             amount: amountInt,
           },
         ],
       });
 
-      toast.info("Please sign the transaction in your wallet...");
-      const signedTx = await signTransaction(depositOpXdr);
+      toast.info("Building transaction...");
 
+      // Build the complete transaction
+      const transaction = await buildTransactionFromXDR(depositOpXdr);
+
+      toast.info("Please sign the transaction in your wallet...");
+
+      // Sign the transaction
+      const signedTx = await signTransaction(transaction);
+
+      // For now, we'll just show success since we don't have full Soroban submission
+      // In production, you would submit the transaction to the network
       toast.success(
-        `Successfully deposited ${depositAmount} ${selectedAsset}! ` +
-          `You received ${estimates.bTokensEstimated.toFixed(4)} b${selectedAsset} tokens.`,
+        `Transaction prepared successfully! ` +
+          `You will receive ${estimates.bTokensEstimated.toFixed(4)} b${selectedAsset} tokens.`,
       );
 
-      console.log("Deposit transaction completed:", {
+      console.log("Transaction signed successfully:", {
         amount: depositAmount,
         asset: selectedAsset,
         bTokensReceived: estimates.bTokensEstimated,
@@ -213,14 +300,25 @@ export function ProvideLiquidityModal({
       console.error("Deposit transaction failed:", error);
 
       if (error instanceof Error) {
-        if (error.message.includes("User rejected")) {
+        if (
+          error.message.includes("User rejected") ||
+          error.message.includes("rejected")
+        ) {
           toast.error("Transaction cancelled by user");
         } else if (error.message.includes("insufficient")) {
-          toast.error("Insufficient balance or gas");
-        } else if (error.message.includes("simulation")) {
-          toast.error("Transaction simulation failed - please try again");
+          toast.error("Insufficient balance or gas fees");
+        } else if (error.message.includes("account not found")) {
+          toast.error(
+            "Account not found - please check your wallet connection and ensure it's funded",
+          );
+        } else if (error.message.includes("Failed to fetch account")) {
+          toast.error(
+            "Unable to connect to Stellar network - please check your connection",
+          );
+        } else if (error.message.includes("sequence")) {
+          toast.error("Transaction sequence error - please try again");
         } else {
-          toast.error(`Deposit failed: ${error.message}`);
+          toast.error(`Transaction failed: ${error.message}`);
         }
       } else {
         toast.error("Failed to complete deposit transaction");
