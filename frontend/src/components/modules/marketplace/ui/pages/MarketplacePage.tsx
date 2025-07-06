@@ -361,7 +361,7 @@ export function MarketplacePage() {
                       variant="outline"
                       className="border-blue-600 text-blue-400 hover:bg-blue-900/20 bg-transparent"
                     >
-                      Supply XLM
+                      Supply XLM Collateral
                     </Button>
                   </>
                 )}
