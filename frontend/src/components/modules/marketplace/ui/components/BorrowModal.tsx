@@ -1,29 +1,5 @@
 "use client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import {
-  TrendingDown,
-  Shield,
-  AlertTriangle,
-  DollarSign,
-  Loader2,
-  CheckCircle,
-  ArrowRight,
-  Info,
-  Percent,
-} from "lucide-react";
 import { useBorrow } from "../../hooks/useBorrow.hook";
 
 interface PoolReserve {
@@ -62,184 +38,158 @@ export function BorrowModal({ isOpen, onClose, poolId }: BorrowModalProps) {
     isBorrowDisabled,
   } = useBorrow({ isOpen, onClose, poolId });
 
+  if (!isOpen) return null;
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[480px] bg-neutral-900 border-neutral-700 text-neutral-200 p-0 max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <DialogHeader className="p-5 pb-3">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="card bg-dark-secondary p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-orange-900/30 rounded-lg">
-              <TrendingDown className="h-5 w-5 text-orange-400" />
-            </div>
+            <i className="fas fa-arrow-down text-warning text-xl"></i>
             <div>
-              <DialogTitle className="text-xl font-semibold text-neutral-100">
-                Borrow USDC
-              </DialogTitle>
-              <DialogDescription className="text-neutral-400 mt-1">
+              <h3 className="text-xl font-semibold text-white">Borrow USDC</h3>
+              <p className="text-gray-400 text-sm">
                 Borrow USDC against your collateral
-              </DialogDescription>
+              </p>
             </div>
           </div>
-        </DialogHeader>
+          <button onClick={onClose} className="text-gray-400 hover:text-white">
+            <i className="fas fa-times"></i>
+          </button>
+        </div>
 
-        <div className="px-5 pb-5 space-y-5">
-          {/* Borrow Amount Section */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label
-                htmlFor="borrowAmount"
-                className="text-sm font-medium text-neutral-300"
-              >
-                Amount to Borrow
-              </Label>
-              <Badge
-                variant="outline"
-                className="text-xs text-neutral-400 border-neutral-600"
-              >
+        <div className="space-y-4">
+          {/* Amount Input */}
+          <div>
+            <div className="flex justify-between items-center mb-2">
+              <label className="form-label">Amount to Borrow</label>
+              <span className="text-xs text-gray-400 bg-dark-tertiary px-2 py-1 rounded">
                 USDC
-              </Badge>
+              </span>
             </div>
-            <div className="relative">
-              <Input
-                id="borrowAmount"
-                type="number"
-                placeholder="0.00"
-                value={borrowAmount}
-                onChange={(e) => setBorrowAmount(e.target.value)}
-                className="bg-neutral-800 border-neutral-600 text-neutral-200 text-lg h-12 pr-16 font-medium placeholder:text-neutral-500"
-                min="0"
-                step="0.01"
-                disabled={loading}
-              />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 text-sm font-medium">
-                USDC
-              </div>
-            </div>
-
+            <input
+              type="number"
+              className="form-input text-lg h-12"
+              placeholder="0.00"
+              value={borrowAmount}
+              onChange={(e) => setBorrowAmount(e.target.value)}
+              min="0"
+              step="0.01"
+              disabled={loading}
+            />
             {/* Quick Amount Buttons */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 mt-2">
               {[100, 500, 1000, 2500].map((amount) => (
-                <Button
+                <button
                   key={amount}
-                  variant="outline"
-                  size="sm"
+                  className="btn-secondary text-xs flex-1"
                   onClick={() => setBorrowAmount(amount.toString())}
                   disabled={loading}
-                  className="flex-1 border-neutral-600 text-neutral-400 hover:bg-neutral-800 hover:text-neutral-200 bg-transparent text-xs"
                 >
                   ${amount}
-                </Button>
+                </button>
               ))}
             </div>
           </div>
 
           {/* Transaction Preview */}
           {borrowAmount && Number(borrowAmount) > 0 && (
-            <div className="space-y-3">
-              <Separator className="bg-neutral-700" />
+            <div className="border-t border-custom pt-4">
+              <h4 className="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                <i className="fas fa-arrow-right"></i>
+                Borrow Overview
+              </h4>
 
-              <div className="space-y-3">
-                <h3 className="text-sm font-medium text-neutral-300 flex items-center gap-2">
-                  <ArrowRight className="h-4 w-4" />
-                  Borrow Overview
-                </h3>
+              {/* Health Factor Card */}
+              <div className="card p-4 mb-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-gray-400">Health Factor</span>
+                  <div className="flex items-center gap-1">
+                    {isHealthy ? (
+                      <i className="fas fa-check-circle text-success"></i>
+                    ) : (
+                      <i
+                        className={`fas fa-exclamation-triangle ${isAtRisk ? "text-warning" : "text-danger"}`}
+                      ></i>
+                    )}
+                  </div>
+                </div>
+                <div
+                  className={`text-xl font-bold ${
+                    isHealthy
+                      ? "text-success"
+                      : isAtRisk
+                        ? "text-warning"
+                        : "text-danger"
+                  }`}
+                >
+                  {estimates.healthFactor > 0
+                    ? estimates.healthFactor.toFixed(2)
+                    : "--"}
+                </div>
+                <div className="mt-2">
+                  <div className="w-full bg-dark-tertiary rounded-full h-1.5">
+                    <div
+                      className={`h-1.5 rounded-full transition-all ${
+                        isHealthy
+                          ? "bg-success"
+                          : isAtRisk
+                            ? "bg-warning"
+                            : "bg-danger"
+                      }`}
+                      style={{
+                        width: `${Math.min(100, Math.max(0, (estimates.healthFactor / 3) * 100))}%`,
+                      }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {isHealthy
+                      ? "Healthy position"
+                      : isAtRisk
+                        ? "At risk"
+                        : "Liquidation risk"}
+                  </p>
+                </div>
+              </div>
 
-                {/* Health Factor Card */}
-                <div className="p-3 rounded-lg bg-neutral-800 border border-neutral-700">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-neutral-400">
-                      Health Factor
+              {/* Borrow Stats */}
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                <div className="card p-3">
+                  <div className="flex items-center gap-1 mb-1">
+                    <i className="fas fa-percentage text-warning text-xs"></i>
+                    <span className="text-xs text-gray-400">Borrow APY</span>
+                  </div>
+                  <div className="text-sm font-semibold text-warning">
+                    {estimates.borrowAPY}%
+                  </div>
+                </div>
+                <div className="card p-3">
+                  <div className="flex items-center gap-1 mb-1">
+                    <i className="fas fa-shield text-gray-400 text-xs"></i>
+                    <span className="text-xs text-gray-400">
+                      Liquidation Threshold
                     </span>
-                    <div className="flex items-center gap-1">
-                      {isHealthy ? (
-                        <CheckCircle className="h-4 w-4 text-green-400" />
-                      ) : (
-                        <AlertTriangle
-                          className={`h-4 w-4 ${isAtRisk ? "text-yellow-400" : "text-red-400"}`}
-                        />
-                      )}
-                    </div>
                   </div>
-                  <div
-                    className={`text-xl font-bold ${
-                      isHealthy
-                        ? "text-green-400"
-                        : isAtRisk
-                          ? "text-yellow-400"
-                          : "text-red-400"
-                    }`}
-                  >
-                    {estimates.healthFactor > 0
-                      ? estimates.healthFactor.toFixed(2)
+                  <div className="text-sm font-semibold text-white">
+                    {estimates.liquidationThreshold}%
+                  </div>
+                </div>
+              </div>
+
+              {/* Required Collateral */}
+              <div className="card p-3 mb-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1">
+                    <i className="fas fa-dollar-sign text-gray-400 text-xs"></i>
+                    <span className="text-xs text-gray-400">
+                      Required Collateral
+                    </span>
+                  </div>
+                  <div className="text-sm font-semibold text-white">
+                    $
+                    {estimates.requiredCollateral > 0
+                      ? estimates.requiredCollateral.toLocaleString()
                       : "--"}
-                  </div>
-                  <div className="mt-2">
-                    <div className="w-full bg-neutral-700 rounded-full h-1.5">
-                      <div
-                        className={`h-1.5 rounded-full transition-all ${
-                          isHealthy
-                            ? "bg-green-400"
-                            : isAtRisk
-                              ? "bg-yellow-400"
-                              : "bg-red-400"
-                        }`}
-                        style={{
-                          width: `${Math.min(100, Math.max(0, (estimates.healthFactor / 3) * 100))}%`,
-                        }}
-                      />
-                    </div>
-                    <p className="text-xs text-neutral-500 mt-1">
-                      {isHealthy
-                        ? "Healthy position"
-                        : isAtRisk
-                          ? "At risk"
-                          : "Liquidation risk"}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Borrow Stats */}
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="p-2 rounded-lg bg-neutral-800/50 border border-neutral-700">
-                    <div className="flex items-center gap-1 mb-1">
-                      <Percent className="h-3 w-3 text-orange-400" />
-                      <span className="text-xs text-neutral-400">
-                        Borrow APY
-                      </span>
-                    </div>
-                    <div className="text-sm font-semibold text-orange-400">
-                      {estimates.borrowAPY}%
-                    </div>
-                  </div>
-
-                  <div className="p-2 rounded-lg bg-neutral-800/50 border border-neutral-700">
-                    <div className="flex items-center gap-1 mb-1">
-                      <Shield className="h-3 w-3 text-neutral-400" />
-                      <span className="text-xs text-neutral-400">
-                        Liquidation Threshold
-                      </span>
-                    </div>
-                    <div className="text-sm font-semibold text-neutral-200">
-                      {estimates.liquidationThreshold}%
-                    </div>
-                  </div>
-                </div>
-
-                {/* Required Collateral */}
-                <div className="p-2 rounded-lg bg-neutral-800/50 border border-neutral-700">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1">
-                      <DollarSign className="h-3 w-3 text-neutral-400" />
-                      <span className="text-xs text-neutral-400">
-                        Required Collateral
-                      </span>
-                    </div>
-                    <div className="text-sm font-semibold text-neutral-200">
-                      $
-                      {estimates.requiredCollateral > 0
-                        ? estimates.requiredCollateral.toLocaleString()
-                        : "--"}
-                    </div>
                   </div>
                 </div>
               </div>
@@ -248,26 +198,22 @@ export function BorrowModal({ isOpen, onClose, poolId }: BorrowModalProps) {
 
           {/* Health Factor Warning */}
           {estimates.healthFactor > 0 && (
-            <Alert
-              className={`${
+            <div
+              className={`p-3 rounded border-l-4 ${
                 isHealthy
-                  ? "bg-green-900/20 border-green-700/50"
+                  ? "bg-green-900 bg-opacity-20 border-success text-success"
                   : isAtRisk
-                    ? "bg-yellow-900/20 border-yellow-700/50"
-                    : "bg-red-900/20 border-red-700/50"
+                    ? "bg-yellow-900 bg-opacity-20 border-warning text-warning"
+                    : "bg-red-900 bg-opacity-20 border-danger text-danger"
               }`}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-start gap-2">
                 {isHealthy ? (
-                  <CheckCircle className="h-4 w-4 text-green-400" />
+                  <i className="fas fa-check-circle mt-0.5"></i>
                 ) : (
-                  <AlertTriangle
-                    className={`h-4 w-4 ${isAtRisk ? "text-yellow-400" : "text-red-400"}`}
-                  />
+                  <i className="fas fa-exclamation-triangle mt-0.5"></i>
                 )}
-                <AlertDescription
-                  className={`text-sm ${isHealthy ? "text-green-300" : isAtRisk ? "text-yellow-300" : "text-red-300"}`}
-                >
+                <div className="text-sm">
                   {isHealthy && (
                     <>
                       <strong>Healthy Position:</strong> You have sufficient
@@ -286,51 +232,52 @@ export function BorrowModal({ isOpen, onClose, poolId }: BorrowModalProps) {
                       immediate liquidation!
                     </>
                   )}
-                </AlertDescription>
+                </div>
               </div>
-            </Alert>
+            </div>
           )}
 
           {/* Risk Disclaimer */}
-          <Alert className="bg-blue-900/20 border-blue-700/50">
-            <Info className="h-4 w-4 text-blue-400" />
-            <AlertDescription className="text-blue-300 text-sm">
-              <strong>Risk Disclaimer:</strong> Borrowing involves liquidation
-              risk. Monitor your health factor regularly and maintain adequate
-              collateral ratios to avoid liquidation.
-            </AlertDescription>
-          </Alert>
+          <div className="p-3 rounded bg-blue-900 bg-opacity-20 border border-blue-700 text-blue-300">
+            <div className="flex items-start gap-2">
+              <i className="fas fa-info-circle mt-0.5 text-blue-400"></i>
+              <div className="text-sm">
+                <strong>Risk Disclaimer:</strong> Borrowing involves liquidation
+                risk. Monitor your health factor regularly and maintain adequate
+                collateral ratios to avoid liquidation.
+              </div>
+            </div>
+          </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 pt-2">
-            <Button
-              variant="outline"
+          <div className="flex justify-end space-x-3 pt-2">
+            <button
+              className="btn-secondary"
               onClick={onClose}
               disabled={loading}
-              className="flex-1 border-neutral-600 text-neutral-300 hover:bg-neutral-800 bg-transparent"
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
+              className="btn-danger"
               onClick={handleBorrow}
               disabled={isBorrowDisabled}
-              className="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-medium"
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <div className="loader mr-2"></div>
                   Processing...
                 </>
               ) : (
                 <>
-                  <TrendingDown className="mr-2 h-4 w-4" />
+                  <i className="fas fa-arrow-down mr-2"></i>
                   Borrow USDC
                 </>
               )}
-            </Button>
+            </button>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }
