@@ -1,27 +1,5 @@
 "use client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import {
-  Shield,
-  Loader2,
-  Info,
-  AlertTriangle,
-  ArrowRight,
-  DollarSign,
-  TrendingDown,
-} from "lucide-react";
 import { useSupplyCollateral } from "../../hooks/useSupplyCollateral.hook";
 
 interface SupplyXLMCollateralModalProps {
@@ -47,228 +25,207 @@ export function SupplyXLMCollateralModal({
     isSupplyDisabled,
   } = useSupplyCollateral({ isOpen, onClose, onSuccess });
 
+  if (!isOpen) return null;
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[480px] bg-neutral-900 border-neutral-700 text-neutral-200 p-0 max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <DialogHeader className="p-5 pb-3">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="card bg-dark-secondary p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-900/30 rounded-lg">
-              <Shield className="h-5 w-5 text-blue-400" />
-            </div>
+            <i className="fas fa-shield text-blue-400 text-xl"></i>
             <div>
-              <DialogTitle className="text-xl font-semibold text-neutral-100">
+              <h3 className="text-xl font-semibold text-white">
                 Supply XLM Collateral
-              </DialogTitle>
-              <DialogDescription className="text-neutral-400 mt-1">
+              </h3>
+              <p className="text-gray-400 text-sm">
                 Deposit XLM to unlock borrowing power
-              </DialogDescription>
+              </p>
             </div>
           </div>
-        </DialogHeader>
+          <button onClick={onClose} className="text-gray-400 hover:text-white">
+            <i className="fas fa-times"></i>
+          </button>
+        </div>
 
-        <div className="px-5 pb-5 space-y-5">
-          {/* Collateral Amount Section */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label
-                htmlFor="collateral-amount"
-                className="text-sm font-medium text-neutral-300"
-              >
-                Amount to Supply
-              </Label>
-              <Badge
-                variant="outline"
-                className="text-xs text-neutral-400 border-neutral-600"
-              >
+        <div className="space-y-4">
+          {/* Amount Input */}
+          <div>
+            <div className="flex justify-between items-center mb-2">
+              <label className="form-label">Amount to Supply</label>
+              <span className="text-xs text-gray-400 bg-dark-tertiary px-2 py-1 rounded">
                 XLM
-              </Badge>
+              </span>
             </div>
-            <div className="relative">
-              <Input
-                id="collateral-amount"
-                type="number"
-                placeholder="0.00"
-                value={collateralAmount}
-                onChange={(e) => setCollateralAmount(e.target.value)}
-                className="bg-neutral-800 border-neutral-600 text-neutral-200 text-lg h-12 pr-16 font-medium placeholder:text-neutral-500"
-                min="0"
-                step="0.01"
-                disabled={loading}
-              />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 text-sm font-medium">
-                XLM
-              </div>
-            </div>
-
+            <input
+              type="number"
+              className="form-input text-lg h-12"
+              placeholder="0.00"
+              value={collateralAmount}
+              onChange={(e) => setCollateralAmount(e.target.value)}
+              min="0"
+              step="0.01"
+              disabled={loading}
+            />
             {/* Quick Amount Buttons */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 mt-2">
               {[100, 500, 1000, 5000].map((amount) => (
-                <Button
+                <button
                   key={amount}
-                  variant="outline"
-                  size="sm"
+                  className="btn-secondary text-xs flex-1"
                   onClick={() => setCollateralAmount(amount.toString())}
                   disabled={loading}
-                  className="flex-1 border-neutral-600 text-neutral-400 hover:bg-neutral-800 hover:text-neutral-200 bg-transparent text-xs"
                 >
                   {amount}
-                </Button>
+                </button>
               ))}
             </div>
           </div>
 
           {/* Transaction Preview */}
           {estimates.borrowingPower > 0 && (
-            <div className="space-y-3">
-              <Separator className="bg-neutral-700" />
+            <div className="border-t border-custom pt-4">
+              <h4 className="text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+                <i className="fas fa-arrow-right"></i>
+                Collateral Overview
+              </h4>
 
-              <div className="space-y-3">
-                <h3 className="text-sm font-medium text-neutral-300 flex items-center gap-2">
-                  <ArrowRight className="h-4 w-4" />
-                  Collateral Overview
-                </h3>
+              {/* Borrowing Power */}
+              <div className="card p-4 mb-3">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm text-gray-400">You will unlock</span>
+                  <span className="text-xs text-blue-400 bg-blue-900 bg-opacity-20 px-2 py-1 rounded">
+                    75% LTV
+                  </span>
+                </div>
+                <div className="text-xl font-bold text-blue-400">
+                  ${estimates.borrowingPower}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">
+                  Available borrowing power
+                </p>
+              </div>
 
-                {/* Borrowing Power */}
-                <div className="p-3 rounded-lg bg-neutral-800 border border-neutral-700">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-neutral-400">
-                      You will unlock
+              {/* Collateral Stats */}
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                <div className="card p-3">
+                  <div className="flex items-center gap-1 mb-1">
+                    <i className="fas fa-dollar-sign text-gray-400 text-xs"></i>
+                    <span className="text-xs text-gray-400">
+                      Collateral Value
                     </span>
-                    <Badge className="bg-blue-900/30 text-blue-300 border-blue-700 text-xs">
-                      75% LTV
-                    </Badge>
                   </div>
-                  <div className="text-xl font-bold text-blue-400">
-                    ${estimates.borrowingPower}
-                  </div>
-                  <p className="text-xs text-neutral-500 mt-1">
-                    Available borrowing power
-                  </p>
-                </div>
-
-                {/* Collateral Stats */}
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="p-2 rounded-lg bg-neutral-800/50 border border-neutral-700">
-                    <div className="flex items-center gap-1 mb-1">
-                      <DollarSign className="h-3 w-3 text-neutral-400" />
-                      <span className="text-xs text-neutral-400">
-                        Collateral Value
-                      </span>
-                    </div>
-                    <div className="text-sm font-semibold text-neutral-200">
-                      ${estimates.collateralValue}
-                    </div>
-                  </div>
-
-                  <div className="p-2 rounded-lg bg-neutral-800/50 border border-neutral-700">
-                    <div className="flex items-center gap-1 mb-1">
-                      <TrendingDown className="h-3 w-3 text-orange-400" />
-                      <span className="text-xs text-neutral-400">
-                        Liquidation Price
-                      </span>
-                    </div>
-                    <div className="text-sm font-semibold text-orange-400">
-                      ${estimates.liquidationPrice}
-                    </div>
+                  <div className="text-sm font-semibold text-white">
+                    ${estimates.collateralValue}
                   </div>
                 </div>
-
-                {/* Health Factor */}
-                <div className="p-2 rounded-lg bg-neutral-800/50 border border-neutral-700">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-1">
-                      <Shield className="h-3 w-3 text-neutral-400" />
-                      <span className="text-xs text-neutral-400">
-                        Health Factor
-                      </span>
-                    </div>
-                    <div
-                      className={`text-sm font-semibold ${
-                        isHealthy
-                          ? "text-green-400"
-                          : isAtRisk
-                            ? "text-yellow-400"
-                            : "text-red-400"
-                      }`}
-                    >
-                      {estimates.healthFactor}
-                    </div>
+                <div className="card p-3">
+                  <div className="flex items-center gap-1 mb-1">
+                    <i className="fas fa-arrow-down text-warning text-xs"></i>
+                    <span className="text-xs text-gray-400">
+                      Liquidation Price
+                    </span>
                   </div>
-                  <div className="w-full bg-neutral-700 rounded-full h-1.5">
-                    <div
-                      className={`h-1.5 rounded-full transition-all ${
-                        isHealthy
-                          ? "bg-green-400"
-                          : isAtRisk
-                            ? "bg-yellow-400"
-                            : "bg-red-400"
-                      }`}
-                    />
+                  <div className="text-sm font-semibold text-warning">
+                    ${estimates.liquidationPrice}
                   </div>
-                  <p className="text-xs text-neutral-500 mt-1">
-                    {isHealthy
-                      ? "Healthy position"
-                      : isAtRisk
-                        ? "At risk"
-                        : "Liquidation risk"}
-                  </p>
                 </div>
+              </div>
+
+              {/* Health Factor */}
+              <div className="card p-3 mb-3">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-1">
+                    <i className="fas fa-shield text-gray-400 text-xs"></i>
+                    <span className="text-xs text-gray-400">Health Factor</span>
+                  </div>
+                  <div
+                    className={`text-sm font-semibold ${
+                      isHealthy
+                        ? "text-success"
+                        : isAtRisk
+                          ? "text-warning"
+                          : "text-danger"
+                    }`}
+                  >
+                    {estimates.healthFactor}
+                  </div>
+                </div>
+                <div className="w-full bg-dark-tertiary rounded-full h-1.5">
+                  <div
+                    className={`h-1.5 rounded-full transition-all ${
+                      isHealthy
+                        ? "bg-success"
+                        : isAtRisk
+                          ? "bg-warning"
+                          : "bg-danger"
+                    }`}
+                  />
+                </div>
+                <p className="text-xs text-gray-400 mt-1">
+                  {isHealthy
+                    ? "Healthy position"
+                    : isAtRisk
+                      ? "At risk"
+                      : "Liquidation risk"}
+                </p>
               </div>
             </div>
           )}
 
           {/* Health Factor Warning */}
           {showHealthWarning && (
-            <Alert className="bg-yellow-900/20 border-yellow-700/50">
-              <AlertTriangle className="h-4 w-4 text-yellow-400" />
-              <AlertDescription className="text-yellow-300 text-sm">
-                <strong>Risk Warning:</strong> Your health factor will be at
-                risk. Consider supplying more collateral.
-              </AlertDescription>
-            </Alert>
+            <div className="p-3 rounded bg-yellow-900 bg-opacity-20 border border-yellow-700 text-warning">
+              <div className="flex items-start gap-2">
+                <i className="fas fa-exclamation-triangle mt-0.5"></i>
+                <div className="text-sm">
+                  <strong>Risk Warning:</strong> Your health factor will be at
+                  risk. Consider supplying more collateral.
+                </div>
+              </div>
+            </div>
           )}
 
           {/* Info Alert */}
-          <Alert className="bg-blue-900/20 border-blue-700/50">
-            <Info className="h-4 w-4 text-blue-400" />
-            <AlertDescription className="text-blue-300 text-sm">
-              <strong>About XLM Collateral:</strong> XLM has a 75% loan-to-value
-              ratio. Your health factor must stay above 1.0 to avoid
-              liquidation.
-            </AlertDescription>
-          </Alert>
+          <div className="p-3 rounded bg-blue-900 bg-opacity-20 border border-blue-700 text-blue-300">
+            <div className="flex items-start gap-2">
+              <i className="fas fa-info-circle mt-0.5 text-blue-400"></i>
+              <div className="text-sm">
+                <strong>About XLM Collateral:</strong> XLM has a 75%
+                loan-to-value ratio. Your health factor must stay above 1.0 to
+                avoid liquidation.
+              </div>
+            </div>
+          </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 pt-2">
-            <Button
-              variant="outline"
+          <div className="flex justify-end space-x-3 pt-2">
+            <button
+              className="btn-secondary"
               onClick={onClose}
               disabled={loading}
-              className="flex-1 border-neutral-600 text-neutral-300 hover:bg-neutral-800 bg-transparent"
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
+              className="btn-secondary"
               onClick={handleSupplyCollateral}
               disabled={isSupplyDisabled}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium"
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <div className="loader mr-2"></div>
                   Supplying...
                 </>
               ) : (
                 <>
-                  <Shield className="mr-2 h-4 w-4" />
+                  <i className="fas fa-shield mr-2"></i>
                   Supply Collateral
                 </>
               )}
-            </Button>
+            </button>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }

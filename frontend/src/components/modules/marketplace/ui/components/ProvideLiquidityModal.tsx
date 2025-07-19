@@ -1,34 +1,24 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
-import {
-  TrendingUp,
-  Shield,
-  AlertTriangle,
-  Loader2,
-  Coins,
-  Info,
-  ArrowRight,
-} from "lucide-react";
+import type React from "react";
+import { useState, useEffect } from "react";
 import { useWalletContext } from "@/providers/wallet.provider";
-import { TOKENS, TRUSTBRIDGE_POOL_ID } from "@/config/contracts";
+import {
+  TOKENS,
+  TRUSTBRIDGE_POOL_ID,
+  NETWORK_CONFIG,
+} from "@/config/contracts";
 import { signTransaction } from "@/components/modules/auth/helpers/stellar-wallet-kit.helper";
 import { toast } from "sonner";
 
-// Import Blend SDK
+// Import Blend SDK and Stellar SDK
 import { PoolContractV2, RequestType } from "@blend-capital/blend-sdk";
+import {
+  TransactionBuilder,
+  xdr,
+  Account,
+  BASE_FEE,
+} from "@stellar/stellar-sdk";
 
 interface PoolReserve {
   symbol: string;
@@ -108,12 +98,10 @@ export function ProvideLiquidityModal({
   useEffect(() => {
     if (depositAmount && Number(depositAmount) > 0 && currentAsset) {
       setEstimating(true);
-
       setTimeout(() => {
         const amount = Number(depositAmount);
         const exchangeRate = 1.0;
         const bTokensEstimated = amount * exchangeRate;
-
         setEstimates({
           bTokensEstimated,
           supplyAPY: currentAsset.apy,
@@ -144,63 +132,137 @@ export function ProvideLiquidityModal({
     setDepositAmount(amount.toFixed(2));
   };
 
-  const handleProvideCapitalLiquidity = async () => {
-    if (!walletAddress) {
-      toast.error("Please connect your wallet first");
-      return;
-    }
-
-    if (!depositAmount || Number(depositAmount) <= 0) {
-      toast.error("Please enter a valid deposit amount");
-      return;
-    }
-
-    if (Number(depositAmount) > walletBalance) {
-      toast.error("Insufficient balance");
-      return;
-    }
-
-    setLoading(true);
-
+  const buildTransactionFromXDR = async (operationXdr: string) => {
+    if (!walletAddress) throw new Error("Wallet not connected");
     try {
-      const amountInt = BigInt(Math.floor(Number(depositAmount) * 1e7));
+      // Get account information from Horizon
+      const accountResponse = await fetch(
+        `${NETWORK_CONFIG.horizonUrl}/accounts/${walletAddress}`,
+      );
+      if (!accountResponse.ok) {
+        throw new Error(
+          "Failed to fetch account information. Please check your wallet connection.",
+        );
+      }
+      const accountData = await accountResponse.json();
 
+      // Create account object
+      const account = new Account(walletAddress, accountData.sequence);
+
+      // Parse the operation from XDR
+      const operation = xdr.Operation.fromXDR(operationXdr, "base64");
+
+      // Build transaction with proper fee and timeout
+      const transaction = new TransactionBuilder(account, {
+        fee: (Number.parseInt(BASE_FEE) * 10).toString(), // Increase fee for Soroban operations
+        networkPassphrase: NETWORK_CONFIG.networkPassphrase,
+      })
+        .addOperation(operation)
+        .setTimeout(300) // 5 minutes timeout
+        .build();
+
+      return transaction;
+    } catch (error) {
+      console.error("Error building transaction:", error);
+      if (error instanceof Error) {
+        if (error.message.includes("account not found")) {
+          throw new Error(
+            "Account not found. Please ensure your wallet is funded and connected to the correct network.",
+          );
+        }
+        throw new Error(`Failed to build transaction: ${error.message}`);
+      }
+      throw new Error("Failed to build transaction due to unknown error");
+    }
+  };
+
+  const validateTransaction = async () => {
+    if (!walletAddress || !currentAsset) return false;
+    try {
+      // Check if wallet is connected
+      if (!walletAddress) {
+        toast.error("Please connect your wallet first");
+        return false;
+      }
+
+      // Check balance
+      const hasBalance = walletBalance >= Number(depositAmount);
+      if (!hasBalance) {
+        toast.error(`Insufficient ${selectedAsset} balance`);
+        return false;
+      }
+
+      // Check if amount is valid
+      if (!depositAmount || Number(depositAmount) <= 0) {
+        toast.error("Please enter a valid deposit amount");
+        return false;
+      }
+
+      // Check if pool is deployed
       if (!TRUSTBRIDGE_POOL_ID) {
         toast.error(
           "TrustBridge pool not yet deployed. Please deploy the pool first.",
         );
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Error validating transaction:", error);
+      toast.error("Failed to validate transaction");
+      return false;
+    }
+  };
+
+  const handleProvideCapitalLiquidity = async () => {
+    setLoading(true);
+    try {
+      // Validate transaction first
+      const isValid = await validateTransaction();
+      if (!isValid) {
+        setLoading(false);
         return;
       }
 
-      if (!currentAsset) {
-        toast.error("Invalid asset selected");
-        return;
-      }
+      const amountInt = BigInt(Math.floor(Number(depositAmount) * 1e7));
 
-      toast.info("Simulating deposit transaction...");
-      const pool = new PoolContractV2(TRUSTBRIDGE_POOL_ID);
+      toast.info("Preparing transaction...");
+
+      // Create the pool contract instance
+      const pool = new PoolContractV2(TRUSTBRIDGE_POOL_ID!);
+
+      // Generate the supply operation XDR
       const depositOpXdr = pool.submit({
-        from: walletAddress,
-        spender: walletAddress,
-        to: walletAddress,
+        from: walletAddress!,
+        spender: walletAddress!,
+        to: walletAddress!,
         requests: [
           {
             request_type: RequestType.Supply,
-            address: currentAsset.address,
+            address: currentAsset!.address,
             amount: amountInt,
           },
         ],
       });
 
-      toast.info("Please sign the transaction in your wallet...");
-      const signedTx = await signTransaction(depositOpXdr);
+      toast.info("Building transaction...");
 
+      // Build the complete transaction
+      const transaction = await buildTransactionFromXDR(depositOpXdr);
+
+      toast.info("Please sign the transaction in your wallet...");
+
+      // Sign the transaction
+      const signedTx = await signTransaction(transaction);
+
+      // For now, we'll just show success since we don't have full Soroban submission
+      // In production, you would submit the transaction to the network
       toast.success(
-        `Successfully deposited ${depositAmount} ${selectedAsset}! ` +
-          `You received ${estimates.bTokensEstimated.toFixed(4)} b${selectedAsset} tokens.`,
+        `Transaction prepared successfully! ` +
+          `You will receive ${estimates.bTokensEstimated.toFixed(4)} b${selectedAsset} tokens.`,
       );
 
-      console.log("Deposit transaction completed:", {
+      console.log("Transaction signed successfully:", {
         amount: depositAmount,
         asset: selectedAsset,
         bTokensReceived: estimates.bTokensEstimated,
@@ -211,16 +273,26 @@ export function ProvideLiquidityModal({
       onClose();
     } catch (error) {
       console.error("Deposit transaction failed:", error);
-
       if (error instanceof Error) {
-        if (error.message.includes("User rejected")) {
+        if (
+          error.message.includes("User rejected") ||
+          error.message.includes("rejected")
+        ) {
           toast.error("Transaction cancelled by user");
         } else if (error.message.includes("insufficient")) {
-          toast.error("Insufficient balance or gas");
-        } else if (error.message.includes("simulation")) {
-          toast.error("Transaction simulation failed - please try again");
+          toast.error("Insufficient balance or gas fees");
+        } else if (error.message.includes("account not found")) {
+          toast.error(
+            "Account not found - please check your wallet connection and ensure it's funded",
+          );
+        } else if (error.message.includes("Failed to fetch account")) {
+          toast.error(
+            "Unable to connect to Stellar network - please check your connection",
+          );
+        } else if (error.message.includes("sequence")) {
+          toast.error("Transaction sequence error - please try again");
         } else {
-          toast.error(`Deposit failed: ${error.message}`);
+          toast.error(`Transaction failed: ${error.message}`);
         }
       } else {
         toast.error("Failed to complete deposit transaction");
@@ -254,203 +326,195 @@ export function ProvideLiquidityModal({
     Number(depositAmount) <= walletBalance;
   const hasEstimates = isValidAmount && estimates.bTokensEstimated > 0;
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[480px] bg-neutral-900 border-neutral-700 text-neutral-100">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-neutral-100 flex items-center gap-2">
-            <Coins className="h-5 w-5 text-emerald-400" />
-            Provide Liquidity
-          </DialogTitle>
-          <DialogDescription className="text-neutral-400">
-            Deposit assets to earn interest and receive bTokens representing
-            your share of the pool.
-          </DialogDescription>
-        </DialogHeader>
+  if (!isOpen) return null;
 
-        <div className="space-y-6">
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="card bg-dark-secondary p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-3">
+            <i className="fas fa-coins text-success text-xl"></i>
+            <div>
+              <h3 className="text-xl font-semibold text-white">
+                Provide Liquidity
+              </h3>
+              <p className="text-gray-400 text-sm">
+                Deposit assets to earn interest and receive bTokens representing
+                your share of the pool.
+              </p>
+            </div>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-white">
+            <i className="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div className="space-y-4">
           {/* Asset Selection */}
-          <div className="space-y-2">
-            <Label className="text-neutral-300 text-sm font-medium">
-              Asset
-            </Label>
+          <div>
+            <label className="form-label">Asset</label>
             <div className="grid grid-cols-3 gap-2">
               {availableAssets.map((asset) => (
-                <Button
+                <button
                   key={asset.symbol}
-                  variant={
-                    selectedAsset === asset.symbol ? "default" : "outline"
-                  }
-                  size="sm"
+                  className={`btn-secondary text-xs ${selectedAsset === asset.symbol ? "btn-primary" : ""}`}
                   onClick={() => setSelectedAsset(asset.symbol)}
-                  className={`${
-                    selectedAsset === asset.symbol
-                      ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                      : "bg-neutral-800 border-neutral-600 hover:bg-neutral-700 text-neutral-300"
-                  }`}
                 >
                   {asset.symbol}
-                </Button>
+                </button>
               ))}
             </div>
           </div>
 
           {/* Wallet Balance */}
-          <div className="flex items-center justify-between p-3 bg-neutral-800 rounded-lg border border-neutral-700">
-            <div className="flex items-center gap-2">
-              <Shield className="h-4 w-4 text-neutral-400" />
-              <span className="text-sm text-neutral-400">Wallet Balance</span>
-            </div>
-            <div className="text-right">
-              <div className="text-neutral-100 font-medium">
-                {walletBalance.toLocaleString()} {selectedAsset}
+          <div className="card p-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <i className="fas fa-shield text-gray-400"></i>
+                <span className="text-sm text-gray-400">Wallet Balance</span>
               </div>
-              <div className="text-xs text-neutral-500">
-                ~$
-                {(
-                  walletBalance * (selectedAsset === "USDC" ? 1 : 0.1)
-                ).toLocaleString()}
+              <div className="text-right">
+                <div className="text-white font-medium">
+                  {walletBalance.toLocaleString()} {selectedAsset}
+                </div>
+                <div className="text-xs text-gray-400">
+                  ~$
+                  {(
+                    walletBalance * (selectedAsset === "USDC" ? 1 : 0.1)
+                  ).toLocaleString()}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Amount Input */}
-          <div className="space-y-2">
-            <Label className="text-neutral-300 text-sm font-medium">
-              Amount to Deposit
-            </Label>
+          <div>
+            <label className="form-label">Amount to Deposit</label>
             <div className="relative">
-              <Input
+              <input
                 type="text"
                 value={depositAmount}
                 onChange={handleAmountChange}
                 placeholder="0.00"
-                className="bg-neutral-800 border-neutral-600 text-neutral-100 text-right pr-20"
+                className="form-input text-right pr-16"
               />
-              <Button
+              <button
                 type="button"
-                size="sm"
-                variant="ghost"
                 onClick={handleMaxClick}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-emerald-400 hover:text-emerald-300"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-success hover:text-green-300"
               >
                 MAX
-              </Button>
+              </button>
             </div>
-
             {/* Preset Buttons */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 mt-2">
               {[25, 50, 75].map((percentage) => (
-                <Button
+                <button
                   key={percentage}
-                  variant="outline"
-                  size="sm"
+                  className="btn-secondary text-xs flex-1"
                   onClick={() => handlePresetClick(percentage)}
-                  className="flex-1 bg-neutral-800 border-neutral-600 hover:bg-neutral-700 text-neutral-300"
                 >
                   {percentage}%
-                </Button>
+                </button>
               ))}
             </div>
           </div>
 
           {/* Transaction Preview */}
           {hasEstimates && (
-            <div className="space-y-3 p-4 bg-neutral-800 rounded-lg border border-neutral-700">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="h-4 w-4 text-emerald-400" />
-                <span className="text-sm font-medium text-neutral-300">
+            <div className="card p-4 border-t border-custom">
+              <div className="flex items-center gap-2 mb-3">
+                <i className="fas fa-arrow-up text-success"></i>
+                <span className="text-sm font-medium text-gray-300">
                   Transaction Preview
                 </span>
-                {estimating && (
-                  <Loader2 className="h-3 w-3 animate-spin text-emerald-400" />
-                )}
+                {estimating && <div className="loader"></div>}
               </div>
-
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-neutral-400">You will receive:</span>
-                  <span className="text-emerald-400 font-medium">
+                  <span className="text-gray-400">You will receive:</span>
+                  <span className="text-success font-medium">
                     {estimates.bTokensEstimated.toFixed(4)} b{selectedAsset}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-neutral-400">Supply APY:</span>
-                  <span className="text-emerald-400 font-medium">
+                  <span className="text-gray-400">Supply APY:</span>
+                  <span className="text-success font-medium">
                     {estimates.supplyAPY.toFixed(2)}%
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-neutral-400">Estimated Gas Fee:</span>
-                  <span className="text-neutral-300">
+                  <span className="text-gray-400">Estimated Gas Fee:</span>
+                  <span className="text-white">
                     {estimates.gasFee.toFixed(4)} XLM
                   </span>
                 </div>
-                <Separator className="bg-neutral-600" />
-                <div className="flex justify-between">
-                  <span className="text-neutral-400">Pool Total After:</span>
-                  <span className="text-neutral-300">
-                    ${estimates.totalSupplyAfter.toLocaleString()}
-                  </span>
+                <div className="border-t border-custom pt-2">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Pool Total After:</span>
+                    <span className="text-white">
+                      ${estimates.totalSupplyAfter.toLocaleString()}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           )}
 
           {/* Info Alert */}
-          <Alert className="bg-blue-900/40 border-blue-700 text-blue-300">
-            <Info className="h-4 w-4 !text-blue-400" />
-            <AlertDescription className="text-sm">
-              <strong>bTokens</strong> represent your share of the pool. They
-              earn interest automatically and can be redeemed for the underlying
-              asset at any time.
-            </AlertDescription>
-          </Alert>
+          <div className="p-3 rounded bg-blue-900 bg-opacity-20 border border-blue-700 text-blue-300">
+            <div className="flex items-start gap-2">
+              <i className="fas fa-info-circle mt-0.5 text-blue-400"></i>
+              <div className="text-sm">
+                <strong>bTokens</strong> represent your share of the pool. They
+                earn interest automatically and can be redeemed for the
+                underlying asset at any time.
+              </div>
+            </div>
+          </div>
 
           {/* Error States */}
           {depositAmount && Number(depositAmount) > walletBalance && (
-            <Alert
-              variant="destructive"
-              className="bg-red-900/40 border-red-700 text-red-300"
-            >
-              <AlertTriangle className="h-4 w-4 !text-red-400" />
-              <AlertDescription>
-                Insufficient balance. You have {walletBalance.toLocaleString()}{" "}
-                {selectedAsset} available.
-              </AlertDescription>
-            </Alert>
+            <div className="p-3 rounded bg-red-900 bg-opacity-20 border border-red-700 text-red-300">
+              <div className="flex items-start gap-2">
+                <i className="fas fa-exclamation-triangle mt-0.5 text-red-400"></i>
+                <div className="text-sm">
+                  Insufficient balance. You have{" "}
+                  {walletBalance.toLocaleString()} {selectedAsset} available.
+                </div>
+              </div>
+            </div>
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
-            <Button
-              variant="outline"
+          <div className="flex justify-end space-x-3">
+            <button
+              className="btn-secondary"
               onClick={onClose}
               disabled={loading}
-              className="flex-1 bg-neutral-800 border-neutral-600 hover:bg-neutral-700 text-neutral-300"
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
+              className="btn-primary"
               onClick={handleProvideCapitalLiquidity}
               disabled={!isValidAmount || loading || !walletAddress}
-              className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <div className="loader mr-2"></div>
                   Processing...
                 </>
               ) : (
                 <>
-                  <ArrowRight className="mr-2 h-4 w-4" />
+                  <i className="fas fa-arrow-right mr-2"></i>
                   Provide Liquidity
                 </>
               )}
-            </Button>
+            </button>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }

@@ -1,200 +1,168 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-} from "@/components/ui/accordion";
-import {
-  AlertCircle,
-  Wallet,
-  User,
-  ArrowRight,
-  FlaskConical,
-  CreditCard,
-  Shield,
-  MapPin,
-  Phone,
-} from "lucide-react";
-import { useDashboard } from "../../hooks/useDashboard.hook";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import Image from "next/image";
+import StatCard from "../cards/StatCard";
 
-export function DashboardOverview() {
-  const { loading, profile, address, walletName } = useDashboard();
-
-  const formatAddress = (addr: string) => {
-    if (!addr) return "Not connected";
-    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+export default function Dashboard() {
+  const handleManagePosition = () => {
+    alert(
+      "Position management functionality will be implemented in the full version.",
+    );
   };
 
-  if (loading) {
-    return (
-      <div className="p-4 md:p-6 space-y-6">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-12 w-full" />
-        <Card className="bg-neutral-800 border-neutral-700">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <Skeleton className="h-6 w-40" />
-              <Skeleton className="h-6 w-24" />
-            </div>
-          </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 px-6 pb-6">
-            {" "}
-            {/* Adjusted grid to 2 cols */}
-            <Skeleton className="h-16 w-full" />
-            <Skeleton className="h-16 w-full" />
-          </CardContent>
-          <CardFooter className="bg-neutral-700/50 p-4">
-            <Skeleton className="h-8 w-full" />
-          </CardFooter>
-        </Card>
-      </div>
-    );
-  }
-
   return (
-    <div className="p-4 md:p-6 space-y-6 text-neutral-200">
-      {!address && (
-        <Alert
-          variant="destructive"
-          className="bg-amber-900/40 border-amber-700 text-amber-300"
-        >
-          <AlertCircle className="h-4 w-4 !text-amber-300" />
-          <AlertTitle>Please connect your wallet</AlertTitle>
-          <AlertDescription>
-            The wallet address does not exist on the network. Please fund your
-            account!
-          </AlertDescription>
-        </Alert>
-      )}
+    <div className="container mx-auto px-4 md:px-6 pt-24 pb-16 max-w-6xl">
+      <h1 className="text-3xl font-bold mb-2">
+        Bienvenido de vuelta, <span className="text-success">GABU...HE3JH</span>
+      </h1>
+      <p className="text-gray-400 mb-6">
+        Revisa tus posiciones y actividad en un solo lugar
+      </p>
 
-      <Card className="bg-neutral-800 border-neutral-700 shadow-lg">
-        <CardHeader className="flex-row items-center justify-between pr-4">
-          <div className="flex items-center gap-3">
-            <FlaskConical className="h-7 w-7 text-emerald-400" />
-            <CardTitle className="text-lg font-medium text-neutral-100">
-              Account Overview
-            </CardTitle>
+      {/* Stats Cards Row */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <StatCard
+          title="Total Supplied"
+          value="$456,289"
+          change="+1.8%"
+          changeType="positive"
+          icon="fas fa-coins"
+        />
+        <StatCard
+          title="Total Borrowed"
+          value="$125,750"
+          change="+0.5%"
+          changeType="positive"
+          icon="fas fa-hand-holding-dollar"
+        />
+        <StatCard
+          title="Balance Disponible"
+          value="$330,539"
+          icon="fas fa-sack-dollar"
+        />
+        <StatCard
+          title="Préstamos Activos"
+          value="3"
+          icon="fas fa-file-contract"
+        />
+      </div>
+
+      {/* Activity Chart */}
+      <div className="card p-6 mb-8" style={{ height: "300px" }}>
+        <h2 className="text-lg font-medium mb-4">Actividad Reciente</h2>
+        <div className="flex items-center justify-center h-5/6 text-gray-400">
+          <div className="text-center">
+            <i className="fas fa-chart-line text-4xl mb-3"></i>
+            <p>Gráfica de actividad cargando...</p>
           </div>
-        </CardHeader>
+        </div>
+      </div>
 
-        <CardContent className="px-6 pb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-neutral-700 border border-neutral-700 rounded-lg overflow-hidden">
-            <div className="bg-neutral-800 p-4">
-              <p className="text-sm text-neutral-400 mb-1">Wallet Status</p>
-              <p
-                className={`text-xl font-semibold ${address ? "text-emerald-400" : "text-amber-400"}`}
-              >
-                {address ? "Connected" : "Disconnected"}
-              </p>
-            </div>
-            <div className="bg-neutral-800 p-4">
-              <p className="text-sm text-neutral-400 mb-1">Profile Status</p>
-              <p
-                className={`text-xl font-semibold ${profile ? "text-emerald-400" : "text-amber-400"}`}
-              >
-                {profile ? "Complete" : "Incomplete"}
-              </p>
-            </div>
-          </div>
-
-          <Accordion type="single" collapsible>
-            <AccordionItem value="item-1" className="border-none">
-              <AccordionContent className="pt-6 space-y-6">
-                {/* Wallet Details */}
-                <div className="p-4 rounded-lg bg-neutral-900/50 border border-neutral-700">
-                  <h3 className="font-semibold text-neutral-200 mb-3 flex items-center gap-2">
-                    <Wallet className="h-4 w-4 text-emerald-400" /> Wallet
-                    Information
-                  </h3>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between items-center">
-                      <span className="text-neutral-400 flex items-center gap-2">
-                        <CreditCard className="h-4 w-4" /> Address
-                      </span>
-                      <span className="font-mono text-neutral-300">
-                        {formatAddress(address || "")}
-                      </span>
+      {/* Current Positions Table */}
+      <div className="card p-6 mb-8">
+        <h2 className="text-lg font-medium mb-4">Posiciones Actuales</h2>
+        <div className="overflow-x-auto">
+          <table className="custom-table">
+            <thead>
+              <tr>
+                <th>Activo</th>
+                <th>Cantidad</th>
+                <th>APY</th>
+                <th>Colateral</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* USDC Position */}
+              <tr>
+                <td>
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 rounded-full overflow-hidden mr-3">
+                      <Image
+                        src="/img/tokens/usdc.png"
+                        alt="USDC Token"
+                        width={32}
+                        height={32}
+                      />
                     </div>
-                    {walletName && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-neutral-400 flex items-center gap-2">
-                          <Shield className="h-4 w-4" /> Wallet Type
-                        </span>
-                        <span className="font-medium text-neutral-300">
-                          {walletName}
-                        </span>
-                      </div>
-                    )}
+                    <div>
+                      <div className="font-medium">USDC</div>
+                      <div className="text-xs text-gray-400">USD Coin</div>
+                    </div>
                   </div>
-                </div>
-                {/* Profile Details */}
-                <div className="p-4 rounded-lg bg-neutral-900/50 border border-neutral-700">
-                  <h3 className="font-semibold text-neutral-200 mb-3 flex items-center gap-2">
-                    <User className="h-4 w-4 text-emerald-400" /> User Profile
-                  </h3>
-                  {profile ? (
-                    <div className="space-y-3 text-sm">
-                      <div className="flex justify-between items-center">
-                        <span className="text-neutral-400">Full Name</span>
-                        <span className="font-medium text-neutral-300">
-                          {profile.firstName} {profile.lastName}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-neutral-400 flex items-center gap-2">
-                          <MapPin className="h-4 w-4" /> Country
-                        </span>
-                        <span className="font-medium text-neutral-300">
-                          {profile.country}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-neutral-400 flex items-center gap-2">
-                          <Phone className="h-4 w-4" /> Phone
-                        </span>
-                        <span className="font-medium text-neutral-300">
-                          {profile.phoneNumber}
-                        </span>
+                </td>
+                <td>
+                  <div className="font-medium">120,000</div>
+                  <div className="text-xs text-gray-400">$120,000</div>
+                </td>
+                <td>
+                  <div className="text-success font-medium">3.2%</div>
+                </td>
+                <td>
+                  <div className="text-xs">-</div>
+                </td>
+                <td>
+                  <div className="bg-green-900 bg-opacity-20 text-green-400 text-xs inline-block px-2 py-1 rounded">
+                    Activo
+                  </div>
+                </td>
+                <td>
+                  <button
+                    className="btn-secondary text-xs px-2 py-1"
+                    onClick={handleManagePosition}
+                  >
+                    Gestionar
+                  </button>
+                </td>
+              </tr>
+              {/* XLM Position */}
+              <tr>
+                <td>
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-3 overflow-hidden">
+                      <img
+                        src="/img/tokens/xlm.png"
+                        alt="XLM"
+                        className="w-5 h-5 object-contain"
+                      />
+                    </div>
+                    <div>
+                      <div className="font-medium">XLM</div>
+                      <div className="text-xs text-gray-400">
+                        Stellar Lumens
                       </div>
                     </div>
-                  ) : (
-                    <p className="text-sm text-neutral-400 text-center py-4">
-                      No profile data available. Please complete your profile.
-                    </p>
-                  )}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </CardContent>
-
-        <CardFooter className="bg-emerald-900/40 p-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-neutral-700 flex items-center justify-center">
-              <Wallet className="h-4 w-4 text-emerald-400" />
-            </div>
-            <div className="w-6 h-6 rounded-full bg-neutral-700 flex items-center justify-center">
-              <User className="h-4 w-4 text-emerald-400" />
-            </div>
-          </div>
-          <a
-            href="#"
-            className="flex items-center gap-2 text-sm font-medium text-emerald-300 hover:text-emerald-200"
-          >
-            Dashboard <ArrowRight className="h-4 w-4" />
-          </a>
-        </CardFooter>
-      </Card>
+                  </div>
+                </td>
+                <td>
+                  <div className="font-medium">550,000</div>
+                  <div className="text-xs text-gray-400">$330,000</div>
+                </td>
+                <td>
+                  <div className="text-success font-medium">2.8%</div>
+                </td>
+                <td>
+                  <div className="text-xs">Sí (75%)</div>
+                </td>
+                <td>
+                  <div className="bg-blue-900 bg-opacity-20 text-blue-400 text-xs inline-block px-2 py-1 rounded">
+                    Collateral
+                  </div>
+                </td>
+                <td>
+                  <button
+                    className="btn-secondary text-xs px-2 py-1"
+                    onClick={handleManagePosition}
+                  >
+                    Gestionar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
