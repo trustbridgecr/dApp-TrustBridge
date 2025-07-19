@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Header } from "@/components/layouts/header/Header";
+import Header from "@/components/layouts/header/Header";
 import { useWalletContext } from "@/providers/wallet.provider";
 import { useRouter } from "next/navigation";
 
