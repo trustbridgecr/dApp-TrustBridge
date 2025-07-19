@@ -20,10 +20,6 @@ export default function HomePage() {
     }
   };
 
-  const handleLearnMore = () => {
-    alert("Learn more functionality will be implemented in the full version.");
-  };
-
   return (
     <div className="flex flex-col bg-dark-primary text-light ">
       <div className="flex-grow">
