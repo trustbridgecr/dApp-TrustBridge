@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import ActivityItem from "./AtivityItem"
+import ActivityItem from "./AtivityItem";
 
 const activityData = [
   {
@@ -44,19 +44,30 @@ const activityData = [
     token: "USDC",
     timestamp: "Jan 18, 02:00 PM",
   },
-]
+];
 
 export default function RecentActivityFeed() {
   return (
     <div className="card p-6 mb-8">
-      <h2 className="text-lg font-medium mb-4 text-gray-100">Actividad Reciente</h2>
+      <h2 className="text-lg font-medium mb-4 text-gray-100">
+        Actividad Reciente
+      </h2>
       <div className="h-72 overflow-y-auto pr-2 custom-scrollbar">
         {" "}
-
         {activityData.map((activity, index) => (
           <ActivityItem
             key={index}
-            type={activity.type as any} // Type assertion for simplicity with mock data
+            type={
+              activity.type as
+                | "supplied"
+                | "borrowed"
+                | "repaid"
+                | "collateral"
+                | "trbt_updated"
+                | "backstop_claim"
+                | "frozen_pool"
+                | "loan_defaulted"
+            }
             description={activity.description}
             amount={activity.amount}
             token={activity.token}
@@ -64,24 +75,6 @@ export default function RecentActivityFeed() {
           />
         ))}
       </div>
-
-      {/* Custom scrollbar styles for better appearance */}
-      <style jsx global>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #2d3748;
-          border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #4a5568;
-          border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #6b7280; 
-        }
-      `}</style>
     </div>
-  )
+  );
 }
