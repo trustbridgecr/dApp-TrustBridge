@@ -52,7 +52,7 @@ export default function RecentActivityFeed() {
       <h2 className="text-lg font-medium mb-4 text-gray-100">Actividad Reciente</h2>
       <div className="h-72 overflow-y-auto pr-2 custom-scrollbar">
         {" "}
-        {/* Added custom-scrollbar for better visibility */}
+
         {activityData.map((activity, index) => (
           <ActivityItem
             key={index}
@@ -64,21 +64,22 @@ export default function RecentActivityFeed() {
           />
         ))}
       </div>
+
       {/* Custom scrollbar styles for better appearance */}
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 8px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: #2d3748; /* Darker background for the track */
+          background: #2d3748;
           border-radius: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #4a5568; /* Grayish thumb */
+          background: #4a5568;
           border-radius: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #6b7280; /* Lighter gray on hover */
+          background: #6b7280; 
         }
       `}</style>
     </div>
