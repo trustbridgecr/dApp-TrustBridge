@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import StatCard from "../cards/StatCard";
+import RecentActivityFeed from "../activity/RecentActivityFeed";
 
 export default function Dashboard() {
   const handleManagePosition = () => {
@@ -48,15 +49,7 @@ export default function Dashboard() {
       </div>
 
       {/* Activity Chart */}
-      <div className="card p-6 mb-8" style={{ height: "300px" }}>
-        <h2 className="text-lg font-medium mb-4">Actividad Reciente</h2>
-        <div className="flex items-center justify-center h-5/6 text-gray-400">
-          <div className="text-center">
-            <i className="fas fa-chart-line text-4xl mb-3"></i>
-            <p>Gráfica de actividad cargando...</p>
-          </div>
-        </div>
-      </div>
+      <RecentActivityFeed />
 
       {/* Current Positions Table */}
       <div className="card p-6 mb-8">
