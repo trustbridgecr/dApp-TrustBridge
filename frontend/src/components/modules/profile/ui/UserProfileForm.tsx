@@ -45,6 +45,7 @@ export default function Profile() {
   const onSubmit = async (data: z.infer<typeof profileSchema>) => {
     try {
       await saveProfile(data);
+      // No reload, context is updated by saveProfile
       toast.success("Profile updated successfully!");
     } catch (error) {
       toast.error("Failed to update profile. Please try again.");
