@@ -59,7 +59,6 @@ export default function BorrowerMarketplacePage() {
   const [collateralRatio] = useState('150%');
   const [totalBorrowed] = useState('$30,153');
   const [totalCollateral] = useState('$45,230');
-  const [healthFactor] = useState('1.5');
   const [amount, setAmount] = useState('0.00');
 
   const handleBorrowUSDC = () => {
@@ -110,7 +109,7 @@ export default function BorrowerMarketplacePage() {
             </tr>
           </thead>
           <tbody>
-            {assets.map((asset, index) => (
+            {assets.map((asset) => (
               <tr key={asset.symbol} className="border-t border-gray-700 hover:bg-gray-750">
                 <td className="p-4">
                   <div className="flex items-center gap-3">

@@ -8,7 +8,7 @@ import { useWalletContext } from '@/providers/wallet.provider';
 
 export default function LenderPage() {
   const router = useRouter();
-  const { walletAddress} = useWalletContext();
+  useWalletContext();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

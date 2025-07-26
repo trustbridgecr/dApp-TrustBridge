@@ -77,7 +77,7 @@ export default function RoleSelectionModal({ isOpen, onClose }: RoleSelectionMod
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-white mb-2">
-                  I'm a Lender
+                  I &apos; m a Lender
                 </h3>
                 <p className="text-gray-400 text-sm mb-3">
                   Supply assets to earn interest and provide liquidity to the market
@@ -107,7 +107,7 @@ export default function RoleSelectionModal({ isOpen, onClose }: RoleSelectionMod
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-white mb-2">
-                  I'm a Borrower
+                  I &apos; m a Borrower
                 </h3>
                 <p className="text-gray-400 text-sm mb-3">
                   Borrow assets by providing collateral for your financial needs
