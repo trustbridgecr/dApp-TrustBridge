@@ -11,8 +11,16 @@ export default function BorrowerPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userRole = localStorage.getItem('userRole');
-    if (userRole !== 'borrower') {
+    try {
+      const userRole = localStorage.getItem('userRole');
+      if (userRole !== 'borrower') {
+        router.push('/dashboard/marketplace');
+        return;
+      }
+
+      document.cookie = `userRole=${userRole}; path=/`;
+    } catch (error) {
+      console.error('Failed to access localStorage:', error);
       router.push('/dashboard/marketplace');
       return;
     }

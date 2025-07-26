@@ -13,7 +13,11 @@ export default function BorrowerLayout({ children }: BorrowerLayoutProps) {
   const router = useRouter();
 
   const handleBackToMarketplace = () => {
-    localStorage.removeItem('userRole');
+    try {
+      localStorage.removeItem('userRole');
+    } catch (error) {
+      console.warn('Failed to remove userRole from localStorage:', error);
+    }
     router.push('/dashboard/marketplace');
   };
 

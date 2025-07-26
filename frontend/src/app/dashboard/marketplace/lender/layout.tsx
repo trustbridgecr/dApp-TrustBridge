@@ -13,7 +13,12 @@ export default function LenderLayout({ children }: LenderLayoutProps) {
   const router = useRouter();
 
   const handleBackToMarketplace = () => {
-    localStorage.removeItem('userRole');
+    try {
+      localStorage.removeItem('userRole');
+      document.cookie = 'userRole=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+    } catch (error) {
+      console.warn('Failed to remove userRole from localStorage:', error);
+    }
     router.push('/dashboard/marketplace');
   };
 
@@ -31,9 +36,9 @@ export default function LenderLayout({ children }: LenderLayoutProps) {
                 <ArrowLeft className="w-5 h-5" />
                 <span>Back to Marketplace</span>
               </button>
-              
+
               <div className="h-6 w-px bg-gray-600"></div>
-              
+
               <div className="flex items-center space-x-2">
                 <TrendingUp className="w-6 h-6 text-green-400" />
                 <span className="text-xl font-semibold text-white">
@@ -43,14 +48,16 @@ export default function LenderLayout({ children }: LenderLayoutProps) {
             </div>
 
             <div className="flex items-center space-x-6">
-              {/* Quick Stats */}
+                {/* Quick Stats */}
+                {/* You can fetch these stats from an API or context */}
+                {/* Example with useState/useEffect for demo purposes */}
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2 text-sm">
                   <Wallet className="w-4 h-4 text-blue-400" />
                   <span className="text-gray-400">Total Supplied:</span>
                   <span className="text-white font-medium">$0.00</span>
                 </div>
-                
+
                 <div className="flex items-center space-x-2 text-sm">
                   <Percent className="w-4 h-4 text-green-400" />
                   <span className="text-gray-400">Avg. APY:</span>
