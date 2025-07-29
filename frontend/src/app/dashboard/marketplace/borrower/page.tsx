@@ -10,8 +10,8 @@ export default function BorrowerMarketplace() {
   const router = useRouter();
 
   useEffect(() => {
+    // If no role is set, redirect to marketplace entry
     if (!role) {
-      // If no role is set, redirect to marketplace entry
       router.push("/dashboard/marketplace");
     } else if (role !== "borrower") {
       // If role is set but not borrower, redirect to correct role page
@@ -19,6 +19,7 @@ export default function BorrowerMarketplace() {
     }
   }, [role, router]);
 
+  // Show loading while checking role
   if (!role) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -30,6 +31,7 @@ export default function BorrowerMarketplace() {
     );
   }
 
+  // Show loading while redirecting
   if (role !== "borrower") {
     return (
       <div className="flex items-center justify-center min-h-screen">

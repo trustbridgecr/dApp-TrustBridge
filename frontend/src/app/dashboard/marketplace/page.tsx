@@ -8,16 +8,16 @@ import { useRoleContext } from "@/providers/role.provider";
 export default function MarketplaceEntry() {
   const { role, setRole } = useRoleContext();
   const [modalOpen, setModalOpen] = useState(false);
+  const [hasShownModal, setHasShownModal] = useState(false);
   const router = useRouter();
 
+  // Show modal only once when component mounts
   useEffect(() => {
-    if (!role) {
+    if (!hasShownModal) {
       setModalOpen(true);
-    } else {
-      // If role is already set, redirect to the appropriate page
-      router.push(`/dashboard/marketplace/${role}`);
+      setHasShownModal(true);
     }
-  }, [role, router]);
+  }, [hasShownModal]);
 
   // Get the last selected role from localStorage as fallback
   const getLastSelectedRole = (): "lender" | "borrower" => {
@@ -39,23 +39,29 @@ export default function MarketplaceEntry() {
     router.push(`/dashboard/marketplace/${selectedRole}`);
   };
 
-  if (!role) {
-    return (
-      <RoleSelectionModal
-        isOpen={modalOpen}
-        onRoleSelect={handleRoleSelect}
-        currentRole={getLastSelectedRole()}
-      />
-    );
-  }
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    // If user closes modal without selecting, redirect to lender by default
+    if (!role) {
+      setRole("lender");
+      router.push("/dashboard/marketplace/lender");
+    } else {
+      router.push(`/dashboard/marketplace/${role}`);
+    }
+  };
 
-  // Show loading while redirecting
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="text-center">
         <div className="loader mb-4"></div>
-        <p className="text-gray-400">Redirecting to your marketplace...</p>
+        <p className="text-gray-400">Loading marketplace...</p>
       </div>
+      <RoleSelectionModal
+        isOpen={modalOpen}
+        onClose={handleCloseModal}
+        onRoleSelect={handleRoleSelect}
+        currentRole={getLastSelectedRole()}
+      />
     </div>
   );
 }

@@ -29,7 +29,11 @@ export default function RoleSelectionModal({
 
   const handleRoleSelect = (role: "lender" | "borrower") => {
     setSelectedRole(role);
-    onRoleSelect?.(role);
+  };
+
+  const handleConfirm = () => {
+    // Immediately call onRoleSelect and let the parent handle the navigation
+    onRoleSelect?.(selectedRole);
   };
 
   if (!isOpen) return null;
@@ -37,15 +41,17 @@ export default function RoleSelectionModal({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="bg-slate-800 rounded-2xl p-8 max-w-md w-full relative">
-        {/* Close Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-4 right-4 text-gray-400 hover:text-white"
-          onClick={onClose}
-        >
-          <X className="h-5 w-5" />
-        </Button>
+        {/* Close Button - Only show if onClose is provided */}
+        {onClose && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            onClick={onClose}
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        )}
 
         {/* Header */}
         <div className="text-center mb-8">
@@ -137,8 +143,18 @@ export default function RoleSelectionModal({
           </Card>
         </div>
 
+        {/* Confirm Button */}
+        <div className="flex justify-center">
+          <Button
+            onClick={handleConfirm}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-2 rounded-lg font-medium"
+          >
+            Continue as {selectedRole}
+          </Button>
+        </div>
+
         {/* Footer */}
-        <p className="text-center text-gray-500 text-xs">
+        <p className="text-center text-gray-500 text-xs mt-4">
           Your preference will be saved for future visits
         </p>
       </div>
