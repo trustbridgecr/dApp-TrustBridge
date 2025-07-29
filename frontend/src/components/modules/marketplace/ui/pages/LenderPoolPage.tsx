@@ -54,20 +54,26 @@ export default function LenderPoolPage() {
   ];
 
   return (
-    <main className="container mx-auto px-4 md:px-6 pt-24 pb-16 max-w-6xl">
+    <main className="mx-auto px-4 md:px-6 pt-24 pb-16 max-w-6xl">
       <div className="space-y-6">
         {/* Header */}
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold mb-2">
-            TrustBridge-MicroLoans Pool
-          </h1>
-          <p className="text-sm text-gray-400 font-mono">
-            Oracle:
-            CCYHURAC...CCTHURACSYTNZ2U6SUUSF245AGURQOQ4FC7B1LN5DMLRTLCC4H44
-          </p>
-          <div className="flex gap-4 text-sm">
-            <span className="text-gray-300">4 Max Positions</span>
-            <span className="text-gray-300">15% Backstop Rate</span>
+        <div className="flex w-full justify-between space-y-2">
+          <div className="flex flex-col">
+            <h1 className="text-3xl font-bold mb-2">
+              TrustBridge-MicroLoans Pool
+            </h1>
+            <p className="text-sm text-gray-400 font-mono">
+              Oracle:
+              CCYHURAC...CCTHURACSYTNZ2U6SUUSF245AGURQOQ4FC7B1LN5DMLRTLCC4H44
+            </p>
+          </div>
+          <div className="flex items-center gap-4 text-sm">
+            <span className="text-gray-100 bg-gray-800 p-1.5 rounded-md">
+              4 Max Positions
+            </span>
+            <span className="text-gray-100 bg-gray-800 p-1.5 rounded-md">
+              15% Backstop Rate
+            </span>
           </div>
         </div>
 
@@ -96,7 +102,7 @@ export default function LenderPoolPage() {
 
           <TabsContent value="supply" className="space-y-6">
             {/* Assets Table */}
-            <Card className="bg-neutral-800 border-neutral-700">
+            <Card className="card">
               <CardContent className="p-0">
                 <div className="overflow-x-auto">
                   <table className="w-full">
@@ -165,7 +171,7 @@ export default function LenderPoolPage() {
             </Card>
 
             {/* Amount Input Section */}
-            <Card className="bg-neutral-800 border-neutral-700">
+            <Card className="card">
               <CardContent className="p-6">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
@@ -190,9 +196,9 @@ export default function LenderPoolPage() {
 
             {/* Information Cards */}
             <div className="grid md:grid-cols-2 gap-6">
-              <Card className="bg-neutral-800 border-neutral-700">
+              <Card className="card">
                 <CardHeader>
-                  <CardTitle className="text-[#35bb64]">
+                  <CardTitle className="text-[#35bb64] text-3xl">
                     Lender Benefits
                   </CardTitle>
                 </CardHeader>
@@ -206,9 +212,11 @@ export default function LenderPoolPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-neutral-800 border-neutral-700">
+              <Card className="card">
                 <CardHeader>
-                  <CardTitle className="text-[#35bb64]">How It Works</CardTitle>
+                  <CardTitle className="text-[#35bb64] text-3xl">
+                    How It Works
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {howItWorks.map((step, index) => (
