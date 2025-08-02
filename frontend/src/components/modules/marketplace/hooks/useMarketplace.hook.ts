@@ -46,6 +46,7 @@ export function useMarketplace() {
   const [showSupplyXLMModal, setShowSupplyXLMModal] = useState(false);
   const [showProvideLiquidityModal, setShowProvideLiquidityModal] =
     useState(false);
+  const [showRoleSelectionModal, setShowRoleSelectionModal] = useState(false);
 
   // Use real-time pool data from hook
   const realTimePoolData = usePoolData();
@@ -173,6 +174,8 @@ export function useMarketplace() {
   const openProvideLiquidityModal = () => setShowProvideLiquidityModal(true);
   const closeProvideLiquidityModal = () => setShowProvideLiquidityModal(false);
 
+  const closeRoleSelectionModal = () => setShowRoleSelectionModal(false);
+
   // Success handlers
   const handleSupplySuccess = () => {
     realTimePoolData.refetch();
@@ -220,9 +223,11 @@ export function useMarketplace() {
     closeSupplyXLMModal,
     openProvideLiquidityModal,
     closeProvideLiquidityModal,
+    showRoleSelectionModal,
 
     // Success handlers
     handleSupplySuccess,
+    closeRoleSelectionModal,
 
     // Computed values
     isWalletConnected,
