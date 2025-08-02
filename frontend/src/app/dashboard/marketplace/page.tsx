@@ -45,7 +45,7 @@ export default function MarketplaceEntry() {
     // If user closes modal without selecting, redirect to borrower by default
     if (!role) {
       setRole("borrower");
-      router.push("/dashboard/marketplace/lender");
+      router.push("/dashboard/marketplace/borrower");
     } else {
       router.push(`/dashboard/marketplace/${role}`);
     }
