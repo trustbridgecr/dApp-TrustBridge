@@ -1,145 +1,162 @@
+"use client";
 
-'use client';
-
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { X, TrendingUp, TrendingDown, Info } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { X, TrendingUp, Flame } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 interface RoleSelectionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
+  currentRole?: "lender" | "borrower";
+  onRoleSelect?: (role: "lender" | "borrower") => void;
 }
 
-export default function RoleSelectionModal({ isOpen, onClose }: RoleSelectionModalProps) {
-  const router = useRouter();
-  const [selectedRole, setSelectedRole] = useState<'lender' | 'borrower' | null>(null);
+export default function RoleSelectionModal({
+  isOpen = true,
+  onClose,
+  currentRole = "lender",
+  onRoleSelect,
+}: RoleSelectionModalProps) {
+  const [selectedRole, setSelectedRole] = useState<"lender" | "borrower">(
+    currentRole,
+  );
 
-  const handleRoleSelection = (role: 'lender' | 'borrower') => {
+  // Update selected role when currentRole prop changes
+  useEffect(() => {
+    setSelectedRole(currentRole);
+  }, [currentRole]);
+
+  const handleRoleSelect = (role: "lender" | "borrower") => {
     setSelectedRole(role);
   };
 
   const handleConfirm = () => {
-    if (!selectedRole) return;
-
-    localStorage.setItem('userRole', selectedRole);
-
-   
-    if (selectedRole === 'borrower') {
-      router.push('/dashboard/marketplace/borrower');
-    } else {
-      router.push('/dashboard/marketplace/lender');
-    }
-
-    onClose();
-    setSelectedRole(null);
-  };
-
-  const handleCancel = () => {
-    setSelectedRole(null);
-    onClose();
+    // Immediately call onRoleSelect and let the parent handle the navigation
+    onRoleSelect?.(selectedRole);
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gray-800 rounded-xl p-8 max-w-md w-full mx-4 border border-gray-700">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Choose Your Role</h2>
-            <p className="text-gray-400 text-sm">
-              Select how you want to interact with TrustBridge
-            </p>
-          </div>
-          <button
-            onClick={handleCancel}
-            className="text-gray-400 hover:text-white transition-colors"
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+      <div className="bg-slate-800 rounded-2xl p-8 max-w-md w-full relative">
+        {/* Close Button - Only show if onClose is provided */}
+        {onClose && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            onClick={onClose}
           >
-            <X className="w-6 h-6" />
-          </button>
+            <X className="h-5 w-5" />
+          </Button>
+        )}
+
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-white mb-3">
+            Choose Your Path
+          </h2>
+          <p className="text-gray-400 text-sm">
+            How would you like to participate in our marketplace?
+          </p>
+          <div className="mt-4">
+            <span className="text-gray-400 text-sm">Selected role: </span>
+            <span
+              className={
+                selectedRole === "lender" ? "text-green-400" : "text-orange-400"
+              }
+            >
+              {selectedRole}
+            </span>
+          </div>
         </div>
 
+        {/* Role Options */}
         <div className="space-y-4 mb-6">
-         
-          <div
-            onClick={() => handleRoleSelection('lender')}
-            className={`cursor-pointer rounded-lg border-2 p-6 transition-all ${
-              selectedRole === 'lender'
-                ? 'border-green-500 bg-green-500/10'
-                : 'border-gray-600 hover:border-gray-500'
+          <Card
+            className={`p-6 cursor-pointer transition-all duration-200 ${
+              selectedRole === "lender"
+                ? "bg-slate-700 border-2 border-green-500"
+                : "bg-slate-700 border border-slate-600 hover:border-slate-500"
             }`}
+            onClick={() => handleRoleSelect("lender")}
           >
-            <div className="flex items-start space-x-4">
-              <div className={`p-3 rounded-lg ${
-                selectedRole === 'lender' ? 'bg-green-500' : 'bg-gray-700'
-              }`}>
-                <TrendingUp className="w-6 h-6 text-white" />
+            <div className="flex items-start gap-4">
+              <div className="bg-slate-600 p-2 rounded-lg">
+                <TrendingUp className="h-5 w-5 text-green-400" />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  I &apos; m a Lender
-                </h3>
-                <p className="text-gray-400 text-sm mb-3">
-                  Supply assets to earn interest and provide liquidity to the market
-                </p>
-                <div className="flex items-center space-x-2 text-xs text-green-400">
-                  <Info className="w-3 h-3" />
-                  <span>Earn up to 15% APY on your assets</span>
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="text-white font-semibold">
+                    I&apos;m a Lender
+                  </h3>
+                  {selectedRole === "lender" && (
+                    <span className="text-xs bg-green-500 text-white px-2 py-1 rounded">
+                      Current
+                    </span>
+                  )}
                 </div>
+                <p className="text-green-400 text-sm font-medium mb-2">
+                  Supply & Earn
+                </p>
+                <p className="text-gray-400 text-sm">
+                  Provide liquidity to earn competitive yields on your crypto
+                  assets
+                </p>
               </div>
             </div>
-          </div>
+          </Card>
 
-          {/* Borrower Option */}
-          <div
-            onClick={() => handleRoleSelection('borrower')}
-            className={`cursor-pointer rounded-lg border-2 p-6 transition-all ${
-              selectedRole === 'borrower'
-                ? 'border-red-500 bg-red-500/10'
-                : 'border-gray-600 hover:border-gray-500'
+          <Card
+            className={`p-6 cursor-pointer transition-all duration-200 ${
+              selectedRole === "borrower"
+                ? "bg-slate-700 border-2 border-orange-500"
+                : "bg-slate-700 border border-slate-600 hover:border-slate-500"
             }`}
+            onClick={() => handleRoleSelect("borrower")}
           >
-            <div className="flex items-start space-x-4">
-              <div className={`p-3 rounded-lg ${
-                selectedRole === 'borrower' ? 'bg-red-500' : 'bg-gray-700'
-              }`}>
-                <TrendingDown className="w-6 h-6 text-white" />
+            <div className="flex items-start gap-4">
+              <div className="bg-slate-600 p-2 rounded-lg">
+                <Flame className="h-5 w-5 text-orange-400" />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  I &apos; m a Borrower
-                </h3>
-                <p className="text-gray-400 text-sm mb-3">
-                  Borrow assets by providing collateral for your financial needs
-                </p>
-                <div className="flex items-center space-x-2 text-xs text-red-400">
-                  <Info className="w-3 h-3" />
-                  <span>Borrow starting from 6.8% APY</span>
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="text-white font-semibold">
+                    I&apos;m a Borrower
+                  </h3>
+                  {selectedRole === "borrower" && (
+                    <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded">
+                      Current
+                    </span>
+                  )}
                 </div>
+                <p className="text-orange-400 text-sm font-medium mb-2">
+                  Borrow & Build
+                </p>
+                <p className="text-gray-400 text-sm">
+                  Access instant liquidity by using your crypto as collateral
+                </p>
               </div>
             </div>
-          </div>
+          </Card>
         </div>
 
-        <div className="flex space-x-4">
-          <button
-            onClick={handleCancel}
-            className="flex-1 px-4 py-3 rounded-lg border border-gray-600 text-gray-400 hover:text-white hover:border-gray-500 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
+        {/* Confirm Button */}
+        <div className="flex justify-center">
+          <Button
             onClick={handleConfirm}
-            disabled={!selectedRole}
-            className={`flex-1 px-4 py-3 rounded-lg font-medium transition-colors ${
-              selectedRole
-                ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                : 'bg-gray-700 text-gray-500 cursor-not-allowed'
-            }`}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-2 rounded-lg font-medium"
           >
-            Continue
-          </button>
+            Continue as {selectedRole}
+          </Button>
         </div>
+
+        {/* Footer */}
+        <p className="text-center text-gray-500 text-xs mt-4">
+          Your preference will be saved for future visits
+        </p>
       </div>
     </div>
   );

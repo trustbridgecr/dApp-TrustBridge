@@ -1,48 +1,48 @@
-// frontend/src/app/dashboard/marketplace/lender/page.tsx
+
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import LenderMarketplacePage from '@/components/modules/marketplace/ui/pages/LenderMarketPlacePage';
-import { useWalletContext } from '@/providers/wallet.provider';
+import { useRoleContext } from "@/providers/role.provider";
 
-export default function LenderPage() {
+export default function LenderMarketplace() {
+  const { role } = useRoleContext();
   const router = useRouter();
-  useWalletContext();
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    
-    const userRole = localStorage.getItem('userRole');
-    if (userRole !== 'lender') {
-      router.push('/dashboard/marketplace');
-      return;
+    // If no role is set, redirect to marketplace entry
+    if (!role) {
+      router.push("/dashboard/marketplace");
+    } else if (role !== "lender") {
+      // If role is set but not lender, redirect to correct role page
+      router.push(`/dashboard/marketplace/${role}`);
     }
-    setLoading(false);
-  }, [router]);
+  }, [role, router]);
 
-  if (loading) {
+  // Show loading while checking role
+  if (!role) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-500"></div>
+        <div className="text-center">
+          <div className="loader mb-4"></div>
+          <p className="text-gray-400">Loading marketplace...</p>
+        </div>
       </div>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-green-900 to-blue-900">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Lender Dashboard
-          </h1>
-          <p className="text-gray-300">
-            Supply assets and earn interest on your deposits
-          </p>
+  // Show loading while redirecting
+  if (role !== "lender") {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="loader mb-4"></div>
+          <p className="text-gray-400">Redirecting to your marketplace...</p>
         </div>
-        
-        <LenderMarketplacePage />
       </div>
-    </div>
-  );
+    );
+  }
+
+  return <LenderMarketplacePage />;
 }

@@ -1,54 +1,70 @@
 'use client';
+import { useRoleContext } from "@/providers/role.provider";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import BorrowerPoolPage from '@/components/modules/marketplace/ui/pages/BorrowerPoolPage';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import BorrowerMarketplacePage from '@/components/modules/marketplace/ui/pages/BorrowerMarketPlacePage';
-import { useWalletContext  } from '@/providers/wallet.provider';
-
-export default function BorrowerPage() {
+export default function BorrowerMarketplace() {
+  const { role, isLoading } = useRoleContext();
   const router = useRouter();
-  useWalletContext();
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const userRole = localStorage.getItem('userRole');
-      if (userRole !== 'borrower') {
-        router.push('/dashboard/marketplace');
-        return;
-      }
-
-      document.cookie = `userRole=${userRole}; path=/`;
-    } catch (error) {
-      console.error('Failed to access localStorage:', error);
-      router.push('/dashboard/marketplace');
+    
+    if (isLoading) return;
+    
+    console.log('BorrowerMarketplace - Role loaded:', role);
+    
+    // If no role is set after loading, redirect to marketplace entry
+    if (!role) {
+      console.log('No role found, redirecting to marketplace');
+      router.push("/dashboard/marketplace");
+      return;
+    } 
+    
+    if (role !== "borrower") {
+      // If role is set but not borrower, redirect to correct role page
+      console.log('Role is not borrower, redirecting to:', `/dashboard/marketplace/${role}`);
+      router.push(`/dashboard/marketplace/${role}`);
       return;
     }
-    setLoading(false);
-  }, [router]);
 
-  if (loading) {
+    console.log('Role is borrower, staying on page');
+  }, [role, isLoading, router]);
+
+  // Show loading while the role provider is loading
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+        <div className="text-center">
+          <div className="loader mb-4"></div>
+          <p className="text-gray-400">Loading user role...</p>
+        </div>
       </div>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Borrower Dashboard
-          </h1>
-          <p className="text-gray-300">
-            Manage your borrowing positions and collateral
-          </p>
+  if (!role) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="loader mb-4"></div>
+          <p className="text-gray-400">Redirecting to marketplace...</p>
         </div>
-        
-        <BorrowerMarketplacePage />
       </div>
-    </div>
-  );
+    );
+  }
+
+
+  if (role !== "borrower") {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="loader mb-4"></div>
+          <p className="text-gray-400">Redirecting to your marketplace...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return <BorrowerPoolPage />;
 }

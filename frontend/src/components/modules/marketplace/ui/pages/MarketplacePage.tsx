@@ -541,5 +541,6 @@ export default function Marketplace() {
         poolData={mockPoolData}
       />
     </main>
+     /* RoleSelectionModal is handled by parent pages */
   );
 }
