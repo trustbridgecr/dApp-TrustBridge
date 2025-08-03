@@ -228,9 +228,6 @@ export function useMarketplace() {
     openProvideLiquidityModal,
     closeProvideLiquidityModal,
 
-    showRoleSelectionModal,
-
-
     // Success handlers
     handleSupplySuccess,
     closeRoleSelectionModal,

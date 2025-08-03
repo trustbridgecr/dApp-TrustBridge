@@ -9,9 +9,8 @@ interface RoleContextType {
   role: Role | null;
   setRole: (role: Role) => void;
   clearRole: () => void;
-
   isLoading: boolean; 
-
+}
 
 const RoleContext = createContext<RoleContextType | undefined>(undefined);
 
