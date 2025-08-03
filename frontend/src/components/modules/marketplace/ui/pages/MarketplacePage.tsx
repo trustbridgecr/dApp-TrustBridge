@@ -5,6 +5,7 @@ import { BorrowModal } from "../components/BorrowModal";
 import { ProvideLiquidityModal } from "../components/ProvideLiquidityModal";
 import { SupplyUSDCModal } from "../components/SupplyUSDCModal";
 import { SupplyXLMCollateralModal } from "../components/SupplyXLMCollateralModal";
+
 // Pool Data Interface
 interface PoolReserve {
   symbol: string;
@@ -540,6 +541,7 @@ export default function Marketplace() {
         onClose={closeProvideLiquidityModal}
         poolData={mockPoolData}
       />
+      {/* RoleSelectionModal is handled by parent pages */}
     </main>
   );
 }

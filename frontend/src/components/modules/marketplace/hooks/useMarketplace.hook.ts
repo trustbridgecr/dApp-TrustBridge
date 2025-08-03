@@ -46,6 +46,7 @@ export function useMarketplace() {
   const [showSupplyXLMModal, setShowSupplyXLMModal] = useState(false);
   const [showProvideLiquidityModal, setShowProvideLiquidityModal] =
     useState(false);
+  const [showRoleSelectionModal, setShowRoleSelectionModal] = useState(false);
 
   // Use real-time pool data from hook
   const realTimePoolData = usePoolData();
@@ -85,6 +86,9 @@ export function useMarketplace() {
     // Use real-time pool data loading state
     setLoading(realTimePoolData.loading);
   }, [realTimePoolData.loading]);
+
+  // Don't show role selection modal automatically in MarketplacePage
+  // It will be handled by the parent pages
 
   const handleDeployPool = async () => {
     if (!walletAddress) {
@@ -173,6 +177,8 @@ export function useMarketplace() {
   const openProvideLiquidityModal = () => setShowProvideLiquidityModal(true);
   const closeProvideLiquidityModal = () => setShowProvideLiquidityModal(false);
 
+  const closeRoleSelectionModal = () => setShowRoleSelectionModal(false);
+
   // Success handlers
   const handleSupplySuccess = () => {
     realTimePoolData.refetch();
@@ -196,6 +202,7 @@ export function useMarketplace() {
     showSupplyUSDCModal,
     showSupplyXLMModal,
     showProvideLiquidityModal,
+    showRoleSelectionModal,
 
     // Data
     mockPoolData,
@@ -220,6 +227,7 @@ export function useMarketplace() {
     closeSupplyXLMModal,
     openProvideLiquidityModal,
     closeProvideLiquidityModal,
+    closeRoleSelectionModal,
 
     // Success handlers
     handleSupplySuccess,
