@@ -1,19 +1,23 @@
 "use client";
+
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 type Role = "borrower" | "lender";
+
 
 interface RoleContextType {
   role: Role | null;
   setRole: (role: Role) => void;
   clearRole: () => void;
+
   isLoading: boolean; 
-}
+
 
 const RoleContext = createContext<RoleContextType | undefined>(undefined);
 
 export function RoleProvider({ children }: { children: React.ReactNode }) {
   const [role, setRoleState] = useState<Role | null>(null);
+
   const [isLoading, setIsLoading] = useState(true); 
 
   useEffect(() => {
@@ -28,20 +32,24 @@ export function RoleProvider({ children }: { children: React.ReactNode }) {
     } finally {
       // Always set loading to false after attempting to load
       setIsLoading(false);
+
     }
   }, []);
 
   const setRole = (newRole: Role) => {
     setRoleState(newRole);
+
     try {
       localStorage.setItem("user-role", newRole);
     } catch (error) {
       console.error("Error saving role to localStorage:", error);
     }
+
   };
 
   const clearRole = () => {
     setRoleState(null);
+
     try {
       localStorage.removeItem("user-role");
     } catch (error) {
@@ -51,6 +59,7 @@ export function RoleProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <RoleContext.Provider value={{ role, setRole, clearRole, isLoading }}>
+
       {children}
     </RoleContext.Provider>
   );
@@ -62,4 +71,6 @@ export function useRoleContext() {
     throw new Error("useRoleContext must be used within a RoleProvider");
   }
   return context;
+
 }
+

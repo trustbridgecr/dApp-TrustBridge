@@ -87,6 +87,9 @@ export function useMarketplace() {
     setLoading(realTimePoolData.loading);
   }, [realTimePoolData.loading]);
 
+  // Don't show role selection modal automatically in MarketplacePage
+  // It will be handled by the parent pages
+
   const handleDeployPool = async () => {
     if (!walletAddress) {
       toast.error("Please connect your wallet first");
@@ -199,6 +202,7 @@ export function useMarketplace() {
     showSupplyUSDCModal,
     showSupplyXLMModal,
     showProvideLiquidityModal,
+    showRoleSelectionModal,
 
     // Data
     mockPoolData,
@@ -223,7 +227,9 @@ export function useMarketplace() {
     closeSupplyXLMModal,
     openProvideLiquidityModal,
     closeProvideLiquidityModal,
+
     showRoleSelectionModal,
+
 
     // Success handlers
     handleSupplySuccess,
