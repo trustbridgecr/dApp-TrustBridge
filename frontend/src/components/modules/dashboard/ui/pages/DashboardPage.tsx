@@ -3,7 +3,7 @@
 import Image from "next/image";
 import StatCard from "../cards/StatCard";
 import { useDashboard } from "../../hooks/useDashboard.hook";
-import { formatCurrency, UserPosition } from "@/helpers/user-positions.helper";
+import { formatCurrency, UserPosition, POOL_CONFIG, getPoolTypeForAsset } from "@/helpers/user-positions.helper";
 
 export default function Dashboard() {
   const {
@@ -55,11 +55,21 @@ export default function Dashboard() {
       return <div className="text-gray-400">No data available</div>;
     }
 
-    // Calculate available balance per asset
-    const availableByAsset = userPositions.map(position => ({
-      symbol: position.symbol,
-      available: Math.max(0, position.supplied - position.borrowed)
-    })).filter(asset => asset.available > 0);
+    // Calculate available balance per asset considering wallet balance and supplied amounts
+    const availableByAsset = userPositions.map(position => {
+      // For each asset, available = wallet balance + supplied - borrowed
+      // This is a simplified calculation - in reality would need actual wallet balance per asset
+      const walletBalanceForAsset = 0; // TODO: Get actual wallet balance for this asset
+      const available = Math.max(0, walletBalanceForAsset + position.supplied - position.borrowed);
+      
+      return {
+        symbol: position.symbol,
+        available: available,
+        walletBalance: walletBalanceForAsset,
+        supplied: position.supplied,
+        borrowed: position.borrowed
+      };
+    }).filter(asset => asset.available > 0);
 
     if (availableByAsset.length === 0) {
       return <div className="text-gray-400">No available balance</div>;
@@ -74,6 +84,12 @@ export default function Dashboard() {
             <span className="text-white">{formatCurrency(asset.available)}</span>
           </div>
         ))}
+        {/* Show additional info if needed */}
+        {availableByAsset.some(asset => asset.walletBalance > 0) && (
+          <div className="text-xs text-gray-500 mt-1 pt-1 border-t border-gray-700">
+            Includes wallet balance
+          </div>
+        )}
       </div>
     );
   };
@@ -84,26 +100,45 @@ export default function Dashboard() {
       return <div className="text-gray-400">No data available</div>;
     }
 
-    // Count active loans by pool type
-    // For now, we'll simulate the pool breakdown based on asset types
-    const mainPoolLoans = userPositions.filter(pos => pos.borrowed > 0 && (pos.symbol === 'USDC' || pos.symbol === 'XLM')).length;
-    const secondaryPoolLoans = userPositions.filter(pos => pos.borrowed > 0 && pos.symbol === 'TBRG').length;
+    // Count active loans by pool type using configuration-driven mapping
+    const poolLoanCounts: Record<string, number> = {};
+    
+    // Initialize counts for all pools
+    Object.keys(POOL_CONFIG).forEach(poolType => {
+      poolLoanCounts[poolType] = 0;
+    });
+    
+    // Count active loans for each position based on pool configuration
+    userPositions.forEach(position => {
+      if (position.borrowed > 0) {
+        const poolType = getPoolTypeForAsset(position.symbol);
+        if (poolType) {
+          poolLoanCounts[poolType]++;
+        }
+      }
+    });
 
-    if (mainPoolLoans === 0 && secondaryPoolLoans === 0) {
+    // Filter pools that have active loans
+    const poolsWithLoans = Object.entries(poolLoanCounts)
+      .filter(([_, count]) => count > 0)
+      .map(([poolType, count]) => ({
+        poolType: poolType.replace('_', ' ').toLowerCase(),
+        count
+      }));
+
+    if (poolsWithLoans.length === 0) {
       return <div className="text-gray-400">No active loans</div>;
     }
 
     return (
       <div className="space-y-1">
         <div className="font-medium text-gray-300">Breakdown:</div>
-        <div className="flex justify-between text-xs">
-          <span className="text-gray-400">Main Pool:</span>
-          <span className="text-white">{mainPoolLoans}</span>
-        </div>
-        <div className="flex justify-between text-xs">
-          <span className="text-gray-400">Secondary Pool:</span>
-          <span className="text-white">{secondaryPoolLoans}</span>
-        </div>
+        {poolsWithLoans.map((pool) => (
+          <div key={pool.poolType} className="flex justify-between text-xs">
+            <span className="text-gray-400">{pool.poolType}:</span>
+            <span className="text-white">{pool.count}</span>
+          </div>
+        ))}
       </div>
     );
   };

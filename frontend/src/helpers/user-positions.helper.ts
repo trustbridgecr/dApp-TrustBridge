@@ -30,6 +30,39 @@ export interface CollateralData {
 }
 
 /**
+ * Pool configuration mapping for asset classification
+ * This makes it easy to add new assets and maintain pool assignments
+ */
+export const POOL_CONFIG = {
+  MAIN_POOL: ['USDC', 'XLM'],
+  SECONDARY_POOL: ['TBRG'],
+  // Future pools can be easily added here
+  // LIQUIDITY_POOL: ['NEW_ASSET_1', 'NEW_ASSET_2'],
+  // STAKING_POOL: ['STAKING_TOKEN_1', 'STAKING_TOKEN_2'],
+} as const;
+
+export type PoolType = keyof typeof POOL_CONFIG;
+
+/**
+ * Helper function to get pool type for an asset
+ */
+export function getPoolTypeForAsset(assetSymbol: string): PoolType | null {
+  for (const [poolType, assets] of Object.entries(POOL_CONFIG)) {
+    if (assets.includes(assetSymbol)) {
+      return poolType as PoolType;
+    }
+  }
+  return null;
+}
+
+/**
+ * Helper function to get assets for a specific pool
+ */
+export function getAssetsForPool(poolType: PoolType): string[] {
+  return POOL_CONFIG[poolType];
+}
+
+/**
  * Fetch user positions from the TrustBridge pool
  * This function makes actual contract calls to get real user data
  */
@@ -74,7 +107,7 @@ export async function fetchUserPositions(walletAddress: string): Promise<UserPos
         asset: "USDC",
         symbol: "USDC",
         supplied: 250000,
-        borrowed: 100000,
+        borrowed: 100000, // $100,000 as shown in image
         collateral: false,
         apy: 3.2,
         usdValue: 250000,
@@ -83,7 +116,7 @@ export async function fetchUserPositions(walletAddress: string): Promise<UserPos
         asset: "XLM",
         symbol: "XLM",
         supplied: 150000,
-        borrowed: 25750,
+        borrowed: 25750, // $25,750 as shown in image
         collateral: true,
         apy: 2.8,
         usdValue: 150000,
@@ -92,7 +125,7 @@ export async function fetchUserPositions(walletAddress: string): Promise<UserPos
         asset: "TBRG",
         symbol: "TBRG",
         supplied: 56289,
-        borrowed: 50000, // Changed to have 1 loan in Secondary Pool
+        borrowed: 0, // No borrowed amount for TBRG to match image
         collateral: false,
         apy: 5.1,
         usdValue: 56289,
@@ -118,11 +151,11 @@ export async function getWalletBalance(walletAddress: string): Promise<WalletBal
     // 2. Converting to USD values using price oracles
     // 3. Handling different asset types
     
-    // Mock wallet balance for demonstration
+    // Mock wallet balance for demonstration - more realistic values
     return {
-      usdc: 50000,
-      xlm: 75000,
-      tbrg: 25000,
+      usdc: 75000,  // User has $75k USDC in wallet
+      xlm: 50000,   // User has $50k XLM in wallet
+      tbrg: 25000,  // User has $25k TBRG in wallet
     };
   } catch (error) {
     console.error("Error fetching wallet balance:", error);
@@ -178,19 +211,32 @@ export async function calculateDashboardMetrics(
   const activeLoans = positions.filter(pos => pos.borrowed > 0).length;
   
   // Available Balance: unallocated funds available for borrowing or supplying again
-  // Fallback: If not tracked explicitly, use: walletBalance - (activeCollateral + borrowedAmount)
+  // Enhanced calculation incorporating real wallet balance and borrowing capacity
   let availableBalance: number;
   try {
-    // Primary calculation: Total Supplied - Total Borrowed
-    availableBalance = Math.max(0, totalSupplied - totalBorrowed);
-  } catch (error) {
-    console.warn("Failed to calculate available balance, using fallback");
-    // Fallback calculation
+    // Get real wallet balance and collateral data
     const walletBalance = await getWalletBalance(walletAddress);
     const collateralData = await getCollateralData(walletAddress);
     
+    // Calculate total wallet balance
     const totalWalletBalance = walletBalance.usdc + walletBalance.xlm + walletBalance.tbrg;
-    availableBalance = Math.max(0, totalWalletBalance - (collateralData.activeCollateral + totalBorrowed));
+    
+    // Calculate borrowing capacity based on collateral
+    const borrowingCapacity = collateralData.totalCollateral * 0.8; // Assuming 80% LTV ratio
+    
+    // Available balance = wallet balance + borrowing capacity - total borrowed
+    availableBalance = Math.max(0, totalWalletBalance + borrowingCapacity - totalBorrowed);
+    
+    // Alternative calculation: if user has supplied assets, consider them as available
+    if (totalSupplied > 0) {
+      const suppliedAvailable = Math.max(0, totalSupplied - totalBorrowed);
+      availableBalance = Math.max(availableBalance, suppliedAvailable);
+    }
+    
+  } catch (error) {
+    console.warn("Failed to calculate available balance with wallet data, using fallback");
+    // Fallback calculation: Total Supplied - Total Borrowed
+    availableBalance = Math.max(0, totalSupplied - totalBorrowed);
   }
 
   return {
