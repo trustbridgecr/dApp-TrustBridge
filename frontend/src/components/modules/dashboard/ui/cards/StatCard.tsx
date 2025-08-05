@@ -5,6 +5,7 @@ interface StatCardProps {
   changeType?: "positive" | "negative";
   badge?: string;
   icon: string;
+  emojiIcon?: string; // Optional emoji icon
   subtitle?: string;
   loading?: boolean;
   hoverContent?: React.ReactNode;
@@ -17,6 +18,7 @@ export default function StatCard({
   changeType,
   badge,
   icon,
+  emojiIcon,
   subtitle,
   loading = false,
   hoverContent,
@@ -46,7 +48,7 @@ export default function StatCard({
 
   return (
     <div className="relative group">
-      <div className="card stat-card p-5 h-full">
+      <div className="card stat-card p-5 h-full min-h-[140px] flex flex-col justify-between">
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-gray-400 text-sm font-medium">
@@ -59,13 +61,19 @@ export default function StatCard({
               </span>
             )}
             <div className="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center">
-              <i className={`${icon} text-success text-sm`}></i>
+              {emojiIcon ? (
+                <span className="text-base">
+                  {emojiIcon}
+                </span>
+              ) : (
+                <i className={`${icon} text-success text-sm`}></i>
+              )}
             </div>
           </div>
         </div>
 
         {/* Value and Change */}
-        <div className="flex items-end justify-between">
+        <div className="flex items-end justify-between mb-2">
           <div className="flex items-baseline space-x-3">
             <span className="text-2xl font-bold text-white transition-all duration-300">
               {formatValue(value)}
@@ -76,7 +84,7 @@ export default function StatCard({
 
         {/* Subtitle */}
         {subtitle && (
-          <div className="mt-2 text-xs text-gray-400">
+          <div className="text-xs text-gray-400">
             {subtitle}
           </div>
         )}
@@ -94,13 +102,13 @@ export default function StatCard({
           </div>
         )}
 
-        {/* Subtle Tooltip on Hover */}
+        {/* Enhanced Tooltip on Hover */}
         {hoverContent && (
-          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none z-20">
-            <div className="bg-gray-900 text-white text-xs rounded-md px-3 py-2 shadow-xl border border-gray-700 whitespace-nowrap">
+          <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-30">
+            <div className="bg-gray-900 text-white text-xs rounded-md px-3 py-2 shadow-2xl border border-gray-700 whitespace-nowrap min-w-[160px]">
               {hoverContent}
-              {/* Tooltip arrow */}
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-t-3 border-transparent border-t-gray-900"></div>
+              {/* Tooltip arrow pointing up */}
+              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-900"></div>
             </div>
           </div>
         )}

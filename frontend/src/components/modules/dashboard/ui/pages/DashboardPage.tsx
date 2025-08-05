@@ -3,7 +3,7 @@
 import Image from "next/image";
 import StatCard from "../cards/StatCard";
 import { useDashboard } from "../../hooks/useDashboard.hook";
-import { formatCurrency } from "@/helpers/user-positions.helper";
+import { formatCurrency, UserPosition } from "@/helpers/user-positions.helper";
 
 export default function Dashboard() {
   const {
@@ -24,30 +24,85 @@ export default function Dashboard() {
     );
   };
 
-  // Create hover content for breakdown
-  const createBreakdownContent = (positions: typeof userPositions, type: 'supplied' | 'borrowed') => {
-    const relevantPositions = positions.filter(pos => pos[type] > 0);
+  // Create breakdown content for tooltips
+  const createBreakdownContent = (positions: UserPosition[], type: 'supplied' | 'borrowed') => {
+    if (!positions || positions.length === 0) {
+      return <div className="text-gray-400">No data available</div>;
+    }
+
+    const filteredPositions = positions.filter(pos => pos[type] > 0);
     
-    if (relevantPositions.length === 0) {
-      return (
-        <div className="text-center">
-          <p className="text-sm text-gray-300">
-            No {type} positions yet
-          </p>
-          <p className="text-xs text-gray-400 mt-1">
-            Start by supplying or borrowing assets
-          </p>
-        </div>
-      );
+    if (filteredPositions.length === 0) {
+      return <div className="text-gray-400">No {type} positions</div>;
     }
 
     return (
-      <div>
-        <h4 className="font-medium text-sm mb-2 text-white">Breakdown:</h4>
-        {relevantPositions.map((pos, index) => (
-          <div key={index} className="flex justify-between items-center text-sm mb-1">
-            <span className="text-gray-300">{pos.symbol}:</span>
-            <span className="font-medium text-white">{formatCurrency(pos[type])}</span>
+      <div className="space-y-1">
+        <div className="font-medium text-gray-300">Breakdown:</div>
+        {filteredPositions.map((position) => (
+          <div key={position.asset} className="flex justify-between text-xs">
+            <span className="text-gray-400">{position.symbol}:</span>
+            <span className="text-white">{formatCurrency(position[type])}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // Create Available Balance breakdown content
+  const createAvailableBalanceContent = () => {
+    if (!userPositions || userPositions.length === 0) {
+      return <div className="text-gray-400">No data available</div>;
+    }
+
+    // Calculate available balance per asset
+    const availableByAsset = userPositions.map(position => ({
+      symbol: position.symbol,
+      available: Math.max(0, position.supplied - position.borrowed)
+    })).filter(asset => asset.available > 0);
+
+    if (availableByAsset.length === 0) {
+      return <div className="text-gray-400">No available balance</div>;
+    }
+
+    return (
+      <div className="space-y-1">
+        <div className="font-medium text-gray-300">Breakdown:</div>
+        {availableByAsset.map((asset) => (
+          <div key={asset.symbol} className="flex justify-between text-xs">
+            <span className="text-gray-400">{asset.symbol}:</span>
+            <span className="text-white">{formatCurrency(asset.available)}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // Create Active Loans breakdown content
+  const createActiveLoansContent = () => {
+    if (!userPositions || userPositions.length === 0) {
+      return <div className="text-gray-400">No data available</div>;
+    }
+
+    // Count active loans by asset
+    const activeLoansByAsset = userPositions
+      .filter(position => position.borrowed > 0)
+      .map(position => ({
+        symbol: position.symbol,
+        borrowed: position.borrowed
+      }));
+
+    if (activeLoansByAsset.length === 0) {
+      return <div className="text-gray-400">No active loans</div>;
+    }
+
+    return (
+      <div className="space-y-1">
+        <div className="font-medium text-gray-300">Breakdown:</div>
+        {activeLoansByAsset.map((asset) => (
+          <div key={asset.symbol} className="flex justify-between text-xs">
+            <span className="text-gray-400">{asset.symbol}:</span>
+            <span className="text-white">{formatCurrency(asset.borrowed)}</span>
           </div>
         ))}
       </div>
@@ -91,34 +146,48 @@ export default function Dashboard() {
       )}
 
       {/* Stats Cards Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard
           title="Total Supplied"
           value={formatCurrency(totalSupplied)}
           icon="fas fa-coins"
+          emojiIcon="💰"
           loading={cardsLoading.totalSupplied}
           hoverContent={createBreakdownContent(userPositions, 'supplied')}
+          change="+1.8%"
+          changeType="positive"
         />
         <StatCard
           title="Total Borrowed"
           value={formatCurrency(totalBorrowed)}
           icon="fas fa-hand-holding-dollar"
+          emojiIcon="🔄"
           loading={cardsLoading.totalBorrowed}
           hoverContent={createBreakdownContent(userPositions, 'borrowed')}
+          change="+0.5%"
+          changeType="positive"
         />
         <StatCard
           title="Available Balance"
           value={formatCurrency(availableBalance)}
           icon="fas fa-sack-dollar"
+          emojiIcon="🧾"
           loading={cardsLoading.availableBalance}
           subtitle="Available for new positions"
+          hoverContent={createAvailableBalanceContent()}
+          change="-2.1%"
+          changeType="negative"
         />
         <StatCard
           title="Active Loans"
           value={activeLoans.toString()}
           icon="fas fa-file-contract"
+          emojiIcon="📌"
           loading={cardsLoading.activeLoans}
           subtitle={`${activeLoans} active loan${activeLoans !== 1 ? 's' : ''}`}
+          hoverContent={createActiveLoansContent()}
+          change="+0.0%"
+          changeType="positive"
         />
       </div>
 

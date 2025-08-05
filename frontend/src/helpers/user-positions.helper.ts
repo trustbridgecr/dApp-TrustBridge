@@ -18,6 +18,17 @@ export interface UserDashboardData {
   positions: UserPosition[];
 }
 
+export interface WalletBalance {
+  usdc: number;
+  xlm: number;
+  tbrg: number;
+}
+
+export interface CollateralData {
+  totalCollateral: number;
+  activeCollateral: number;
+}
+
 /**
  * Fetch user positions from the TrustBridge pool
  * This function makes actual contract calls to get real user data
@@ -56,9 +67,39 @@ export async function fetchUserPositions(walletAddress: string): Promise<UserPos
     //   }
     // }
     
-    // For now, return empty array to indicate no positions
-    // This will show "No positions yet" in the UI
-    return [];
+    // For now, return mock data to simulate real user positions
+    // This will be replaced with real contract calls
+    const mockPositions: UserPosition[] = [
+      {
+        asset: "USDC",
+        symbol: "USDC",
+        supplied: 250000,
+        borrowed: 100000,
+        collateral: false,
+        apy: 3.2,
+        usdValue: 250000,
+      },
+      {
+        asset: "XLM",
+        symbol: "XLM",
+        supplied: 150000,
+        borrowed: 25750,
+        collateral: true,
+        apy: 2.8,
+        usdValue: 150000,
+      },
+      {
+        asset: "TBRG",
+        symbol: "TBRG",
+        supplied: 56289,
+        borrowed: 0,
+        collateral: false,
+        apy: 5.1,
+        usdValue: 56289,
+      },
+    ];
+
+    return mockPositions;
     
   } catch (error) {
     console.error("Error fetching user positions:", error);
@@ -67,17 +108,97 @@ export async function fetchUserPositions(walletAddress: string): Promise<UserPos
 }
 
 /**
- * Calculate dashboard metrics from user positions
+ * Fallback: Get wallet balance when direct contract calls fail
  */
-export function calculateDashboardMetrics(positions: UserPosition[]): Omit<UserDashboardData, 'positions'> {
-  const totalSupplied = positions.reduce((sum, pos) => sum + pos.supplied, 0);
+export async function getWalletBalance(walletAddress: string): Promise<WalletBalance> {
+  try {
+    // TODO: Implement actual wallet balance fetching
+    // This would typically involve:
+    // 1. Querying the Stellar network for account balances
+    // 2. Converting to USD values using price oracles
+    // 3. Handling different asset types
+    
+    // Mock wallet balance for demonstration
+    return {
+      usdc: 50000,
+      xlm: 75000,
+      tbrg: 25000,
+    };
+  } catch (error) {
+    console.error("Error fetching wallet balance:", error);
+    return {
+      usdc: 0,
+      xlm: 0,
+      tbrg: 0,
+    };
+  }
+}
+
+/**
+ * Fallback: Get collateral data when direct contract calls fail
+ */
+export async function getCollateralData(walletAddress: string): Promise<CollateralData> {
+  try {
+    // TODO: Implement actual collateral data fetching
+    // This would typically involve:
+    // 1. Querying collateral contracts
+    // 2. Calculating liquidation thresholds
+    // 3. Determining active vs total collateral
+    
+    // Mock collateral data for demonstration
+    return {
+      totalCollateral: 150000,
+      activeCollateral: 125000,
+    };
+  } catch (error) {
+    console.error("Error fetching collateral data:", error);
+    return {
+      totalCollateral: 0,
+      activeCollateral: 0,
+    };
+  }
+}
+
+/**
+ * Calculate dashboard metrics from user positions with fallback logic
+ */
+export async function calculateDashboardMetrics(
+  positions: UserPosition[], 
+  walletAddress: string
+): Promise<Omit<UserDashboardData, 'positions'>> {
+  
+  // Total Supplied: sum of all supplied assets across all pools
+  // Fallback: If cannot be fetched directly, use sum of get_user_position().supplied
+  let totalSupplied: number;
+  try {
+    totalSupplied = positions.reduce((sum, pos) => sum + pos.supplied, 0);
+  } catch (error) {
+    console.warn("Failed to calculate total supplied from positions, using fallback");
+    // Fallback: Sum of supplied amounts from user positions
+    totalSupplied = positions.reduce((sum, pos) => sum + pos.supplied, 0);
+  }
+  
+  // Total Borrowed: total amount borrowed by the user
   const totalBorrowed = positions.reduce((sum, pos) => sum + pos.borrowed, 0);
+  
+  // Active Loans: number of currently active borrow positions
   const activeLoans = positions.filter(pos => pos.borrowed > 0).length;
   
-  // Available balance calculation
-  // This is a simplified calculation - in reality it would be more complex
-  // considering collateral factors, liquidation thresholds, etc.
-  const availableBalance = Math.max(0, totalSupplied - totalBorrowed * 0.8);
+  // Available Balance: unallocated funds available for borrowing or supplying again
+  // Fallback: If not tracked explicitly, use: walletBalance - (activeCollateral + borrowedAmount)
+  let availableBalance: number;
+  try {
+    // Primary calculation: Total Supplied - Total Borrowed
+    availableBalance = Math.max(0, totalSupplied - totalBorrowed);
+  } catch (error) {
+    console.warn("Failed to calculate available balance, using fallback");
+    // Fallback calculation
+    const walletBalance = await getWalletBalance(walletAddress);
+    const collateralData = await getCollateralData(walletAddress);
+    
+    const totalWalletBalance = walletBalance.usdc + walletBalance.xlm + walletBalance.tbrg;
+    availableBalance = Math.max(0, totalWalletBalance - (collateralData.activeCollateral + totalBorrowed));
+  }
 
   return {
     totalSupplied,
@@ -88,16 +209,80 @@ export function calculateDashboardMetrics(positions: UserPosition[]): Omit<UserD
 }
 
 /**
- * Get real-time user dashboard data
+ * Get real-time user dashboard data with fallback logic
  */
 export async function fetchUserDashboardData(walletAddress: string): Promise<UserDashboardData> {
-  const positions = await fetchUserPositions(walletAddress);
-  const metrics = calculateDashboardMetrics(positions);
-  
-  return {
-    ...metrics,
-    positions,
-  };
+  try {
+    // Primary: Fetch user positions from contracts
+    const positions = await fetchUserPositions(walletAddress);
+    const metrics = await calculateDashboardMetrics(positions, walletAddress);
+    
+    return {
+      ...metrics,
+      positions,
+    };
+  } catch (error) {
+    console.error("Error fetching dashboard data, using fallback calculations:", error);
+    
+    // Fallback: Use alternative data sources
+    try {
+      const walletBalance = await getWalletBalance(walletAddress);
+      const collateralData = await getCollateralData(walletAddress);
+      
+      // Create fallback positions based on wallet balance
+      const fallbackPositions: UserPosition[] = [
+        {
+          asset: "USDC",
+          symbol: "USDC",
+          supplied: walletBalance.usdc,
+          borrowed: 0,
+          collateral: false,
+          apy: 0,
+          usdValue: walletBalance.usdc,
+        },
+        {
+          asset: "XLM",
+          symbol: "XLM",
+          supplied: walletBalance.xlm,
+          borrowed: 0,
+          collateral: false,
+          apy: 0,
+          usdValue: walletBalance.xlm,
+        },
+        {
+          asset: "TBRG",
+          symbol: "TBRG",
+          supplied: walletBalance.tbrg,
+          borrowed: 0,
+          collateral: false,
+          apy: 0,
+          usdValue: walletBalance.tbrg,
+        },
+      ];
+      
+      const totalSupplied = walletBalance.usdc + walletBalance.xlm + walletBalance.tbrg;
+      const availableBalance = Math.max(0, totalSupplied - collateralData.activeCollateral);
+      
+      return {
+        totalSupplied,
+        totalBorrowed: 0,
+        availableBalance,
+        activeLoans: 0,
+        positions: fallbackPositions,
+      };
+    } catch (fallbackError) {
+      console.error("Fallback calculation also failed:", fallbackError);
+      
+      // Ultimate fallback: Return empty data
+      return {
+        totalSupplied: 0,
+        totalBorrowed: 0,
+        availableBalance: 0,
+        activeLoans: 0,
+        positions: [],
+      };
+    }
+  }
 }
 
 /**
