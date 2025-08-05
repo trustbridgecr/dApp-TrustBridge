@@ -84,27 +84,26 @@ export default function Dashboard() {
       return <div className="text-gray-400">No data available</div>;
     }
 
-    // Count active loans by asset
-    const activeLoansByAsset = userPositions
-      .filter(position => position.borrowed > 0)
-      .map(position => ({
-        symbol: position.symbol,
-        borrowed: position.borrowed
-      }));
+    // Count active loans by pool type
+    // For now, we'll simulate the pool breakdown based on asset types
+    const mainPoolLoans = userPositions.filter(pos => pos.borrowed > 0 && (pos.symbol === 'USDC' || pos.symbol === 'XLM')).length;
+    const secondaryPoolLoans = userPositions.filter(pos => pos.borrowed > 0 && pos.symbol === 'TBRG').length;
 
-    if (activeLoansByAsset.length === 0) {
+    if (mainPoolLoans === 0 && secondaryPoolLoans === 0) {
       return <div className="text-gray-400">No active loans</div>;
     }
 
     return (
       <div className="space-y-1">
         <div className="font-medium text-gray-300">Breakdown:</div>
-        {activeLoansByAsset.map((asset) => (
-          <div key={asset.symbol} className="flex justify-between text-xs">
-            <span className="text-gray-400">{asset.symbol}:</span>
-            <span className="text-white">{formatCurrency(asset.borrowed)}</span>
-          </div>
-        ))}
+        <div className="flex justify-between text-xs">
+          <span className="text-gray-400">Main Pool:</span>
+          <span className="text-white">{mainPoolLoans}</span>
+        </div>
+        <div className="flex justify-between text-xs">
+          <span className="text-gray-400">Secondary Pool:</span>
+          <span className="text-white">{secondaryPoolLoans}</span>
+        </div>
       </div>
     );
   };

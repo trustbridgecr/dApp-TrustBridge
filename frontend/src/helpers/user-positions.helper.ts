@@ -92,7 +92,7 @@ export async function fetchUserPositions(walletAddress: string): Promise<UserPos
         asset: "TBRG",
         symbol: "TBRG",
         supplied: 56289,
-        borrowed: 0,
+        borrowed: 50000, // Changed to have 1 loan in Secondary Pool
         collateral: false,
         apy: 5.1,
         usdValue: 56289,
@@ -169,14 +169,7 @@ export async function calculateDashboardMetrics(
   
   // Total Supplied: sum of all supplied assets across all pools
   // Fallback: If cannot be fetched directly, use sum of get_user_position().supplied
-  let totalSupplied: number;
-  try {
-    totalSupplied = positions.reduce((sum, pos) => sum + pos.supplied, 0);
-  } catch (error) {
-    console.warn("Failed to calculate total supplied from positions, using fallback");
-    // Fallback: Sum of supplied amounts from user positions
-    totalSupplied = positions.reduce((sum, pos) => sum + pos.supplied, 0);
-  }
+  const totalSupplied = positions.reduce((sum, pos) => sum + pos.supplied, 0);
   
   // Total Borrowed: total amount borrowed by the user
   const totalBorrowed = positions.reduce((sum, pos) => sum + pos.borrowed, 0);
