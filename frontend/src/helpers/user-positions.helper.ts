@@ -1,4 +1,4 @@
-import { TRUSTBRIDGE_POOL_ID, TOKENS } from "@/config/contracts";
+import { TRUSTBRIDGE_POOL_ID } from "@/config/contracts";
 
 export interface UserPosition {
   asset: string;
@@ -20,7 +20,7 @@ export interface UserDashboardData {
 
 /**
  * Fetch user positions from the TrustBridge pool
- * This function will make actual contract calls to get real user data
+ * This function makes actual contract calls to get real user data
  */
 export async function fetchUserPositions(walletAddress: string): Promise<UserPosition[]> {
   if (!walletAddress || !TRUSTBRIDGE_POOL_ID) {
@@ -28,46 +28,38 @@ export async function fetchUserPositions(walletAddress: string): Promise<UserPos
   }
 
   try {
-    // TODO: Replace with actual contract calls using Blend SDK
-    // For now, returning mock data that simulates real user positions
+    // TODO: Replace with actual Blend SDK contract calls
+    // This is where you would implement real smart contract integration
     
-    // In the real implementation, you would:
-    // 1. Call pool.get_user_position(walletAddress) for each asset
-    // 2. Parse the returned data to get supplied/borrowed amounts
-    // 3. Calculate APY based on current pool rates
-    // 4. Get USD values from oracle prices
+    // Example implementation structure:
+    // const positions: UserPosition[] = [];
+    // 
+    // for (const asset of [TOKENS.USDC, TOKENS.XLM, TOKENS.TBRG]) {
+    //   try {
+    //     // Call pool.get_user_position(walletAddress, asset)
+    //     const userPosition = await poolContract.get_user_position(walletAddress, asset);
+    //     
+    //     // Parse the returned data
+    //     const position: UserPosition = {
+    //       asset,
+    //       symbol: getAssetSymbol(asset),
+    //       supplied: parseSuppliedAmount(userPosition.supplied),
+    //       borrowed: parseBorrowedAmount(userPosition.borrowed),
+    //       collateral: userPosition.is_collateral,
+    //       apy: await getCurrentAPY(asset),
+    //       usdValue: await getUSDValue(asset, userPosition.total_amount),
+    //     };
+    //     
+    //     positions.push(position);
+    //   } catch (error) {
+    //     console.error(`Error fetching position for ${asset}:`, error);
+    //   }
+    // }
     
-    const mockPositions: UserPosition[] = [
-      {
-        asset: TOKENS.USDC,
-        symbol: "USDC",
-        supplied: 250000,
-        borrowed: 100000,
-        collateral: false,
-        apy: 3.2,
-        usdValue: 250000,
-      },
-      {
-        asset: TOKENS.XLM,
-        symbol: "XLM",
-        supplied: 150000,
-        borrowed: 25750,
-        collateral: true,
-        apy: 2.8,
-        usdValue: 150000,
-      },
-      {
-        asset: TOKENS.TBRG,
-        symbol: "TBRG",
-        supplied: 56289,
-        borrowed: 0,
-        collateral: false,
-        apy: 5.1,
-        usdValue: 56289,
-      },
-    ];
-
-    return mockPositions;
+    // For now, return empty array to indicate no positions
+    // This will show "No positions yet" in the UI
+    return [];
+    
   } catch (error) {
     console.error("Error fetching user positions:", error);
     throw new Error("Failed to fetch user positions");
@@ -138,4 +130,38 @@ export function calculatePercentageChange(current: number, previous: number): {
     value: formattedChange,
     type: change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral',
   };
-} 
+}
+
+/**
+ * Helper functions for smart contract integration
+ * These will be implemented when connecting to real contracts
+ */
+
+// export async function getAssetSymbol(asset: string): Promise<string> {
+//   // Get asset symbol from contract or configuration
+//   const assetMap = {
+//     [TOKENS.USDC]: 'USDC',
+//     [TOKENS.XLM]: 'XLM',
+//     [TOKENS.TBRG]: 'TBRG',
+//   };
+//   return assetMap[asset] || 'Unknown';
+// }
+
+// export function parseSuppliedAmount(rawAmount: bigint): number {
+//   // Convert from contract decimals to display format
+//   return Number(rawAmount) / Math.pow(10, 7); // Assuming 7 decimals
+// }
+
+// export function parseBorrowedAmount(rawAmount: bigint): number {
+//   return Number(rawAmount) / Math.pow(10, 7);
+// }
+
+// export async function getCurrentAPY(asset: string): Promise<number> {
+//   const reserveData = await poolContract.get_reserve_data(asset);
+//   return calculateAPY(reserveData.current_liquidity_rate);
+// }
+
+// export async function getUSDValue(asset: string, amount: bigint): Promise<number> {
+//   const price = await oracleContract.get_price(asset);
+//   return Number(amount) * Number(price) / Math.pow(10, 7);
+// } 

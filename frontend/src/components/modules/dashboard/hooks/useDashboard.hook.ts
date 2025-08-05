@@ -73,7 +73,7 @@ export function useDashboard(): DashboardData {
     try {
       setError(null);
       
-      // Fetch real user dashboard data
+      // Fetch real user dashboard data from smart contracts
       const dashboardData: UserDashboardData = await fetchUserDashboardData(address);
       
       setUserPositions(dashboardData.positions);

@@ -95,8 +95,6 @@ export default function Dashboard() {
         <StatCard
           title="Total Supplied"
           value={formatCurrency(totalSupplied)}
-          change="+1.8%"
-          changeType="positive"
           icon="fas fa-coins"
           loading={cardsLoading.totalSupplied}
           hoverContent={createBreakdownContent(userPositions, 'supplied')}
@@ -104,8 +102,6 @@ export default function Dashboard() {
         <StatCard
           title="Total Borrowed"
           value={formatCurrency(totalBorrowed)}
-          change="+0.5%"
-          changeType="positive"
           icon="fas fa-hand-holding-dollar"
           loading={cardsLoading.totalBorrowed}
           hoverContent={createBreakdownContent(userPositions, 'borrowed')}
@@ -113,8 +109,6 @@ export default function Dashboard() {
         <StatCard
           title="Available Balance"
           value={formatCurrency(availableBalance)}
-          change="-2.1%"
-          changeType="negative"
           icon="fas fa-sack-dollar"
           loading={cardsLoading.availableBalance}
           subtitle="Available for new positions"
@@ -122,8 +116,6 @@ export default function Dashboard() {
         <StatCard
           title="Active Loans"
           value={activeLoans.toString()}
-          change="+0.0%"
-          changeType="positive"
           icon="fas fa-file-contract"
           loading={cardsLoading.activeLoans}
           subtitle={`${activeLoans} active loan${activeLoans !== 1 ? 's' : ''}`}
