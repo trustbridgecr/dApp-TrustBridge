@@ -94,13 +94,13 @@ export default function StatCard({
           </div>
         )}
 
-        {/* Tooltip on Hover */}
+        {/* Subtle Tooltip on Hover */}
         {hoverContent && (
-          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
-            <div className="bg-gray-800 text-white text-sm rounded-lg px-3 py-2 shadow-lg border border-gray-700 min-w-[200px]">
+          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none z-20">
+            <div className="bg-gray-900 text-white text-xs rounded-md px-3 py-2 shadow-xl border border-gray-700 whitespace-nowrap">
               {hoverContent}
               {/* Tooltip arrow */}
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-t-3 border-transparent border-t-gray-900"></div>
             </div>
           </div>
         )}
