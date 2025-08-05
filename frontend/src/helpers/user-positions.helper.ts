@@ -125,7 +125,7 @@ export async function fetchUserPositions(walletAddress: string): Promise<UserPos
         asset: "TBRG",
         symbol: "TBRG",
         supplied: 56289,
-        borrowed: 0, // No borrowed amount for TBRG to match image
+        borrowed: 50000, // Added borrowed amount to show in Secondary Pool
         collateral: false,
         apy: 5.1,
         usdValue: 56289,

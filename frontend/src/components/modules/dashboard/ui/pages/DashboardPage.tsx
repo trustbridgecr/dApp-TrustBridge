@@ -122,7 +122,7 @@ export default function Dashboard() {
     const poolsWithLoans = Object.entries(poolLoanCounts)
       .filter(([_, count]) => count > 0)
       .map(([poolType, count]) => ({
-        poolType: poolType.replace('_', ' ').toLowerCase(),
+        poolType: poolType === 'MAIN_POOL' ? 'Main Pool' : 'Secondary Pool',
         count
       }));
 

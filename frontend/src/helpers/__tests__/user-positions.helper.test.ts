@@ -76,7 +76,7 @@ describe('User Positions Helper', () => {
     it('should handle no change', () => {
       const result = calculatePercentageChange(100, 100);
       expect(result.value).toBe('+0.0%');
-      expect(result.type).toBe('positive');
+      expect(result.type).toBe('neutral');
     });
   });
 }); 

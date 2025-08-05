@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useWalletContext } from "@/providers/wallet.provider";
 import { useUserContext } from "@/providers/user.provider";
 import { usePoolData } from "@/hooks/usePoolData";
@@ -59,7 +59,15 @@ export function useDashboard(): DashboardData {
   });
 
   // Fetch user dashboard data
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
+    // Reset all loading states to true immediately when starting to fetch data
+    setCardsLoading({
+      totalSupplied: true,
+      totalBorrowed: true,
+      availableBalance: true,
+      activeLoans: true,
+    });
+
     if (!address) {
       setCardsLoading({
         totalSupplied: false,
@@ -67,7 +75,7 @@ export function useDashboard(): DashboardData {
         availableBalance: false,
         activeLoans: false,
       });
-      return;
+      return () => {}; // Return an empty cleanup function
     }
 
     try {
@@ -78,26 +86,34 @@ export function useDashboard(): DashboardData {
       
       setUserPositions(dashboardData.positions);
 
+      // Store timeout IDs for cleanup
+      const timeoutIds: NodeJS.Timeout[] = [];
+
       // Simulate loading delays for better UX
-      setTimeout(() => {
+      timeoutIds.push(setTimeout(() => {
         setTotalSupplied(dashboardData.totalSupplied);
         setCardsLoading(prev => ({ ...prev, totalSupplied: false }));
-      }, 300);
+      }, 300));
 
-      setTimeout(() => {
+      timeoutIds.push(setTimeout(() => {
         setTotalBorrowed(dashboardData.totalBorrowed);
         setCardsLoading(prev => ({ ...prev, totalBorrowed: false }));
-      }, 500);
+      }, 500));
 
-      setTimeout(() => {
+      timeoutIds.push(setTimeout(() => {
         setAvailableBalance(dashboardData.availableBalance);
         setCardsLoading(prev => ({ ...prev, availableBalance: false }));
-      }, 700);
+      }, 700));
 
-      setTimeout(() => {
+      timeoutIds.push(setTimeout(() => {
         setActiveLoans(dashboardData.activeLoans);
         setCardsLoading(prev => ({ ...prev, activeLoans: false }));
-      }, 900);
+      }, 900));
+
+      // Return cleanup function
+      return () => {
+        timeoutIds.forEach(id => clearTimeout(id));
+      };
 
     } catch (err) {
       console.error("Error fetching user dashboard data:", err);
@@ -108,8 +124,9 @@ export function useDashboard(): DashboardData {
         availableBalance: false,
         activeLoans: false,
       });
+      return () => {}; // Return an empty cleanup function
     }
-  };
+  }, [address]);
 
   useEffect(() => {
     const loadChats = async () => {
@@ -123,10 +140,76 @@ export function useDashboard(): DashboardData {
     loadChats();
   }, [address]);
 
+  // Reset loading states when wallet address changes
+  const resetLoadingStates = useCallback(() => {
+    if (address) {
+      // Reset all loading states to true when address changes
+      setCardsLoading({
+        totalSupplied: true,
+        totalBorrowed: true,
+        availableBalance: true,
+        activeLoans: true,
+      });
+      // Clear any previous error
+      setError(null);
+    } else {
+      // Reset loading states to false when no address
+      setCardsLoading({
+        totalSupplied: false,
+        totalBorrowed: false,
+        availableBalance: false,
+        activeLoans: false,
+      });
+    }
+  }, [address]);
+
+  useEffect(() => {
+    resetLoadingStates();
+  }, [resetLoadingStates]);
+
   // Fetch dashboard data when wallet address changes
   useEffect(() => {
-    fetchDashboardData();
-  }, [address, poolData.lastUpdated]);
+    let isMounted = true;
+    let cleanup: (() => void) | undefined;
+    let abortController: AbortController | undefined;
+
+    const loadData = async () => {
+      // Create abort controller for this request
+      abortController = new AbortController();
+      
+      try {
+        cleanup = await fetchDashboardData();
+        
+        // Check if component is still mounted before updating state
+        if (!isMounted) {
+          if (cleanup) cleanup();
+          return;
+        }
+      } catch (error) {
+        // Only log error if component is still mounted
+        if (isMounted) {
+          console.error("Error in loadData:", error);
+        }
+      }
+    };
+
+    loadData();
+
+    // Cleanup function for useEffect
+    return () => {
+      isMounted = false;
+      
+      // Abort ongoing request if it exists
+      if (abortController) {
+        abortController.abort();
+      }
+      
+      // Clean up timeouts if cleanup function exists
+      if (cleanup) {
+        cleanup();
+      }
+    };
+  }, [fetchDashboardData]);
 
   return {
     profile,
