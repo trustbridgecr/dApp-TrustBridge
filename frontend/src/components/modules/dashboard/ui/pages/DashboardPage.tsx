@@ -4,7 +4,6 @@ import Image from "next/image";
 import StatCard from "../cards/StatCard";
 import { useDashboard } from "../../hooks/useDashboard.hook";
 import { formatCurrency } from "@/helpers/user-positions.helper";
-import { useState } from "react";
 
 export default function Dashboard() {
   const {
@@ -19,22 +18,10 @@ export default function Dashboard() {
     error,
   } = useDashboard();
 
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
   const handleManagePosition = () => {
     alert(
       "Position management functionality will be implemented in the full version.",
     );
-  };
-
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    // Simulate refresh delay
-    setTimeout(() => {
-      setIsRefreshing(false);
-      // In a real implementation, you would trigger a refetch here
-      window.location.reload();
-    }, 1000);
   };
 
   // Create hover content for breakdown
@@ -44,10 +31,10 @@ export default function Dashboard() {
     if (relevantPositions.length === 0) {
       return (
         <div className="text-center">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-300">
             No {type} positions yet
           </p>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-gray-400 mt-1">
             Start by supplying or borrowing assets
           </p>
         </div>
@@ -56,11 +43,11 @@ export default function Dashboard() {
 
     return (
       <div>
-        <h4 className="font-medium text-sm mb-2">Breakdown:</h4>
+        <h4 className="font-medium text-sm mb-2 text-white">Breakdown:</h4>
         {relevantPositions.map((pos, index) => (
           <div key={index} className="flex justify-between items-center text-sm mb-1">
-            <span className="text-gray-600 dark:text-gray-400">{pos.symbol}:</span>
-            <span className="font-medium">{formatCurrency(pos[type])}</span>
+            <span className="text-gray-300">{pos.symbol}:</span>
+            <span className="font-medium text-white">{formatCurrency(pos[type])}</span>
           </div>
         ))}
       </div>
@@ -74,33 +61,16 @@ export default function Dashboard() {
     return `${address.slice(0, 4)}...${address.slice(-4)}`;
   };
 
-  // Check if any card is loading
-  const isAnyCardLoading = Object.values(cardsLoading).some(loading => loading);
-
   return (
     <div className="container mx-auto px-4 md:px-6 pt-24 pb-16 max-w-6xl">
-      {/* Header with Refresh Button */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">
-            Bienvenido de vuelta, <span className="text-success">{getWalletDisplayName()}</span>
-          </h1>
-          <p className="text-gray-400">
-            Revisa tus posiciones y actividad en un solo lugar
-          </p>
-        </div>
-        <button
-          onClick={handleRefresh}
-          disabled={isRefreshing || isAnyCardLoading}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-lg border transition-all duration-200 ${
-            isRefreshing || isAnyCardLoading
-              ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 border-gray-200 dark:border-gray-600 cursor-not-allowed'
-              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500'
-          }`}
-        >
-          <i className={`fas fa-sync-alt ${isRefreshing ? 'animate-spin' : ''}`}></i>
-          <span>{isRefreshing ? 'Actualizando...' : 'Actualizar'}</span>
-        </button>
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold mb-2">
+          Bienvenido de vuelta, <span className="text-success">{getWalletDisplayName()}</span>
+        </h1>
+        <p className="text-gray-400">
+          Revisa tus posiciones y actividad en un solo lugar
+        </p>
       </div>
 
       {/* Error Display */}
@@ -121,7 +91,7 @@ export default function Dashboard() {
       )}
 
       {/* Stats Cards Row */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard
           title="Total Supplied"
           value={formatCurrency(totalSupplied)}
