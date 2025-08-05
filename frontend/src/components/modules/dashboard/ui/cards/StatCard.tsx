@@ -58,8 +58,8 @@ export default function StatCard({
                 {badge}
               </span>
             )}
-            <div className="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-              <i className={`${icon} text-gray-500 dark:text-gray-400 text-sm`}></i>
+            <div className="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center">
+              <i className={`${icon} text-success text-sm`}></i>
             </div>
           </div>
         </div>

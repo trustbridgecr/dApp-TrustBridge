@@ -111,15 +111,19 @@ export default function Dashboard() {
           hoverContent={createBreakdownContent(userPositions, 'borrowed')}
         />
         <StatCard
-          title="Balance Disponible"
+          title="Available Balance"
           value={formatCurrency(availableBalance)}
+          change="-2.1%"
+          changeType="negative"
           icon="fas fa-sack-dollar"
           loading={cardsLoading.availableBalance}
           subtitle="Available for new positions"
         />
         <StatCard
-          title="Préstamos Activos"
+          title="Active Loans"
           value={activeLoans.toString()}
+          change="+0.0%"
+          changeType="positive"
           icon="fas fa-file-contract"
           loading={cardsLoading.activeLoans}
           subtitle={`${activeLoans} active loan${activeLoans !== 1 ? 's' : ''}`}
@@ -128,7 +132,7 @@ export default function Dashboard() {
 
       {/* Activity Chart */}
       <div className="card p-6 mb-8" style={{ height: "300px" }}>
-        <h2 className="text-lg font-medium mb-4">Actividad Reciente</h2>
+        <h2 className="text-lg font-medium mb-4">Recent Activity</h2>
         <div className="flex items-center justify-center h-5/6 text-gray-400">
           <div className="text-center">
             <i className="fas fa-chart-line text-4xl mb-3"></i>
