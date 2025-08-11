@@ -1,11 +1,50 @@
 "use client";
 
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SupplyUSDCModal } from "../components/SupplyUSDCModal";
+import { ProvideLiquidityModal } from "../components/ProvideLiquidityModal";
 
 export default function LenderPoolPage() {
+  // Modal states
+  const [showSupplyUSDCModal, setShowSupplyUSDCModal] = useState(false);
+  const [showProvideLiquidityModal, setShowProvideLiquidityModal] =
+    useState(false);
+
+  // Mock pool data for the modals
+  const mockPoolData = {
+    name: "TrustBridge Pool",
+    totalSupplied: "1,245,678",
+    totalBorrowed: "867,432",
+    utilizationRate: "69.6",
+    reserves: [
+      {
+        symbol: "USDC",
+        supplied: "856,234",
+        borrowed: "589,432",
+        supplyAPY: "4.2",
+        borrowAPY: "6.8",
+      },
+      {
+        symbol: "XLM",
+        supplied: "234,567",
+        borrowed: "156,789",
+        supplyAPY: "3.8",
+        borrowAPY: "7.2",
+      },
+      {
+        symbol: "TBRG",
+        supplied: "154,877",
+        borrowed: "121,211",
+        supplyAPY: "5.1",
+        borrowAPY: "8.4",
+      },
+    ],
+  };
+
   const assets = [
     {
       symbol: "USDC",
@@ -52,6 +91,17 @@ export default function LenderPoolPage() {
     "Your funds are secured by over-collateralization",
     "Track your earnings in real-time",
   ];
+
+  // Modal handlers
+  const openSupplyUSDCModal = () => setShowSupplyUSDCModal(true);
+  const closeSupplyUSDCModal = () => setShowSupplyUSDCModal(false);
+  const openProvideLiquidityModal = () => setShowProvideLiquidityModal(true);
+  const closeProvideLiquidityModal = () => setShowProvideLiquidityModal(false);
+
+  const handleSupplySuccess = () => {
+    closeSupplyUSDCModal();
+    // You can add success notification here
+  };
 
   return (
     <main className="mx-auto px-4 md:px-6 pt-24 pb-16 max-w-6xl">
@@ -180,12 +230,16 @@ export default function LenderPoolPage() {
                   </div>
                   <div className="text-3xl font-bold text-white">0.00</div>
                   <div className="flex gap-3">
-                    <Button className="bg-[#35bb64] hover:bg-[#2da354] text-white">
+                    <Button
+                      className="bg-[#35bb64] hover:bg-[#2da354] text-white"
+                      onClick={openSupplyUSDCModal}
+                    >
                       Supply USDC
                     </Button>
                     <Button
                       variant="outline"
                       className="border-[#35bb64] text-[#35bb64] hover:bg-[#35bb64] hover:text-white bg-transparent"
+                      onClick={openProvideLiquidityModal}
                     >
                       Provide Liquidity
                     </Button>
@@ -251,6 +305,18 @@ export default function LenderPoolPage() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Modals */}
+      <SupplyUSDCModal
+        isOpen={showSupplyUSDCModal}
+        onClose={closeSupplyUSDCModal}
+        onSuccess={handleSupplySuccess}
+      />
+      <ProvideLiquidityModal
+        isOpen={showProvideLiquidityModal}
+        onClose={closeProvideLiquidityModal}
+        poolData={mockPoolData}
+      />
     </main>
   );
 }
