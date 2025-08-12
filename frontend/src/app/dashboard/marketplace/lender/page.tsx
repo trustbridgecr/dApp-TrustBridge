@@ -1,6 +1,8 @@
-
+"use client";
 
 import LenderPoolPage from "@/components/modules/marketplace/ui/pages/LenderPoolPage";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useRoleContext } from "@/providers/role.provider";
 
 

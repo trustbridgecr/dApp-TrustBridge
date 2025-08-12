@@ -3,12 +3,47 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
+import { BorrowModal } from "../components/BorrowModal";
+import { SupplyXLMCollateralModal } from "../components/SupplyXLMCollateralModal";
 
 export default function BorrowerPoolPage() {
   const [borrowAmount, setBorrowAmount] = useState("0.00");
   const [selectedAsset, setSelectedAsset] = useState("USDC");
-  const [supplying, setSupplying] = useState(false);
-  const [borrowing, setBorrowing] = useState(false);
+  
+  // Modal states
+  const [showBorrowModal, setShowBorrowModal] = useState(false);
+  const [showSupplyCollateralModal, setShowSupplyCollateralModal] = useState(false);
+
+  // Mock pool data for the modals
+  const mockPoolData = {
+    name: "TrustBridge MicroLoans Pool",
+    totalSupplied: "1,245,678",
+    totalBorrowed: "867,432",
+    utilizationRate: "69.6",
+    reserves: [
+      {
+        symbol: "USDC",
+        supplied: "856,234",
+        borrowed: "589,432",
+        supplyAPY: "4.2",
+        borrowAPY: "6.8",
+      },
+      {
+        symbol: "XLM",
+        supplied: "234,567",
+        borrowed: "156,789",
+        supplyAPY: "3.8",
+        borrowAPY: "7.2",
+      },
+      {
+        symbol: "TBRG",
+        supplied: "154,877",
+        borrowed: "121,211",
+        supplyAPY: "5.1",
+        borrowAPY: "8.4",
+      },
+    ],
+  };
 
   const assets = [
     {
@@ -66,29 +101,21 @@ export default function BorrowerPoolPage() {
     "Monitor liquidation thresholds"
   ];
 
-  const handleBorrow = async (asset: string): Promise<void> => {
-    setBorrowing(true);
-    try {
-      await new Promise<void>(resolve => setTimeout(resolve, 2000));
-      console.log(`Borrowing ${borrowAmount} ${asset}`);
-      setBorrowAmount("0.00");
-    } catch (error) {
-      console.error("Borrow failed:", error);
-    } finally {
-      setBorrowing(false);
-    }
+  // Modal handlers
+  const openBorrowModal = () => setShowBorrowModal(true);
+  const closeBorrowModal = () => setShowBorrowModal(false);
+  const openSupplyCollateralModal = () => setShowSupplyCollateralModal(true);
+  const closeSupplyCollateralModal = () => setShowSupplyCollateralModal(false);
+
+  const handleBorrowSuccess = () => {
+    closeBorrowModal();
+    setBorrowAmount("0.00");
+    
   };
 
-  const handleSupplyCollateral = async () => {
-    setSupplying(true);
-    try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      console.log("Supplying XLM collateral");
-    } catch (error) {
-      console.error("Supply failed:", error);
-    } finally {
-      setSupplying(false);
-    }
+  const handleSupplyCollateralSuccess = () => {
+    closeSupplyCollateralModal();
+    
   };
 
   return (
@@ -264,32 +291,16 @@ export default function BorrowerPoolPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Button
                   className="bg-orange-600 hover:bg-orange-600 text-white h-12 text-base font-semibold rounded-lg"
-                  onClick={() => handleBorrow(selectedAsset)}
-                  disabled={borrowing || !borrowAmount || borrowAmount === "0.00"}
+                  onClick={openBorrowModal}
                 >
-                  {borrowing ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                      Borrowing...
-                    </>
-                  ) : (
-                    "Borrow USDC"
-                  )}
+                  Borrow USDC
                 </Button>
 
                 <Button
                   className="bg-gray-600 hover:bg-gray-500 text-white h-12 text-base font-semibold rounded-lg"
-                  onClick={handleSupplyCollateral}
-                  disabled={supplying}
+                  onClick={openSupplyCollateralModal}
                 >
-                  {supplying ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                      Supplying...
-                    </>
-                  ) : (
-                    "Supply XLM Collateral"
-                  )}
+                  Supply XLM Collateral
                 </Button>
               </div>
 
@@ -350,6 +361,19 @@ export default function BorrowerPoolPage() {
             </TabsContent>
           </Tabs>
         </div>
+
+        {/* Modals */}
+        <BorrowModal
+          isOpen={showBorrowModal}
+          onClose={closeBorrowModal}
+          poolData={mockPoolData}
+          poolId="trustbridge-microloans-pool"
+        />
+        <SupplyXLMCollateralModal
+          isOpen={showSupplyCollateralModal}
+          onClose={closeSupplyCollateralModal}
+          onSuccess={handleSupplyCollateralSuccess}
+        />
       </main>
     
   );
