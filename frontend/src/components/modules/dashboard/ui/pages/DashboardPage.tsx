@@ -2,8 +2,14 @@
 
 import Image from "next/image";
 import StatCard from "../cards/StatCard";
+import RecentActivityFeed from "../activity/RecentActivityFeed";
 import { useDashboard } from "../../hooks/useDashboard.hook";
-import { formatCurrency, UserPosition, POOL_CONFIG, getPoolTypeForAsset } from "@/helpers/user-positions.helper";
+import {
+  formatCurrency,
+  UserPosition,
+  POOL_CONFIG,
+  getPoolTypeForAsset,
+} from "@/helpers/user-positions.helper";
 
 export default function Dashboard() {
   const {
@@ -20,18 +26,21 @@ export default function Dashboard() {
 
   const handleManagePosition = () => {
     alert(
-      "Position management functionality will be implemented in the full version.",
+      "Position management functionality will be implemented in the full version."
     );
   };
 
   // Create breakdown content for tooltips
-  const createBreakdownContent = (positions: UserPosition[], type: 'supplied' | 'borrowed') => {
+  const createBreakdownContent = (
+    positions: UserPosition[],
+    type: "supplied" | "borrowed"
+  ) => {
     if (!positions || positions.length === 0) {
       return <div className="text-gray-400">No data available</div>;
     }
 
-    const filteredPositions = positions.filter(pos => pos[type] > 0);
-    
+    const filteredPositions = positions.filter((pos) => pos[type] > 0);
+
     if (filteredPositions.length === 0) {
       return <div className="text-gray-400">No {type} positions</div>;
     }
@@ -42,7 +51,9 @@ export default function Dashboard() {
         {filteredPositions.map((position) => (
           <div key={position.asset} className="flex justify-between text-xs">
             <span className="text-gray-400">{position.symbol}:</span>
-            <span className="text-white">{formatCurrency(position[type])}</span>
+            <span className="text-white">
+              {formatCurrency(position[type])}
+            </span>
           </div>
         ))}
       </div>
@@ -55,21 +66,23 @@ export default function Dashboard() {
       return <div className="text-gray-400">No data available</div>;
     }
 
-    // Calculate available balance per asset considering wallet balance and supplied amounts
-    const availableByAsset = userPositions.map(position => {
-      // For each asset, available = wallet balance + supplied - borrowed
-      // This is a simplified calculation - in reality would need actual wallet balance per asset
-      const walletBalanceForAsset = 0; // TODO: Get actual wallet balance for this asset
-      const available = Math.max(0, walletBalanceForAsset + position.supplied - position.borrowed);
-      
-      return {
-        symbol: position.symbol,
-        available: available,
-        walletBalance: walletBalanceForAsset,
-        supplied: position.supplied,
-        borrowed: position.borrowed
-      };
-    }).filter(asset => asset.available > 0);
+    const availableByAsset = userPositions
+      .map((position) => {
+        const walletBalanceForAsset = 0; // TODO: Get actual wallet balance for this asset
+        const available = Math.max(
+          0,
+          walletBalanceForAsset + position.supplied - position.borrowed
+        );
+
+        return {
+          symbol: position.symbol,
+          available: available,
+          walletBalance: walletBalanceForAsset,
+          supplied: position.supplied,
+          borrowed: position.borrowed,
+        };
+      })
+      .filter((asset) => asset.available > 0);
 
     if (availableByAsset.length === 0) {
       return <div className="text-gray-400">No available balance</div>;
@@ -81,11 +94,12 @@ export default function Dashboard() {
         {availableByAsset.map((asset) => (
           <div key={asset.symbol} className="flex justify-between text-xs">
             <span className="text-gray-400">{asset.symbol}:</span>
-            <span className="text-white">{formatCurrency(asset.available)}</span>
+            <span className="text-white">
+              {formatCurrency(asset.available)}
+            </span>
           </div>
         ))}
-        {/* Show additional info if needed */}
-        {availableByAsset.some(asset => asset.walletBalance > 0) && (
+        {availableByAsset.some((asset) => asset.walletBalance > 0) && (
           <div className="text-xs text-gray-500 mt-1 pt-1 border-t border-gray-700">
             Includes wallet balance
           </div>
@@ -100,16 +114,12 @@ export default function Dashboard() {
       return <div className="text-gray-400">No data available</div>;
     }
 
-    // Count active loans by pool type using configuration-driven mapping
     const poolLoanCounts: Record<string, number> = {};
-    
-    // Initialize counts for all pools
-    Object.keys(POOL_CONFIG).forEach(poolType => {
+    Object.keys(POOL_CONFIG).forEach((poolType) => {
       poolLoanCounts[poolType] = 0;
     });
-    
-    // Count active loans for each position based on pool configuration
-    userPositions.forEach(position => {
+
+    userPositions.forEach((position) => {
       if (position.borrowed > 0) {
         const poolType = getPoolTypeForAsset(position.symbol);
         if (poolType) {
@@ -118,12 +128,11 @@ export default function Dashboard() {
       }
     });
 
-    // Filter pools that have active loans
     const poolsWithLoans = Object.entries(poolLoanCounts)
       .filter(([_, count]) => count > 0)
       .map(([poolType, count]) => ({
-        poolType: poolType === 'MAIN_POOL' ? 'Main Pool' : 'Secondary Pool',
-        count
+        poolType: poolType === "MAIN_POOL" ? "Main Pool" : "Secondary Pool",
+        count,
       }));
 
     if (poolsWithLoans.length === 0) {
@@ -143,7 +152,6 @@ export default function Dashboard() {
     );
   };
 
-  // Get wallet display name
   const getWalletDisplayName = () => {
     if (!address) return "Usuario";
     if (walletName) return walletName;
@@ -155,7 +163,8 @@ export default function Dashboard() {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">
-          Bienvenido de vuelta, <span className="text-success">{getWalletDisplayName()}</span>
+          Bienvenido de vuelta,{" "}
+          <span className="text-success">{getWalletDisplayName()}</span>
         </h1>
         <p className="text-gray-400">
           Revisa tus posiciones y actividad en un solo lugar
@@ -187,7 +196,7 @@ export default function Dashboard() {
           icon="fas fa-coins"
           emojiIcon="💰"
           loading={cardsLoading.totalSupplied}
-          hoverContent={createBreakdownContent(userPositions, 'supplied')}
+          hoverContent={createBreakdownContent(userPositions, "supplied")}
           change="+1.8%"
           changeType="positive"
         />
@@ -197,7 +206,7 @@ export default function Dashboard() {
           icon="fas fa-hand-holding-dollar"
           emojiIcon="🔄"
           loading={cardsLoading.totalBorrowed}
-          hoverContent={createBreakdownContent(userPositions, 'borrowed')}
+          hoverContent={createBreakdownContent(userPositions, "borrowed")}
           change="+0.5%"
           changeType="positive"
         />
@@ -218,23 +227,17 @@ export default function Dashboard() {
           icon="fas fa-file-contract"
           emojiIcon="📌"
           loading={cardsLoading.activeLoans}
-          subtitle={`${activeLoans} active loan${activeLoans !== 1 ? 's' : ''}`}
+          subtitle={`${activeLoans} active loan${
+            activeLoans !== 1 ? "s" : ""
+          }`}
           hoverContent={createActiveLoansContent()}
           change="+0.0%"
           changeType="positive"
         />
       </div>
 
-      {/* Activity Chart */}
-      <div className="card p-6 mb-8" style={{ height: "300px" }}>
-        <h2 className="text-lg font-medium mb-4">Recent Activity</h2>
-        <div className="flex items-center justify-center h-5/6 text-gray-400">
-          <div className="text-center">
-            <i className="fas fa-chart-line text-4xl mb-3"></i>
-            <p>Gráfica de actividad cargando...</p>
-          </div>
-        </div>
-      </div>
+      {/* Activity Feed (from feat-219) */}
+      <RecentActivityFeed />
 
       {/* Current Positions Table */}
       <div className="card p-6 mb-8">
@@ -242,7 +245,8 @@ export default function Dashboard() {
           <h2 className="text-lg font-medium">Posiciones Actuales</h2>
           {userPositions.length > 0 && (
             <div className="text-sm text-gray-500">
-              {userPositions.length} position{userPositions.length !== 1 ? 's' : ''}
+              {userPositions.length} position
+              {userPositions.length !== 1 ? "s" : ""}
             </div>
           )}
         </div>
@@ -264,8 +268,12 @@ export default function Dashboard() {
                   <td colSpan={6} className="text-center py-8 text-gray-500">
                     <div className="flex flex-col items-center">
                       <i className="fas fa-wallet text-3xl mb-3 text-gray-300"></i>
-                      <p className="text-lg font-medium mb-2">No positions yet</p>
-                      <p className="text-sm">Start by supplying assets or taking out loans</p>
+                      <p className="text-lg font-medium mb-2">
+                        No positions yet
+                      </p>
+                      <p className="text-sm">
+                        Start by supplying assets or taking out loans
+                      </p>
                     </div>
                   </td>
                 </tr>
@@ -281,10 +289,11 @@ export default function Dashboard() {
                             width={32}
                             height={32}
                             onError={(e) => {
-                              // Fallback to a default icon if image fails to load
                               const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                              target.nextElementSibling?.classList.remove('hidden');
+                              target.style.display = "none";
+                              target.nextElementSibling?.classList.remove(
+                                "hidden"
+                              );
                             }}
                           />
                           <div className="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center hidden">
@@ -294,42 +303,58 @@ export default function Dashboard() {
                         <div>
                           <div className="font-medium">{position.symbol}</div>
                           <div className="text-xs text-gray-400">
-                            {position.symbol === 'USDC' ? 'USD Coin' : 
-                             position.symbol === 'XLM' ? 'Stellar Lumens' : 
-                             'TrustBridge Token'}
+                            {position.symbol === "USDC"
+                              ? "USD Coin"
+                              : position.symbol === "XLM"
+                              ? "Stellar Lumens"
+                              : "TrustBridge Token"}
                           </div>
                         </div>
                       </div>
                     </td>
                     <td>
                       <div className="font-medium">
-                        {position.supplied > 0 ? formatCurrency(position.supplied) : 
-                         position.borrowed > 0 ? formatCurrency(position.borrowed) : '-'}
+                        {position.supplied > 0
+                          ? formatCurrency(position.supplied)
+                          : position.borrowed > 0
+                          ? formatCurrency(position.borrowed)
+                          : "-"}
                       </div>
                       <div className="text-xs text-gray-400">
-                        {position.supplied > 0 && position.borrowed > 0 ? 
-                         `Supplied: ${formatCurrency(position.supplied)} | Borrowed: ${formatCurrency(position.borrowed)}` :
-                         position.supplied > 0 ? 'Supplied' : 'Borrowed'}
+                        {position.supplied > 0 && position.borrowed > 0
+                          ? `Supplied: ${formatCurrency(
+                              position.supplied
+                            )} | Borrowed: ${formatCurrency(position.borrowed)}`
+                          : position.supplied > 0
+                          ? "Supplied"
+                          : "Borrowed"}
                       </div>
                     </td>
                     <td>
-                      <div className="text-success font-medium">{position.apy}%</div>
+                      <div className="text-success font-medium">
+                        {position.apy}%
+                      </div>
                     </td>
                     <td>
                       <div className="text-xs">
-                        {position.collateral ? 'Sí (75%)' : '-'}
+                        {position.collateral ? "Sí (75%)" : "-"}
                       </div>
                     </td>
                     <td>
-                      <div className={`text-xs inline-block px-2 py-1 rounded ${
-                        position.collateral 
-                          ? 'bg-blue-900 bg-opacity-20 text-blue-400' 
-                          : position.supplied > 0 
-                            ? 'bg-green-900 bg-opacity-20 text-green-400'
-                            : 'bg-orange-900 bg-opacity-20 text-orange-400'
-                      }`}>
-                        {position.collateral ? 'Collateral' : 
-                         position.supplied > 0 ? 'Activo' : 'Borrowed'}
+                      <div
+                        className={`text-xs inline-block px-2 py-1 rounded ${
+                          position.collateral
+                            ? "bg-blue-900 bg-opacity-20 text-blue-400"
+                            : position.supplied > 0
+                            ? "bg-green-900 bg-opacity-20 text-green-400"
+                            : "bg-orange-900 bg-opacity-20 text-orange-400"
+                        }`}
+                      >
+                        {position.collateral
+                          ? "Collateral"
+                          : position.supplied > 0
+                          ? "Activo"
+                          : "Borrowed"}
                       </div>
                     </td>
                     <td>
