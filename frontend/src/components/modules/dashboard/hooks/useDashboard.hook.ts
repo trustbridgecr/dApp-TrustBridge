@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useWalletContext } from "@/providers/wallet.provider";
 import { useUserContext } from "@/providers/user.provider";
-import { usePoolData } from "@/hooks/usePoolData";
 import { 
   fetchUserDashboardData, 
   UserPosition, 
@@ -37,7 +36,6 @@ interface DashboardData {
 export function useDashboard(): DashboardData {
   const { walletAddress: address, walletName } = useWalletContext();
   const { profile, loading: profileLoading } = useUserContext();
-  const poolData = usePoolData();
 
   const [chatCount, setChatCount] = useState(0);
   const [chatsLoading, setChatsLoading] = useState(true);

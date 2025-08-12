@@ -14,7 +14,7 @@ describe('User Positions Helper', () => {
   });
 
   describe('calculateDashboardMetrics', () => {
-    it('should calculate metrics correctly', () => {
+    it('should calculate metrics correctly', async () => {
       const mockPositions = [
         {
           asset: 'USDC',
@@ -36,7 +36,7 @@ describe('User Positions Helper', () => {
         },
       ];
 
-      const metrics = calculateDashboardMetrics(mockPositions);
+      const metrics = await calculateDashboardMetrics(mockPositions);
 
       expect(metrics.totalSupplied).toBe(150000);
       expect(metrics.totalBorrowed).toBe(25000);
@@ -44,8 +44,8 @@ describe('User Positions Helper', () => {
       expect(metrics.availableBalance).toBe(130000); // 150000 - (25000 * 0.8)
     });
 
-    it('should handle empty positions', () => {
-      const metrics = calculateDashboardMetrics([]);
+    it('should handle empty positions', async () => {
+      const metrics = await calculateDashboardMetrics([]);
 
       expect(metrics.totalSupplied).toBe(0);
       expect(metrics.totalBorrowed).toBe(0);

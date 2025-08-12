@@ -129,7 +129,7 @@ export default function Dashboard() {
     });
 
     const poolsWithLoans = Object.entries(poolLoanCounts)
-      .filter(([_, count]) => count > 0)
+      .filter(([, count]) => count > 0)
       .map(([poolType, count]) => ({
         poolType: poolType === "MAIN_POOL" ? "Main Pool" : "Secondary Pool",
         count,

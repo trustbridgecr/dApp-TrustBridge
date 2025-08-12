@@ -48,7 +48,7 @@ export type PoolType = keyof typeof POOL_CONFIG;
  */
 export function getPoolTypeForAsset(assetSymbol: string): PoolType | null {
   for (const [poolType, assets] of Object.entries(POOL_CONFIG)) {
-    if (assets.includes(assetSymbol)) {
+    if ((assets as readonly string[]).includes(assetSymbol)) {
       return poolType as PoolType;
     }
   }
@@ -58,7 +58,7 @@ export function getPoolTypeForAsset(assetSymbol: string): PoolType | null {
 /**
  * Helper function to get assets for a specific pool
  */
-export function getAssetsForPool(poolType: PoolType): string[] {
+export function getAssetsForPool(poolType: PoolType): readonly string[] {
   return POOL_CONFIG[poolType];
 }
 
@@ -143,7 +143,7 @@ export async function fetchUserPositions(walletAddress: string): Promise<UserPos
 /**
  * Fallback: Get wallet balance when direct contract calls fail
  */
-export async function getWalletBalance(walletAddress: string): Promise<WalletBalance> {
+export async function getWalletBalance(): Promise<WalletBalance> {
   try {
     // TODO: Implement actual wallet balance fetching
     // This would typically involve:
@@ -170,7 +170,7 @@ export async function getWalletBalance(walletAddress: string): Promise<WalletBal
 /**
  * Fallback: Get collateral data when direct contract calls fail
  */
-export async function getCollateralData(walletAddress: string): Promise<CollateralData> {
+export async function getCollateralData(): Promise<CollateralData> {
   try {
     // TODO: Implement actual collateral data fetching
     // This would typically involve:
@@ -196,8 +196,7 @@ export async function getCollateralData(walletAddress: string): Promise<Collater
  * Calculate dashboard metrics from user positions with fallback logic
  */
 export async function calculateDashboardMetrics(
-  positions: UserPosition[], 
-  walletAddress: string
+  positions: UserPosition[]
 ): Promise<Omit<UserDashboardData, 'positions'>> {
   
   // Total Supplied: sum of all supplied assets across all pools
@@ -215,8 +214,8 @@ export async function calculateDashboardMetrics(
   let availableBalance: number;
   try {
     // Get real wallet balance and collateral data
-    const walletBalance = await getWalletBalance(walletAddress);
-    const collateralData = await getCollateralData(walletAddress);
+    const walletBalance = await getWalletBalance();
+    const collateralData = await getCollateralData();
     
     // Calculate total wallet balance
     const totalWalletBalance = walletBalance.usdc + walletBalance.xlm + walletBalance.tbrg;
@@ -233,7 +232,7 @@ export async function calculateDashboardMetrics(
       availableBalance = Math.max(availableBalance, suppliedAvailable);
     }
     
-  } catch (error) {
+  } catch {
     console.warn("Failed to calculate available balance with wallet data, using fallback");
     // Fallback calculation: Total Supplied - Total Borrowed
     availableBalance = Math.max(0, totalSupplied - totalBorrowed);
@@ -254,7 +253,7 @@ export async function fetchUserDashboardData(walletAddress: string): Promise<Use
   try {
     // Primary: Fetch user positions from contracts
     const positions = await fetchUserPositions(walletAddress);
-    const metrics = await calculateDashboardMetrics(positions, walletAddress);
+    const metrics = await calculateDashboardMetrics(positions);
     
     return {
       ...metrics,
@@ -265,8 +264,8 @@ export async function fetchUserDashboardData(walletAddress: string): Promise<Use
     
     // Fallback: Use alternative data sources
     try {
-      const walletBalance = await getWalletBalance(walletAddress);
-      const collateralData = await getCollateralData(walletAddress);
+      const walletBalance = await getWalletBalance();
+      const collateralData = await getCollateralData();
       
       // Create fallback positions based on wallet balance
       const fallbackPositions: UserPosition[] = [
