@@ -1,9 +1,10 @@
 "use client";
 
 import LenderPoolPage from "@/components/modules/marketplace/ui/pages/LenderPoolPage";
-import { useRoleContext } from "@/providers/role.provider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useRoleContext } from "@/providers/role.provider";
+
 
 export default function LenderMarketplace() {
   const { role } = useRoleContext();
@@ -43,5 +44,8 @@ export default function LenderMarketplace() {
     );
   }
 
+
   return <LenderPoolPage />;
+
 }
+
