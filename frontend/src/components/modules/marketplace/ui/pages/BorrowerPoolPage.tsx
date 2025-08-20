@@ -8,7 +8,6 @@ import { SupplyXLMCollateralModal } from "../components/SupplyXLMCollateralModal
 
 export default function BorrowerPoolPage() {
   const [borrowAmount, setBorrowAmount] = useState("0.00");
-  const [selectedAsset, setSelectedAsset] = useState("USDC");
   
   // Modal states
   const [showBorrowModal, setShowBorrowModal] = useState(false);
@@ -107,11 +106,6 @@ export default function BorrowerPoolPage() {
   const openSupplyCollateralModal = () => setShowSupplyCollateralModal(true);
   const closeSupplyCollateralModal = () => setShowSupplyCollateralModal(false);
 
-  const handleBorrowSuccess = () => {
-    closeBorrowModal();
-    setBorrowAmount("0.00");
-    
-  };
 
   const handleSupplyCollateralSuccess = () => {
     closeSupplyCollateralModal();
