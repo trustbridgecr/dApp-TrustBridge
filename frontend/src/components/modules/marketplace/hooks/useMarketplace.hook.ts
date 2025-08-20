@@ -227,10 +227,10 @@ export function useMarketplace() {
     closeSupplyXLMModal,
     openProvideLiquidityModal,
     closeProvideLiquidityModal,
-    closeRoleSelectionModal,
 
     // Success handlers
     handleSupplySuccess,
+    closeRoleSelectionModal,
 
     // Computed values
     isWalletConnected,

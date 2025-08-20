@@ -1,9 +1,11 @@
 "use client";
 
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import RoleSelectionModal from "@/components/modules/marketplace/ui/components/RoleSelectionModal";
 import { useRoleContext } from "@/providers/role.provider";
+
 
 export default function MarketplaceEntry() {
   const { role, setRole } = useRoleContext();
@@ -20,11 +22,13 @@ export default function MarketplaceEntry() {
   }, [hasShownModal]);
 
   // Get the last selected role from localStorage as fallback
-  const getLastSelectedRole = (): "lender" | "borrower" => {
+
+  const getLastSelectedRole = (): "borrower" | "lender" => {
     if (typeof window !== "undefined") {
       const savedRole = localStorage.getItem("user-role") as
-        | "lender"
         | "borrower"
+        | "lender"
+
         | null;
       return savedRole && (savedRole === "lender" || savedRole === "borrower")
         ? savedRole
@@ -41,10 +45,12 @@ export default function MarketplaceEntry() {
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    // If user closes modal without selecting, redirect to lender by default
+
+    // If user closes modal without selecting, redirect to borrower by default
     if (!role) {
-      setRole("lender");
-      router.push("/dashboard/marketplace/lender");
+      setRole("borrower");
+      router.push("/dashboard/marketplace/borrower");
+
     } else {
       router.push(`/dashboard/marketplace/${role}`);
     }

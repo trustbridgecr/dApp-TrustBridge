@@ -543,5 +543,6 @@ export default function Marketplace() {
       />
       {/* RoleSelectionModal is handled by parent pages */}
     </main>
+     /* RoleSelectionModal is handled by parent pages */
   );
 }

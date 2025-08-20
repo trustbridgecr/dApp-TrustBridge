@@ -9,8 +9,9 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <WalletProvider>
       <TabsProvider>
-        <UserProvider>
-          <RoleProvider>{children}</RoleProvider>
+
+         <UserProvider>
+         <RoleProvider>{children}</RoleProvider>
         </UserProvider>
       </TabsProvider>
     </WalletProvider>
