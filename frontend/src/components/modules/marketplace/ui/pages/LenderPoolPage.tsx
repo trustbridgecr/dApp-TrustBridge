@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SupplyUSDCModal } from "../components/SupplyUSDCModal";
 import { ProvideLiquidityModal } from "../components/ProvideLiquidityModal";
+import { Icon } from "@/components/ui/icon";
 
 export default function LenderPoolPage() {
   // Modal states
@@ -49,7 +50,7 @@ export default function LenderPoolPage() {
     {
       symbol: "USDC",
       name: "USD Coin",
-      icon: "🔒",
+      image: "/img/tokens/usdc.png",
       supplied: "$856,234",
       supplyValue: "$856,234",
       apy: "4.2%",
@@ -59,7 +60,7 @@ export default function LenderPoolPage() {
     {
       symbol: "XLM",
       name: "Stellar Lumens",
-      icon: "⭐",
+      image: "/img/tokens/xlm.png",
       supplied: "$234,567",
       supplyValue: "$234,567",
       apy: "3.8%",
@@ -69,7 +70,7 @@ export default function LenderPoolPage() {
     {
       symbol: "TBRG",
       name: "TrustBridge Token",
-      icon: "🏛️",
+      image: "/img/tokens/tbt.png",
       supplied: "$154,877",
       supplyValue: "$154,877",
       apy: "5.1%",
@@ -180,7 +181,7 @@ export default function LenderPoolPage() {
                         >
                           <td className="p-4">
                             <div className="flex items-center gap-3">
-                              <span className="text-xl">{asset.icon}</span>
+                              <Icon type="image" value={asset.image} />
                               <div>
                                 <div className="font-semibold text-white">
                                   {asset.symbol}
