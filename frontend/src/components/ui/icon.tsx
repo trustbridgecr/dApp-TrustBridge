@@ -5,9 +5,16 @@ interface IconProps {
   value: string;
   size?: "sm" | "md" | "lg";
   className?: string;
+  ariaLabel?: string;
 }
 
-export function Icon({ type, value, size = "md", className }: IconProps) {
+export function Icon({
+  type,
+  value,
+  size = "md",
+  className,
+  ariaLabel,
+}: IconProps) {
   const sizeClasses = {
     sm: "w-4 h-4",
     md: "w-6 h-6",
@@ -22,11 +29,19 @@ export function Icon({ type, value, size = "md", className }: IconProps) {
         <img
           src={value}
           alt="Icon"
-          className={`${sizeClasses[size]} ${className}`}
+          className={cn(sizeClasses[size], className)}
         />
       );
     case "emoji":
-      return <span className={`text-${size} ${className}`}>{value}</span>;
+      return (
+        <span
+          className={cn(sizeClasses[size], className)}
+          role="img"
+          aria-label={ariaLabel}
+        >
+          {value}
+        </span>
+      );
     default:
       return null;
   }
