@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import { GlobalProvider } from "@/providers/global.provider";
 import { Toaster } from "sonner";
 
