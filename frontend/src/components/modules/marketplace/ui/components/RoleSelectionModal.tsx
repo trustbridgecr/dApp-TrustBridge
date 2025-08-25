@@ -40,7 +40,7 @@ export default function RoleSelectionModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-slate-800 rounded-2xl p-8 max-w-md w-full relative">
+      <div className="card bg-dark-secondary p-8 max-w-md w-full relative">
         {/* Close Button - Only show if onClose is provided */}
         {onClose && (
           <Button
@@ -160,7 +160,4 @@ export default function RoleSelectionModal({
       </div>
     </div>
   );
-
 }
-
-
