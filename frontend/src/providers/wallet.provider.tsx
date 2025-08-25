@@ -12,6 +12,7 @@ type WalletContextType = {
   walletAddress: string | null;
   walletName: string | null;
   setWalletInfo: (address: string, name: string) => void;
+  updateDisplayName: (name: string) => void;
   clearWalletInfo: () => void;
 };
 
@@ -43,6 +44,14 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("walletName", name);
   };
 
+   /**
+    * Update display name 
+    * @param name 
+    */
+  const updateDisplayName = (name: string) => {
+    setWalletName(name);
+  };
+
   /**
    * Clear wallet info
    */
@@ -55,7 +64,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <WalletContext.Provider
-      value={{ walletAddress, walletName, setWalletInfo, clearWalletInfo }}
+      value={{ walletAddress, walletName, setWalletInfo, updateDisplayName, clearWalletInfo }}
     >
       {children}
     </WalletContext.Provider>

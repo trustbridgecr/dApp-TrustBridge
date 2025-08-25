@@ -16,7 +16,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { walletAddress } = useWalletContext();
+  const { walletAddress, updateDisplayName } = useWalletContext();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -38,7 +38,16 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       const userDoc = await getDoc(doc(db, "users", walletAddress));
 
       if (userDoc.exists()) {
-        setProfile(userDoc.data() as unknown as UserProfile);
+        const userData = userDoc.data() as UserProfile;
+        setProfile(userData);
+        
+        // Update display name if profile has name information
+        if (userData.firstName || userData.lastName) {
+          const displayName = `${userData.firstName} ${userData.lastName}`.trim();
+          if (displayName) {
+            updateDisplayName(displayName);
+          }
+        }
       } else {
         setProfile(null);
       }
@@ -68,6 +77,15 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
       await setDoc(doc(db, "users", walletAddress), userData);
       setProfile(userData);
+      
+      // Update display name in wallet context
+      if (data.firstName || data.lastName) {
+        const displayName = `${data.firstName} ${data.lastName}`.trim();
+        if (displayName) {
+          updateDisplayName(displayName);
+        }
+      }
+      
       toast.success("Profile saved successfully");
     } catch (error) {
       console.error("Error saving user profile:", error);

@@ -8,7 +8,7 @@ import { useWalletContext } from "@/providers/wallet.provider";
 
 export default function Header() {
   const pathname = usePathname();
-  const { walletAddress } = useWalletContext();
+  const { walletAddress, walletName } = useWalletContext();
   const { handleConnect, handleDisconnect } = useWallet();
 
   const truncateAddress = (address: string) => {
@@ -71,7 +71,11 @@ export default function Header() {
               <div className="wallet-btn">
                 <i className="fas fa-wallet mr-2"></i>
                 <span className="wallet-address">
-                  {truncateAddress(walletAddress)}
+                {/* Show profile name if available, otherwise truncated address */}
+                {walletName && walletName !== "Freighter" 
+                  ? walletName 
+                  : truncateAddress(walletAddress)
+                }
                 </span>
                 <i className="fas fa-chevron-down ml-2 text-xs text-gray-400"></i>
               </div>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import StatCard from "../cards/StatCard";
 import RecentActivityFeed from "../activity/RecentActivityFeed";
 import { useDashboard } from "../../hooks/useDashboard.hook";
+import { useUserContext } from "@/providers/user.provider";
 import {
   formatCurrency,
   UserPosition,
@@ -23,6 +24,8 @@ export default function Dashboard() {
     cardsLoading,
     error,
   } = useDashboard();
+  
+  const { profile } = useUserContext();
 
   const handleManagePosition = () => {
     alert(
@@ -154,7 +157,19 @@ export default function Dashboard() {
 
   const getWalletDisplayName = () => {
     if (!address) return "Usuario";
-    if (walletName) return walletName;
+    
+    // Use profile name if available
+    if (profile && (profile.firstName || profile.lastName)) {
+      const profileName = `${profile.firstName} ${profile.lastName}`.trim();
+      if (profileName) return profileName;
+    }
+    
+    // 2: Use walletName if it's not "Freighter"
+    if (walletName && walletName !== "Freighter") {
+      return walletName;
+    }
+    
+    // Fallback: Use truncated address
     return `${address.slice(0, 4)}...${address.slice(-4)}`;
   };
 
