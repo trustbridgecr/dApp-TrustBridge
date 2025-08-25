@@ -4,7 +4,7 @@ interface StatCardProps {
   change?: string;
   changeType?: "positive" | "negative";
   badge?: string;
-  icon: string;
+  icon: React.ReactNode;
   emojiIcon?: string; // Optional emoji icon
   subtitle?: string;
   loading?: boolean;
@@ -51,9 +51,7 @@ export default function StatCard({
       <div className="card stat-card p-5 h-full min-h-[140px] flex flex-col justify-between">
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-gray-400 text-sm font-medium">
-            {title}
-          </h3>
+          <h3 className="text-gray-400 text-sm font-medium">{title}</h3>
           <div className="flex items-center space-x-2">
             {badge && (
               <span className="text-success bg-green-900 bg-opacity-20 px-2 py-0.5 rounded-full text-xs">
@@ -62,11 +60,9 @@ export default function StatCard({
             )}
             <div className="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center">
               {emojiIcon ? (
-                <span className="text-base">
-                  {emojiIcon}
-                </span>
+                <span className="text-base">{emojiIcon}</span>
               ) : (
-                <i className={`${icon} text-success text-sm`}></i>
+                <div className="text-success text-sm">{icon}</div>
               )}
             </div>
           </div>
@@ -83,11 +79,7 @@ export default function StatCard({
         </div>
 
         {/* Subtitle */}
-        {subtitle && (
-          <div className="text-xs text-gray-400">
-            {subtitle}
-          </div>
-        )}
+        {subtitle && <div className="text-xs text-gray-400">{subtitle}</div>}
 
         {/* Loading Skeleton */}
         {loading && (
