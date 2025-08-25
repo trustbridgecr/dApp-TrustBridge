@@ -11,7 +11,7 @@ import { profileSchema } from "../schemas/profile.schema";
 
 export default function Profile() {
   const { profile, loading, saving, saveProfile } = useUserContext();
-  const { walletAddress } = useWalletContext();
+  const { walletAddress, updateDisplayName } = useWalletContext();
 
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),

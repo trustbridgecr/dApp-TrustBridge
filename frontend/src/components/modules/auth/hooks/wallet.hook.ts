@@ -23,11 +23,19 @@ export const useWallet = () => {
         const { address } = await kit.getAddress();
         const { name } = option;
 
-        setWalletInfo(address, name);
-
         // Check if user profile exists and create if it doesn't
         try {
           const userDoc = await getDoc(doc(db, "users", address));
+
+          let displayName = name; // fallback to wallet name
+          if (userDoc.exists()) {
+            const userData = userDoc.data() as UserProfile;
+            if (userData.firstName || userData.lastName) {
+              displayName = `${userData.firstName} ${userData.lastName}`.trim();
+            }
+          }
+    
+          setWalletInfo(address, displayName);
 
           if (!userDoc.exists()) {
             const now = Date.now();
@@ -43,10 +51,19 @@ export const useWallet = () => {
 
             await setDoc(doc(db, "users", address), initialProfile);
             toast.success("Welcome! Please complete your profile.");
+          } else {
+            // Show welcome back message for existing users
+            const userData = userDoc.data() as UserProfile;
+            if (userData.firstName || userData.lastName) {
+              toast.success(`Welcome back, ${displayName}!`);
+            } else {
+              toast.success("Welcome back! Please complete your profile.");
+            }
           }
         } catch (error) {
-          console.error("Error creating initial profile:", error);
-          toast.error("Failed to create initial profile");
+          console.error("Error creating profile:", error);
+          setWalletInfo(address, name); // fallback to wallet name
+          toast.error("Failed to load profile");
         }
       },
     });
