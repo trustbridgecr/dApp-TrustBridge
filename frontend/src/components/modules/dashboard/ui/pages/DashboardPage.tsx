@@ -10,6 +10,7 @@ import {
   POOL_CONFIG,
   getPoolTypeForAsset,
 } from "@/helpers/user-positions.helper";
+import { DollarSignIcon, File, HandCoins, PiggyBank } from "lucide-react";
 
 export default function Dashboard() {
   const {
@@ -26,14 +27,14 @@ export default function Dashboard() {
 
   const handleManagePosition = () => {
     alert(
-      "Position management functionality will be implemented in the full version."
+      "Position management functionality will be implemented in the full version.",
     );
   };
 
   // Create breakdown content for tooltips
   const createBreakdownContent = (
     positions: UserPosition[],
-    type: "supplied" | "borrowed"
+    type: "supplied" | "borrowed",
   ) => {
     if (!positions || positions.length === 0) {
       return <div className="text-gray-400">No data available</div>;
@@ -51,9 +52,7 @@ export default function Dashboard() {
         {filteredPositions.map((position) => (
           <div key={position.asset} className="flex justify-between text-xs">
             <span className="text-gray-400">{position.symbol}:</span>
-            <span className="text-white">
-              {formatCurrency(position[type])}
-            </span>
+            <span className="text-white">{formatCurrency(position[type])}</span>
           </div>
         ))}
       </div>
@@ -71,7 +70,7 @@ export default function Dashboard() {
         const walletBalanceForAsset = 0; // TODO: Get actual wallet balance for this asset
         const available = Math.max(
           0,
-          walletBalanceForAsset + position.supplied - position.borrowed
+          walletBalanceForAsset + position.supplied - position.borrowed,
         );
 
         return {
@@ -193,8 +192,7 @@ export default function Dashboard() {
         <StatCard
           title="Total Supplied"
           value={formatCurrency(totalSupplied)}
-          icon="fas fa-coins"
-          emojiIcon="💰"
+          icon={<DollarSignIcon size={20} />}
           loading={cardsLoading.totalSupplied}
           hoverContent={createBreakdownContent(userPositions, "supplied")}
           change="+1.8%"
@@ -203,8 +201,7 @@ export default function Dashboard() {
         <StatCard
           title="Total Borrowed"
           value={formatCurrency(totalBorrowed)}
-          icon="fas fa-hand-holding-dollar"
-          emojiIcon="🔄"
+          icon={<HandCoins size={20} />}
           loading={cardsLoading.totalBorrowed}
           hoverContent={createBreakdownContent(userPositions, "borrowed")}
           change="+0.5%"
@@ -213,8 +210,7 @@ export default function Dashboard() {
         <StatCard
           title="Available Balance"
           value={formatCurrency(availableBalance)}
-          icon="fas fa-sack-dollar"
-          emojiIcon="🧾"
+          icon={<PiggyBank size={20} />}
           loading={cardsLoading.availableBalance}
           subtitle="Available for new positions"
           hoverContent={createAvailableBalanceContent()}
@@ -224,12 +220,9 @@ export default function Dashboard() {
         <StatCard
           title="Active Loans"
           value={activeLoans.toString()}
-          icon="fas fa-file-contract"
-          emojiIcon="📌"
+          icon={<File size={20} />}
           loading={cardsLoading.activeLoans}
-          subtitle={`${activeLoans} active loan${
-            activeLoans !== 1 ? "s" : ""
-          }`}
+          subtitle={`${activeLoans} active loan${activeLoans !== 1 ? "s" : ""}`}
           hoverContent={createActiveLoansContent()}
           change="+0.0%"
           changeType="positive"
@@ -292,7 +285,7 @@ export default function Dashboard() {
                               const target = e.target as HTMLImageElement;
                               target.style.display = "none";
                               target.nextElementSibling?.classList.remove(
-                                "hidden"
+                                "hidden",
                               );
                             }}
                           />
@@ -306,8 +299,8 @@ export default function Dashboard() {
                             {position.symbol === "USDC"
                               ? "USD Coin"
                               : position.symbol === "XLM"
-                              ? "Stellar Lumens"
-                              : "TrustBridge Token"}
+                                ? "Stellar Lumens"
+                                : "TrustBridge Token"}
                           </div>
                         </div>
                       </div>
@@ -317,17 +310,17 @@ export default function Dashboard() {
                         {position.supplied > 0
                           ? formatCurrency(position.supplied)
                           : position.borrowed > 0
-                          ? formatCurrency(position.borrowed)
-                          : "-"}
+                            ? formatCurrency(position.borrowed)
+                            : "-"}
                       </div>
                       <div className="text-xs text-gray-400">
                         {position.supplied > 0 && position.borrowed > 0
                           ? `Supplied: ${formatCurrency(
-                              position.supplied
+                              position.supplied,
                             )} | Borrowed: ${formatCurrency(position.borrowed)}`
                           : position.supplied > 0
-                          ? "Supplied"
-                          : "Borrowed"}
+                            ? "Supplied"
+                            : "Borrowed"}
                       </div>
                     </td>
                     <td>
@@ -346,15 +339,15 @@ export default function Dashboard() {
                           position.collateral
                             ? "bg-blue-900 bg-opacity-20 text-blue-400"
                             : position.supplied > 0
-                            ? "bg-green-900 bg-opacity-20 text-green-400"
-                            : "bg-orange-900 bg-opacity-20 text-orange-400"
+                              ? "bg-green-900 bg-opacity-20 text-green-400"
+                              : "bg-orange-900 bg-opacity-20 text-orange-400"
                         }`}
                       >
                         {position.collateral
                           ? "Collateral"
                           : position.supplied > 0
-                          ? "Activo"
-                          : "Borrowed"}
+                            ? "Activo"
+                            : "Borrowed"}
                       </div>
                     </td>
                     <td>
